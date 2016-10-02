@@ -8,13 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
-		26E3B8CD1DA177D000D157BB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CC1DA177D000D157BB /* ViewController.swift */; };
+		26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CC1DA177D000D157BB /* MainViewController.swift */; };
 		26E3B8D01DA177D000D157BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8CE1DA177D000D157BB /* Main.storyboard */; };
 		26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */; };
 		26E3B8D51DA177D000D157BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8D41DA177D000D157BB /* Assets.xcassets */; };
 		26E3B8D81DA177D000D157BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */; };
 		26E3B8E31DA177D000D157BB /* AlogeaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8E21DA177D000D157BB /* AlogeaTests.swift */; };
 		26E3B8EE1DA177D000D157BB /* AlogeaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8ED1DA177D000D157BB /* AlogeaUITests.swift */; };
+		26E3B8FE1DA177DF00D157BB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E3B8FD1DA177DF00D157BB /* CloudKit.framework */; };
+		26E3B9001DA177E800D157BB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E3B8FF1DA177E800D157BB /* StoreKit.framework */; };
+		26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9021DA1816E00D157BB /* Event+CoreDataClass.swift */; };
+		26E3B90B1DA1816E00D157BB /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9031DA1816E00D157BB /* Event+CoreDataProperties.swift */; };
+		26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9041DA1816E00D157BB /* RecordType+CoreDataClass.swift */; };
+		26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9051DA1816E00D157BB /* RecordType+CoreDataProperties.swift */; };
+		26E3B90E1DA1816E00D157BB /* Exercise+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9061DA1816E00D157BB /* Exercise+CoreDataClass.swift */; };
+		26E3B90F1DA1816E00D157BB /* Exercise+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9071DA1816E00D157BB /* Exercise+CoreDataProperties.swift */; };
+		26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9081DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift */; };
+		26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B9091DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +47,7 @@
 /* Begin PBXFileReference section */
 		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E3B8CA1DA177D000D157BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		26E3B8CC1DA177D000D157BB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		26E3B8CC1DA177D000D157BB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		26E3B8CF1DA177D000D157BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		26E3B8D21DA177D000D157BB /* Alogea.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Alogea.xcdatamodel; sourceTree = "<group>"; };
 		26E3B8D41DA177D000D157BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +59,17 @@
 		26E3B8E91DA177D000D157BB /* AlogeaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlogeaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E3B8ED1DA177D000D157BB /* AlogeaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlogeaUITests.swift; sourceTree = "<group>"; };
 		26E3B8EF1DA177D000D157BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Alogea.entitlements; sourceTree = "<group>"; };
+		26E3B8FD1DA177DF00D157BB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		26E3B8FF1DA177E800D157BB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		26E3B9021DA1816E00D157BB /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+CoreDataClass.swift"; path = "Data Models/Event+CoreDataClass.swift"; sourceTree = "<group>"; };
+		26E3B9031DA1816E00D157BB /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+CoreDataProperties.swift"; path = "Data Models/Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		26E3B9041DA1816E00D157BB /* RecordType+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "RecordType+CoreDataClass.swift"; path = "Data Models/RecordType+CoreDataClass.swift"; sourceTree = "<group>"; };
+		26E3B9051DA1816E00D157BB /* RecordType+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "RecordType+CoreDataProperties.swift"; path = "Data Models/RecordType+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		26E3B9061DA1816E00D157BB /* Exercise+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Exercise+CoreDataClass.swift"; path = "Data Models/Exercise+CoreDataClass.swift"; sourceTree = "<group>"; };
+		26E3B9071DA1816E00D157BB /* Exercise+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Exercise+CoreDataProperties.swift"; path = "Data Models/Exercise+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		26E3B9081DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "DrugEpisode+CoreDataClass.swift"; path = "Data Models/DrugEpisode+CoreDataClass.swift"; sourceTree = "<group>"; };
+		26E3B9091DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "DrugEpisode+CoreDataProperties.swift"; path = "Data Models/DrugEpisode+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26E3B8FE1DA177DF00D157BB /* CloudKit.framework in Frameworks */,
+				26E3B9001DA177E800D157BB /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +106,7 @@
 				26E3B8E11DA177D000D157BB /* AlogeaTests */,
 				26E3B8EC1DA177D000D157BB /* AlogeaUITests */,
 				26E3B8C81DA177D000D157BB /* Products */,
+				26E3B8FC1DA177DF00D157BB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,13 +123,15 @@
 		26E3B8C91DA177D000D157BB /* Alogea */ = {
 			isa = PBXGroup;
 			children = (
+				26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
-				26E3B8CC1DA177D000D157BB /* ViewController.swift */,
+				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
 				26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */,
 				26E3B8D91DA177D000D157BB /* Info.plist */,
 				26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */,
+				26E3B9121DA1819B00D157BB /* Data Models */,
 			);
 			path = Alogea;
 			sourceTree = "<group>";
@@ -128,6 +154,31 @@
 			path = AlogeaUITests;
 			sourceTree = "<group>";
 		};
+		26E3B8FC1DA177DF00D157BB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B8FF1DA177E800D157BB /* StoreKit.framework */,
+				26E3B8FD1DA177DF00D157BB /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		26E3B9121DA1819B00D157BB /* Data Models */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B9021DA1816E00D157BB /* Event+CoreDataClass.swift */,
+				26E3B9031DA1816E00D157BB /* Event+CoreDataProperties.swift */,
+				26E3B9041DA1816E00D157BB /* RecordType+CoreDataClass.swift */,
+				26E3B9051DA1816E00D157BB /* RecordType+CoreDataProperties.swift */,
+				26E3B9061DA1816E00D157BB /* Exercise+CoreDataClass.swift */,
+				26E3B9071DA1816E00D157BB /* Exercise+CoreDataProperties.swift */,
+				26E3B9081DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift */,
+				26E3B9091DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift */,
+			);
+			name = "Data Models";
+			path = ..;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,6 +189,7 @@
 				26E3B8C31DA177D000D157BB /* Sources */,
 				26E3B8C41DA177D000D157BB /* Frameworks */,
 				26E3B8C51DA177D000D157BB /* Resources */,
+				26E3B9011DA1789F00D157BB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -198,6 +250,23 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 9T25ACNCQ7;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					26E3B8DD1DA177D000D157BB = {
 						CreatedOnToolsVersion = 8.0;
@@ -260,14 +329,38 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		26E3B9011DA1789F00D157BB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		26E3B8C31DA177D000D157BB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26E3B90B1DA1816E00D157BB /* Event+CoreDataProperties.swift in Sources */,
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
-				26E3B8CD1DA177D000D157BB /* ViewController.swift in Sources */,
+				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
+				26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */,
+				26E3B90E1DA1816E00D157BB /* Exercise+CoreDataClass.swift in Sources */,
+				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,
+				26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */,
+				26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */,
+				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,
 				26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */,
+				26E3B90F1DA1816E00D157BB /* Exercise+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +512,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Alogea/Alogea.entitlements;
 				DEVELOPMENT_TEAM = 9T25ACNCQ7;
 				INFOPLIST_FILE = Alogea/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -432,6 +526,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Alogea/Alogea.entitlements;
 				DEVELOPMENT_TEAM = 9T25ACNCQ7;
 				INFOPLIST_FILE = Alogea/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
