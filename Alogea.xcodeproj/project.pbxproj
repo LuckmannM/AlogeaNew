@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
+		26E3B8CD1DA177D000D157BB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CC1DA177D000D157BB /* ViewController.swift */; };
+		26E3B8D01DA177D000D157BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8CE1DA177D000D157BB /* Main.storyboard */; };
+		26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */; };
+		26E3B8D51DA177D000D157BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8D41DA177D000D157BB /* Assets.xcassets */; };
+		26E3B8D81DA177D000D157BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */; };
+		26E3B8E31DA177D000D157BB /* AlogeaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8E21DA177D000D157BB /* AlogeaTests.swift */; };
+		26E3B8EE1DA177D000D157BB /* AlogeaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8ED1DA177D000D157BB /* AlogeaUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		26E3B8DF1DA177D000D157BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26E3B8BF1DA177D000D157BB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26E3B8C61DA177D000D157BB;
+			remoteInfo = Alogea;
+		};
+		26E3B8EA1DA177D000D157BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26E3B8BF1DA177D000D157BB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26E3B8C61DA177D000D157BB;
+			remoteInfo = Alogea;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		26E3B8CA1DA177D000D157BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		26E3B8CC1DA177D000D157BB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		26E3B8CF1DA177D000D157BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		26E3B8D21DA177D000D157BB /* Alogea.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Alogea.xcdatamodel; sourceTree = "<group>"; };
+		26E3B8D41DA177D000D157BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		26E3B8D71DA177D000D157BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		26E3B8D91DA177D000D157BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26E3B8DE1DA177D000D157BB /* AlogeaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlogeaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		26E3B8E21DA177D000D157BB /* AlogeaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlogeaTests.swift; sourceTree = "<group>"; };
+		26E3B8E41DA177D000D157BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26E3B8E91DA177D000D157BB /* AlogeaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlogeaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		26E3B8ED1DA177D000D157BB /* AlogeaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlogeaUITests.swift; sourceTree = "<group>"; };
+		26E3B8EF1DA177D000D157BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		26E3B8C41DA177D000D157BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26E3B8DB1DA177D000D157BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26E3B8E61DA177D000D157BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		26E3B8BE1DA177D000D157BB = {
+			isa = PBXGroup;
+			children = (
+				26E3B8C91DA177D000D157BB /* Alogea */,
+				26E3B8E11DA177D000D157BB /* AlogeaTests */,
+				26E3B8EC1DA177D000D157BB /* AlogeaUITests */,
+				26E3B8C81DA177D000D157BB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		26E3B8C81DA177D000D157BB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B8C71DA177D000D157BB /* Alogea.app */,
+				26E3B8DE1DA177D000D157BB /* AlogeaTests.xctest */,
+				26E3B8E91DA177D000D157BB /* AlogeaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		26E3B8C91DA177D000D157BB /* Alogea */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
+				26E3B8CC1DA177D000D157BB /* ViewController.swift */,
+				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
+				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
+				26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */,
+				26E3B8D91DA177D000D157BB /* Info.plist */,
+				26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */,
+			);
+			path = Alogea;
+			sourceTree = "<group>";
+		};
+		26E3B8E11DA177D000D157BB /* AlogeaTests */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B8E21DA177D000D157BB /* AlogeaTests.swift */,
+				26E3B8E41DA177D000D157BB /* Info.plist */,
+			);
+			path = AlogeaTests;
+			sourceTree = "<group>";
+		};
+		26E3B8EC1DA177D000D157BB /* AlogeaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B8ED1DA177D000D157BB /* AlogeaUITests.swift */,
+				26E3B8EF1DA177D000D157BB /* Info.plist */,
+			);
+			path = AlogeaUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		26E3B8C61DA177D000D157BB /* Alogea */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26E3B8F21DA177D000D157BB /* Build configuration list for PBXNativeTarget "Alogea" */;
+			buildPhases = (
+				26E3B8C31DA177D000D157BB /* Sources */,
+				26E3B8C41DA177D000D157BB /* Frameworks */,
+				26E3B8C51DA177D000D157BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Alogea;
+			productName = Alogea;
+			productReference = 26E3B8C71DA177D000D157BB /* Alogea.app */;
+			productType = "com.apple.product-type.application";
+		};
+		26E3B8DD1DA177D000D157BB /* AlogeaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26E3B8F51DA177D000D157BB /* Build configuration list for PBXNativeTarget "AlogeaTests" */;
+			buildPhases = (
+				26E3B8DA1DA177D000D157BB /* Sources */,
+				26E3B8DB1DA177D000D157BB /* Frameworks */,
+				26E3B8DC1DA177D000D157BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				26E3B8E01DA177D000D157BB /* PBXTargetDependency */,
+			);
+			name = AlogeaTests;
+			productName = AlogeaTests;
+			productReference = 26E3B8DE1DA177D000D157BB /* AlogeaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		26E3B8E81DA177D000D157BB /* AlogeaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26E3B8F81DA177D000D157BB /* Build configuration list for PBXNativeTarget "AlogeaUITests" */;
+			buildPhases = (
+				26E3B8E51DA177D000D157BB /* Sources */,
+				26E3B8E61DA177D000D157BB /* Frameworks */,
+				26E3B8E71DA177D000D157BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				26E3B8EB1DA177D000D157BB /* PBXTargetDependency */,
+			);
+			name = AlogeaUITests;
+			productName = AlogeaUITests;
+			productReference = 26E3B8E91DA177D000D157BB /* AlogeaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		26E3B8BF1DA177D000D157BB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = AppToolFactory;
+				TargetAttributes = {
+					26E3B8C61DA177D000D157BB = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 9T25ACNCQ7;
+						ProvisioningStyle = Automatic;
+					};
+					26E3B8DD1DA177D000D157BB = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 9T25ACNCQ7;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 26E3B8C61DA177D000D157BB;
+					};
+					26E3B8E81DA177D000D157BB = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 9T25ACNCQ7;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 26E3B8C61DA177D000D157BB;
+					};
+				};
+			};
+			buildConfigurationList = 26E3B8C21DA177D000D157BB /* Build configuration list for PBXProject "Alogea" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 26E3B8BE1DA177D000D157BB;
+			productRefGroup = 26E3B8C81DA177D000D157BB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				26E3B8C61DA177D000D157BB /* Alogea */,
+				26E3B8DD1DA177D000D157BB /* AlogeaTests */,
+				26E3B8E81DA177D000D157BB /* AlogeaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		26E3B8C51DA177D000D157BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26E3B8D81DA177D000D157BB /* LaunchScreen.storyboard in Resources */,
+				26E3B8D51DA177D000D157BB /* Assets.xcassets in Resources */,
+				26E3B8D01DA177D000D157BB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26E3B8DC1DA177D000D157BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26E3B8E71DA177D000D157BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		26E3B8C31DA177D000D157BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
+				26E3B8CD1DA177D000D157BB /* ViewController.swift in Sources */,
+				26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26E3B8DA1DA177D000D157BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26E3B8E31DA177D000D157BB /* AlogeaTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26E3B8E51DA177D000D157BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26E3B8EE1DA177D000D157BB /* AlogeaUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		26E3B8E01DA177D000D157BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26E3B8C61DA177D000D157BB /* Alogea */;
+			targetProxy = 26E3B8DF1DA177D000D157BB /* PBXContainerItemProxy */;
+		};
+		26E3B8EB1DA177D000D157BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26E3B8C61DA177D000D157BB /* Alogea */;
+			targetProxy = 26E3B8EA1DA177D000D157BB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		26E3B8CE1DA177D000D157BB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				26E3B8CF1DA177D000D157BB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				26E3B8D71DA177D000D157BB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		26E3B8F01DA177D000D157BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		26E3B8F11DA177D000D157BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		26E3B8F31DA177D000D157BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9T25ACNCQ7;
+				INFOPLIST_FILE = Alogea/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.uk.AppToolFactory.Alogea;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		26E3B8F41DA177D000D157BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9T25ACNCQ7;
+				INFOPLIST_FILE = Alogea/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.uk.AppToolFactory.Alogea;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		26E3B8F61DA177D000D157BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 9T25ACNCQ7;
+				INFOPLIST_FILE = AlogeaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.uk.AppToolFactory.AlogeaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Alogea.app/Alogea";
+			};
+			name = Debug;
+		};
+		26E3B8F71DA177D000D157BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 9T25ACNCQ7;
+				INFOPLIST_FILE = AlogeaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.uk.AppToolFactory.AlogeaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Alogea.app/Alogea";
+			};
+			name = Release;
+		};
+		26E3B8F91DA177D000D157BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 9T25ACNCQ7;
+				INFOPLIST_FILE = AlogeaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.uk.AppToolFactory.AlogeaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Alogea;
+			};
+			name = Debug;
+		};
+		26E3B8FA1DA177D000D157BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 9T25ACNCQ7;
+				INFOPLIST_FILE = AlogeaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.uk.AppToolFactory.AlogeaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Alogea;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		26E3B8C21DA177D000D157BB /* Build configuration list for PBXProject "Alogea" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26E3B8F01DA177D000D157BB /* Debug */,
+				26E3B8F11DA177D000D157BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		26E3B8F21DA177D000D157BB /* Build configuration list for PBXNativeTarget "Alogea" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26E3B8F31DA177D000D157BB /* Debug */,
+				26E3B8F41DA177D000D157BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		26E3B8F51DA177D000D157BB /* Build configuration list for PBXNativeTarget "AlogeaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26E3B8F61DA177D000D157BB /* Debug */,
+				26E3B8F71DA177D000D157BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		26E3B8F81DA177D000D157BB /* Build configuration list for PBXNativeTarget "AlogeaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26E3B8F91DA177D000D157BB /* Debug */,
+				26E3B8FA1DA177D000D157BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				26E3B8D21DA177D000D157BB /* Alogea.xcdatamodel */,
+			);
+			currentVersion = 26E3B8D21DA177D000D157BB /* Alogea.xcdatamodel */;
+			path = Alogea.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 26E3B8BF1DA177D000D157BB /* Project object */;
+}
