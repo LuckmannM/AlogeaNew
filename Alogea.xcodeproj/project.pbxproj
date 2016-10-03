@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
 		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
 		26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CC1DA177D000D157BB /* MainViewController.swift */; };
 		26E3B8D01DA177D000D157BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8CE1DA177D000D157BB /* Main.storyboard */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E3B8CA1DA177D000D157BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		26E3B8CC1DA177D000D157BB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
+				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
 				26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */,
 				26E3B8D91DA177D000D157BB /* Info.plist */,
@@ -353,6 +356,7 @@
 				26E3B90B1DA1816E00D157BB /* Event+CoreDataProperties.swift in Sources */,
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
+				26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */,
 				26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */,
 				26E3B90E1DA1816E00D157BB /* Exercise+CoreDataClass.swift in Sources */,
 				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,
@@ -613,6 +617,7 @@
 				26E3B8F41DA177D000D157BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		26E3B8F51DA177D000D157BB /* Build configuration list for PBXNativeTarget "AlogeaTests" */ = {
 			isa = XCConfigurationList;
@@ -621,6 +626,7 @@
 				26E3B8F71DA177D000D157BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		26E3B8F81DA177D000D157BB /* Build configuration list for PBXNativeTarget "AlogeaUITests" */ = {
 			isa = XCConfigurationList;
@@ -629,6 +635,7 @@
 				26E3B8FA1DA177D000D157BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
