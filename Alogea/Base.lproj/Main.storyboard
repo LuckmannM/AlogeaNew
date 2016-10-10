@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,9 +20,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj">
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2f0-CN-u9e">
                                 <segments>
                                     <segment title="Day"/>
@@ -31,36 +29,27 @@
                                 </segments>
                                 <color key="tintColor" red="0.66568392519999997" green="0.30898010729999997" blue="0.28021350499999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </segmentedControl>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj">
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="1Bh-TZ-bh5"/>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" id="B75-hh-w3k"/>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="2f0-CN-u9e" secondAttribute="leading" id="IDB-vb-tRa"/>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="PHO-XD-jze"/>
-                            <constraint firstAttribute="trailing" secondItem="2f0-CN-u9e" secondAttribute="trailing" id="gHt-42-oHk"/>
-                            <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="nTq-BI-FYI"/>
-                            <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="vHb-yd-LwJ"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5HX-bf-Nth"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="KY2-mz-0Wj"/>
+                            <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" id="TUa-od-DY8"/>
+                            <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="Zep-kQ-hxe"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
+                            <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="B75-hh-w3k"/>
-                                <exclude reference="IDB-vb-tRa"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular">
-                            <mask key="constraints">
-                                <include reference="B75-hh-w3k"/>
-                                <include reference="IDB-vb-tRa"/>
-                            </mask>
-                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="ADY-CS-NDV"/>
                     <navigationItem key="navigationItem" id="A2h-jV-1ed"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3009.375" y="137.32394366197184"/>
+            <point key="canvasLocation" x="3005.7971014492755" y="135.32608695652175"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="g3U-cZ-6H7">
