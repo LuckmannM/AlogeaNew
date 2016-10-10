@@ -17,7 +17,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2f0-CN-u9e">
@@ -38,7 +38,10 @@
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5HX-bf-Nth"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="KY2-mz-0Wj"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" id="TUa-od-DY8"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" id="TUa-od-DY8">
+                                <variation key="heightClass=compact-widthClass=compact" constant="164.75"/>
+                                <variation key="heightClass=compact-widthClass=regular" constant="186.97999999999999"/>
+                            </constraint>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="Zep-kQ-hxe"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
@@ -49,22 +52,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3005.7971014492755" y="135.32608695652175"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="g3U-cZ-6H7">
-            <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="3lH-ml-dOk" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="3an-tl-TCl">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jnv-aQ-iD3" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
+            <point key="canvasLocation" x="3004.9475262368819" y="133.59999999999999"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sx4-I1-IEg">
@@ -72,6 +60,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="gtS-nw-F2W" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="DiL-Kv-AKq">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
