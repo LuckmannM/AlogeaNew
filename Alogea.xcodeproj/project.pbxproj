@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AC1DAE355300FF0484 /* ColorScheme.swift */; };
 		2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */; };
+		2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */; };
 		2697A9491DAC254E00E33320 /* GraphContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2697A9481DAC254E00E33320 /* GraphContainer.swift */; };
 		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
 		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
@@ -51,6 +52,7 @@
 /* Begin PBXFileReference section */
 		2644B8AC1DAE355300FF0484 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchWheelView.swift; sourceTree = "<group>"; };
+		2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GetGradientColor Extension.swift"; path = "../../CircularSlider/CircularSlider/GetGradientColor Extension.swift"; sourceTree = "<group>"; };
 		2697A9481DAC254E00E33320 /* GraphContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphContainer.swift; sourceTree = "<group>"; };
 		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +138,7 @@
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
 				2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */,
+				2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
 				2697A9481DAC254E00E33320 /* GraphContainer.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
@@ -372,6 +375,7 @@
 				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,
 				26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */,
 				26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */,
+				2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
 				2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */,
 				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,
