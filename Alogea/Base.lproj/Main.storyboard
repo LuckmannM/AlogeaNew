@@ -33,38 +33,29 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainer" customModule="Alogea" customModuleProvider="target">
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GbI-hY-xqc" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HON-qg-VDu" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="HON-qg-VDu" secondAttribute="height" multiplier="1:1" id="CcT-yd-DyP"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
                                 <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" id="aht-uH-Vvm"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="HON-qg-VDu" secondAttribute="bottom" id="3J4-Vk-pac"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5HX-bf-Nth"/>
-                            <constraint firstItem="HON-qg-VDu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EgU-z9-hY3"/>
-                            <constraint firstItem="GbI-hY-xqc" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="Fgn-qv-DvC"/>
+                            <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
+                            <constraint firstItem="iIW-Nc-pNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUg-qH-Qns"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="KY2-mz-0Wj"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
-                            <constraint firstItem="GbI-hY-xqc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="PF8-kQ-nh7"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" priority="750" id="TUa-od-DY8">
                                 <variation key="heightClass=compact-widthClass=compact" constant="164.75"/>
                                 <variation key="heightClass=compact-widthClass=regular" constant="186.97999999999999"/>
                                 <variation key="heightClass=regular-widthClass=regular" constant="50.68"/>
                             </constraint>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="Zep-kQ-hxe"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="GbI-hY-xqc" secondAttribute="bottom" id="e87-4e-EfU"/>
-                            <constraint firstItem="GbI-hY-xqc" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="jhe-HF-qHW"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="iIW-Nc-pNj" secondAttribute="bottom" id="cUK-R7-fYd"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
-                            <constraint firstItem="HON-qg-VDu" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="sUI-ud-MZz"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="ADY-CS-NDV"/>

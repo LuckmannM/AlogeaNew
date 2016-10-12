@@ -11,6 +11,7 @@ import UIKit
 class TouchWheelView: UIView {
     
     let π: CGFloat = CGFloat(M_PI)
+    let margin: CGFloat = 5.0
     let themeColors = ColorScheme.sharedInstance()
     let gradientBar = UIImage(named: "GradientBar")
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
@@ -27,24 +28,20 @@ class TouchWheelView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        let context = UIGraphicsGetCurrentContext()
+        if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
         
-        self.backgroundColor = themeColors.gradientGreen
+        let context = UIGraphicsGetCurrentContext()
         
         circleSegment = 2 * π / 256
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
-        lineWidth = frame.height / 10
-        radius = -lineWidth + frame.height / 2
+        lineWidth = frame.height / 6
+        radius = -margin - lineWidth / 2 + frame.height / 2
+        centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
-        centerPoint = CGPoint(x: frame.midX, y: frame.midY)
-        print("TWView data: frame: \(frame)")
-        print("center: \(centerPoint)")
-        print("radius: \(radius)")
-        print("lineWidth: \(lineWidth)")
-                context!.saveGState()
-                context!.translateBy(x: 0, y: frame.height)
-                context!.rotate(by: -π / 2)
+        context!.saveGState()
+        context!.translateBy(x: 0, y: frame.height)
+        context!.rotate(by: -π / 2)
         
         circleRim.addArc(withCenter: centerPoint, radius: (radius), startAngle: 2 * π, endAngle: 0, clockwise: false)
         themeColors.darkBlue.setStroke()
@@ -60,8 +57,7 @@ class TouchWheelView: UIView {
         
         drawArcSegment(startAngle: startAngle, endAngle: 2 * π)
         
-                context!.restoreGState()
-        
+        context!.restoreGState()
     }
     
     
