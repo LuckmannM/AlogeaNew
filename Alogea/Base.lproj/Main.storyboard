@@ -36,7 +36,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
                                 <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" id="aht-uH-Vvm"/>
+                                    <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" priority="250" id="aht-uH-Vvm">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
+                                    </constraint>
                                 </constraints>
                             </view>
                         </subviews>
