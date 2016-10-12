@@ -42,9 +42,9 @@ class TouchWheelView: UIView {
         print("center: \(centerPoint)")
         print("radius: \(radius)")
         print("lineWidth: \(lineWidth)")
-        //        context!.saveGState()
-        //        context!.translateBy(x: 0, y: frame.height)
-        //        context!.rotate(by: -π / 2)
+                context!.saveGState()
+                context!.translateBy(x: 0, y: frame.height)
+                context!.rotate(by: -π / 2)
         
         circleRim.addArc(withCenter: centerPoint, radius: (radius), startAngle: 2 * π, endAngle: 0, clockwise: false)
         themeColors.darkBlue.setStroke()
@@ -60,7 +60,7 @@ class TouchWheelView: UIView {
         
         drawArcSegment(startAngle: startAngle, endAngle: 2 * π)
         
-        //        context!.restoreGState()
+                context!.restoreGState()
         
     }
     
