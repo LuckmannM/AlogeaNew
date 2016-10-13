@@ -16,15 +16,18 @@ class TouchWheelView: UIView {
     let gradientBar = UIImage(named: "GradientBar")
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
     
+    @IBOutlet var scoreLabel: UILabel!
+    
     var color = UIColor()
     var circleRim = UIBezierPath()
-    
     var lineWidth: CGFloat!
     var startAngle, endAngle: CGFloat!
     var circleSegment: CGFloat!
     var radius: CGFloat!
     var centerPoint, colorPosition: CGPoint!
     
+    var touchPoint = CGPoint.zero
+    var touchWheelValue: Double = 0.0
     
     override func draw(_ rect: CGRect) {
         
@@ -60,7 +63,6 @@ class TouchWheelView: UIView {
         context!.restoreGState()
     }
     
-    
     func drawArcSegment(startAngle: CGFloat, endAngle: CGFloat) {
         
         if (gradientBar != nil) {
@@ -81,6 +83,42 @@ class TouchWheelView: UIView {
         circlePath.lineWidth = lineWidth
         color.setStroke()
         circlePath.stroke()
+        
+    }
+    
+    /* much simpler than gestureRecogniser but can't provide feedback during slides
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        for touch: AnyObject in touches {
+            print("touch ended \( touch.location(in:self))")
+        }
+    }
+     */
+    
+    @IBAction func touchGesture(recogniser: UIPanGestureRecognizer) {
+        
+        if recogniser.state == .began  {
+            touchPoint = CGPoint.zero
+        }
+        
+        touchPoint = recogniser.translation(in: self)
+        
+        touchPoint.x += touchPoint.x
+        touchPoint.y += touchPoint.y
+        print("touch point = \(touchPoint)")
+        
+        let distanceFromCentre = CGPoint(x: (touchPoint.x - centerPoint.x),y: (touchPoint.y - centerPoint.y))
+        
+        var angle = atan2f(Float(distanceFromCentre.y),Float(distanceFromCentre.x)) + Float(π)
+        
+        if angle < 0 {
+            angle += Float(2 * π)
+        }
+        
+        print("angle in π = \(CGFloat(angle) / π)")
+        
+        // value = -1 * (CGFloat(angle) / (2 * π)) + 1
+        scoreLabel.text = "\(10 * (1 - (CGFloat(angle) / (2 * π))))"
         
     }
     

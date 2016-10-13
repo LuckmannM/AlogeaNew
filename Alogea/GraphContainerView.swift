@@ -1,14 +1,14 @@
 //
-//  GraphContainer.swift
+//  GraphContainerView.swift
 //  Alogea
 //
-//  Created by mikeMBP on 10/10/2016.
+//  Created by mikeMBP on 12/10/2016.
 //  Copyright © 2016 AppToolFactory. All rights reserved.
 //
 
 import UIKit
 
-class GraphContainer: UIView {
+class GraphContainerView: UIView {
 
     /*
     // Only override draw() if you perform custom drawing.

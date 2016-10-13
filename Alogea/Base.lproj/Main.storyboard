@@ -30,19 +30,36 @@
                                 </segments>
                                 <color key="tintColor" red="0.66568392519999997" green="0.30898010729999997" blue="0.28021350499999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </segmentedControl>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainer" customModule="Alogea" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainerView" customModule="Alogea" customModuleProvider="target">
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-nv-FrV">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="82" id="qG2-Zl-9dg"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="34"/>
+                                        <color key="textColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstItem="iqj-nv-FrV" firstAttribute="centerY" secondItem="iIW-Nc-pNj" secondAttribute="centerY" id="Nzr-aL-RAI"/>
+                                    <constraint firstItem="iqj-nv-FrV" firstAttribute="centerX" secondItem="iIW-Nc-pNj" secondAttribute="centerX" id="R2h-gr-BoP"/>
                                     <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" priority="250" id="aht-uH-Vvm">
                                         <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
                                     </constraint>
                                 </constraints>
+                                <connections>
+                                    <outlet property="scoreLabel" destination="iqj-nv-FrV" id="PBQ-1k-6cp"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5HX-bf-Nth"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
@@ -59,11 +76,19 @@
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ko5-0R-WEF" appends="YES" id="AOX-UF-a2b"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="ADY-CS-NDV"/>
                     <navigationItem key="navigationItem" id="A2h-jV-1ed"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="ko5-0R-WEF">
+                    <connections>
+                        <action selector="touchGestureWithRecogniser:" destination="iIW-Nc-pNj" id="zsp-9T-o86"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3004" y="132.68365817091455"/>
         </scene>
