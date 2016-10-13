@@ -86,40 +86,38 @@ class TouchWheelView: UIView {
         
     }
     
-    /* much simpler than gestureRecogniser but can't provide feedback during slides
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch: AnyObject in touches {
-            print("touch ended \( touch.location(in:self))")
+            // *** KEEP THIS HERE or integrate into CircularSlider
+            touchPoint = touch.location(in: self)
         }
+
     }
-     */
     
     @IBAction func touchGesture(recogniser: UIPanGestureRecognizer) {
         
-        if recogniser.state == .began  {
-            touchPoint = CGPoint.zero
-        }
+        let π: Float = Float(M_PI)
+        var angle: Float = 0.0
         
-        touchPoint = recogniser.translation(in: self)
+        let translate = recogniser.translation(in: self)
         
-        touchPoint.x += touchPoint.x
-        touchPoint.y += touchPoint.y
-        print("touch point = \(touchPoint)")
+        touchPoint.x += translate.x
+        touchPoint.y += translate.y
+        recogniser.setTranslation(CGPoint.zero, in: self)
+ 
+        let distanceFromCentre = CGPoint(
+            x: (touchPoint.x - self.frame.width / 2),
+            y: (touchPoint.y - self.frame.height / 2 )
+        )
         
-        let distanceFromCentre = CGPoint(x: (touchPoint.x - centerPoint.x),y: (touchPoint.y - centerPoint.y))
-        
-        var angle = atan2f(Float(distanceFromCentre.y),Float(distanceFromCentre.x)) + Float(π)
+        angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 2
         
         if angle < 0 {
-            angle += Float(2 * π)
+            angle += 2 * π
         }
-        
-        print("angle in π = \(CGFloat(angle) / π)")
-        
-        // value = -1 * (CGFloat(angle) / (2 * π)) + 1
-        scoreLabel.text = "\(10 * (1 - (CGFloat(angle) / (2 * π))))"
-        
+        touchWheelValue = Double(10 * angle / (2 * π))
+        scoreLabel.text = "\(touchWheelValue)"
     }
     
 }
