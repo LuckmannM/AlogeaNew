@@ -111,7 +111,7 @@ class TouchWheelView: UIView {
             y: (touchPoint.y - self.frame.height / 2 )
         )
         
-        angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 2
+        angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 2.1
         
         if angle < 0 {
             angle += 2 * π
