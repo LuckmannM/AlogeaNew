@@ -16,6 +16,7 @@ class TouchWheelView: UIView {
     let gradientBar = UIImage(named: "GradientBar")
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
     
+    // temporary - display in circular Button interface
     @IBOutlet var scoreLabel: UILabel!
     
     var color = UIColor()
@@ -88,8 +89,9 @@ class TouchWheelView: UIView {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        // to get initial touch location before pan starts
+        // this initial touchLocation is not available from the PanGestureRecogniser
         for touch: AnyObject in touches {
-            // *** KEEP THIS HERE or integrate into CircularSlider
             touchPoint = touch.location(in: self)
         }
 
@@ -111,13 +113,18 @@ class TouchWheelView: UIView {
             y: (touchPoint.y - self.frame.height / 2 )
         )
         
+        // red/green wheel transition at top  - due to overlap in gradient arc drawing - is at ca. 3º 'west'
+        // so add slightly more than π/2 to align 0 angle to border
         angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 2.1
         
         if angle < 0 {
             angle += 2 * π
         }
-        touchWheelValue = Double(10 * angle / (2 * π))
-        scoreLabel.text = "\(touchWheelValue)"
+        
+        if self.layer.pixelIsOpaque(point: touchPoint) {
+            touchWheelValue = Double(10 * angle / (2 * π))
+            scoreLabel.text = "\(touchWheelValue)"
+        }
     }
     
 }

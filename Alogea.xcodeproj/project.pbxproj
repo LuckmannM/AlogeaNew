@@ -109,6 +109,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26B5A14D1DAFE4760082DA40 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		26E3B8BE1DA177D000D157BB = {
 			isa = PBXGroup;
 			children = (
@@ -139,13 +147,13 @@
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
 				2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */,
-				2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
 				26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */,
 				26E3B8D91DA177D000D157BB /* Info.plist */,
 				26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */,
+				26B5A14D1DAFE4760082DA40 /* Extensions */,
 				26E3B9121DA1819B00D157BB /* Data Models */,
 			);
 			path = Alogea;
