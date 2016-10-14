@@ -10,9 +10,15 @@ import UIKit
 
 class MainViewController: UIViewController {
 
+    @IBOutlet weak var touchWheel: TouchWheelView!
+    
+    @IBOutlet weak var roundButton: MainViewButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        touchWheel.delegate = roundButton
         
     }
 

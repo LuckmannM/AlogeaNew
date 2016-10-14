@@ -34,29 +34,19 @@
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqj-nv-FrV">
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="82" id="qG2-Zl-9dg"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <color key="textColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="iqj-nv-FrV" firstAttribute="centerY" secondItem="iIW-Nc-pNj" secondAttribute="centerY" id="Nzr-aL-RAI"/>
-                                    <constraint firstItem="iqj-nv-FrV" firstAttribute="centerX" secondItem="iIW-Nc-pNj" secondAttribute="centerX" id="R2h-gr-BoP"/>
                                     <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" priority="250" id="aht-uH-Vvm">
                                         <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
                                     </constraint>
                                 </constraints>
-                                <connections>
-                                    <outlet property="scoreLabel" destination="iqj-nv-FrV" id="PBQ-1k-6cp"/>
-                                </connections>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d69-8e-UYl" userLabel="MainViewButton" customClass="MainViewButton" customModule="Alogea" customModuleProvider="target">
+                                <frame key="frameInset" minX="160" minY="462" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -82,6 +72,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="ADY-CS-NDV"/>
                     <navigationItem key="navigationItem" id="A2h-jV-1ed"/>
+                    <connections>
+                        <outlet property="roundButton" destination="d69-8e-UYl" id="qMh-Ew-ZLc"/>
+                        <outlet property="touchWheel" destination="iIW-Nc-pNj" id="3nC-gw-I56"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="ko5-0R-WEF">

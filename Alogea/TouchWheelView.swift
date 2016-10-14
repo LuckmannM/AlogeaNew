@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol TouchWheelDelegate {
+    func passOnTouchWheelScore(score: Double)
+}
+
 class TouchWheelView: UIView {
     
     let π: CGFloat = CGFloat(M_PI)
@@ -16,8 +20,7 @@ class TouchWheelView: UIView {
     let gradientBar = UIImage(named: "GradientBar")
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
     
-    // temporary - display in circular Button interface
-    @IBOutlet var scoreLabel: UILabel!
+    var delegate: TouchWheelDelegate!
     
     var color = UIColor()
     var circleRim = UIBezierPath()
@@ -29,6 +32,10 @@ class TouchWheelView: UIView {
     
     var touchPoint = CGPoint.zero
     var touchWheelValue: Double = 0.0
+    
+    class func sharedInstance() -> TouchWheelView {
+        return touchWheel
+    }
     
     override func draw(_ rect: CGRect) {
         
@@ -123,9 +130,11 @@ class TouchWheelView: UIView {
         
         if self.layer.pixelIsOpaque(point: touchPoint) {
             touchWheelValue = Double(10 * angle / (2 * π))
-            scoreLabel.text = "\(touchWheelValue)"
+            delegate.passOnTouchWheelScore(score: touchWheelValue)
         }
     }
     
 }
+
+let touchWheel = TouchWheelView()
 
