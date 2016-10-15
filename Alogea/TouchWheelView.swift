@@ -21,6 +21,7 @@ class TouchWheelView: UIView {
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
     
     var delegate: TouchWheelDelegate!
+    var roundButton:MainViewButton!
     
     var color = UIColor()
     var circleRim = UIBezierPath()
@@ -37,9 +38,23 @@ class TouchWheelView: UIView {
         return touchWheel
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        roundButton = MainViewButton(frame: CGRect.zero, containingView: self)
+        addSubview(roundButton)
+        
+    }
+    
     override func draw(_ rect: CGRect) {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
+        
+        roundButton.frame = centralCircleRect()
+        roundButton.setNeedsDisplay()
         
         let context = UIGraphicsGetCurrentContext()
         
@@ -132,6 +147,11 @@ class TouchWheelView: UIView {
             touchWheelValue = Double(10 * angle / (2 * π))
             delegate.passOnTouchWheelScore(score: touchWheelValue)
         }
+    }
+    
+    func centralCircleRect() -> CGRect {
+        let innerRect = CGRect(x: 8 + frame.width / 6, y: 8 + frame.width / 6, width: frame.width - (16 + frame.width / 3), height: frame.height - (16 + frame.height / 3))
+        return innerRect
     }
     
 }

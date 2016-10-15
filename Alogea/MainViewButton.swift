@@ -11,24 +11,38 @@ import UIKit
 class MainViewButton: UIButton, TouchWheelDelegate {
     
     var scoreLabel = UILabel()
+    var colorScheme: ColorScheme!
+    weak var touchWheel: TouchWheelView!
         
+    convenience init(frame: CGRect, containingView: TouchWheelView) {
+        self.init(frame: frame)
+        self.touchWheel = containingView
+        self.touchWheel.delegate = self
+        self.backgroundColor = UIColor.clear
+        colorScheme = ColorScheme.sharedInstance()
+        scoreLabel.text = "0.0"
+        scoreLabel.sizeToFit()
+        scoreLabel.center = self.center
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
     }
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
-        // Drawing code
+        let buttonCircle = UIBezierPath(ovalIn: bounds)
+        colorScheme.seaGreen.setFill()
+        buttonCircle.fill()
+        colorScheme.darkBlue.setStroke()
+        buttonCircle.lineWidth = 2
+        buttonCircle.stroke()
     }
-    */
     
     func passOnTouchWheelScore(score: Double) {
         let scoreNumber = NSNumber(value: score)
@@ -39,6 +53,8 @@ class MainViewButton: UIButton, TouchWheelDelegate {
         }()
     
         scoreLabel.text = numberFormatter.string(from: scoreNumber)
+        scoreLabel.sizeToFit()
+        scoreLabel.center = self.center
         print("MVButton label set to \(numberFormatter.string(from: scoreNumber)) ")
     }
 
