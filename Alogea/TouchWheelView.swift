@@ -61,7 +61,7 @@ class TouchWheelView: UIView {
         circleSegment = 2 * π / 256
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
-        lineWidth = frame.height / 6
+        lineWidth = frame.height / 5
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
@@ -150,7 +150,7 @@ class TouchWheelView: UIView {
     }
     
     func centralCircleRect() -> CGRect {
-        let innerRect = CGRect(x: 8 + frame.width / 6, y: 8 + frame.width / 6, width: frame.width - (16 + frame.width / 3), height: frame.height - (16 + frame.height / 3))
+        let innerRect = CGRect(x: 10 + frame.width / 6, y: 10 + frame.width / 6, width: frame.width - (20 + frame.width / 3), height: frame.height - (20 + frame.height / 3))
         return innerRect
     }
     
