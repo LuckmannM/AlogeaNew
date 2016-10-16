@@ -13,7 +13,7 @@ class MainViewButton: UIButton {
     var colors: ColorScheme!
     weak var containingView: MVButtonView!
         
-    convenience init(frame: CGRect, containingView: MVButtonView) {
+    convenience init(frame: CGRect, controller: MVButtonController) {
         self.init(frame: frame)
         colors = ColorScheme.sharedInstance()
         setTitle("MVButton", for: .normal)

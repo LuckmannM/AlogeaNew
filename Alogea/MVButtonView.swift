@@ -29,7 +29,7 @@ class MVButtonView: UIView {
         }()
         addSubview(scoreLabel)
         
-        roundButton = MainViewButton(frame: CGRect.zero, containingView: self)
+        roundButton = MainViewButton(frame: CGRect.zero, controller: controller)
         addSubview(roundButton)
     }
     

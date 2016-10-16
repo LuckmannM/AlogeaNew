@@ -13,11 +13,13 @@ class MVButtonController: TouchWheelDelegate {
     
     var buttonView: MVButtonView!
     var roundButton: MainViewButton!
+    var touchWheel: TouchWheelView!
     
     init(viewRect: CGRect, touchWheel: TouchWheelView) {
+        self.touchWheel = touchWheel
         touchWheel.delegate = self
         buttonView = MVButtonView(frame: viewRect, controller: self)
-        roundButton = MainViewButton(frame: viewRect, containingView: buttonView)
+        roundButton = MainViewButton(frame: viewRect, controller: self)
     }
     
     func passOnTouchWheelScore(score: Double,ended: Bool? = false) {
