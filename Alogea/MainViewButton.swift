@@ -8,27 +8,15 @@
 
 import UIKit
 
-class MainViewButton: UIButton, TouchWheelDelegate {
+class MainViewButton: UIButton {
     
-    var scoreLabel: UILabel!
-    var colorScheme: ColorScheme!
-    weak var touchWheel: TouchWheelView!
+    var colors: ColorScheme!
+    weak var containingView: MVButtonView!
         
-    convenience init(frame: CGRect, containingView: TouchWheelView) {
+    convenience init(frame: CGRect, containingView: MVButtonView) {
         self.init(frame: frame)
-        self.touchWheel = containingView
-        self.touchWheel.delegate = self
         self.backgroundColor = UIColor.clear
-        colorScheme = ColorScheme.sharedInstance()
-        scoreLabel = {
-            let label = UILabel()
-            label.text = "0.0"
-            label.font = UIFont.boldSystemFont(ofSize: 64)
-            label.textColor = colorScheme.darkBlue
-            label.isHidden = true
-            return label
-        }()
-        addSubview(scoreLabel)
+        colors = ColorScheme.sharedInstance()
     }
     
     override init(frame: CGRect) {
@@ -40,43 +28,10 @@ class MainViewButton: UIButton, TouchWheelDelegate {
         super.init(coder: aDecoder)
         
     }
-
+    
+    
+    /*
     override func draw(_ rect: CGRect) {
-        let buttonCircle = UIBezierPath(ovalIn: bounds)
-        colorScheme.seaGreen.setFill()
-        buttonCircle.fill()
-        
-        colorScheme.darkBlue.setStroke()
-        buttonCircle.lineWidth = 1
-        buttonCircle.stroke()
-        
-        centerScoreLabel()        
     }
-    
-    func passOnTouchWheelScore(score: Double,ended: Bool? = false) {
-        let scoreNumber = NSNumber(value: score)
-        let numberFormatter: NumberFormatter = {
-            let formatter = NumberFormatter()
-            formatter.minimumFractionDigits = 1
-            formatter.maximumFractionDigits = 1
-            formatter.minimumIntegerDigits = 1
-            return formatter
-        }()
-    
-        scoreLabel.text = numberFormatter.string(from: scoreNumber)
-        centerScoreLabel()
-        scoreLabel.isHidden = false
-    }
-    
-    func centerScoreLabel() {
-        scoreLabel.sizeToFit()
-        scoreLabel.frame = CGRect(
-            x: frame.width / 2 - scoreLabel.frame.width / 2,
-            y: frame.height / 2 - scoreLabel.frame.height / 2,
-            width: scoreLabel.frame.width,
-            height: scoreLabel.frame.height
-        )
-        
-    }
-
+    */
 }
