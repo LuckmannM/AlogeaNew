@@ -8,15 +8,24 @@
 
 import UIKit
 
+protocol MVButtonDelegate {
+    func mvButtonTapped(sender: MVButton)
+}
+
 class MVButton: UIButton {
     
     var colors: ColorScheme!
     weak var containingView: MVButtonView!
+    var delegate: MVButtonDelegate!
+    var controller: MVButtonController!
     
     convenience init(frame: CGRect, controller: MVButtonController) {
         self.init(frame: frame)
+        self.delegate = controller
+        self.controller = controller
         colors = ColorScheme.sharedInstance()
         setTitle("MVButton", for: .normal)
+        addTarget(self, action: #selector(tapped), for: .touchUpInside)
     }
     
     override init(frame: CGRect) {
@@ -31,12 +40,26 @@ class MVButton: UIButton {
     
     override func draw(_ rect: CGRect) {
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
-        colorScheme.darkViolet.setFill()
+        colorScheme.seaGreen.setFill()
         buttonCircle.fill()
         
         colorScheme.darkBlue.setStroke()
         buttonCircle.lineWidth = 1
         buttonCircle.stroke()
+    }
+    
+    func tapped() {
+        
+        UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveEaseOut, animations: {
+            
+            let targetRect = CGRect(origin: .zero, size: CGSize(width: self.controller.touchWheel.frame.width, height: self.controller.touchWheel.frame.height))
+            self.controller.buttonView.frame = targetRect
+            self.frame = targetRect
+            
+            }, completion: { (value: Bool) in
+                self.delegate.mvButtonTapped(sender: self)
+        })
+        
     }
     
 }

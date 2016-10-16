@@ -8,15 +8,23 @@
 
 import UIKit
 
-class MVButtonView: UIView {
+class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
 
     var scoreLabel: UILabel!
     var roundButton: UIButton!
     var colorScheme: ColorScheme!
     weak var touchWheel: TouchWheelView!
+    weak var controller: MVButtonController!
+    var pickerView: UIPickerView!
+    
+    var pickerViewTitles = ["Cancel","Diary entry","Medication"]
+    
+    // MARK: - Core class functions
 
     convenience init(frame: CGRect, controller: MVButtonController) {
         self.init(frame: frame)
+        self.controller = controller
+        self.touchWheel = controller.touchWheel
         self.backgroundColor = UIColor.clear
         colorScheme = ColorScheme.sharedInstance()
         scoreLabel = {
@@ -31,6 +39,17 @@ class MVButtonView: UIView {
         
         roundButton = MVButton(frame: CGRect.zero, controller: controller)
         addSubview(roundButton)
+        
+        pickerView = {
+            let pV = UIPickerView()
+            pV.frame = CGRect.zero
+            pV.delegate  = self
+            pV.dataSource = self
+            pV.isUserInteractionEnabled = false
+            pV.isHidden = true
+            return pV
+        }()
+        addSubview(pickerView)
     }
     
     override init(frame: CGRect) {
@@ -45,9 +64,6 @@ class MVButtonView: UIView {
 
     override func draw(_ rect: CGRect) {
 
-//        roundButton.frame = bounds
-//        roundButton.setNeedsDisplay()
-        
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
         colorScheme.seaGreen.setFill()
         buttonCircle.fill()
@@ -81,9 +97,55 @@ class MVButtonView: UIView {
             width: scoreLabel.frame.width,
             height: scoreLabel.frame.height
         )
-        
     }
 
-
+    // MARK: - PickerView functions
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerViewTitles.count
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return pickerViewTitles[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return frame.height / 5
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if row == 0 {
+            //cancel
+            resolvePicker()
+        } else if row == 1 {
+            // diary entry
+        } else {
+            // medication event
+        }
+    }
+    
+    func showPicker() {
+        roundButton.isUserInteractionEnabled = false
+        roundButton.isHidden = true
+        pickerView.frame = bounds.insetBy(dx: 15, dy: 15)
+        pickerView.isHidden = false
+        pickerView.isUserInteractionEnabled = true
+    }
+    
+    func resolvePicker() {
+        pickerView.isHidden = true
+        pickerView.isUserInteractionEnabled = false
+        roundButton.isHidden = false
+        roundButton.isUserInteractionEnabled = true
+        UIView.animate(withDuration: 0.1, animations: {
+            self.controller.sizeButtonViews(rect: self.touchWheel.frame, touchWheelWidth: self.touchWheel.lineWidth, margins: self.touchWheel.margin)
+        })
+    }
 
 }
