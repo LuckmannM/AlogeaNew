@@ -8,17 +8,15 @@
 
 import UIKit
 
-class MVButtonView: UIView, TouchWheelDelegate {
+class MVButtonView: UIView {
 
     var scoreLabel: UILabel!
     var roundButton: UIButton!
     var colorScheme: ColorScheme!
     weak var touchWheel: TouchWheelView!
 
-    convenience init(frame: CGRect, containingView: TouchWheelView) {
+    convenience init(frame: CGRect, controller: MVButtonController) {
         self.init(frame: frame)
-        self.touchWheel = containingView
-        self.touchWheel.delegate = self
         self.backgroundColor = UIColor.clear
         colorScheme = ColorScheme.sharedInstance()
         scoreLabel = {
@@ -59,7 +57,7 @@ class MVButtonView: UIView, TouchWheelDelegate {
         buttonCircle.stroke()
     }
     
-    func passOnTouchWheelScore(score: Double,ended: Bool? = false) {
+    func displayScore(score: Double,ended: Bool? = false) {
         let scoreNumber = NSNumber(value: score)
         let numberFormatter: NumberFormatter = {
             let formatter = NumberFormatter()

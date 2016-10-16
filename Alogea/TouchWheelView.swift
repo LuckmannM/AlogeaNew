@@ -22,6 +22,7 @@ class TouchWheelView: UIView {
     
     var delegate: TouchWheelDelegate!
     var buttonView:MVButtonView!
+    var mainButtonController: MVButtonController!
     
     var color = UIColor()
     var circleRim = UIBezierPath()
@@ -44,9 +45,9 @@ class TouchWheelView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        buttonView = MVButtonView(frame: CGRect.zero, containingView: self)
+        mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self)
+        buttonView = mainButtonController.buttonView
         addSubview(buttonView)
-        
     }
     
     override func draw(_ rect: CGRect) {

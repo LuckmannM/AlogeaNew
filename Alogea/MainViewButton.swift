@@ -15,8 +15,8 @@ class MainViewButton: UIButton {
         
     convenience init(frame: CGRect, containingView: MVButtonView) {
         self.init(frame: frame)
-        self.backgroundColor = UIColor.clear
         colors = ColorScheme.sharedInstance()
+        setTitle("MVButton", for: .normal)
     }
     
     override init(frame: CGRect) {
@@ -26,12 +26,17 @@ class MainViewButton: UIButton {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
     }
     
-    
-    /*
+
     override func draw(_ rect: CGRect) {
+        let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
+        colorScheme.darkViolet.setFill()
+        buttonCircle.fill()
+        
+        colorScheme.darkBlue.setStroke()
+        buttonCircle.lineWidth = 1
+        buttonCircle.stroke()
     }
-    */
+
 }
