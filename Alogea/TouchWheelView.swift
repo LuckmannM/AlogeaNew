@@ -9,7 +9,7 @@
 import UIKit
 
 protocol TouchWheelDelegate {
-    func passOnTouchWheelScore(score: Double)
+    func passOnTouchWheelScore(score: Double,ended: Bool?)
 }
 
 class TouchWheelView: UIView {
@@ -61,7 +61,7 @@ class TouchWheelView: UIView {
         circleSegment = 2 * π / 256
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
-        lineWidth = frame.height / 5
+        lineWidth = frame.height / 4
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
@@ -135,9 +135,9 @@ class TouchWheelView: UIView {
             y: (touchPoint.y - self.frame.height / 2 )
         )
         
-        // red/green wheel transition at top  - due to overlap in gradient arc drawing - is at ca. 3º 'west'
+        // red/green wheel transition at top  - due to overlap in gradient arc drawing - is at ca. 3º 'east'
         // so add slightly more than π/2 to align 0 angle to border
-        angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 2.1
+        angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 1.9
         
         if angle < 0 {
             angle += 2 * π
@@ -145,7 +145,11 @@ class TouchWheelView: UIView {
         
         if self.layer.pixelIsOpaque(point: touchPoint) {
             touchWheelValue = Double(10 * angle / (2 * π))
-            delegate.passOnTouchWheelScore(score: touchWheelValue)
+            if recogniser.state == .ended {
+                delegate.passOnTouchWheelScore(score: touchWheelValue, ended: true)
+            } else {
+                delegate.passOnTouchWheelScore(score: touchWheelValue, ended: false)
+            }
         }
     }
     

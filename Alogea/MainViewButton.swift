@@ -25,6 +25,7 @@ class MainViewButton: UIButton, TouchWheelDelegate {
             label.text = "0.0"
             label.font = UIFont.boldSystemFont(ofSize: 64)
             label.textColor = colorScheme.darkBlue
+            label.isHidden = true
             return label
         }()
         addSubview(scoreLabel)
@@ -49,19 +50,10 @@ class MainViewButton: UIButton, TouchWheelDelegate {
         buttonCircle.lineWidth = 1
         buttonCircle.stroke()
         
-        centerScoreLabel()
-        
-//        print("label frame = \(scoreLabel.frame)")
-//        let realCenter = CGPoint(x: scoreLabel.frame.origin.x + scoreLabel.frame.width / 2, y: scoreLabel.frame.origin.y + scoreLabel.frame.height / 2)
-//        print("frame real center is \(realCenter)")
-//        print("'center' is \(scoreLabel.center)")
-//        let mid = CGPoint(x: scoreLabel.frame.midX, y: scoreLabel.frame.midY)
-//        print("'mid-' is \(mid)")
-//        print("MVButton center = \(center)")
-        
+        centerScoreLabel()        
     }
     
-    func passOnTouchWheelScore(score: Double) {
+    func passOnTouchWheelScore(score: Double,ended: Bool? = false) {
         let scoreNumber = NSNumber(value: score)
         let numberFormatter: NumberFormatter = {
             let formatter = NumberFormatter()
@@ -73,6 +65,7 @@ class MainViewButton: UIButton, TouchWheelDelegate {
     
         scoreLabel.text = numberFormatter.string(from: scoreNumber)
         centerScoreLabel()
+        scoreLabel.isHidden = false
     }
     
     func centerScoreLabel() {
