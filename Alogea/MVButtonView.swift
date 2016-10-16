@@ -29,7 +29,7 @@ class MVButtonView: UIView {
         }()
         addSubview(scoreLabel)
         
-        roundButton = MainViewButton(frame: CGRect.zero, controller: controller)
+        roundButton = MVButton(frame: CGRect.zero, controller: controller)
         addSubview(roundButton)
     }
     
@@ -44,9 +44,9 @@ class MVButtonView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
-        // Drawing code
-        roundButton.frame = bounds
-        roundButton.setNeedsDisplay()
+
+//        roundButton.frame = bounds
+//        roundButton.setNeedsDisplay()
         
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
         colorScheme.seaGreen.setFill()

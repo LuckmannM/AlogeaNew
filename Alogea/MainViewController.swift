@@ -12,7 +12,6 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var touchWheel: TouchWheelView!
     
-    var roundButton: MainViewButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()

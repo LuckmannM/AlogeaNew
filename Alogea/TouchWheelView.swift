@@ -19,16 +19,15 @@ class TouchWheelView: UIView {
     let themeColors = ColorScheme.sharedInstance()
     let gradientBar = UIImage(named: "GradientBar")
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
+    let circleSegment: CGFloat = 2 * CGFloat(M_PI) / 256
     
     var delegate: TouchWheelDelegate!
-    var buttonView:MVButtonView!
     var mainButtonController: MVButtonController!
     
     var color = UIColor()
     var circleRim = UIBezierPath()
     var lineWidth: CGFloat!
     var startAngle, endAngle: CGFloat!
-    var circleSegment: CGFloat!
     var radius: CGFloat!
     var centerPoint, colorPosition: CGPoint!
     
@@ -46,26 +45,21 @@ class TouchWheelView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self)
-        buttonView = mainButtonController.buttonView
-        addSubview(buttonView)
     }
     
     override func draw(_ rect: CGRect) {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
-        
-        buttonView.frame = centralCircleRect()
-        buttonView.setNeedsDisplay()
-        
-        let context = UIGraphicsGetCurrentContext()
-        
-        circleSegment = 2 * π / 256
+                
+        // self.frame is only available in correct size while drawing, not after init() from NIB; it's then set to 0,0,1000,1000
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
         lineWidth = frame.height / 5
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
+        let context = UIGraphicsGetCurrentContext()
+
         context!.saveGState()
         context!.translateBy(x: 0, y: frame.height)
         context!.rotate(by: -π / 2)
@@ -85,6 +79,8 @@ class TouchWheelView: UIView {
         drawArcSegment(startAngle: startAngle, endAngle: 2 * π)
         
         context!.restoreGState()
+        
+        mainButtonController.sizeButtonViews(rect: frame, touchWheelWidth: lineWidth, margins: margin)
     }
     
     func drawArcSegment(startAngle: CGFloat, endAngle: CGFloat) {
@@ -152,11 +148,6 @@ class TouchWheelView: UIView {
                 delegate.passOnTouchWheelScore(score: touchWheelValue, ended: false)
             }
         }
-    }
-    
-    func centralCircleRect() -> CGRect {
-        let innerRect = CGRect(x: 10 + frame.width / 6, y: 10 + frame.width / 6, width: frame.width - (20 + frame.width / 3), height: frame.height - (20 + frame.height / 3))
-        return innerRect
     }
     
 }
