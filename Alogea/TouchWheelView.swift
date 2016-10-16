@@ -21,7 +21,7 @@ class TouchWheelView: UIView {
     let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
     
     var delegate: TouchWheelDelegate!
-    var roundButton:MainViewButton!
+    var buttonView:MVButtonView!
     
     var color = UIColor()
     var circleRim = UIBezierPath()
@@ -44,8 +44,8 @@ class TouchWheelView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        roundButton = MainViewButton(frame: CGRect.zero, containingView: self)
-        addSubview(roundButton)
+        buttonView = MVButtonView(frame: CGRect.zero, containingView: self)
+        addSubview(buttonView)
         
     }
     
@@ -53,15 +53,15 @@ class TouchWheelView: UIView {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
         
-        roundButton.frame = centralCircleRect()
-        roundButton.setNeedsDisplay()
+        buttonView.frame = centralCircleRect()
+        buttonView.setNeedsDisplay()
         
         let context = UIGraphicsGetCurrentContext()
         
         circleSegment = 2 * π / 256
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
-        lineWidth = frame.height / 4
+        lineWidth = frame.height / 5
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
