@@ -73,7 +73,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         buttonCircle.stroke()
     }
     
-    func displayScore(score: Double,ended: Bool? = false) {
+    func displayScore(score: Double) {
         let scoreNumber = NSNumber(value: score)
         let numberFormatter: NumberFormatter = {
             let formatter = NumberFormatter()
@@ -87,6 +87,12 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         centerScoreLabel()
         roundButton.isHidden = true
         scoreLabel.isHidden = false
+    }
+    
+    func hideScore() {
+        scoreLabel.text = "0.0"
+        scoreLabel.isHidden = true
+        roundButton.isHidden = false
     }
     
     func centerScoreLabel() {
@@ -109,13 +115,22 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         return 1
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        
-        return pickerViewTitles[row]
-    }
-    
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return frame.height / 5
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        
+//        print("fontNames for Avenir Next are \(UIFont.fontNames(forFamilyName: "Avenir Next"))")
+        
+        let attributedTitle = NSAttributedString(
+            string: pickerViewTitles[row],
+            attributes: [
+                NSFontAttributeName: UIFont(name: "Arial-Bold", size: 42),
+                NSForegroundColorAttributeName: UIColor.white
+            ])
+        return attributedTitle
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -124,7 +139,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             //cancel
             resolvePicker()
         } else if row == 1 {
-            // diary entry
+            resolvePicker()
+            showDiaryEntryWindow(frame: touchWheel.bounds)
         } else {
             // medication event
         }
@@ -146,6 +162,12 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         UIView.animate(withDuration: 0.1, animations: {
             self.controller.sizeButtonViews(rect: self.touchWheel.frame, touchWheelWidth: self.touchWheel.lineWidth, margins: self.touchWheel.margin)
         })
+    }
+    
+    func showDiaryEntryWindow(frame: CGRect) {
+        
+        controller.requestDiaryEntryWindow()
+        
     }
 
 }

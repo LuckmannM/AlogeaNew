@@ -9,7 +9,7 @@
 import UIKit
 
 protocol TouchWheelDelegate {
-    func passOnTouchWheelScore(score: Double,ended: Bool?)
+    func passOnTouchWheelScore(score: Double,ended: Bool)
 }
 
 class TouchWheelView: UIView {
@@ -47,6 +47,7 @@ class TouchWheelView: UIView {
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self)
     }
     
+    // MARK: - drawing functions
     override func draw(_ rect: CGRect) {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
@@ -106,6 +107,8 @@ class TouchWheelView: UIView {
         
     }
     
+    // MARK: - gestureFunctions
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         // to get initial touch location before pan starts
@@ -149,7 +152,7 @@ class TouchWheelView: UIView {
             }
         }
     }
-    
+        
 }
 
 let touchWheel = TouchWheelView()
