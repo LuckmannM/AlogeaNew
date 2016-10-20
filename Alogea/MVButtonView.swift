@@ -140,7 +140,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             resolvePicker()
         } else if row == 1 {
             resolvePicker()
-            showDiaryEntryWindow(frame: touchWheel.bounds)
+//            showDiaryEntryWindow(frame: touchWheel.bounds)
+            controller.requestDiaryEntryWindow(frame: touchWheel.frame)
         } else {
             // medication event
         }
@@ -164,10 +165,4 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         })
     }
     
-    func showDiaryEntryWindow(frame: CGRect) {
-        
-        controller.requestDiaryEntryWindow()
-        
-    }
-
 }

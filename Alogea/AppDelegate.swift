@@ -13,10 +13,18 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    var tabBarViews: [UIViewController]!
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        tabBarViews = {
+            let tBC = (UIApplication.shared.delegate as! AppDelegate).window!.rootViewController as! UITabBarController
+            if let controllers = tBC.viewControllers { return controllers }
+            else { return [] }
+        }()
         
         return true
     }
