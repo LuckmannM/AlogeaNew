@@ -23,11 +23,13 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     weak var touchWheel: TouchWheelView!
     weak var mainViewController: MainViewController!
     
+    var temporaryVAScore: Double?
+    
     init(viewRect: CGRect, touchWheel: TouchWheelView, mainViewController: MainViewController) {
         self.touchWheel = touchWheel
         touchWheel.delegate = self
         buttonView = MVButtonView(frame: viewRect, controller: self)
-        roundButton = buttonView.roundButton as! MVButton!
+        roundButton = buttonView.roundButton
         touchWheel.addSubview(buttonView)
         self.mainViewController = mainViewController
     }
@@ -55,10 +57,19 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         if ended {
             
             //*** display buttonView.picker with cancel, now, 15 min ago etc
+            temporaryVAScore = score
+            buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePicker)
             
             buttonView.hideScore()
-            // create score event
+            // create score event AFTER the above choice has been made
+            // e.g. create event now but modify time/date in buttonView.eventTimePicker
+            // for this, the buttonView needs access to the scoreEvent object
         }
+    }
+    
+    func finaliseScoreEvent(amendTime: TimeInterval) {
+        
+        // create score event and modify time with the above timeInterval received from ButtonView.eventTimePicker
     }
     
     func mvButtonTapped(sender: MVButton) {

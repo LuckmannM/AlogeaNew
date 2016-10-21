@@ -49,6 +49,10 @@ class MVButton: UIButton {
     }
     
     func tapped() {
+        enlargeButtonView()
+    }
+    
+    func enlargeButtonView(withTap:Bool = true) {
         
         UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveEaseOut, animations: {
             
@@ -57,7 +61,9 @@ class MVButton: UIButton {
             self.frame = targetRect
             
             }, completion: { (value: Bool) in
-                self.delegate.mvButtonTapped(sender: self)
+                if withTap == true {
+                    self.delegate.mvButtonTapped(sender: self)
+                }
         })
         
     }

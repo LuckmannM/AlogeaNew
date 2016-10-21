@@ -17,7 +17,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
 
 
     var scoreLabel: UILabel!
-    var roundButton: UIButton!
+    var roundButton: MVButton!
     var colorScheme: ColorScheme!
     weak var touchWheel: TouchWheelView!
     weak var controller: MVButtonController!
@@ -25,6 +25,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var eventTimePicker: UIPickerView!
     
     var diaryEntryTypeTitles = ["Cancel","Diary entry","Medication"]
+    var eventTimePickerOptions = ["Cancel", "Now", "30 minutes ago","1 hour ago", "2 hours ago", "4 hours ago"]
     
     // MARK: - Core class functions
 
@@ -46,17 +47,6 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         roundButton = MVButton(frame: CGRect.zero, controller: controller)
         addSubview(roundButton)
-        
-        diaryEntryTypePicker = {
-            let pV = UIPickerView()
-            pV.frame = CGRect.zero
-            pV.delegate  = self
-            pV.dataSource = self
-            pV.isUserInteractionEnabled = false
-            pV.isHidden = true
-            return pV
-        }()
-        addSubview(diaryEntryTypePicker)
     }
     
     override init(frame: CGRect) {
@@ -99,7 +89,6 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     func hideScore() {
         scoreLabel.text = "0.0"
         scoreLabel.isHidden = true
-        roundButton.isHidden = false
     }
     
     func centerScoreLabel() {
@@ -119,7 +108,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         if pickerView.isEqual(diaryEntryTypePicker) {
             return diaryEntryTypeTitles.count
         } else {
-            return 0
+            return eventTimePickerOptions.count
         }
     }
     
@@ -133,6 +122,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
+        var options = [String]()
+        
         var title: UILabel!
         if view == nil {
             title = UILabel()
@@ -140,23 +131,22 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             title = view as! UILabel
         }
         title.textAlignment = .center
-
+        
         if pickerView.isEqual(diaryEntryTypePicker) {
-            
-            let fontAttribute = UIFont(name: "AvenirNext-UltraLight", size: 38)! // fronName must be valid or crash
-            title.attributedText = NSAttributedString(
-                string: diaryEntryTypeTitles[row],
-                attributes: [
-                    NSFontAttributeName: fontAttribute,
-                    NSForegroundColorAttributeName: UIColor.white,
-                ]
-            )
-            return title
-        } else {
-            
-            title.text = "not set"
-            return title
+            options = diaryEntryTypeTitles
+        } else  if pickerView.isEqual(eventTimePicker) {
+            options = eventTimePickerOptions
         }
+        
+        let fontAttribute = UIFont(name: "AvenirNext-Medium", size: 32)! // fronName must be valid or crash
+        title.attributedText = NSAttributedString(
+            string: options[row],
+            attributes: [
+                NSFontAttributeName: fontAttribute,
+                NSForegroundColorAttributeName: UIColor.white,
+            ]
+        )
+        return title
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -164,12 +154,41 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         if row == 0 {
             //cancel
             resolvePicker(picker: pickerView)
-        } else if row == 1 {
+            return
+        }
+        
+        if pickerView.isEqual(diaryEntryTypePicker) {
+            if row == 1 {
+                resolvePicker(picker: pickerView)
+                controller.requestDiaryEntryWindow(frame: touchWheel.frame)
+            } else {
+                // medication event
+            }
+        } else if pickerView.isEqual(eventTimePicker) {
             resolvePicker(picker: pickerView)
-//            showDiaryEntryWindow(frame: touchWheel.bounds)
-            controller.requestDiaryEntryWindow(frame: touchWheel.frame)
-        } else {
-            // medication event
+            
+            var timeInterval: TimeInterval = 0
+            switch row {
+            case 1:
+                print("now")
+                timeInterval = 0
+            case 2:
+                print("30 min ago")
+                timeInterval = 30*60
+            case 3:
+                print("60 min ago")
+                timeInterval = 60*60
+            case 3:
+                print("120 min ago")
+                timeInterval = 120*60
+            case 3:
+                print("240 min ago")
+                timeInterval = 240*60
+           default:
+                print("now")
+            }
+            
+            controller.finaliseScoreEvent(amendTime: timeInterval)
         }
     }
     
@@ -186,33 +205,27 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
                 pV.frame = bounds.insetBy(dx: 15, dy: 15)
                 pV.delegate  = self
                 pV.dataSource = self
-                pV.isUserInteractionEnabled = false
-                pV.isHidden = true
                 return pV
             }()
             addSubview(diaryEntryTypePicker)
 //            diaryEntryTypePicker.frame = bounds.insetBy(dx: 15, dy: 15)
-            diaryEntryTypePicker.isHidden = false
-            diaryEntryTypePicker.isUserInteractionEnabled = true
+//            diaryEntryTypePicker.isHidden = false
+//            diaryEntryTypePicker.isUserInteractionEnabled = true
             
         case .eventTimePicker:
+            
+            roundButton.enlargeButtonView(withTap: false)
             
             eventTimePicker = {
                 let pV = UIPickerView()
                 pV.frame = bounds.insetBy(dx: 15, dy: 15)
                 pV.delegate  = self
                 pV.dataSource = self
-                pV.isUserInteractionEnabled = false
-                pV.isHidden = true
                 return pV
             }()
             addSubview(eventTimePicker)
-            
-//            diaryEntryTypePicker.frame = bounds.insetBy(dx: 15, dy: 15)
-            eventTimePicker.isHidden = false
-            eventTimePicker.isUserInteractionEnabled = true
-        default:
-            print("no pickerView")
+          
+            // start timer here to automatically chose 'now' after 1 second of inaction or so
         }
     }
     

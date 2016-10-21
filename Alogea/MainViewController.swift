@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
     
     var colorScheme = ColorScheme.sharedInstance()
     
-    // TextEntryWindow properties
+    // MARK: - TextEntryWindow properties
     var textEntryWindow = UIView()
     var textEntryController:MVButtonController!
     var textView: UITextView!
