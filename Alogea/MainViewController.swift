@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Alogea
 //
-//  Created by mikeMBP on 02/10/2016.
+//  Created by Michael Luckmann on 02/10/2016.
 //  Copyright © 2016 AppToolFactory. All rights reserved.
 //
 
