@@ -119,18 +119,26 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         return frame.height / 5
     }
     
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
-//        print("fontNames for Avenir Next are \(UIFont.fontNames(forFamilyName: "Avenir Next"))")
+        var title: UILabel!
+  
+        if view == nil {
+            title = UILabel()
+        } else {
+            title = view as! UILabel
+        }
+        title.textAlignment = .center
         
-        let attributedTitle = NSAttributedString(
+        let fontAttribute = UIFont(name: "AvenirNext-UltraLight", size: 38)! // fronName must be valid or crash
+        title.attributedText = NSAttributedString(
             string: pickerViewTitles[row],
             attributes: [
-                NSFontAttributeName: UIFont(name: "Arial-Bold", size: 42),
-                NSForegroundColorAttributeName: UIColor.white
-            ])
-        return attributedTitle
-        
+                NSFontAttributeName: fontAttribute,
+                NSForegroundColorAttributeName: UIColor.white,
+            ]
+        )
+        return title
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

@@ -12,6 +12,8 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var touchWheel: TouchWheelView!
     
+    var colorScheme = ColorScheme.sharedInstance()
+    
     // TextEntryWindow properties
     var textEntryWindow = UIView()
     var textEntryController:MVButtonController!
@@ -55,6 +57,7 @@ extension MainViewController: UITextViewDelegate {
         
         eventPicker = {
             let pV = UIPickerView(frame: CGRect(x: 5, y: 5, width: textEntryWindow.frame.width - 10, height: 60))
+            pV.backgroundColor = colorScheme.darkBlue
             pV.delegate = self
             return pV
         }()
@@ -80,9 +83,6 @@ extension MainViewController: UITextViewDelegate {
         textViewFrameInPortrait = textView.frame
         textView.selectedRange = NSMakeRange(0, 0)
         textEntryWindow.addSubview(textView)
-        
-        
-// ***       textEntryController = TextViewController(textEntryWindow: textEntryWindow, textView: textView)
         
         addDoneButtonToKeyboard(sender: textView)
         textView.becomeFirstResponder()
@@ -129,30 +129,34 @@ extension MainViewController: UITextViewDelegate {
             let lastChar = textView.text.substring(to: index)
             textView.text = lastChar
         }
-        
-// ***        textEntryController.textViewText(text: textView.text,pickerViewSelection: eventPickerTitles[eventPickerSelection])
     }
 
     func endedTextEntry() {
+        
         textView.resignFirstResponder()
-        if liftTextViewForKeyBoard != nil {
-            
-            UIView.animate(withDuration: 0.4, animations: {
-                self.textEntryWindow.frame = self.textEntryWindow.frame.offsetBy(dx: 0, dy: -self.liftTextViewForKeyBoard!)
-                
-                }, completion: { (value: Bool) in
-                    
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.textEntryWindow.alpha = 0.0
-                        
-                        }, completion: { (value: Bool) in
-                            self.eventPicker.removeFromSuperview()
-                            self.textView.removeFromSuperview()
-                            self.textEntryWindow.removeFromSuperview()
-                    })
-            })
+        
+        let text = textView.text ?? ""
+        textEntryController = touchWheel.mainButtonController
+        
+        if eventPickerSelection != 0 {
+            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles[eventPickerSelection])
         }
-// ***        textEntryController.textViewText(text: textView.text, pickerViewSelection: eventPickerTitles[pickerViewSelection])
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.textEntryWindow.frame = self.textEntryWindow.frame.offsetBy(dx: 0, dy: -self.liftTextViewForKeyBoard!)
+            
+            }, completion: { (value: Bool) in
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.textEntryWindow.alpha = 0.0
+                    
+                    }, completion: { (value: Bool) in
+                        self.eventPicker.removeFromSuperview()
+                        self.textView.removeFromSuperview()
+                        self.textEntryWindow.removeFromSuperview()
+                })
+        })
+        
         NotificationCenter.default.removeObserver(observer)
     }
 
@@ -162,10 +166,28 @@ extension MainViewController: UITextViewDelegate {
 
 extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
-        return eventPickerTitles[row]
+        var title: UILabel!
+        
+        if view == nil {
+            title = UILabel()
+        } else {
+            title = view as! UILabel
+        }
+        title.textAlignment = .center
+        title.backgroundColor = colorScheme.darkBlue
+        
+        title.attributedText = NSAttributedString(
+            string: "New event: " + eventPickerTitles[row],
+            attributes: [
+                NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!,
+                NSForegroundColorAttributeName: UIColor.white,
+                ]
+        )
+        return title
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
