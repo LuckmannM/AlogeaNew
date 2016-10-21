@@ -8,16 +8,23 @@
 
 import UIKit
 
+enum ButtonViewPickers {
+    case diaryEntryTypePicker
+    case eventTimePicker
+}
+
 class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
+
 
     var scoreLabel: UILabel!
     var roundButton: UIButton!
     var colorScheme: ColorScheme!
     weak var touchWheel: TouchWheelView!
     weak var controller: MVButtonController!
-    var pickerView: UIPickerView!
+    var diaryEntryTypePicker: UIPickerView!
+    var eventTimePicker: UIPickerView!
     
-    var pickerViewTitles = ["Cancel","Diary entry","Medication"]
+    var diaryEntryTypeTitles = ["Cancel","Diary entry","Medication"]
     
     // MARK: - Core class functions
 
@@ -40,7 +47,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         roundButton = MVButton(frame: CGRect.zero, controller: controller)
         addSubview(roundButton)
         
-        pickerView = {
+        diaryEntryTypePicker = {
             let pV = UIPickerView()
             pV.frame = CGRect.zero
             pV.delegate  = self
@@ -49,7 +56,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             pV.isHidden = true
             return pV
         }()
-        addSubview(pickerView)
+        addSubview(diaryEntryTypePicker)
     }
     
     override init(frame: CGRect) {
@@ -108,7 +115,12 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     // MARK: - PickerView functions
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerViewTitles.count
+        
+        if pickerView.isEqual(diaryEntryTypePicker) {
+            return diaryEntryTypeTitles.count
+        } else {
+            return 0
+        }
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -122,32 +134,38 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         
         var title: UILabel!
-  
         if view == nil {
             title = UILabel()
         } else {
             title = view as! UILabel
         }
         title.textAlignment = .center
-        
-        let fontAttribute = UIFont(name: "AvenirNext-UltraLight", size: 38)! // fronName must be valid or crash
-        title.attributedText = NSAttributedString(
-            string: pickerViewTitles[row],
-            attributes: [
-                NSFontAttributeName: fontAttribute,
-                NSForegroundColorAttributeName: UIColor.white,
-            ]
-        )
-        return title
+
+        if pickerView.isEqual(diaryEntryTypePicker) {
+            
+            let fontAttribute = UIFont(name: "AvenirNext-UltraLight", size: 38)! // fronName must be valid or crash
+            title.attributedText = NSAttributedString(
+                string: diaryEntryTypeTitles[row],
+                attributes: [
+                    NSFontAttributeName: fontAttribute,
+                    NSForegroundColorAttributeName: UIColor.white,
+                ]
+            )
+            return title
+        } else {
+            
+            title.text = "not set"
+            return title
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if row == 0 {
             //cancel
-            resolvePicker()
+            resolvePicker(picker: pickerView)
         } else if row == 1 {
-            resolvePicker()
+            resolvePicker(picker: pickerView)
 //            showDiaryEntryWindow(frame: touchWheel.bounds)
             controller.requestDiaryEntryWindow(frame: touchWheel.frame)
         } else {
@@ -155,22 +173,58 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         }
     }
     
-    func showPicker() {
+    func showPicker(pickerType: ButtonViewPickers) {
+        
         roundButton.isUserInteractionEnabled = false
         roundButton.isHidden = true
-        pickerView.frame = bounds.insetBy(dx: 15, dy: 15)
-        pickerView.isHidden = false
-        pickerView.isUserInteractionEnabled = true
+        
+        switch pickerType {
+        case .diaryEntryTypePicker:
+            
+            diaryEntryTypePicker = {
+                let pV = UIPickerView()
+                pV.frame = bounds.insetBy(dx: 15, dy: 15)
+                pV.delegate  = self
+                pV.dataSource = self
+                pV.isUserInteractionEnabled = false
+                pV.isHidden = true
+                return pV
+            }()
+            addSubview(diaryEntryTypePicker)
+//            diaryEntryTypePicker.frame = bounds.insetBy(dx: 15, dy: 15)
+            diaryEntryTypePicker.isHidden = false
+            diaryEntryTypePicker.isUserInteractionEnabled = true
+            
+        case .eventTimePicker:
+            
+            eventTimePicker = {
+                let pV = UIPickerView()
+                pV.frame = bounds.insetBy(dx: 15, dy: 15)
+                pV.delegate  = self
+                pV.dataSource = self
+                pV.isUserInteractionEnabled = false
+                pV.isHidden = true
+                return pV
+            }()
+            addSubview(eventTimePicker)
+            
+//            diaryEntryTypePicker.frame = bounds.insetBy(dx: 15, dy: 15)
+            eventTimePicker.isHidden = false
+            eventTimePicker.isUserInteractionEnabled = true
+        default:
+            print("no pickerView")
+        }
     }
     
-    func resolvePicker() {
-        pickerView.isHidden = true
-        pickerView.isUserInteractionEnabled = false
+    func resolvePicker(picker: UIPickerView) {
+        picker.isHidden = true
+        picker.isUserInteractionEnabled = false
         roundButton.isHidden = false
         roundButton.isUserInteractionEnabled = true
         UIView.animate(withDuration: 0.1, animations: {
             self.controller.sizeButtonViews(rect: self.touchWheel.frame, touchWheelWidth: self.touchWheel.lineWidth, margins: self.touchWheel.margin)
         })
+        picker.removeFromSuperview()
     }
     
 }

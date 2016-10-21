@@ -62,7 +62,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     }
     
     func mvButtonTapped(sender: MVButton) {
-        buttonView.showPicker()
+        buttonView.showPicker(pickerType: ButtonViewPickers.diaryEntryTypePicker)
     }
     
     // MARK: - diaryEntryWindow
@@ -72,6 +72,10 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     }
     
     func receiveDiaryText(text: String, eventType: String) {
+        
+        print("got new diary entry: \(text), for new event: \(eventType)")
+        // save to persistent state
+        // display on graph
         
     }
 
