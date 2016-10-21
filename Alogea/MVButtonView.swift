@@ -208,9 +208,6 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
                 return pV
             }()
             addSubview(diaryEntryTypePicker)
-//            diaryEntryTypePicker.frame = bounds.insetBy(dx: 15, dy: 15)
-//            diaryEntryTypePicker.isHidden = false
-//            diaryEntryTypePicker.isUserInteractionEnabled = true
             
         case .eventTimePicker:
             
@@ -224,6 +221,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
                 return pV
             }()
             addSubview(eventTimePicker)
+            eventTimePicker.selectRow(1, inComponent: 0, animated: false)
           
             // start timer here to automatically chose 'now' after 1 second of inaction or so
         }

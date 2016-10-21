@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
     var textViewFrameInPortrait: CGRect!
     
     var eventPicker: UIPickerView!
-    let eventPickerTitles = ["Cancel","Treatment","Fall","Holiday","New..."]
+    let eventPickerTitles = ["Cancel","My event", "Treatment","Fall","Holiday","New..."]
     let placeHolderText = "Dictate or type your diary entry here"
     var eventPickerSelection: Int!
 
@@ -62,7 +62,8 @@ extension MainViewController: UITextViewDelegate {
             return pV
         }()
         textEntryWindow.addSubview(eventPicker)
-        eventPickerSelection = 0
+        eventPicker.selectRow(1, inComponent: 0, animated: false)
+        eventPickerSelection = 1
         
         textView = {
             let tV = UITextView()
