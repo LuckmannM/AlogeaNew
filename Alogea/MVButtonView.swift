@@ -23,9 +23,11 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     weak var controller: MVButtonController!
     var diaryEntryTypePicker: UIPickerView!
     var eventTimePicker: UIPickerView!
+    var eventTimeTimer: Timer!
     
     var diaryEntryTypeTitles = ["Cancel","Diary entry","Medication"]
     var eventTimePickerOptions = ["Cancel", "Now", "30 minutes ago","1 hour ago", "2 hours ago", "4 hours ago"]
+    var eventTimeIntervals: [TimeInterval] = [0,0,30*60,60*60,120*60,240*60]
     
     // MARK: - Core class functions
 
@@ -162,33 +164,16 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
                 resolvePicker(picker: pickerView)
                 controller.requestDiaryEntryWindow(frame: touchWheel.frame)
             } else {
+                
                 // medication event
+                
             }
         } else if pickerView.isEqual(eventTimePicker) {
-            resolvePicker(picker: pickerView)
             
-            var timeInterval: TimeInterval = 0
-            switch row {
-            case 1:
-                print("now")
-                timeInterval = 0
-            case 2:
-                print("30 min ago")
-                timeInterval = 30*60
-            case 3:
-                print("60 min ago")
-                timeInterval = 60*60
-            case 3:
-                print("120 min ago")
-                timeInterval = 120*60
-            case 3:
-                print("240 min ago")
-                timeInterval = 240*60
-           default:
-                print("now")
+            if eventTimeTimer.isValid {
+                eventTimeTimer.invalidate()
             }
-            
-            controller.finaliseScoreEvent(amendTime: timeInterval)
+            eventTimeSelected()
         }
     }
     
@@ -223,7 +208,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             addSubview(eventTimePicker)
             eventTimePicker.selectRow(1, inComponent: 0, animated: false)
           
-            // start timer here to automatically chose 'now' after 1 second of inaction or so
+            eventTimeTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(eventTimeSelected), userInfo: nil, repeats: false)
         }
     }
     
@@ -236,6 +221,15 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             self.controller.sizeButtonViews(rect: self.touchWheel.frame, touchWheelWidth: self.touchWheel.lineWidth, margins: self.touchWheel.margin)
         })
         picker.removeFromSuperview()
+    }
+    
+    func eventTimeSelected() {
+        let time = eventTimeIntervals[eventTimePicker.selectedRow(inComponent: 0)]
+        resolvePicker(picker: self.eventTimePicker)
+        if eventTimePicker.selectedRow(inComponent: 0) != 0 {
+            controller.finaliseScoreEvent(amendTime: time )
+        }
+        
     }
     
 }

@@ -55,8 +55,6 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         buttonView.displayScore(score: score)
         
         if ended {
-            
-            //*** display buttonView.picker with cancel, now, 15 min ago etc
             temporaryVAScore = score
             buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePicker)
             
@@ -70,6 +68,9 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     func finaliseScoreEvent(amendTime: TimeInterval) {
         
         // create score event and modify time with the above timeInterval received from ButtonView.eventTimePicker
+        
+        print("create new scoreEvent \(amendTime/60) minutes ago, with score \(temporaryVAScore!)")
+        temporaryVAScore = nil
     }
     
     func mvButtonTapped(sender: MVButton) {
