@@ -15,7 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var tabBarViews: [UIViewController]!
-
+    
+    lazy var stack : CoreDataStack = {
+        let options  = [NSPersistentStoreUbiquitousContentNameKey: "Alogea", NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true] as [String : Any]
+        
+        return CoreDataStack(modelName: "Alogea", storeName: "Alogea", options: options as NSDictionary?)
+        
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

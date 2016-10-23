@@ -69,6 +69,16 @@ class CoreDataStack: CustomStringConvertible {
     
     lazy var model : NSManagedObjectModel = NSManagedObjectModel(contentsOf: self.modelURL as URL)!
     
+    private lazy var storeContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: self.modelName)
+        container.loadPersistentStores {
+            (storeDescription, error) in
+            if let error = error as NSError? {
+                print("unresolved Persistent Store Container error")
+            }
+        }
+        return container
+    }()
     
     
     // the options[] were missing in the CoreData project; the options make the sync succeed
@@ -127,11 +137,15 @@ class CoreDataStack: CustomStringConvertible {
     
     
     
-    lazy var context : NSManagedObjectContext = {
+    lazy var oldContext : NSManagedObjectContext = {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.persistentStoreCoordinator = self.coordinator
         
         return context
+    }()
+    
+    lazy var context: NSManagedObjectContext = {
+        return self.storeContainer.viewContext
     }()
     
     var updateContextWithUbiquitousChangesObserver: Bool = false {

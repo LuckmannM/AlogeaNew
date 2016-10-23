@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */; };
 		2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AC1DAE355300FF0484 /* ColorScheme.swift */; };
 		2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */; };
 		2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsDataController.swift; sourceTree = "<group>"; };
 		2644B8AC1DAE355300FF0484 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchWheelView.swift; sourceTree = "<group>"; };
 		2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GetGradientColor Extension.swift"; path = "../../CircularSlider/CircularSlider/GetGradientColor Extension.swift"; sourceTree = "<group>"; };
@@ -117,6 +119,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */ = {
+			isa = PBXGroup;
+			children = (
+				2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */,
+				2651FD691DB3B90C00C1301A /* MVButtonController.swift */,
+				2651FD671DB3B07700C1301A /* MVButtonView.swift */,
+				2651FD6B1DB3D8A600C1301A /* MVButton.swift */,
+			);
+			name = "TouchWheel & Button Group";
+			sourceTree = "<group>";
+		};
 		26B5A14D1DAFE4760082DA40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,10 +168,7 @@
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
 				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
-				2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */,
-				2651FD691DB3B90C00C1301A /* MVButtonController.swift */,
-				2651FD671DB3B07700C1301A /* MVButtonView.swift */,
-				2651FD6B1DB3D8A600C1301A /* MVButton.swift */,
+				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
@@ -201,6 +211,7 @@
 		26E3B9121DA1819B00D157BB /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
+				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
 				26E3B9021DA1816E00D157BB /* Event+CoreDataClass.swift */,
 				26E3B9031DA1816E00D157BB /* Event+CoreDataProperties.swift */,
 				26E3B9041DA1816E00D157BB /* RecordType+CoreDataClass.swift */,
@@ -396,6 +407,7 @@
 				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,
 				26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */,
 				26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */,
+				263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */,
 				2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */,
 				2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
