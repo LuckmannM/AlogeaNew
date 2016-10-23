@@ -32,6 +32,9 @@
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainerView" customModule="Alogea" customModuleProvider="target">
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yMt-NO-418" customClass="GraphView" customModule="Alogea" customModuleProvider="target">
+                                        <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
                                     <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
@@ -47,8 +50,12 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="yMt-NO-418" secondAttribute="bottom" constant="8" id="1AO-6e-MQa"/>
+                                    <constraint firstItem="yMt-NO-418" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="8" id="AId-Nz-uc6"/>
+                                    <constraint firstAttribute="trailing" secondItem="yMt-NO-418" secondAttribute="trailing" constant="8" id="Cqh-1C-I22"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="centerY" secondItem="lGD-MW-hsj" secondAttribute="centerY" id="Doe-Lq-sOE"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-70" id="Y6d-fR-RgD"/>
+                                    <constraint firstItem="yMt-NO-418" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="8" id="Yq7-4t-V58"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="93" id="r0L-Mi-bju"/>
                                 </constraints>
                                 <connections>

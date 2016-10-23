@@ -115,13 +115,19 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         
-        eventTypes.removeAll(keepingCapacity: true)
-        for section in eventTypeFRC.sections! {
-            eventTypes.append(section.name)
-        }
-        print("eventFRCs have changed - found the following types: \(eventTypes)")
-        print("There are \(scoreEvents.fetchedObjects?.count) score events")
+        // allEvents FRC changes always
         
+        if controller.isEqual(scoreEvents) {
+            print("scoreEventsFRC has changed")
+            print("There are \(scoreEvents.fetchedObjects?.count) score events")
+        } else if controller.isEqual(eventTypeFRC) {
+            print("eventTypeFRC has changed")
+            eventTypes.removeAll(keepingCapacity: true)
+            for section in eventTypeFRC.sections! {
+                eventTypes.append(section.name)
+            }
+            print("eventTypeFRC have changed - found the following types: \(eventTypes)")
+        }
     }
     
 }
