@@ -19,6 +19,7 @@ import CoreData
 class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     
     var buttonView: MVButtonView!
+    var eventsDataController: EventsDataController!
     weak var roundButton: MVButton!
     weak var touchWheel: TouchWheelView!
     weak var mainViewController: MainViewController!
@@ -32,6 +33,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         roundButton = buttonView.roundButton
         touchWheel.addSubview(buttonView)
         self.mainViewController = mainViewController
+        self.eventsDataController = EventsDataController.sharedInstance()
     }
     
     func sizeButtonViews(rect: CGRect, touchWheelWidth: CGFloat, margins: CGFloat) {
@@ -67,10 +69,11 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     
     func finaliseScoreEvent(amendTime: TimeInterval) {
         
-        // create score event and modify time with the above timeInterval received from ButtonView.eventTimePicker
-        
-        print("create new scoreEvent \(amendTime/60) minutes ago, with score \(temporaryVAScore!)")
+        let eventDate = Date().addingTimeInterval(-amendTime)
+        eventsDataController.newEvent(ofType: "default score", withDate: eventDate, vas: temporaryVAScore)
         temporaryVAScore = nil
+        
+        // display on graph, best via EventFRC delegate link to graoh object
     }
     
     func mvButtonTapped(sender: MVButton) {
@@ -85,11 +88,12 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     
     func receiveDiaryText(text: String, eventType: String) {
         
-        print("got new diary entry: \(text), for new event: \(eventType)")
-        // save to persistent state
-        // display on graph
+        // eventType is the NAME of the eventRecord
+        // the type of eventRecord is 'Diary Entry'
+        
+        eventsDataController.newEvent(ofType: "Diary Entry", withName: eventType, note: text)
+
+        // display on graph, best via EventFRC delegate link to graoh object
         
     }
-
-       
 }

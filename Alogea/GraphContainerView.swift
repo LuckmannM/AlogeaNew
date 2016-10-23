@@ -13,6 +13,9 @@ class GraphContainerView: UIView {
     
     @IBOutlet var floatingMenuView: FloatingMenuView!
     
+    var eventsController = EventsDataController.sharedInstance()
+    
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
