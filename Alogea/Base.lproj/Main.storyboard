@@ -31,7 +31,23 @@
                                 <color key="tintColor" red="0.66568392519999997" green="0.30898010729999997" blue="0.28021350499999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainerView" customModule="Alogea" customModuleProvider="target">
+                                <subviews>
+                                    <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="aMg-RL-DS0"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="centerY" secondItem="lGD-MW-hsj" secondAttribute="centerY" id="Doe-Lq-sOE"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-70" id="Y6d-fR-RgD"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="93" id="r0L-Mi-bju"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="floatingMenuView" destination="KFJ-pZ-cje" id="BiL-OE-FOE"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -68,6 +84,8 @@
                     <tabBarItem key="tabBarItem" title="Item" id="ADY-CS-NDV"/>
                     <navigationItem key="navigationItem" id="A2h-jV-1ed"/>
                     <connections>
+                        <outlet property="floatingMenuView" destination="KFJ-pZ-cje" id="Mu1-BR-DLg"/>
+                        <outlet property="graphContainerView" destination="lGD-MW-hsj" id="WWR-Vl-e5T"/>
                         <outlet property="touchWheel" destination="iIW-Nc-pNj" id="3nC-gw-I56"/>
                     </connections>
                 </viewController>

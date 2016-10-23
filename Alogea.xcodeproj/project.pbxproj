@@ -14,6 +14,7 @@
 		2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD691DB3B90C00C1301A /* MVButtonController.swift */; };
 		2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD6B1DB3D8A600C1301A /* MVButton.swift */; };
 		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
+		26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */; };
 		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
 		26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CC1DA177D000D157BB /* MainViewController.swift */; };
 		26E3B8D01DA177D000D157BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26E3B8CE1DA177D000D157BB /* Main.storyboard */; };
@@ -60,6 +61,7 @@
 		2651FD691DB3B90C00C1301A /* MVButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonController.swift; sourceTree = "<group>"; };
 		2651FD6B1DB3D8A600C1301A /* MVButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButton.swift; sourceTree = "<group>"; };
 		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingMenuView.swift; sourceTree = "<group>"; };
 		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E3B8CA1DA177D000D157BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		26E3B8CC1DA177D000D157BB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
+				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
 				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
 				2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */,
 				2651FD691DB3B90C00C1301A /* MVButtonController.swift */,
@@ -383,6 +386,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26E3B90B1DA1816E00D157BB /* Event+CoreDataProperties.swift in Sources */,
+				26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */,
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
 				26F647721DAE70EC0061E560 /* GraphContainerView.swift in Sources */,

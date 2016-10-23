@@ -11,6 +11,8 @@ import UIKit
 class MainViewController: UIViewController {
 
     @IBOutlet weak var touchWheel: TouchWheelView!
+    @IBOutlet weak var graphContainerView: GraphContainerView!
+    @IBOutlet weak var floatingMenuView: FloatingMenuView!
     
     var colorScheme = ColorScheme.sharedInstance()
     
@@ -27,11 +29,28 @@ class MainViewController: UIViewController {
     let eventPickerTitles = ["Cancel","My event", "Treatment","Fall","Holiday","New..."]
     let placeHolderText = "Dictate or type your diary entry here"
     var eventPickerSelection: Int!
+    
 
     // MARK: - core functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        floatingMenuView = {
+//            let floatingViewSize = CGSize(width: self.view.frame.width / 10, height: view.frame.height / 6)
+//            let fView = UIView()
+//            fView.frame = CGRect(
+//                x: -1/4 * floatingViewSize.width,
+//                y: graphContainerView.frame.height / 2 - floatingViewSize.height / 2,
+//                width: floatingViewSize.width,
+//                height: floatingViewSize.height
+//            )
+//            print("viewFrame = \(fView.frame)")
+//            fView.backgroundColor = UIColor.white
+//            fView.alpha = 0.8
+//            return fView
+//        }()
+//        view.addSubview(floatingMenuView)
         
     }
 
