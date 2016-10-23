@@ -27,6 +27,7 @@ class TouchWheelView: UIView {
     
     var color = UIColor()
     var circleRim = UIBezierPath()
+    var arrowTriangle = UIBezierPath()
     var lineWidth: CGFloat!
     var startAngle, endAngle: CGFloat!
     var radius: CGFloat!
@@ -83,6 +84,12 @@ class TouchWheelView: UIView {
         drawArcSegment(startAngle: startAngle, endAngle: 2 * π)
         
         context!.restoreGState()
+        
+        arrowTriangle.move(to: CGPoint(x: bounds.midX, y: margin))
+        arrowTriangle.addLine(to: CGPoint(x: bounds.midX, y: margin + lineWidth))
+        arrowTriangle.addLine(to: CGPoint(x: bounds.midX - 1/3 * lineWidth, y: margin + lineWidth/2))
+        gradientBar?.getPixelColor(pos: CGPoint(x: 5, y: 0.97 * gradientBarHeight)).setFill()
+        arrowTriangle.fill()
         
         mainButtonController.sizeButtonViews(rect: frame, touchWheelWidth: lineWidth, margins: margin)
     }
