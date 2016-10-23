@@ -36,22 +36,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        floatingMenuView = {
-//            let floatingViewSize = CGSize(width: self.view.frame.width / 10, height: view.frame.height / 6)
-//            let fView = UIView()
-//            fView.frame = CGRect(
-//                x: -1/4 * floatingViewSize.width,
-//                y: graphContainerView.frame.height / 2 - floatingViewSize.height / 2,
-//                width: floatingViewSize.width,
-//                height: floatingViewSize.height
-//            )
-//            print("viewFrame = \(fView.frame)")
-//            fView.backgroundColor = UIColor.white
-//            fView.alpha = 0.8
-//            return fView
-//        }()
-//        view.addSubview(floatingMenuView)
-        
     }
 
     override func didReceiveMemoryWarning() {

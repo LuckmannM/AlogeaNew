@@ -32,11 +32,17 @@
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainerView" customModule="Alogea" customModuleProvider="target">
                                 <subviews>
-                                    <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
+                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="aMg-RL-DS0"/>
                                         </constraints>
+                                        <connections>
+                                            <outlet property="graphContainerView" destination="lGD-MW-hsj" id="G2Q-Sn-mhi"/>
+                                            <outlet property="tapGesture" destination="TQ9-A5-Hvg" id="aCi-tk-tQm"/>
+                                            <outletCollection property="gestureRecognizers" destination="TQ9-A5-Hvg" appends="YES" id="6xV-Jg-eeb"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -95,6 +101,11 @@
                         <action selector="touchGestureWithRecogniser:" destination="iIW-Nc-pNj" id="zsp-9T-o86"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer id="TQ9-A5-Hvg">
+                    <connections>
+                        <action selector="slideOutWithTap:" destination="KFJ-pZ-cje" id="NsG-LJ-oVJ"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3002.898550724638" y="131.25"/>
         </scene>
