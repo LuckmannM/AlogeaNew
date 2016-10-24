@@ -18,10 +18,13 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2f0-CN-u9e">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="UGo-Kp-8JD"/>
+                                </constraints>
                                 <segments>
                                     <segment title="Day"/>
                                     <segment title="Week"/>
@@ -66,10 +69,10 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" priority="250" id="aht-uH-Vvm">
+                                    <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" priority="250" identifier="touchWheelARConstraint" id="aht-uH-Vvm">
                                         <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
                                     </constraint>
-                                    <constraint firstAttribute="height" id="fE1-J0-5hL"/>
+                                    <constraint firstAttribute="height" identifier="touchViewHeightConstraint" id="fE1-J0-5hL"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -89,7 +92,6 @@
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5HX-bf-Nth"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUg-qH-Qns"/>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="KY2-mz-0Wj"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" priority="750" id="TUa-od-DY8">
                                 <variation key="heightClass=compact-widthClass=compact" constant="164.75"/>
@@ -98,6 +100,7 @@
                             </constraint>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="Zep-kQ-hxe"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="iIW-Nc-pNj" secondAttribute="bottom" id="cUK-R7-fYd"/>
+                            <constraint firstItem="yMt-NO-418" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="9" id="iKL-AH-k4a"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
                         </constraints>
@@ -111,6 +114,7 @@
                         <outlet property="floatingMenuView" destination="KFJ-pZ-cje" id="Mu1-BR-DLg"/>
                         <outlet property="graphContainerView" destination="lGD-MW-hsj" id="WWR-Vl-e5T"/>
                         <outlet property="touchWheel" destination="iIW-Nc-pNj" id="3nC-gw-I56"/>
+                        <outlet property="touchWheelARConstraint" destination="aht-uH-Vvm" id="bcb-2V-mJx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

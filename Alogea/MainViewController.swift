@@ -14,6 +14,9 @@ class MainViewController: UIViewController {
     @IBOutlet weak var graphContainerView: GraphContainerView!
     @IBOutlet weak var floatingMenuView: FloatingMenuView!
     
+    @IBOutlet var touchWheelARConstraint: NSLayoutConstraint!
+    var iPadLandScapeTouchWheelHConstraint: NSLayoutConstraint!
+    
     var colorScheme = ColorScheme.sharedInstance()
     
     // MARK: - TextEntryWindow properties
@@ -36,28 +39,41 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        iPadLandScapeTouchWheelHConstraint = NSLayoutConstraint(item: touchWheel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 0, constant: 0)
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
-        if let tabBar = self.tabBarController?.tabBar {
-            if size.width > size.height {
-                tabBar.isHidden = true // *** leaves small stretch of touchWheel visible at the bottom
-                // *** is this required? self.hidesBottomBarWhenPushed = true
-            } else {
-                tabBar.isHidden = false
-            }
-
-        }
+            if let tabBar = self.tabBarController?.tabBar {
+                if size.width > size.height {
+                    tabBar.isHidden = true
+                    // *** is this required? self.hidesBottomBarWhenPushed = true
+                } else {
+                    tabBar.isHidden = false
+                }
+           }
+        
         if UIDevice().userInterfaceIdiom == .pad {
-
+            if size.width > size.height {
+                touchWheelARConstraint.isActive = false
+                iPadLandScapeTouchWheelHConstraint.isActive = true
+            } else {
+                touchWheelARConstraint.isActive = true
+                iPadLandScapeTouchWheelHConstraint.isActive = false
+                
+            }
         }
+        touchWheel.layoutIfNeeded()
     }
+    
+    
 }
 
 extension MainViewController: UITextViewDelegate {
