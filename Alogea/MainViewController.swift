@@ -43,6 +43,21 @@ class MainViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
+        if let tabBar = self.tabBarController?.tabBar {
+            if size.width > size.height {
+                tabBar.isHidden = true // *** leaves small stretch of touchWheel visible at the bottom
+                // *** is this required? self.hidesBottomBarWhenPushed = true
+            } else {
+                tabBar.isHidden = false
+            }
+
+        }
+        if UIDevice().userInterfaceIdiom == .pad {
+
+        }
+    }
 }
 
 extension MainViewController: UITextViewDelegate {

@@ -166,10 +166,10 @@
 			children = (
 				26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
-				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
+				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
 				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
 				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,

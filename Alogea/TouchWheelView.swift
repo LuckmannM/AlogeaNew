@@ -14,6 +14,8 @@ protocol TouchWheelDelegate {
 
 class TouchWheelView: UIView {
     
+    @IBOutlet var panRecogniser: UIPanGestureRecognizer!
+    
     let π: CGFloat = CGFloat(M_PI)
     let margin: CGFloat = 5.0
     let themeColors = ColorScheme.sharedInstance()
@@ -161,6 +163,17 @@ class TouchWheelView: UIView {
                 delegate.passOnTouchWheelScore(score: touchWheelValue, ended: false)
             }
         }
+    }
+    
+    func disable() {
+        panRecogniser.isEnabled = false
+        mainButtonController.roundButton.isEnabled = false
+        
+    }
+    
+    func enable() {
+        panRecogniser.isEnabled = true
+        mainButtonController.roundButton.isEnabled = true
     }
         
 }
