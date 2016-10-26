@@ -70,6 +70,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         colorScheme.darkBlue.setStroke()
         buttonCircle.lineWidth = 1
         buttonCircle.stroke()
+        
+        print("buttonView drawn in \(frame)")
     }
     
     func displayScore(score: Double) {
@@ -218,7 +220,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         roundButton.isHidden = false
         roundButton.isUserInteractionEnabled = true
         UIView.animate(withDuration: 0.1, animations: {
-            self.controller.sizeButtonViews(rect: self.touchWheel.frame, touchWheelWidth: self.touchWheel.lineWidth, margins: self.touchWheel.margin)
+            self.controller.sizeViews(rect: self.touchWheel.innerRect)
         })
         picker.removeFromSuperview()
     }

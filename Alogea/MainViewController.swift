@@ -33,11 +33,29 @@ class MainViewController: UIViewController {
     let placeHolderText = "Dictate or type your diary entry here"
     var eventPickerSelection: Int!
     
+    var iPadLandScapeStart = false
+    var iPadRotationFromLSStart = false
+    
 
     // MARK: - core functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("view did load")
+        
+        // Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
+        // it is therefore not possible - like with iPhone - to add a 0 height IB constraint for touchWheel for landScape orientation
+        // this needs to added in code and toggled with touchWheelARconstraint (1:1 aspect ratio) depending on orientation
+        // if launched in ls orientation (not in portrait), the buttonView is not resized properly when orientation is changed to portrait
+        // this requires a manual call to mainButtonController.sizeViews AFTER the rotation is complete
+        /* doing this in the viewWillTransition function doesn't work as the rotated frame sizes of touchWheel are only available after rotation is complete at which time viewDidLayoutSubviews is called; in this function the manual call to sizeViews is done with the then updated touchWheel innerRect parameters but should only be called once; if calling initially after launch the inits aren't all complete resulting in crash due to nil value 
+         */
+        if UIDevice().userInterfaceIdiom == .pad && view.frame.size.width > view.frame.size.height {
+                print("iPad in landScape")
+            iPadLandScapeStart = true
+            
+        }
         
         iPadLandScapeTouchWheelHConstraint = NSLayoutConstraint(item: touchWheel, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 0, constant: 0)
         
@@ -48,31 +66,55 @@ class MainViewController: UIViewController {
         // Dispose of any resources that can be recreated.
         
     }
+    override func viewDidLayoutSubviews() {
+        
+        print("view did layout subViews")
+        
+        if iPadRotationFromLSStart {
+            print("applying iPad LS rotation adjustment...")
+            iPadRotationFromLSStart = false
+            touchWheel.mainButtonController.sizeViews(rect: touchWheel.innerRect)
+            print("touchWheel frame after layout \(touchWheel.frame)")
+            print("touchWheel innerRect after layout  \(touchWheel.innerRect)")
+            print("touchWheel linewidth after layout  \(touchWheel.lineWidth)")
+            print("buttonView frame after layout \(touchWheel.mainButtonController.buttonView.frame)")
+            print("")
+        }
+//        touchWheel.mainButtonController.sizeViews(rect: touchWheel.innerRect)
+//        touchWheel.mainButtonController.buttonView.setNeedsDisplay()
+    }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
-            if let tabBar = self.tabBarController?.tabBar {
-                if size.width > size.height {
-                    tabBar.isHidden = true
-                    // *** is this required? self.hidesBottomBarWhenPushed = true
-                } else {
-                    tabBar.isHidden = false
-                }
-           }
+        if let tabBar = self.tabBarController?.tabBar {
+            if size.width > size.height {
+                tabBar.isHidden = true
+                // *** is this required? self.hidesBottomBarWhenPushed = true
+            } else {
+                tabBar.isHidden = false
+            }
+       }
         
         if UIDevice().userInterfaceIdiom == .pad {
             if size.width > size.height {
                 touchWheelARConstraint.isActive = false
                 iPadLandScapeTouchWheelHConstraint.isActive = true
+                print("rotation to landScape")
             } else {
                 touchWheelARConstraint.isActive = true
                 iPadLandScapeTouchWheelHConstraint.isActive = false
-                
+                if iPadLandScapeStart {
+                    iPadLandScapeStart = false
+                    iPadRotationFromLSStart = true
+                }
+                print("rotation to portrait")
             }
-        }
-        touchWheel.layoutIfNeeded()
+            touchWheel.layoutIfNeeded()
+       }
+        print("touchWheel resized to \(touchWheel.frame)")
+        print("buttonView resized to \(touchWheel.mainButtonController.buttonView.frame)")
+        print("")
     }
-    
     
 }
 

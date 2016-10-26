@@ -30,7 +30,9 @@ class TouchWheelView: UIView {
     var color = UIColor()
     var circleRim = UIBezierPath()
     var arrowTriangle = UIBezierPath()
-    var lineWidth: CGFloat!
+    var lineWidth: CGFloat {
+        return frame.height / 5
+    }
     var startAngle, endAngle: CGFloat!
     var radius: CGFloat!
     var centerPoint, colorPosition: CGPoint!
@@ -38,6 +40,9 @@ class TouchWheelView: UIView {
     var touchPoint = CGPoint.zero
     var touchWheelValue: Double = 0.0
     
+    var innerRect: CGRect {
+        return bounds.insetBy(dx: lineWidth + margin, dy: lineWidth + margin)
+    }
     class func sharedInstance() -> TouchWheelView {
         return touchWheel
     }
@@ -61,7 +66,6 @@ class TouchWheelView: UIView {
         // self.frame is only available in correct size while drawing, not after init() from NIB; it's then set to 0,0,1000,1000
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
-        lineWidth = frame.height / 5
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
@@ -93,7 +97,7 @@ class TouchWheelView: UIView {
         gradientBar?.getPixelColor(pos: CGPoint(x: 5, y: 0.97 * gradientBarHeight)).setFill()
         arrowTriangle.fill()
         
-        mainButtonController.sizeButtonViews(rect: frame, touchWheelWidth: lineWidth, margins: margin)
+        mainButtonController.sizeViews(rect: innerRect)
     }
     
     func drawArcSegment(startAngle: CGFloat, endAngle: CGFloat) {

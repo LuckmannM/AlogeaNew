@@ -46,6 +46,7 @@ class MVButton: UIButton {
         colorScheme.darkBlue.setStroke()
         buttonCircle.lineWidth = 1
         buttonCircle.stroke()
+        print("roundButton drawn, frame \(frame)")
     }
     
     func tapped() {

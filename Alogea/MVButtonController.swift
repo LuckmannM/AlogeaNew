@@ -35,21 +35,13 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         self.mainViewController = mainViewController
         self.eventsDataController = EventsDataController.sharedInstance()
     }
-    
-    func sizeButtonViews(rect: CGRect, touchWheelWidth: CGFloat, margins: CGFloat) {
-
-        let innerRect = CGRect(
-            x: margins + touchWheelWidth,
-            y: margins + touchWheelWidth,
-            width: rect.width - (2 * margins + touchWheelWidth * 2),
-            height: rect.height - (2 * margins + touchWheelWidth * 2)
-        )
-        buttonView.frame = innerRect
+        
+    func sizeViews(rect: CGRect) {
+        buttonView.frame = rect
         roundButton.frame = buttonView.bounds
         
         buttonView.setNeedsDisplay()
         roundButton.setNeedsDisplay()
-        
     }
     
     func passOnTouchWheelScore(score: Double,ended: Bool = false) {
