@@ -84,6 +84,10 @@
                                         <include reference="fE1-J0-5hL"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <outlet property="aspectRatioConstraint" destination="aht-uH-Vvm" id="Bfx-p5-hBt"/>
+                                    <outlet property="zeroHeightConstraint" destination="fE1-J0-5hL" id="9yl-zM-Rgi"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -114,7 +118,6 @@
                         <outlet property="floatingMenuView" destination="KFJ-pZ-cje" id="Mu1-BR-DLg"/>
                         <outlet property="graphContainerView" destination="lGD-MW-hsj" id="WWR-Vl-e5T"/>
                         <outlet property="touchWheel" destination="iIW-Nc-pNj" id="3nC-gw-I56"/>
-                        <outlet property="touchWheelARConstraint" destination="aht-uH-Vvm" id="bcb-2V-mJx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

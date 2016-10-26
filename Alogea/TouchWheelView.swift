@@ -15,6 +15,8 @@ protocol TouchWheelDelegate {
 class TouchWheelView: UIView {
     
     @IBOutlet var panRecogniser: UIPanGestureRecognizer!
+    @IBOutlet var aspectRatioConstraint: NSLayoutConstraint!
+    @IBOutlet var zeroHeightConstraint: NSLayoutConstraint!
     
     let π: CGFloat = CGFloat(M_PI)
     let margin: CGFloat = 5.0
@@ -56,6 +58,18 @@ class TouchWheelView: UIView {
         
         mainViewController = (UIApplication.shared.delegate as! AppDelegate).tabBarViews[0] as! MainViewController
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
+    }
+    
+    func switchConstraints(forLandScape:Bool) {
+        if forLandScape {
+            aspectRatioConstraint.isActive = false
+            zeroHeightConstraint.isActive = true
+        } else {
+            aspectRatioConstraint.isActive = true
+            zeroHeightConstraint.isActive = false
+        }
+        touchWheel.layoutIfNeeded()
+
     }
     
     // MARK: - drawing functions
