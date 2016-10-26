@@ -70,8 +70,6 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         colorScheme.darkBlue.setStroke()
         buttonCircle.lineWidth = 1
         buttonCircle.stroke()
-        
-        print("buttonView drawn in \(frame)")
     }
     
     func displayScore(score: Double) {
