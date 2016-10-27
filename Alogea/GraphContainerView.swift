@@ -14,6 +14,19 @@ class GraphContainerView: UIView {
     @IBOutlet var floatingMenuView: FloatingMenuView!
     
     var eventsController = EventsDataController.sharedInstance()
+    var recordTypesController = RecordTypesController.sharedInstance()
+    
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+    }
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     
     
     /*

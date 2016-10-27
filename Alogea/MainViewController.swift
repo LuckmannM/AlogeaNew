@@ -25,8 +25,20 @@ class MainViewController: UIViewController {
     var originalEntryWindowRect: CGRect!
     var textViewFrameInPortrait: CGRect!
     
+    var eventsDataController = EventsDataController.sharedInstance()
     var eventPicker: UIPickerView!
-    let eventPickerTitles = ["Cancel","My event", "Treatment","Fall","Holiday","New..."]
+//    let eventPickerTitles = ["Cancel","My event", "Treatment","Fall","Holiday","New..."]
+    var eventPickerTitles: [String] {
+        var array = ["Cancel", "Event"]
+        
+        if eventsDataController.nonScoreEventTypes.count > 0 {
+            array = ["Cancel"]
+            for type in eventsDataController.nonScoreEventTypes {
+                array.append(type)
+            }
+        }
+        return array
+    }
     let placeHolderText = "Dictate or type your diary entry here"
     var eventPickerSelection: Int!
     
@@ -243,7 +255,7 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         title.backgroundColor = colorScheme.darkBlue
         
         title.attributedText = NSAttributedString(
-            string: "New event: " + eventPickerTitles[row],
+            string: "> " + eventPickerTitles[row] + " <",
             attributes: [
                 NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!,
                 NSForegroundColorAttributeName: UIColor.white,
