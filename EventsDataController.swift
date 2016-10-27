@@ -49,10 +49,10 @@ class EventsDataController: NSObject {
     
     lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
-        let predicate = NSPredicate(format: "vas < %@", argumentArray: [0.0])
+        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Diary Entry"])
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
