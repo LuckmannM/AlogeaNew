@@ -84,6 +84,9 @@ class EventsDataController: NSObject {
         return frc
     }()
     
+    
+    // MARK: - other properties
+    
     var selectedScoreEventMinMaxDates: [Date]? {
         
         guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
@@ -112,46 +115,46 @@ class EventsDataController: NSObject {
         
         return selectedEventDates
         
-//        // MEthod 2
-//        
-//        
-//        let minExpressionDescription = NSExpressionDescription()
-//        minExpressionDescription.name = "minimumDate"
-//        minExpressionDescription.expression = NSExpression(forFunction: "min:", arguments: [NSExpression(forKeyPath: "date")])
-//        minExpressionDescription.expressionResultType = .dateAttributeType
-//        
-//        let maxExpressionDescription = NSExpressionDescription()
-//        maxExpressionDescription.name = "maximumDate"
-//        maxExpressionDescription.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: "date")])
-//        maxExpressionDescription.expressionResultType = .dateAttributeType
-//        
-//        let dateFetch: NSFetchRequest<Event> = Event.fetchRequest()
-//        dateFetch.predicate = NSPredicate(format: "type == %@",firstEvent.type!)
-//        dateFetch.propertiesToFetch = [minExpressionDescription, maxExpressionDescription]
-//        dateFetch.resultType = .dictionaryResultType
-//        dateFetch.includesPendingChanges = true
-//        
-//        do {
-//            let fetchResult = try managedObjectContext.fetch(dateFetch)
-//            if fetchResult.count > 1 {
-//                selectedEventDates.append(((fetchResult.first! as Event).date as Date?)!)
-//                selectedEventDates.append(((fetchResult.last! as Event).date as Date?)!)
-//                return selectedEventDates
-//            } else {
-//                return nil
-//            }
-//        }
-//        catch let error as NSError {
-//            print("error fetching earliest selected event date in EventsDataController: \(error)")
-//            return nil
-//        }
+        //        // MEthod 2
+        //
+        //
+        //        let minExpressionDescription = NSExpressionDescription()
+        //        minExpressionDescription.name = "minimumDate"
+        //        minExpressionDescription.expression = NSExpression(forFunction: "min:", arguments: [NSExpression(forKeyPath: "date")])
+        //        minExpressionDescription.expressionResultType = .dateAttributeType
+        //
+        //        let maxExpressionDescription = NSExpressionDescription()
+        //        maxExpressionDescription.name = "maximumDate"
+        //        maxExpressionDescription.expression = NSExpression(forFunction: "max:", arguments: [NSExpression(forKeyPath: "date")])
+        //        maxExpressionDescription.expressionResultType = .dateAttributeType
+        //
+        //        let dateFetch: NSFetchRequest<Event> = Event.fetchRequest()
+        //        dateFetch.predicate = NSPredicate(format: "type == %@",firstEvent.type!)
+        //        dateFetch.propertiesToFetch = [minExpressionDescription, maxExpressionDescription]
+        //        dateFetch.resultType = .dictionaryResultType
+        //        dateFetch.includesPendingChanges = true
+        //
+        //        do {
+        //            let fetchResult = try managedObjectContext.fetch(dateFetch)
+        //            if fetchResult.count > 1 {
+        //                selectedEventDates.append(((fetchResult.first! as Event).date as Date?)!)
+        //                selectedEventDates.append(((fetchResult.last! as Event).date as Date?)!)
+        //                return selectedEventDates
+        //            } else {
+        //                return nil
+        //            }
+        //        }
+        //        catch let error as NSError {
+        //            print("error fetching earliest selected event date in EventsDataController: \(error)")
+        //            return nil
+        //        }
     }
-
+    
     var selectedScoreEventsTimeSpan: TimeInterval {
         
         guard selectedScoreEventMinMaxDates != nil
             else {
-            return (24 * 3600)
+                return (24 * 3600)
         }
         return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
     }
@@ -169,8 +172,6 @@ class EventsDataController: NSObject {
         
         return frc
     }()
-    
-    // MARK: - other properties
     
     var eventTypes = [String]()
     var nonScoreEventTypes = [String]()
@@ -247,6 +248,17 @@ class EventsDataController: NSObject {
                 print("a new matching recordType has been created by EventsDataController.reconcile method")
             }
         }
+    }
+    
+    func maxScore() -> Double {
+        
+        var score: Double = 10.0
+        for object in recordTypesController.allTypes.fetchedObjects! {
+            if let type = object as RecordType? {
+                if type.name == selectedScore { score = type.maxScore }
+            }
+        }
+        return score
     }
     
     func newEvent(ofType: String, withName: String? = nil, withDate: Date = Date(), vas: Double? = nil, note: String? = nil, duration: Double? = nil) {

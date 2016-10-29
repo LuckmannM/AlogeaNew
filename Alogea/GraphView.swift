@@ -15,9 +15,6 @@ class GraphView: UIView {
     let colorScheme = ColorScheme.sharedInstance()
     var graphPoints: [CGPoint]!
     
-    var displayedTimeSpan: TimeInterval!
-    var minDisplayDate: Date!
-    var maxDisplayDate: Date!
     var helper: GraphViewHelper!
     
     var maxGraphDate: Date {
@@ -34,12 +31,17 @@ class GraphView: UIView {
         return maxGraphDate.timeIntervalSince(minGraphDate)
     }
     
+    var displayedTimeSpan: TimeInterval!
+    var minDisplayDate: Date!
+    var maxDisplayDate: Date!
+
+    // MARK: - methods
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
 
     }
-    
-    
+        
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -100,7 +102,6 @@ class GraphView: UIView {
         let gradientStartPoint = CGPoint(x: 0, y: highestGraphPoint)
         let gradientEndPoint = CGPoint(x: 0, y: frame.maxY)
         lineContext!.drawLinearGradient(helper.lineGraphGradient(), start: gradientStartPoint, end: gradientEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
-        
         lineContext!.restoreGState()
     
         // draw small circles
