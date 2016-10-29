@@ -34,7 +34,6 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         touchWheel.addSubview(buttonView)
         self.mainViewController = mainViewController
         self.eventsDataController = EventsDataController.sharedInstance()
-        print("mvButtonController init")
     }
         
     func sizeViews(rect: CGRect) {

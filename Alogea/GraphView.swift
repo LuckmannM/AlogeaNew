@@ -45,6 +45,7 @@ class GraphView: UIView {
         
         self.helper = GraphViewHelper(graphView: self)
         self.graphPoints = [CGPoint]()
+        self.eventsDataController.graphView = self
         
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
@@ -85,7 +86,7 @@ class GraphView: UIView {
             if graphPoints[k].y < highestGraphPoint { highestGraphPoint = graphPoints[k].y }
         }
         graphPath.lineWidth = helper.lineGraphLineWidth
-        UIColor.white.setStroke()
+        colorScheme.lightGray.setStroke()
         graphPath.stroke()
         
         // create clipPath for optional gradient under lineGraph

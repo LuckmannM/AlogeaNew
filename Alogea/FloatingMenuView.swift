@@ -49,7 +49,7 @@ class FloatingMenuView: UIView {
         UIView.animate(withDuration: 0.5, animations: {
             self.frame = CGRect(x: self.stickOutWidth - self.frame.width, y: targetY, width: self.frame.width, height: targetHeight)
             self.frame = self.frame.offsetBy(dx: self.frame.minX * -1, dy: 0)
-            self.alpha = 0.5
+            self.alpha = 0.8
             }, completion: { (value: Bool) in
                 
                 self.setNeedsDisplay()
@@ -65,7 +65,7 @@ class FloatingMenuView: UIView {
         
         UIView.animate(withDuration: 0.5, animations: {
             self.frame = self.frame.offsetBy(dx: -self.frame.width + self.stickOutWidth, dy: 0)
-            self.alpha = 0.3
+            self.alpha = 0.5
             
             }, completion: { (value: Bool) in
                 UIView.animate(withDuration: 0.2, animations: {

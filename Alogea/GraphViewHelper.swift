@@ -19,9 +19,9 @@ class GraphViewHelper: NSObject {
     let horizontalLineWidth: CGFloat = 1.0
     
     // MARK: - LineGraph format
-    let lineGraphCircleRadius: CGFloat = 5.0
-    let lineGraphCircleLineWidth: CGFloat = 2.0
-    let lineGraphLineWidth: CGFloat = 3.0
+    let lineGraphCircleRadius: CGFloat = 4.0
+    let lineGraphCircleLineWidth: CGFloat = 3.0
+    let lineGraphLineWidth: CGFloat = 2.0
     let lineCircleFillColor = ColorScheme.sharedInstance().darkBlue
 
     // MARK: - BarGraph format
@@ -44,8 +44,8 @@ class GraphViewHelper: NSObject {
     func lineGraphGradient() -> CGGradient {
         
         let colourSpace = CGColorSpaceCreateDeviceRGB()
-        let gradientStartColour = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.4)
-        let gradientEndColour = UIColor(red: 231/255, green: 40/255, blue: 5/255, alpha: 1.0)
+        let gradientStartColour = colorScheme.lightGray.withAlphaComponent(0.8)
+        let gradientEndColour = colorScheme.lightGray.withAlphaComponent(0.0)
         let graphGradientColours = [gradientStartColour.cgColor, gradientEndColour.cgColor]
         let graphColourLocations:[CGFloat] = [0.0, 1.0]
         return CGGradient(colorsSpace: colourSpace, colors: graphGradientColours as CFArray, locations: graphColourLocations)!

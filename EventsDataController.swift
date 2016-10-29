@@ -96,8 +96,6 @@ class EventsDataController: NSObject {
         
         var selectedEventDates = [Date]()
         
-        // Method 1
-
         if selectedScoreEventsFRC.fetchedObjects!.count < 2 {
             let firstObjectPath = IndexPath(item: 0, section: 0)
             let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
@@ -155,7 +153,6 @@ class EventsDataController: NSObject {
             else {
             return (24 * 3600)
         }
-        
         return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
     }
     
@@ -189,12 +186,8 @@ class EventsDataController: NSObject {
     var recordTypesController: RecordTypesController {
         return RecordTypesController.sharedInstance()
     }
-    var maxVAS = Double()
     
-    var maxDisplayDate = Date()
-    var minDisplayDate: Date!
-    var displayTimeInterval: TimeInterval!
-    
+    weak var graphView: GraphView!
     
     // MARK: - methods
     
@@ -285,36 +278,6 @@ class EventsDataController: NSObject {
         (UIApplication.shared.delegate as! AppDelegate).stack.save()
     }
     
-//    func lineGraphData(forViewSize: CGSize, minDate: Date, displayedTimeSpan: TimeInterval) -> [CGPoint] {
-//        
-//        var array = [CGPoint]()
-//        var maxVAS = CGFloat()
-//        var highPoint = CGFloat()
-//        
-//        if recordTypesController.returnMaxVAS(forType: selectedScore) == nil {
-//            print("no maxValue found for selected scoreEventType \(selectedScore)")
-//            maxVAS = 10.0
-//        } else {
-//            maxVAS = CGFloat(recordTypesController.returnMaxVAS(forType: selectedScore)!)
-//        }
-//        // this positions the earliest event relative to timeInterval from/to minDisplayDate based on scale
-//        // and calculates all other values from this point to the right
-//        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
-//            return array
-//        }
-//        
-//        let timePerWidth = CGFloat(displayedTimeSpan) / forViewSize.width
-//        
-//        for object in scoreEventsFRC.fetchedObjects! {
-//            if let event = object as Event? {
-//                let xCoordinate = CGFloat(TimeInterval(event.date! .timeIntervalSince(minDate))) / timePerWidth
-//                let yCoordinate = forViewSize.height * CGFloat(event.vas) / maxVAS
-//                array.append(CGPoint(x: xCoordinate, y: yCoordinate))
-//            }
-//        }
-//        
-//        return array
-//    }
     
     func graphData() -> [scoreEventGraphData]? {
         
@@ -345,6 +308,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         if controller.isEqual(scoreEventsFRC) {
             print("scoreEventsFRC has changed")
             print("There are \(scoreEventsFRC.fetchedObjects?.count) score events")
+            graphView.setNeedsDisplay()
         } else if controller.isEqual(eventTypeFRC) {
             print("eventTypeFRC has changed")
             eventTypes.removeAll(keepingCapacity: true)
