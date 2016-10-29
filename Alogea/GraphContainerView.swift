@@ -15,6 +15,7 @@ class GraphContainerView: UIView {
     
     @IBOutlet var floatingMenuView: FloatingMenuView!
     @IBOutlet weak var graphView: GraphView!
+    @IBOutlet weak var clipView: ClipView!
     
     var eventsController = EventsDataController.sharedInstance()
     var recordTypesController = RecordTypesController.sharedInstance()
@@ -70,9 +71,9 @@ class GraphContainerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
-        updateLabels()
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
+        addSubview(lowerLimitLabel)
     }
 
     func updateLabels() {
@@ -95,19 +96,18 @@ class GraphContainerView: UIView {
         upperLimitLabel.sizeToFit()
         upperLimitLabel.frame.origin = CGPoint(
             x: self.frame.maxX - upperLimitLabel.frame.width - 5,
-            y: 30 - upperLimitLabel.frame.height / 2
+            y: clipView.frame.minY - upperLimitLabel.frame.height / 2
         )
      
-        
-        
+        lowerLimitLabel.frame.origin = CGPoint(
+            x: self.frame.maxX - lowerLimitLabel.frame.width - 5,
+            y: clipView.frame.maxY - graphView.timeLineSpace - upperLimitLabel.frame.height / 2
+        )
     }
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
         // Drawing code
+        updateLabels()
     }
-    */
 
 }
