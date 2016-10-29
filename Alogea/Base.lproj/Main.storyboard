@@ -40,8 +40,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainerView" customModule="Alogea" customModuleProvider="target">
                                 <rect key="frame" x="-4" y="49" width="375" height="287"/>
                                 <subviews>
-                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yMt-NO-418" customClass="GraphView" customModule="Alogea" customModuleProvider="target">
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yMt-NO-418" customClass="GraphView" customModule="Alogea" customModuleProvider="target">
                                         <rect key="frame" x="8" y="8" width="359" height="271"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3MZ-MM-gjS" customClass="ClipView" customModule="Alogea" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="10" width="355" height="267"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
@@ -60,12 +65,12 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="yMt-NO-418" secondAttribute="bottom" constant="8" id="1AO-6e-MQa"/>
-                                    <constraint firstItem="yMt-NO-418" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="8" id="AId-Nz-uc6"/>
-                                    <constraint firstAttribute="trailing" secondItem="yMt-NO-418" secondAttribute="trailing" constant="8" id="Cqh-1C-I22"/>
+                                    <constraint firstItem="3MZ-MM-gjS" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="10" id="3yG-R4-BI7"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="centerY" secondItem="lGD-MW-hsj" secondAttribute="centerY" id="Doe-Lq-sOE"/>
+                                    <constraint firstItem="3MZ-MM-gjS" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="10" id="Qll-ux-Prm"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-70" id="Y6d-fR-RgD"/>
-                                    <constraint firstItem="yMt-NO-418" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="8" id="Yq7-4t-V58"/>
+                                    <constraint firstAttribute="trailing" secondItem="3MZ-MM-gjS" secondAttribute="trailing" constant="10" id="fpR-Jj-wim"/>
+                                    <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="10" id="pbf-Di-hcC"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="93" id="r0L-Mi-bju"/>
                                 </constraints>
                                 <connections>
@@ -74,7 +79,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="46.5" y="336" width="282" height="282"/>
+                                <rect key="frame" x="47" y="336" width="282" height="282"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -105,6 +110,7 @@
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="5HX-bf-Nth"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUg-qH-Qns"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="HwF-k0-zvC"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" priority="750" id="TUa-od-DY8">
                                 <variation key="heightClass=compact-widthClass=compact" constant="164.75"/>
@@ -113,7 +119,6 @@
                             </constraint>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="Zep-kQ-hxe"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="iIW-Nc-pNj" secondAttribute="bottom" id="cUK-R7-fYd"/>
-                            <constraint firstItem="yMt-NO-418" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="9" id="iKL-AH-k4a"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
                         </constraints>
@@ -141,7 +146,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3002.898550724638" y="131.25"/>
+            <point key="canvasLocation" x="3002.4000000000001" y="130.88455772113943"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sx4-I1-IEg">
