@@ -12,6 +12,7 @@ class GraphContainerView: UIView {
 
     
     @IBOutlet var floatingMenuView: FloatingMenuView!
+    @IBOutlet weak var graphView: GraphView!
     
     var eventsController = EventsDataController.sharedInstance()
     var recordTypesController = RecordTypesController.sharedInstance()
@@ -19,12 +20,16 @@ class GraphContainerView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("graphViewContainer override init")
         
     }
     
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        print("graphViewContainer init coder")
+
     }
 
     

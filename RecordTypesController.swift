@@ -83,6 +83,18 @@ class RecordTypesController: NSObject {
         
     }
     
+    func returnMaxVAS(forType: String?) -> Double? {
+        
+        for object in allTypes.fetchedObjects! {
+            if let recordType = object as RecordType? {
+                if recordType.name == forType {
+                    return recordType.maxScore
+                }
+            }
+        }
+        return nil
+    }
+    
     
     func save() {
         (UIApplication.shared.delegate as! AppDelegate).stack.save()

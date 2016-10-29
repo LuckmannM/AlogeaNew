@@ -63,6 +63,7 @@ class MainViewController: UIViewController {
         }
         
         toggleTabBar(size: view.frame.size)
+        print("mainView did load")
     }
 
     override func didReceiveMemoryWarning() {

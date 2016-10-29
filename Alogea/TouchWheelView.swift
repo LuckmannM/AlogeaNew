@@ -58,6 +58,9 @@ class TouchWheelView: UIView {
         
         mainViewController = (UIApplication.shared.delegate as! AppDelegate).tabBarViews[0] as! MainViewController
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
+        
+        print("touchWheel init coder")
+
     }
     
     func switchConstraints(forLandScape:Bool) {

@@ -53,6 +53,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("buttonView override init")
+
     }
     
     

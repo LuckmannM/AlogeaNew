@@ -9,13 +9,52 @@
 import UIKit
 
 class GraphView: UIView {
+    
+    let eventsDataController = EventsDataController.sharedInstance()
+    var graphPoints: [CGPoint]!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
     }
-    */
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        graphPoints = [CGPoint]()
+        
+        if eventsDataController.selectedScoreEventsFRC.fetchedObjects?.count == 0 {
+            eventsDataController.createExampleEvents()
+            eventsDataController.printSelectedScoreEventDates()
+        }
+        
+        print("graphView init coder")
+        graphPoints = calculateGraphPoints()
+        
+    }
+    
+
+//    override func draw(_ rect: CGRect) {
+//        // Drawing code
+//        graphPoints = eventsDataController.lineGraphData(forViewSize: frame.size, minDate: eventsDataController.minDisplayDate, displayedTimeSpan: eventsDataController.displayTimeInterval)
+//        
+//    }
+    
+    func calculateGraphPoints() -> [CGPoint] {
+        
+        let points = [CGPoint]()
+        
+        guard let scoreEventsDict = eventsDataController.graphData() else {
+            return points
+        }
+        
+        for scoreEvent in scoreEventsDict {
+            print("eventDict \(scoreEvent)")
+        
+        }
+        
+        return points
+    }
 
 }

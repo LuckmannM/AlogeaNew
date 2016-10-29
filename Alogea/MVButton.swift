@@ -30,6 +30,8 @@ class MVButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("button override init")
+
     }
     
     

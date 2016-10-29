@@ -34,6 +34,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         touchWheel.addSubview(buttonView)
         self.mainViewController = mainViewController
         self.eventsDataController = EventsDataController.sharedInstance()
+        print("mvButtonController init")
     }
         
     func sizeViews(rect: CGRect) {
@@ -62,7 +63,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     func finaliseScoreEvent(amendTime: TimeInterval) {
         
         let eventDate = Date().addingTimeInterval(-amendTime)
-        eventsDataController.newEvent(ofType: "default score", withDate: eventDate, vas: temporaryVAScore)
+        eventsDataController.newEvent(ofType: eventsDataController.selectedScore, withDate: eventDate, vas: temporaryVAScore)
         temporaryVAScore = nil
         
         // display on graph, best via EventFRC delegate link to graoh object
