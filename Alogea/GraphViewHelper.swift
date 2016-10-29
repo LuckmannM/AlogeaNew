@@ -14,6 +14,16 @@ class GraphViewHelper: NSObject {
     weak var graphView: GraphView!
     let colorScheme = ColorScheme.sharedInstance()
     
+    let timeLineTickLength: CGFloat = 5.0
+    let timeLineLabelHeight: CGFloat = {
+        let label = UILabel()
+        label.font = UIFont(name: "AvenirNext-Regular", size: 12.0)
+        label.text = "30.12.2020"
+        label.sizeToFit()
+        return label.frame.height
+    }()
+
+    
     // MARK: - Horizontal line format
     let horizontalLineColor = ColorScheme.sharedInstance().lightGray
     let horizontalLineWidth: CGFloat = 1.0
@@ -34,6 +44,8 @@ class GraphViewHelper: NSObject {
     // MARK: - GraphView2 timeLine formats
     let tLLineWidth: CGFloat = 2.0
     let tLLineColor = UIColor.white
+    
+    //MARK: - methods
 
     convenience init(graphView: GraphView) {
         self.init()

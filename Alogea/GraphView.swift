@@ -34,6 +34,10 @@ class GraphView: UIView {
     var displayedTimeSpan: TimeInterval!
     var minDisplayDate: Date!
     var maxDisplayDate: Date!
+    
+    var timeLineSpace: CGFloat {
+        return helper.timeLineLabelHeight + helper.timeLineTickLength + 5
+    }
 
     // MARK: - methods
     
@@ -71,17 +75,49 @@ class GraphView: UIView {
     
 
     override func draw(_ rect: CGRect) {
-        // Drawing code
 
-        let lineContext = UIGraphicsGetCurrentContext()
-        let graphPath = UIBezierPath()
-        var highestGraphPoint: CGFloat = frame.height
+        
+        drawHorizontalLines()
         
         graphPoints = calculateGraphPoints()
         
         guard graphPoints.count > 0  else { return }
+        drawLineGraph()
+    }
+    
+    func drawHorizontalLines() {
+        let xStart: CGFloat = bounds.origin.x
+        let xEnd: CGFloat = bounds.maxX
+        //        print("drawLines from \(xStart) to \(xEnd)")
         
-        //draw lineGraph
+        let upperLineY = bounds.minY + 1.0
+        let lowerLineY = bounds.maxY - timeLineSpace
+        let midLineY = (upperLineY + lowerLineY) / 2 + 0.5
+        
+        
+        let linePath = UIBezierPath()
+        linePath.move(to: CGPoint(x: xStart, y: upperLineY))
+        linePath.addLine(to: CGPoint(x: xEnd, y: upperLineY))
+        
+        linePath.move(to: CGPoint(x: xStart, y: midLineY))
+        linePath.addLine(to: CGPoint(x: xEnd, y: midLineY))
+        
+        linePath.move(to: CGPoint(x: xStart, y:lowerLineY))
+        linePath.addLine(to: CGPoint(x: xEnd, y: lowerLineY))
+        
+        
+        colorScheme.lightGray.withAlphaComponent(0.75).setStroke()
+        linePath.lineWidth = helper.lineGraphLineWidth
+        linePath.stroke()
+        
+    }
+    
+    func drawLineGraph() {
+        
+        let lineContext = UIGraphicsGetCurrentContext()
+        let graphPath = UIBezierPath()
+        var highestGraphPoint: CGFloat = frame.height
+
         graphPath.move(to: graphPoints[0])
         for k in 1..<graphPoints.count {
             graphPath.addLine(to: graphPoints[k])
@@ -91,19 +127,19 @@ class GraphView: UIView {
         colorScheme.lightGray.setStroke()
         graphPath.stroke()
         
-        // create clipPath for optional gradient under lineGraph
+        // create clipPath for gradient under lineGraph
         lineContext!.saveGState()
         let clipPath = graphPath.copy() as! UIBezierPath
-        clipPath.addLine(to: CGPoint(x:graphPoints[graphPoints.count - 1].x, y: frame.maxY))
-        clipPath.addLine(to: CGPoint(x: graphPoints[0].x, y: frame.maxY))
+        clipPath.addLine(to: CGPoint(x:graphPoints[graphPoints.count - 1].x, y: bounds.maxY - timeLineSpace))
+        clipPath.addLine(to: CGPoint(x: graphPoints[0].x, y: bounds.maxY - timeLineSpace))
         clipPath.close()
         clipPath.addClip()
         
         let gradientStartPoint = CGPoint(x: 0, y: highestGraphPoint)
-        let gradientEndPoint = CGPoint(x: 0, y: frame.maxY)
+        let gradientEndPoint = CGPoint(x: 0, y: bounds.maxY - timeLineSpace)
         lineContext!.drawLinearGradient(helper.lineGraphGradient(), start: gradientStartPoint, end: gradientEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
         lineContext!.restoreGState()
-    
+        
         // draw small circles
         helper.lineCircleFillColor.setFill()
         for i in 0..<graphPoints.count {
@@ -135,7 +171,7 @@ class GraphView: UIView {
 
         for eventData in scoreEventsData {
             let xCoordinate = CGFloat(TimeInterval(eventData.date .timeIntervalSince(minGraphDate))) / timePerWidth
-            let yCoordinate = frame.height * eventData.score / maxVAS
+            let yCoordinate = (frame.height - timeLineSpace) * eventData.score / maxVAS
             let newPoint = CGPoint(x: xCoordinate, y: yCoordinate)
             points.append(newPoint)
         }
