@@ -15,6 +15,7 @@
 		2651FD681DB3B07700C1301A /* MVButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD671DB3B07700C1301A /* MVButtonView.swift */; };
 		2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD691DB3B90C00C1301A /* MVButtonController.swift */; };
 		2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD6B1DB3D8A600C1301A /* MVButton.swift */; };
+		267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */; };
 		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
 		26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */; };
 		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
@@ -65,6 +66,7 @@
 		2651FD671DB3B07700C1301A /* MVButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonView.swift; sourceTree = "<group>"; };
 		2651FD691DB3B90C00C1301A /* MVButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonController.swift; sourceTree = "<group>"; };
 		2651FD6B1DB3D8A600C1301A /* MVButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButton.swift; sourceTree = "<group>"; };
+		267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewHelper.swift; sourceTree = "<group>"; };
 		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingMenuView.swift; sourceTree = "<group>"; };
 		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,6 +174,7 @@
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
 				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
+				267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */,
 				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
 				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
@@ -407,6 +410,7 @@
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
+				267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */,
 				26F647721DAE70EC0061E560 /* GraphContainerView.swift in Sources */,
 				26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */,
 				26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */,
