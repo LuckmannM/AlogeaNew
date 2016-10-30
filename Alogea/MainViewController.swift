@@ -13,6 +13,8 @@ class MainViewController: UIViewController {
     @IBOutlet weak var touchWheel: TouchWheelView!
     @IBOutlet weak var graphContainerView: GraphContainerView!
     @IBOutlet weak var floatingMenuView: FloatingMenuView!
+    @IBOutlet weak var displayTimeSegmentedController: UISegmentedControl!
+
     
     var colorScheme = ColorScheme.sharedInstance()
     
@@ -61,9 +63,8 @@ class MainViewController: UIViewController {
         if UIDevice().userInterfaceIdiom == .pad && view.frame.size.width > view.frame.size.height {
             iPadLandScapeStart = true
         }
-        
         toggleTabBar(size: view.frame.size)
-        print("mainView did load")
+        displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
     }
 
     override func didReceiveMemoryWarning() {
@@ -112,6 +113,22 @@ class MainViewController: UIViewController {
             } else {
                 tabBar.isHidden = false
             }
+        }
+        
+    }
+    
+    @IBAction func displayTimeSelection(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+            
+        case 0:
+            graphContainerView.graphView.changeDisplayedInteral(toInterval: 24 * 3600)
+        case 1:
+            graphContainerView.graphView.changeDisplayedInteral(toInterval: 7 * 24 * 3600)
+        case 2:
+            graphContainerView.graphView.changeDisplayedInteral(toInterval: 30 * 24 * 3600)
+        default:
+            graphContainerView.graphView.changeDisplayedInteral(toInterval: 365 * 24 * 3600)
         }
         
     }

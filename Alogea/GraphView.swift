@@ -11,6 +11,11 @@ import Foundation
 
 class GraphView: UIView {
     
+    @IBOutlet weak var mainViewController: MainViewController!
+    @IBOutlet weak var clipView: ClipView!
+    @IBOutlet var leftFrameConstraint: NSLayoutConstraint!
+    @IBOutlet var rightFrameConstraint: NSLayoutConstraint!
+    
     let eventsDataController = EventsDataController.sharedInstance()
     let colorScheme = ColorScheme.sharedInstance()
     var graphPoints: [CGPoint]!
@@ -24,6 +29,7 @@ class GraphView: UIView {
         if eventsDataController.selectedScoreEventMinMaxDates != nil {
             return (eventsDataController.selectedScoreEventMinMaxDates![0])
         } else {
+            mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             return maxGraphDate.addingTimeInterval(-24 * 3600)
         }
     }
@@ -56,6 +62,7 @@ class GraphView: UIView {
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
         if eventsDataController.selectedScoreEventsTimeSpan < (24 * 3600) {
+            mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             displayedTimeSpan = 24 * 3600
         } else {
             displayedTimeSpan = eventsDataController.selectedScoreEventsTimeSpan // set initial dTS to min-maxScoreEventDates
@@ -113,7 +120,7 @@ class GraphView: UIView {
     }
     
     func drawLineGraph() {
-        
+                
         let lineContext = UIGraphicsGetCurrentContext()
         let graphPath = UIBezierPath()
         var highestGraphPoint: CGFloat = frame.height
@@ -177,6 +184,23 @@ class GraphView: UIView {
         }
         
         return points
+    }
+    
+    func changeDisplayedInteral(toInterval: TimeInterval) {
+        
+        var newDisplayInterval = toInterval
+        if toInterval < (24 * 3600) {
+            newDisplayInterval = 24 * 3600
+        }
+        
+        let newFrameWidth = CGFloat(graphTimeSpan / newDisplayInterval) * clipView.frame.width
+        if leftFrameConstraint.isActive {
+            leftFrameConstraint.isActive = false
+            rightFrameConstraint.isActive = false
+        }
+        self.frame = CGRect(x: clipView.frame.maxX - newFrameWidth, y: frame.origin.y, width: newFrameWidth, height: frame.height)
+        print("graphTimeSpan is to \(graphTimeSpan/(24*3600)) days")
+        print("set new frame to \(frame)")
     }
 
 }

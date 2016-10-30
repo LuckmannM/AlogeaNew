@@ -37,10 +37,10 @@ class EventsDataController: NSObject {
     
     lazy var scoreEventsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
-        let predicate = NSPredicate(format: "vas > %@", argumentArray: [0.0])
+        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
@@ -69,7 +69,7 @@ class EventsDataController: NSObject {
     
     lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
-        let anyScorePredicate = NSPredicate(format: "vas > %@", argumentArray: [0.0])
+        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
         let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [anyScorePredicate, selectedScorePredicate])
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
@@ -211,6 +211,7 @@ class EventsDataController: NSObject {
         }
         
         reconcileRecordTypesAndEventNames()
+        
     }
     
     func reconcileRecordTypesAndEventNames() {
@@ -248,6 +249,10 @@ class EventsDataController: NSObject {
                 print("a new matching recordType has been created by EventsDataController.reconcile method")
             }
         }
+        
+        // *** debug
+//         deleteAllScoreEvents()
+//        createExampleEvents()
     }
     
     func maxScore() -> Double {
@@ -297,6 +302,16 @@ class EventsDataController: NSObject {
             return nil
         }
         
+        // *** debug only
+        print("there are \(selectedScoreEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
+        print("there are \(scoreEventsFRC.fetchedObjects!.count) different scoreEvents")
+        var scoreEventTypes = [String]()
+        for section in scoreEventsFRC.sections! {
+            scoreEventTypes.append(section.name)
+        }
+        print("there are the following scoreEvent types: \(scoreEventTypes)")
+        // *** debug only
+
         var dataArray = [scoreEventGraphData]()
         for object in selectedScoreEventsFRC.fetchedObjects! {
             if let event = object as Event? {
@@ -320,26 +335,29 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         if controller.isEqual(scoreEventsFRC) {
             print("scoreEventsFRC has changed")
             print("There are \(scoreEventsFRC.fetchedObjects?.count) score events")
-            graphView.setNeedsDisplay()
         } else if controller.isEqual(eventTypeFRC) {
-            print("eventTypeFRC has changed")
             eventTypes.removeAll(keepingCapacity: true)
             for section in eventTypeFRC.sections! {
                 eventTypes.append(section.name)
             }
-            print("eventTypeFRC have changed - found the following types: \(eventTypes)")
+            print("eventTypeFRC has changed - found the following types: \(eventTypes)")
         } else if controller.isEqual(nonScoreEventTypesFRC) {
             nonScoreEventTypes.removeAll()
             for sections in self.nonScoreEventTypesFRC.sections! {
                 nonScoreEventTypes.append(sections.name)
             }
             print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
+        } else if controller.isEqual(selectedScoreEventsFRC) {
+            print("selectedScoreEventTypeFRC has changed")
         }
         reconcileRecordTypesAndEventNames()
+        graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
     }
     
 }
 
+
+// *** For debuggin only ***
 extension EventsDataController {
     
     func createExampleEvents() {
@@ -355,7 +373,7 @@ extension EventsDataController {
                 NSEntityDescription.insertNewObject(forEntityName: "Event", into: managedObjectContext) as? Event
             }()
             newEvent!.name = selectedScore
-            newEvent!.type = selectedScore
+            newEvent!.type = "Score Event"
             newEvent?.vas = drand48() * 10
             newEvent!.date = NSDate().addingTimeInterval(drand48() * -45 * 24 * 3600)
         }
@@ -371,6 +389,19 @@ extension EventsDataController {
         print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
         print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
 
+    }
+    
+    func deleteAllScoreEvents() {
+        
+        
+        guard (scoreEventsFRC.fetchedObjects?.count)! > 0 else { return }
+        
+        print("deleting all 'Score Events'")
+        
+        for object in scoreEventsFRC.fetchedObjects! {
+            managedObjectContext.delete(object)
+        }
+        save()
     }
     
     func printSelectedScoreEventDates() {
