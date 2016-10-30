@@ -84,7 +84,7 @@ class GraphView: UIView {
     override func draw(_ rect: CGRect) {
 
         
-        drawHorizontalLines()
+//        drawHorizontalLines()
         
         graphPoints = calculateGraphPoints()
         
@@ -92,32 +92,32 @@ class GraphView: UIView {
         drawLineGraph()
     }
     
-    func drawHorizontalLines() {
-        let xStart: CGFloat = bounds.origin.x
-        let xEnd: CGFloat = bounds.maxX
-        //        print("drawLines from \(xStart) to \(xEnd)")
-        
-        let upperLineY = bounds.minY + 1.0
-        let lowerLineY = bounds.maxY - timeLineSpace
-        let midLineY = (upperLineY + lowerLineY) / 2 + 0.5
-        
-        
-        let linePath = UIBezierPath()
-        linePath.move(to: CGPoint(x: xStart, y: upperLineY))
-        linePath.addLine(to: CGPoint(x: xEnd, y: upperLineY))
-        
-        linePath.move(to: CGPoint(x: xStart, y: midLineY))
-        linePath.addLine(to: CGPoint(x: xEnd, y: midLineY))
-        
-        linePath.move(to: CGPoint(x: xStart, y:lowerLineY))
-        linePath.addLine(to: CGPoint(x: xEnd, y: lowerLineY))
-        
-        
-        colorScheme.lightGray.withAlphaComponent(0.75).setStroke()
-        linePath.lineWidth = helper.lineGraphLineWidth
-        linePath.stroke()
-        
-    }
+//    func drawHorizontalLines() {
+//        let xStart: CGFloat = bounds.origin.x
+//        let xEnd: CGFloat = bounds.maxX
+//        //        print("drawLines from \(xStart) to \(xEnd)")
+//        
+//        let upperLineY = bounds.minY + 1.0
+//        let lowerLineY = bounds.maxY - timeLineSpace
+//        let midLineY = (upperLineY + lowerLineY) / 2 + 0.5
+//        
+//        
+//        let linePath = UIBezierPath()
+//        linePath.move(to: CGPoint(x: xStart, y: upperLineY))
+//        linePath.addLine(to: CGPoint(x: xEnd, y: upperLineY))
+//        
+//        linePath.move(to: CGPoint(x: xStart, y: midLineY))
+//        linePath.addLine(to: CGPoint(x: xEnd, y: midLineY))
+//        
+//        linePath.move(to: CGPoint(x: xStart, y:lowerLineY))
+//        linePath.addLine(to: CGPoint(x: xEnd, y: lowerLineY))
+//        
+//        
+//        colorScheme.lightGray.withAlphaComponent(0.75).setStroke()
+//        linePath.lineWidth = helper.lineGraphLineWidth
+//        linePath.stroke()
+//        
+//    }
     
     func drawLineGraph() {
                 
@@ -199,8 +199,9 @@ class GraphView: UIView {
             rightFrameConstraint.isActive = false
         }
         self.frame = CGRect(x: clipView.frame.maxX - newFrameWidth, y: frame.origin.y, width: newFrameWidth, height: frame.height)
-        print("graphTimeSpan is to \(graphTimeSpan/(24*3600)) days")
-        print("set new frame to \(frame)")
+        setNeedsDisplay()
+//        print("graphTimeSpan is to \(graphTimeSpan/(24*3600)) days")
+//        print("set new frame to \(frame)")
     }
 
 }

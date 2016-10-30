@@ -53,6 +53,10 @@ class GraphViewHelper: NSObject {
         self.graphView = graphView
     }
     
+    class func sharedInstance() -> GraphViewHelper {
+        return helper
+    }
+    
     func lineGraphGradient() -> CGGradient {
         
         let colourSpace = CGColorSpaceCreateDeviceRGB()
@@ -71,5 +75,11 @@ class GraphViewHelper: NSObject {
         let coloursForColumns = [UIColor.red.cgColor, UIColor.orange.cgColor, UIColor.yellow.cgColor,UIColor.green.cgColor]
         return CGGradient(colorsSpace: colourSpace, colors: coloursForColumns as CFArray, locations: colourLocationsForColumns)!
     }
+    
+    func timeLineSpace() -> CGFloat {
+        return timeLineLabelHeight + timeLineTickLength
+    }
 
 }
+
+let helper = GraphViewHelper()
