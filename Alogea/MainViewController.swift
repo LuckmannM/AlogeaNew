@@ -124,8 +124,9 @@ extension MainViewController: UITextViewDelegate {
         
         textEntryWindow.frame = frame
         originalEntryWindowRect = textEntryWindow.frame
-        textEntryWindow.backgroundColor = UIColor(colorLiteralRed: 248/255, green: 248/255, blue: 245/255, alpha: 0.8)
+        textEntryWindow.backgroundColor = UIColor(colorLiteralRed: 248/255, green: 248/255, blue: 245/255, alpha: 0.9)
         view.addSubview(textEntryWindow)
+        
         
         observer = NotificationCenter.default
         
@@ -140,6 +141,17 @@ extension MainViewController: UITextViewDelegate {
         textEntryWindow.addSubview(eventPicker)
         eventPicker.selectRow(1, inComponent: 0, animated: false)
         eventPickerSelection = 1
+        
+        let arrowView = UIImageView(image: UIImage(named: "UpDownArrows"))
+        arrowView.frame = CGRect(x: 15, y: 15, width: 17, height: 40)
+        arrowView.alpha = 0.8
+        let arrowView2 = UIImageView(image: UIImage(named: "UpDownArrows"))
+        arrowView2.frame = arrowView.frame.offsetBy(dx: eventPicker.frame.width - 10 - arrowView2.frame.width, dy: 0)
+        arrowView2.alpha = 0.8
+        
+        textEntryWindow.addSubview(arrowView)
+        textEntryWindow.addSubview(arrowView2)
+
         
         textView = {
             let tV = UITextView()
@@ -256,7 +268,7 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         title.backgroundColor = colorScheme.darkBlue
         
         title.attributedText = NSAttributedString(
-            string: "> " + eventPickerTitles[row] + " <",
+            string: eventPickerTitles[row],
             attributes: [
                 NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!,
                 NSForegroundColorAttributeName: UIColor.white,

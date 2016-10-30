@@ -138,6 +138,18 @@
 			name = "TouchWheel & Button Group";
 			sourceTree = "<group>";
 		};
+		267F78D21DC54214008CC23E /* GraphViews Group */ = {
+			isa = PBXGroup;
+			children = (
+				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
+				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
+				267F78D01DC5264F008CC23E /* ClipView.swift */,
+				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
+				267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */,
+			);
+			name = "GraphViews Group";
+			sourceTree = "<group>";
+		};
 		26B5A14D1DAFE4760082DA40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,14 +186,10 @@
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
-				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
-				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
-				267F78D01DC5264F008CC23E /* ClipView.swift */,
-				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
-				267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */,
-				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
-				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
+				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
+				267F78D21DC54214008CC23E /* GraphViews Group */,
+				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
 				26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */,
 				26E3B8D91DA177D000D157BB /* Info.plist */,
