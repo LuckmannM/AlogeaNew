@@ -85,14 +85,14 @@ class GraphContainerView: UIView {
         }()
 
         
-        upperLabel.text = eventsController.selectedScore
+        upperLabel.text = graphView.helper.selectedScore
         upperLabel.sizeToFit()
         upperLabel.frame.origin = CGPoint(
             x: bounds.midX - upperLabel.frame.width / 2,
             y: 5
         )
         
-        upperLimitLabel.text = numberFormatter.string(from: eventsController.maxScore() as NSNumber)
+        upperLimitLabel.text = numberFormatter.string(from: graphView.helper.maxScore() as NSNumber)
         upperLimitLabel.sizeToFit()
         upperLimitLabel.frame.origin = CGPoint(
             x: self.frame.maxX - upperLimitLabel.frame.width - 5,

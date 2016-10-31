@@ -26,8 +26,8 @@ class GraphView: UIView {
         return Date()
     }
     var minGraphDate: Date {
-        if eventsDataController.selectedScoreEventMinMaxDates != nil {
-            return (eventsDataController.selectedScoreEventMinMaxDates![0])
+        if helper.selectedScoreEventMinMaxDates != nil {
+            return (helper.selectedScoreEventMinMaxDates![0])
         } else {
             mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             return maxGraphDate.addingTimeInterval(-24 * 3600)
@@ -61,20 +61,20 @@ class GraphView: UIView {
         
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
-        if eventsDataController.selectedScoreEventsTimeSpan < (24 * 3600) {
+        if helper.selectedScoreEventsTimeSpan < (24 * 3600) {
             mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             displayedTimeSpan = 24 * 3600
         } else {
-            displayedTimeSpan = eventsDataController.selectedScoreEventsTimeSpan // set initial dTS to min-maxScoreEventDates
+            displayedTimeSpan = helper.selectedScoreEventsTimeSpan // set initial dTS to min-maxScoreEventDates
         }
         
         graphPoints = [CGPoint]()
         
         
         // *** Debug
-        if eventsDataController.selectedScoreEventsFRC.fetchedObjects?.count == 0 {
+        if helper.selectedScoreEventsFRC.fetchedObjects?.count == 0 {
             eventsDataController.createExampleEvents()
-            eventsDataController.printSelectedScoreEventDates()
+            helper.printSelectedScoreEventDates()
         }
         // ***
         
@@ -163,22 +163,22 @@ class GraphView: UIView {
         var points = [CGPoint]()
         var maxVAS = CGFloat()
 
-        guard let scoreEventsData = eventsDataController.graphData() else {
+        guard let scoreEventsData = helper.graphData() else {
             return points
         }
         
-        if recordTypesController.returnMaxVAS(forType: eventsDataController.selectedScore) == nil {
-            print("no maxValue found for selected scoreEventType \(eventsDataController.selectedScore)")
+        if recordTypesController.returnMaxVAS(forType: helper.selectedScore) == nil {
+            print("no maxValue found for selected scoreEventType \(helper.selectedScore)")
             maxVAS = 10.0
         } else {
-            maxVAS = CGFloat(recordTypesController.returnMaxVAS(forType: eventsDataController.selectedScore)!)
+            maxVAS = CGFloat(recordTypesController.returnMaxVAS(forType: helper.selectedScore)!)
         }
 
         let timePerWidth = CGFloat(graphTimeSpan) / frame.width
 
         for eventData in scoreEventsData {
             let xCoordinate = CGFloat(TimeInterval(eventData.date .timeIntervalSince(minGraphDate))) / timePerWidth
-            let yCoordinate = (frame.height - timeLineSpace) * eventData.score / maxVAS
+            let yCoordinate = (frame.height - timeLineSpace) * (maxVAS - eventData.score) / maxVAS
             let newPoint = CGPoint(x: xCoordinate, y: yCoordinate)
             points.append(newPoint)
         }

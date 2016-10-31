@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 import CoreData
 
-typealias scoreEventGraphData = (date: Date, score: CGFloat)
-
 
 class EventsDataController: NSObject {
     
@@ -67,54 +65,39 @@ class EventsDataController: NSObject {
         return frc
     }()
     
-    lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
-        let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [anyScorePredicate, selectedScorePredicate])
-        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("selectedScoreEventsFRC fetching error")
-        }
-        
-        return frc
-    }()
+
     
     
     // MARK: - other properties
     
-    var selectedScoreEventMinMaxDates: [Date]? {
-        
-        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
-            return nil
-        }
-        
-        guard (selectedScoreEventsFRC.fetchedObjects![0] as Event?) != nil else {
-            return nil
-        }
-        
-        var selectedEventDates = [Date]()
-        
-        if selectedScoreEventsFRC.fetchedObjects!.count < 2 {
-            let firstObjectPath = IndexPath(item: 0, section: 0)
-            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
-            selectedEventDates.append(firstDate) // minDate from one and only event
-            selectedEventDates.append(Date()) // maxDate is now
-        } else {
-            let firstObjectPath = IndexPath(item: 0, section: 0)
-            let lastObjectPath = IndexPath(item: selectedScoreEventsFRC.fetchedObjects!.count - 1, section: 0)
-            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
-            selectedEventDates.append(firstDate) // minDate from one and only event
-            let lastDate = (selectedScoreEventsFRC.object(at: lastObjectPath) as Event).date as! Date
-            selectedEventDates.append(lastDate) // maxDate is now
-        }
-        
-        return selectedEventDates
-        
+//    var selectedScoreEventMinMaxDates: [Date]? {
+//        
+//        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
+//            return nil
+//        }
+//        
+//        guard (selectedScoreEventsFRC.fetchedObjects![0] as Event?) != nil else {
+//            return nil
+//        }
+//        
+//        var selectedEventDates = [Date]()
+//        
+//        if selectedScoreEventsFRC.fetchedObjects!.count < 2 {
+//            let firstObjectPath = IndexPath(item: 0, section: 0)
+//            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
+//            selectedEventDates.append(firstDate) // minDate from one and only event
+//            selectedEventDates.append(Date()) // maxDate is now
+//        } else {
+//            let firstObjectPath = IndexPath(item: 0, section: 0)
+//            let lastObjectPath = IndexPath(item: selectedScoreEventsFRC.fetchedObjects!.count - 1, section: 0)
+//            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
+//            selectedEventDates.append(firstDate) // minDate from one and only event
+//            let lastDate = (selectedScoreEventsFRC.object(at: lastObjectPath) as Event).date as! Date
+//            selectedEventDates.append(lastDate) // maxDate is now
+//        }
+//        
+//        return selectedEventDates
+    
         //        // MEthod 2
         //
         //
@@ -148,17 +131,17 @@ class EventsDataController: NSObject {
         //            print("error fetching earliest selected event date in EventsDataController: \(error)")
         //            return nil
         //        }
-    }
+//    }
     
-    var selectedScoreEventsTimeSpan: TimeInterval {
-        
-        guard selectedScoreEventMinMaxDates != nil
-            else {
-                return (24 * 3600)
-        }
-        return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
-    }
-    
+//    var selectedScoreEventsTimeSpan: TimeInterval {
+//        
+//        guard selectedScoreEventMinMaxDates != nil
+//            else {
+//                return (24 * 3600)
+//        }
+//        return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
+//    }
+//    
     lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
@@ -175,14 +158,14 @@ class EventsDataController: NSObject {
     
     var eventTypes = [String]()
     var nonScoreEventTypes = [String]()
-    var selectedScore: String {
-        if UserDefaults.standard.value(forKey: "SelectedScore") != nil {
-            return UserDefaults.standard.value(forKey: "SelectedScore") as! String
-        } else {
-            UserDefaults.standard.set("untitled", forKey: "SelectedScore")
-            return "untitled"
-        }
-    }
+//    var selectedScore: String {
+//        if UserDefaults.standard.value(forKey: "SelectedScore") != nil {
+//            return UserDefaults.standard.value(forKey: "SelectedScore") as! String
+//        } else {
+//            UserDefaults.standard.set("untitled", forKey: "SelectedScore")
+//            return "untitled"
+//        }
+//    }
     
     var recordTypesController: RecordTypesController {
         return RecordTypesController.sharedInstance()
@@ -218,7 +201,7 @@ class EventsDataController: NSObject {
         
         let scoreEventTypesFRC: NSFetchedResultsController<Event> = {
             let request = NSFetchRequest<Event>(entityName: "Event")
-            let anyScorePredicate = NSPredicate(format: "vas > %@", argumentArray: [0.0])
+            let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
             request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
             request.predicate = anyScorePredicate
             let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
@@ -255,16 +238,6 @@ class EventsDataController: NSObject {
 //        createExampleEvents()
     }
     
-    func maxScore() -> Double {
-        
-        var score: Double = 10.0
-        for object in recordTypesController.allTypes.fetchedObjects! {
-            if let type = object as RecordType? {
-                if type.name == selectedScore { score = type.maxScore }
-            }
-        }
-        return score
-    }
     
     func newEvent(ofType: String, withName: String? = nil, withDate: Date = Date(), vas: Double? = nil, note: String? = nil, duration: Double? = nil) {
         
@@ -296,31 +269,6 @@ class EventsDataController: NSObject {
     }
     
     
-    func graphData() -> [scoreEventGraphData]? {
-        
-        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
-            return nil
-        }
-        
-        // *** debug only
-        print("there are \(selectedScoreEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
-        print("there are \(scoreEventsFRC.fetchedObjects!.count) different scoreEvents")
-        var scoreEventTypes = [String]()
-        for section in scoreEventsFRC.sections! {
-            scoreEventTypes.append(section.name)
-        }
-        print("there are the following scoreEvent types: \(scoreEventTypes)")
-        // *** debug only
-
-        var dataArray = [scoreEventGraphData]()
-        for object in selectedScoreEventsFRC.fetchedObjects! {
-            if let event = object as Event? {
-                let data = (event.date! as Date, CGFloat(event.vas))
-                dataArray.append(data)
-            }
-        }
-        return dataArray
-    }
     
 }
 
@@ -347,8 +295,6 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
                 nonScoreEventTypes.append(sections.name)
             }
             print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
-        } else if controller.isEqual(selectedScoreEventsFRC) {
-            print("selectedScoreEventTypeFRC has changed")
         }
         reconcileRecordTypesAndEventNames()
         graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
@@ -360,9 +306,8 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 // *** For debuggin only ***
 extension EventsDataController {
     
-    func createExampleEvents() {
+    func createExampleEvents(withName: String = "untitled") {
         
-        print("create example event of type \(selectedScore)")
 
         for _ in 0..<Int(10 + drand48() * 100) {
             let _ = drand48()
@@ -372,7 +317,7 @@ extension EventsDataController {
             let newEvent:Event? = {
                 NSEntityDescription.insertNewObject(forEntityName: "Event", into: managedObjectContext) as? Event
             }()
-            newEvent!.name = selectedScore
+            newEvent!.name = withName
             newEvent!.type = "Score Event"
             newEvent?.vas = drand48() * 10
             newEvent!.date = NSDate().addingTimeInterval(drand48() * -45 * 24 * 3600)
@@ -385,10 +330,6 @@ extension EventsDataController {
 //            print("Error saving \(error)", terminator: "")
 //        }
         
-        print("there are now \(selectedScoreEventsFRC.fetchedObjects?.count) events of type \(selectedScore)")
-        print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
-        print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
-
     }
     
     func deleteAllScoreEvents() {
@@ -404,17 +345,4 @@ extension EventsDataController {
         save()
     }
     
-    func printSelectedScoreEventDates() {
-        
-        for object in selectedScoreEventsFRC.fetchedObjects! {
-            if let event = object as Event? {
-                print("event date \(event.date)")
-            }
-        }
-        
-        print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
-        print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
-
-
-    }
 }

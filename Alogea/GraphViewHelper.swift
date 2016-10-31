@@ -8,6 +8,9 @@
 
 import Foundation
 import UIKit
+import  CoreData
+
+typealias scoreEventGraphData = (date: Date, score: CGFloat)
 
 class GraphViewHelper: NSObject {
     
@@ -45,12 +48,99 @@ class GraphViewHelper: NSObject {
     let tLLineWidth: CGFloat = 2.0
     let tLLineColor = UIColor.white
     
+    // MARK: - CoreData and FRC
+    
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        return moc
+    }()
+
+    
+    lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
+        let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [anyScorePredicate, selectedScorePredicate])
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("selectedScoreEventsFRC fetching error")
+        }
+        
+        return frc
+    }()
+    
+    var selectedScoreEventMinMaxDates: [Date]? {
+        
+        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
+            return nil
+        }
+        
+        guard (selectedScoreEventsFRC.fetchedObjects![0] as Event?) != nil else {
+            return nil
+        }
+        
+        var selectedEventDates = [Date]()
+        
+        if selectedScoreEventsFRC.fetchedObjects!.count < 2 {
+            let firstObjectPath = IndexPath(item: 0, section: 0)
+            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
+            selectedEventDates.append(firstDate) // minDate from one and only event
+            selectedEventDates.append(Date()) // maxDate is now
+        } else {
+            let firstObjectPath = IndexPath(item: 0, section: 0)
+            let lastObjectPath = IndexPath(item: selectedScoreEventsFRC.fetchedObjects!.count - 1, section: 0)
+            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
+            selectedEventDates.append(firstDate) // minDate from one and only event
+            let lastDate = (selectedScoreEventsFRC.object(at: lastObjectPath) as Event).date as! Date
+            selectedEventDates.append(lastDate) // maxDate is now
+        }
+        
+        return selectedEventDates
+    }
+    
+    var selectedScoreEventsTimeSpan: TimeInterval {
+        
+        guard selectedScoreEventMinMaxDates != nil
+            else {
+                return (24 * 3600)
+        }
+        return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
+    }
+    
+    lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("eventTypesFRC fetching error")
+        }
+        
+        return frc
+    }()
+    
+    var selectedScore: String {
+        if UserDefaults.standard.value(forKey: "SelectedScore") != nil {
+            return UserDefaults.standard.value(forKey: "SelectedScore") as! String
+        } else {
+            UserDefaults.standard.set("untitled", forKey: "SelectedScore")
+            return "untitled"
+        }
+    }
+    
     //MARK: - methods
 
     convenience init(graphView: GraphView) {
         self.init()
         
         self.graphView = graphView
+        selectedScoreEventsFRC.delegate = self
     }
     
     class func sharedInstance() -> GraphViewHelper {
@@ -79,7 +169,67 @@ class GraphViewHelper: NSObject {
     func timeLineSpace() -> CGFloat {
         return timeLineLabelHeight + timeLineTickLength
     }
+    
+    
+    func maxScore() -> Double {
+        
+        var score: Double = 10.0
+        for object in EventsDataController.sharedInstance().recordTypesController.allTypes.fetchedObjects! {
+            if let type = object as RecordType? {
+                if type.name == selectedScore { score = type.maxScore }
+            }
+        }
+        return score
+    }
+    
+    func graphData() -> [scoreEventGraphData]? {
+        
+        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
+            return nil
+        }
+        
+        // *** debug only
+        print("there are \(selectedScoreEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
+        // *** debug only
+        
+        var dataArray = [scoreEventGraphData]()
+        for object in selectedScoreEventsFRC.fetchedObjects! {
+            if let event = object as Event? {
+                let data = (event.date! as Date, CGFloat(event.vas))
+                dataArray.append(data)
+            }
+        }
+        return dataArray
+    }
 
 }
 
 let helper = GraphViewHelper()
+
+extension GraphViewHelper: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("GV Helper selectedScoreEventsFRC has changed content")
+        graphView.setNeedsDisplay()
+    }
+    
+}
+
+// *** Debug only
+extension GraphViewHelper {
+  
+    func printSelectedScoreEventDates() {
+        
+        for object in selectedScoreEventsFRC.fetchedObjects! {
+            if let event = object as Event? {
+                print("event date \(event.date)")
+            }
+        }
+        
+        print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
+        print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
+    }
+
+}
+// *** Debug only
+
