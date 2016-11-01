@@ -66,7 +66,8 @@ class GraphView: UIView {
             mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             displayedTimeSpan = 24 * 3600
         } else {
-            displayedTimeSpan = helper.selectedScoreEventsTimeSpan // set initial dTS to min-maxScoreEventDates
+            displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
+            minDisplayDate = maxDisplayDate.addingTimeInterval(-displayedTimeSpan)
         }
         
         graphPoints = [CGPoint]()
@@ -95,33 +96,6 @@ class GraphView: UIView {
         guard graphPoints.count > 0  else { return }
         drawLineGraph()
     }
-    
-//    func drawHorizontalLines() {
-//        let xStart: CGFloat = bounds.origin.x
-//        let xEnd: CGFloat = bounds.maxX
-//        //        print("drawLines from \(xStart) to \(xEnd)")
-//        
-//        let upperLineY = bounds.minY + 1.0
-//        let lowerLineY = bounds.maxY - timeLineSpace
-//        let midLineY = (upperLineY + lowerLineY) / 2 + 0.5
-//        
-//        
-//        let linePath = UIBezierPath()
-//        linePath.move(to: CGPoint(x: xStart, y: upperLineY))
-//        linePath.addLine(to: CGPoint(x: xEnd, y: upperLineY))
-//        
-//        linePath.move(to: CGPoint(x: xStart, y: midLineY))
-//        linePath.addLine(to: CGPoint(x: xEnd, y: midLineY))
-//        
-//        linePath.move(to: CGPoint(x: xStart, y:lowerLineY))
-//        linePath.addLine(to: CGPoint(x: xEnd, y: lowerLineY))
-//        
-//        
-//        colorScheme.lightGray.withAlphaComponent(0.75).setStroke()
-//        linePath.lineWidth = helper.lineGraphLineWidth
-//        linePath.stroke()
-//        
-//    }
     
     func drawLineGraph() {
                 
@@ -178,10 +152,10 @@ class GraphView: UIView {
             maxVAS = CGFloat(recordTypesController.returnMaxVAS(forType: helper.selectedScore)!)
         }
 
-        let timePerWidth = CGFloat(graphTimeSpan) / frame.width
+        let timePerWidth = CGFloat(displayedTimeSpan) / frame.width
 
         for eventData in scoreEventsData {
-            let xCoordinate = CGFloat(TimeInterval(eventData.date .timeIntervalSince(minGraphDate))) / timePerWidth
+            let xCoordinate = CGFloat(TimeInterval(eventData.date .timeIntervalSince(minDisplayDate))) / timePerWidth
             let yCoordinate = (frame.height - timeLineSpace) * (maxVAS - eventData.score) / maxVAS
             let newPoint = CGPoint(x: xCoordinate, y: yCoordinate)
             points.append(newPoint)
@@ -190,22 +164,32 @@ class GraphView: UIView {
         return points
     }
     
-    func changeDisplayedInteral(toInterval: TimeInterval) {
+    func changeDisplayedInterval(toInterval: TimeInterval? = nil, toDates:[Date]? = nil) {
         
-        var newDisplayInterval = toInterval
-        if toInterval < (24 * 3600) {
-            newDisplayInterval = 24 * 3600
+        guard toInterval != nil || toDates != nil else {
+            return
         }
         
-        let newFrameWidth = CGFloat(graphTimeSpan / newDisplayInterval) * clipView.frame.width
-        if leftFrameConstraint.isActive {
-            leftFrameConstraint.isActive = false
-            rightFrameConstraint.isActive = false
+        var newDisplayInterval: TimeInterval?
+        
+        if toInterval != nil {
+            newDisplayInterval = toInterval
+            if newDisplayInterval! < (24 * 3600) {
+                newDisplayInterval = 24 * 3600
+            }
+            displayedTimeSpan = newDisplayInterval
+            maxDisplayDate = Date()
+            minDisplayDate = maxDisplayDate.addingTimeInterval(-displayedTimeSpan)
+        } else {
+            minDisplayDate = toDates![0]
+            maxDisplayDate = toDates![1]
+            displayedTimeSpan = maxDisplayDate.timeIntervalSince(minDisplayDate)
         }
-        self.frame = CGRect(x: clipView.frame.maxX - newFrameWidth, y: frame.origin.y, width: newFrameWidth, height: frame.height)
+        
+        
         setNeedsDisplay()
-//        print("graphTimeSpan is to \(graphTimeSpan/(24*3600)) days")
-//        print("set new frame to \(frame)")
+        print("displayedTimeSpan changed to \(displayedTimeSpan/(24*3600)) days")
+        print("set minDisplayDate to \(minDisplayDate)")
     }
     
     func deviceRotation(notification: Notification) {

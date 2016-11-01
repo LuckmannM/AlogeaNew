@@ -111,6 +111,15 @@ class GraphViewHelper: NSObject {
         return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
     }
     
+    var selectedScoreMinDateToNow: TimeInterval {
+        
+        guard selectedScoreEventMinMaxDates != nil
+            else {
+                return (24 * 3600)
+        }
+        return Date().timeIntervalSince(selectedScoreEventMinMaxDates![0])
+    }
+    
     lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
