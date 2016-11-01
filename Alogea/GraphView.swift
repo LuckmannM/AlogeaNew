@@ -45,6 +45,7 @@ class GraphView: UIView {
         return helper.timeLineLabelHeight + helper.timeLineTickLength + 5
     }
 
+    var rotationObserver: NotificationCenter!
     // MARK: - methods
     
     override init(frame: CGRect) {
@@ -77,10 +78,13 @@ class GraphView: UIView {
             helper.printSelectedScoreEventDates()
         }
         // ***
+
+        rotationObserver = NotificationCenter.default
         
+        rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+
     }
     
-
     override func draw(_ rect: CGRect) {
 
         
@@ -202,6 +206,12 @@ class GraphView: UIView {
         setNeedsDisplay()
 //        print("graphTimeSpan is to \(graphTimeSpan/(24*3600)) days")
 //        print("set new frame to \(frame)")
+    }
+    
+    func deviceRotation(notification: Notification) {
+        
+        setNeedsDisplay() //  doesn't work
+        // also need to re-position UILabels in GraphContainer - this needs an observer as well
     }
 
 }
