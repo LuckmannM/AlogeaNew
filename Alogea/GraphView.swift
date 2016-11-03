@@ -45,13 +45,13 @@ class GraphView: UIView {
     var timeLineSpace: CGFloat {
         return helper.timeLineLabelHeight + helper.timeLineTickLength + 5
     }
+    var refreshPointsFlag: Bool = true
 
     var rotationObserver: NotificationCenter!
     // MARK: - methods
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
     }
         
     required init?(coder aDecoder: NSCoder) {
@@ -89,13 +89,12 @@ class GraphView: UIView {
     
     override func draw(_ rect: CGRect) {
 
-        
-//        drawHorizontalLines()
-        
-        graphPoints = calculateGraphPoints()
-        
+        if refreshPointsFlag {
+            graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
+        }
         guard graphPoints.count > 0  else { return }
         drawLineGraph()
+        refreshPointsFlag = true
     }
     
     func drawLineGraph() {
@@ -136,34 +135,18 @@ class GraphView: UIView {
             circle.fill()
         }
     }
-
-    func calculateGraphPoints() -> [CGPoint] {
+    
+    func shiftGraphPoints(by: CGFloat) {
         
-        var points = [CGPoint]()
-        var maxVAS = CGFloat()
-
-        guard let scoreEventsData = helper.graphData() else {
-            return points
+        var i = 0
+        for _ in graphPoints {
+            graphPoints[i].offSetX(by: by)
+            i += 1
         }
-        
-        if recordTypesController.returnMaxVAS(forType: helper.selectedScore) == nil {
-            print("no maxValue found for selected scoreEventType \(helper.selectedScore)")
-            maxVAS = 10.0
-        } else {
-            maxVAS = CGFloat(recordTypesController.returnMaxVAS(forType: helper.selectedScore)!)
-        }
-
-        let timePerWidth = CGFloat(displayedTimeSpan) / frame.width
-
-        for eventData in scoreEventsData {
-            let xCoordinate = CGFloat(TimeInterval(eventData.date .timeIntervalSince(minDisplayDate))) / timePerWidth
-            let yCoordinate = (frame.height - timeLineSpace) * (maxVAS - eventData.score) / maxVAS
-            let newPoint = CGPoint(x: xCoordinate, y: yCoordinate)
-            points.append(newPoint)
-        }
-        
-        return points
+        refreshPointsFlag = false
+        setNeedsDisplay()
     }
+
     
     func changeDisplayedInterval(toInterval: TimeInterval? = nil, toDates:[Date]? = nil) {
         
@@ -187,10 +170,7 @@ class GraphView: UIView {
             displayedTimeSpan = maxDisplayDate.timeIntervalSince(minDisplayDate)
         }
         
-        
         setNeedsDisplay()
-        print("displayedTimeSpan changed to \(displayedTimeSpan/(24*3600)) days")
-        print("set minDisplayDate to \(minDisplayDate)")
     }
     
     func deviceRotation(notification: Notification) {
@@ -206,26 +186,20 @@ class GraphView: UIView {
         // dragging view to the LEFT side = negative shift = INCREASING min/maxDisplayDates
         
         let timeShift = TimeInterval(shift.x * CGFloat(-displayedTimeSpan)/frame.width)
-        print("drag, timeShift = \(timeShift/3600) hours")
-        let now = NSDate()
-        if now.earlierDate((maxDisplayDate as NSDate).addingTimeInterval(timeShift) as Date) == now as Date {
-            
+        let now = Date()
+        
+        if now.compare(maxDisplayDate.addingTimeInterval(timeShift)) == .orderedAscending {
             // end shift as current date on right side has been reached
             return
-        } else if (minDisplayDate as NSDate).laterDate(minDisplayDate.addingTimeInterval(timeShift)) == minGraphDate {
-            
+        }
+        else if minGraphDate.compare(minDisplayDate.addingTimeInterval(timeShift)) == .orderedDescending {
             // end shift as earliest timeLine date on left side has been reached
-            print("over left limit")
-            print("minTimeLineDate = \(minDisplayDate)")
-            print("minDisplayDate with graphSift would be  = \(minDisplayDate.addingTimeInterval(timeShift)))")
             return
         }
         
-        let newMaxDisplayDate = maxDisplayDate.addingTimeInterval(timeShift)
-        let newMinDisplayDate = minDisplayDate.addingTimeInterval(timeShift)
-        print("new minDD is \(newMinDisplayDate)")
-        
-        changeDisplayedInterval(toDates: [newMinDisplayDate, newMaxDisplayDate])
+        maxDisplayDate = maxDisplayDate.addingTimeInterval(timeShift)
+        minDisplayDate = minDisplayDate.addingTimeInterval(timeShift)
+        shiftGraphPoints(by: shift.x)
         recogniser.setTranslation(CGPoint(x: 0, y: 0), in:self)
 
     }

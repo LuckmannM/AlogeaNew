@@ -210,6 +210,34 @@ class GraphViewHelper: NSObject {
         }
         return dataArray
     }
+    
+    func calculateGraphPoints(forFrame: CGRect, withDisplayedTimeSpan: TimeInterval, withMinDate: Date) -> [CGPoint] {
+        
+        var points = [CGPoint]()
+        var maxVAS = CGFloat()
+        
+        guard let scoreEventsData = helper.graphData() else {
+            return points
+        }
+        
+        if recordTypesController.returnMaxVAS(forType: helper.selectedScore) == nil {
+            print("no maxValue found for selected scoreEventType \(helper.selectedScore)")
+            maxVAS = 10.0
+        } else {
+            maxVAS = CGFloat(recordTypesController.returnMaxVAS(forType: helper.selectedScore)!)
+        }
+        
+        let timePerWidth = CGFloat(withDisplayedTimeSpan) / forFrame.width
+        
+        for eventData in scoreEventsData {
+            let xCoordinate = CGFloat(TimeInterval(eventData.date .timeIntervalSince(withMinDate))) / timePerWidth
+            let yCoordinate = (forFrame.height - timeLineSpace()) * (maxVAS - eventData.score) / maxVAS
+            let newPoint = CGPoint(x: xCoordinate, y: yCoordinate)
+            points.append(newPoint)
+        }
+        
+        return points
+    }
 
 }
 
