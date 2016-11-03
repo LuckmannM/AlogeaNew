@@ -16,6 +16,7 @@ class GraphView: UIView {
     @IBOutlet var leftFrameConstraint: NSLayoutConstraint!
     @IBOutlet var rightFrameConstraint: NSLayoutConstraint!
     @IBOutlet var dragRecognizer: UIPanGestureRecognizer!
+    @IBOutlet var zoomRecognizer: UIPinchGestureRecognizer!
     
     let eventsDataController = EventsDataController.sharedInstance()
     let colorScheme = ColorScheme.sharedInstance()
@@ -48,6 +49,7 @@ class GraphView: UIView {
     var refreshPointsFlag: Bool = true
 
     var rotationObserver: NotificationCenter!
+    
     // MARK: - methods
     
     override init(frame: CGRect) {
@@ -85,6 +87,10 @@ class GraphView: UIView {
         
         rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
 
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(rotationObserver)
     }
     
     override func draw(_ rect: CGRect) {
@@ -202,6 +208,37 @@ class GraphView: UIView {
         shiftGraphPoints(by: shift.x)
         recogniser.setTranslation(CGPoint(x: 0, y: 0), in:self)
 
+    }
+    
+    @IBAction func zoom(recognizer: UIPinchGestureRecognizer) {
+        
+        /*
+         starting clipViewScale = 1
+         0 < 1 = zoom out = moving fingers closer together = zoom out
+         > 1 = zoom in = moving fingers apart = zoom in / magnify
+         */
+        
+        let newDTS = displayedTimeSpan / TimeInterval(recognizer.scale)
+        if newDTS <= 86400 || newDTS > 1*365*24*3600 { return }
+        
+        let dTSChange = newDTS - displayedTimeSpan
+        var timeChangeRight = dTSChange / 2
+        var timeChangeLeft = -dTSChange / 2
+        let now = Date()
+        
+        if now.compare(maxDisplayDate.addingTimeInterval(dTSChange / 2)) == .orderedAscending {
+            timeChangeRight = now.timeIntervalSince(maxDisplayDate)
+            timeChangeLeft = -(dTSChange - timeChangeRight)
+        }
+        
+        //        debugDisplayLabel.text = "\(displayedTimeSpan / 86400) days"
+        //        debugDisplayLabel.sizeToFit()
+        
+        minDisplayDate = minDisplayDate.addingTimeInterval(timeChangeLeft)
+        maxDisplayDate = maxDisplayDate.addingTimeInterval(timeChangeRight)
+        displayedTimeSpan = maxDisplayDate.timeIntervalSince(minDisplayDate)
+        
+        setNeedsDisplay()
     }
 
 }

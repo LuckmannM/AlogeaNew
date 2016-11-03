@@ -41,7 +41,7 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lGD-MW-hsj" customClass="GraphContainerView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="49" width="375" height="287"/>
+                                <rect key="frame" x="-2" y="49" width="375" height="287"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3MZ-MM-gjS" customClass="ClipView" customModule="Alogea" customModuleProvider="target">
                                         <rect key="frame" x="15" y="30" width="335" height="247"/>
@@ -56,7 +56,9 @@
                                                     <outlet property="leftFrameConstraint" destination="ybk-X5-WP3" id="WWP-Qo-dk2"/>
                                                     <outlet property="mainViewController" destination="BYZ-38-t0r" id="LNT-g6-DMa"/>
                                                     <outlet property="rightFrameConstraint" destination="oap-xz-Q6y" id="QWn-dQ-fuP"/>
+                                                    <outlet property="zoomRecognizer" destination="i6q-mz-KP5" id="Xp2-Ng-ux0"/>
                                                     <outletCollection property="gestureRecognizers" destination="erJ-PE-F4m" appends="YES" id="5nj-C1-0cA"/>
+                                                    <outletCollection property="gestureRecognizers" destination="i6q-mz-KP5" appends="YES" id="dHT-6j-TSR"/>
                                                 </connections>
                                             </view>
                                         </subviews>
@@ -99,7 +101,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="47" y="336" width="282" height="282"/>
+                                <rect key="frame" x="46.5" y="336" width="282" height="282"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -128,7 +130,7 @@
                         <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="5HX-bf-Nth"/>
+                            <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-18" id="5HX-bf-Nth"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUg-qH-Qns"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="HwF-k0-zvC"/>
@@ -172,6 +174,11 @@
                         <action selector="dragWithRecogniser:" destination="Dj1-06-7rI" id="MXL-vr-Fu2"/>
                     </connections>
                 </panGestureRecognizer>
+                <pinchGestureRecognizer id="i6q-mz-KP5">
+                    <connections>
+                        <action selector="zoomWithRecognizer:" destination="Dj1-06-7rI" id="zFZ-I8-AB1"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3002.4000000000001" y="130.88455772113943"/>
         </scene>

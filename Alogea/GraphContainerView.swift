@@ -61,7 +61,10 @@ class GraphContainerView: UIView {
         return label
     }()
     
+    var rotationObserver: NotificationCenter!
 
+    // Mark: - methods
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -74,8 +77,17 @@ class GraphContainerView: UIView {
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
         addSubview(lowerLimitLabel)
+
+        rotationObserver = NotificationCenter.default
+        
+        rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(rotationObserver)
+    }
+    
+    
     func updateLabels() {
         
         let numberFormatter: NumberFormatter = {
@@ -107,6 +119,11 @@ class GraphContainerView: UIView {
     
     override func draw(_ rect: CGRect) {
         // Drawing code
+        updateLabels()
+    }
+    
+    func deviceRotation(notification: Notification) {
+        
         updateLabels()
     }
 
