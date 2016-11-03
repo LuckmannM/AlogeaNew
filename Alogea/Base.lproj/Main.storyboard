@@ -49,11 +49,14 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dj1-06-7rI" customClass="GraphView" customModule="Alogea" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="247"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <gestureRecognizers/>
                                                 <connections>
                                                     <outlet property="clipView" destination="3MZ-MM-gjS" id="J1e-Kx-kWU"/>
+                                                    <outlet property="dragRecognizer" destination="erJ-PE-F4m" id="wqh-XT-pK5"/>
                                                     <outlet property="leftFrameConstraint" destination="ybk-X5-WP3" id="WWP-Qo-dk2"/>
                                                     <outlet property="mainViewController" destination="BYZ-38-t0r" id="LNT-g6-DMa"/>
                                                     <outlet property="rightFrameConstraint" destination="oap-xz-Q6y" id="QWn-dQ-fuP"/>
+                                                    <outletCollection property="gestureRecognizers" destination="erJ-PE-F4m" appends="YES" id="5nj-C1-0cA"/>
                                                 </connections>
                                             </view>
                                         </subviews>
@@ -117,6 +120,7 @@
                                 </variation>
                                 <connections>
                                     <outlet property="aspectRatioConstraint" destination="aht-uH-Vvm" id="Bfx-p5-hBt"/>
+                                    <outlet property="panRecogniser" destination="ko5-0R-WEF" id="zHO-ZV-lwv"/>
                                     <outlet property="zeroHeightConstraint" destination="fE1-J0-5hL" id="9yl-zM-Rgi"/>
                                 </connections>
                             </view>
@@ -163,6 +167,11 @@
                         <action selector="slideOutWithTap:" destination="KFJ-pZ-cje" id="NsG-LJ-oVJ"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="erJ-PE-F4m">
+                    <connections>
+                        <action selector="dragWithRecogniser:" destination="Dj1-06-7rI" id="MXL-vr-Fu2"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3002.4000000000001" y="130.88455772113943"/>
         </scene>

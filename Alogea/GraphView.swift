@@ -15,6 +15,7 @@ class GraphView: UIView {
     @IBOutlet weak var clipView: ClipView!
     @IBOutlet var leftFrameConstraint: NSLayoutConstraint!
     @IBOutlet var rightFrameConstraint: NSLayoutConstraint!
+    @IBOutlet var dragRecognizer: UIPanGestureRecognizer!
     
     let eventsDataController = EventsDataController.sharedInstance()
     let colorScheme = ColorScheme.sharedInstance()
@@ -196,6 +197,37 @@ class GraphView: UIView {
         
         setNeedsDisplay() //  doesn't work
         // also need to re-position UILabels in GraphContainer - this needs an observer as well
+    }
+    
+    @IBAction func drag(recogniser: UIPanGestureRecognizer) {
+        
+        let shift: CGPoint = recogniser.translation(in: self)
+        // dragging view to the RIGHT side = positive shift = DECREASING min/maxDisplayDates
+        // dragging view to the LEFT side = negative shift = INCREASING min/maxDisplayDates
+        
+        let timeShift = TimeInterval(shift.x * CGFloat(-displayedTimeSpan)/frame.width)
+        print("drag, timeShift = \(timeShift/3600) hours")
+        let now = NSDate()
+        if now.earlierDate((maxDisplayDate as NSDate).addingTimeInterval(timeShift) as Date) == now as Date {
+            
+            // end shift as current date on right side has been reached
+            return
+        } else if (minDisplayDate as NSDate).laterDate(minDisplayDate.addingTimeInterval(timeShift)) == minGraphDate {
+            
+            // end shift as earliest timeLine date on left side has been reached
+            print("over left limit")
+            print("minTimeLineDate = \(minDisplayDate)")
+            print("minDisplayDate with graphSift would be  = \(minDisplayDate.addingTimeInterval(timeShift)))")
+            return
+        }
+        
+        let newMaxDisplayDate = maxDisplayDate.addingTimeInterval(timeShift)
+        let newMinDisplayDate = minDisplayDate.addingTimeInterval(timeShift)
+        print("new minDD is \(newMinDisplayDate)")
+        
+        changeDisplayedInterval(toDates: [newMinDisplayDate, newMaxDisplayDate])
+        recogniser.setTranslation(CGPoint(x: 0, y: 0), in:self)
+
     }
 
 }
