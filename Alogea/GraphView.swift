@@ -214,14 +214,14 @@ class GraphView: UIView {
         
         /*
          starting clipViewScale = 1
-         0 < 1 = zoom out = moving fingers closer together = zoom out
+         0 < 1 = zoom out = moving fingers closer together
          > 1 = zoom in = moving fingers apart = zoom in / magnify
          */
         
-        let newDTS = displayedTimeSpan / TimeInterval(recognizer.scale)
-        if newDTS <= 86400 || newDTS > 1*365*24*3600 { return }
+        let newDTS = displayedTimeSpan / TimeInterval(sqrt(recognizer.scale))
+        if newDTS <= 86400 || newDTS > graphTimeSpan { return }
+        let dTSChange = (newDTS - displayedTimeSpan) / 25 // 25 is make zoom slower and more controlled
         
-        let dTSChange = newDTS - displayedTimeSpan
         var timeChangeRight = dTSChange / 2
         var timeChangeLeft = -dTSChange / 2
         let now = Date()
@@ -230,7 +230,6 @@ class GraphView: UIView {
             timeChangeRight = now.timeIntervalSince(maxDisplayDate)
             timeChangeLeft = -(dTSChange - timeChangeRight)
         }
-        
         //        debugDisplayLabel.text = "\(displayedTimeSpan / 86400) days"
         //        debugDisplayLabel.sizeToFit()
         
