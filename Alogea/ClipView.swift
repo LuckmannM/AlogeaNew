@@ -12,17 +12,7 @@ class ClipView: UIView {
 
     
     @IBOutlet weak var graphView:GraphView!
-    
-//    let timeLineTickLength: CGFloat = 5.0
-//    let timeLineLabelHeight: CGFloat = {
-//        let label = UILabel()
-//        label.font = UIFont(name: "AvenirNext-Regular", size: 12.0)
-//        label.text = "30.12.2020"
-//        label.sizeToFit()
-//        return label.frame.height
-//    }()
-
-    
+        
     override func draw(_ rect: CGRect) {
         
             let xStart: CGFloat = bounds.origin.x
@@ -30,7 +20,6 @@ class ClipView: UIView {
         
             let upperLineY = bounds.minY + 1.0
             let lowerLineY = bounds.maxY - GraphViewHelper.sharedInstance().timeLineSpace()
-            print("drawing lower line in clipView at y = \(lowerLineY)")
             let midLineY = (upperLineY + lowerLineY) / 2 + 0.5
             
             

@@ -35,8 +35,8 @@ class GraphContainerView: UIView {
         let label = UILabel()
         label.text = "centreBottomLabel"
         label.textAlignment = NSTextAlignment.center
-        label.textColor = UIColor.white
-        label.font =  UIFont(name: labelFontName, size: 18)
+        label.textColor = ColorScheme.sharedInstance().lightGray
+        label.font =  UIFont(name: labelFontName, size: 14)
         label.sizeToFit()
         return label
     }()
@@ -62,6 +62,18 @@ class GraphContainerView: UIView {
     }()
     
     var rotationObserver: NotificationCenter!
+    
+    var centerBottomText: String {
+        
+        let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.locale = NSLocale.current
+            formatter.timeZone = NSTimeZone.local
+            formatter.dateStyle = .short
+            return formatter
+        }()
+        return dateFormatter.string(from: graphView.minDisplayDate) + " - " + dateFormatter.string(from: graphView.maxDisplayDate)
+    }
 
     // Mark: - methods
     
@@ -77,6 +89,7 @@ class GraphContainerView: UIView {
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
         addSubview(lowerLimitLabel)
+        addSubview(centreBottomLabel)
 
         rotationObserver = NotificationCenter.default
         
@@ -115,12 +128,25 @@ class GraphContainerView: UIView {
             x: self.frame.maxX - lowerLimitLabel.frame.width - 5,
             y: clipView.frame.maxY - graphView.helper.timeLineSpace() - upperLimitLabel.frame.height / 2
         )
+        
+        updateBottomLabel()
     }
     
     override func draw(_ rect: CGRect) {
         // Drawing code
         updateLabels()
     }
+    
+    
+    func updateBottomLabel() {
+        centreBottomLabel.text = centerBottomText
+        centreBottomLabel.sizeToFit()
+        centreBottomLabel.frame.origin = CGPoint(
+            x: bounds.midX - centreBottomLabel.bounds.width / 2,
+            y: bounds.maxY - centreBottomLabel.frame.height - 5
+        )
+    }
+    
     
     func deviceRotation(notification: Notification) {
         

@@ -256,6 +256,7 @@ class GraphView: UIView {
         maxDisplayDate = maxDisplayDate.addingTimeInterval(timeShift)
         minDisplayDate = minDisplayDate.addingTimeInterval(timeShift)
         shiftGraphPoints(by: shift.x)
+        graphContainerView.updateBottomLabel()
         recogniser.setTranslation(CGPoint(x: 0, y: 0), in:self)
 
     }
@@ -295,6 +296,7 @@ class GraphView: UIView {
             }
         }
         setNeedsDisplay()
+        graphContainerView.updateBottomLabel()
     }
 
 }

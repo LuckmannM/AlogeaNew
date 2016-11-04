@@ -265,6 +265,7 @@ class GraphViewHelper: NSObject {
             graphView.displayedTimeSpan = graphView.maxDisplayDate.timeIntervalSince(graphView.minDisplayDate)
         }
         
+        graphView.graphContainerView.updateBottomLabel()
         graphView.setNeedsDisplay()
     }
 

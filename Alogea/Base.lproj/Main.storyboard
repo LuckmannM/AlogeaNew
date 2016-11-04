@@ -44,10 +44,10 @@
                                 <rect key="frame" x="-2" y="49" width="375" height="287"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3MZ-MM-gjS" customClass="ClipView" customModule="Alogea" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="30" width="335" height="247"/>
+                                        <rect key="frame" x="15" y="30" width="335" height="232"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dj1-06-7rI" customClass="GraphView" customModule="Alogea" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="335" height="247"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="335" height="232"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <gestureRecognizers/>
                                                 <connections>
@@ -92,7 +92,7 @@
                                     <constraint firstItem="3MZ-MM-gjS" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="15" id="Qll-ux-Prm"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-70" id="Y6d-fR-RgD"/>
                                     <constraint firstAttribute="trailing" secondItem="3MZ-MM-gjS" secondAttribute="trailing" constant="25" id="fpR-Jj-wim"/>
-                                    <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="10" id="pbf-Di-hcC"/>
+                                    <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="25" id="pbf-Di-hcC"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="93" id="r0L-Mi-bju"/>
                                 </constraints>
                                 <connections>
