@@ -122,13 +122,13 @@ class MainViewController: UIViewController {
         switch sender.selectedSegmentIndex {
             
         case 0:
-            graphContainerView.graphView.changeDisplayedInterval(toInterval: 24 * 3600)
+            graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 24 * 3600)
         case 1:
-            graphContainerView.graphView.changeDisplayedInterval(toInterval: 7 * 24 * 3600)
+            graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 7 * 24 * 3600)
         case 2:
-            graphContainerView.graphView.changeDisplayedInterval(toInterval: 30 * 24 * 3600)
+            graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 30 * 24 * 3600)
         default:
-            graphContainerView.graphView.changeDisplayedInterval(toInterval: 365 * 24 * 3600)
+            graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 365 * 24 * 3600)
         }
         
     }

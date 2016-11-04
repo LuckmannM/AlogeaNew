@@ -238,6 +238,32 @@ class GraphViewHelper: NSObject {
         
         return points
     }
+    
+    func changeDisplayedInterval(toInterval: TimeInterval? = nil, toDates:[Date]? = nil) {
+        
+        guard toInterval != nil || toDates != nil else {
+            return
+        }
+        
+        var newDisplayInterval: TimeInterval?
+        
+        if toInterval != nil {
+            newDisplayInterval = toInterval
+            if newDisplayInterval! < (24 * 3600) {
+                newDisplayInterval = 24 * 3600
+            }
+            graphView.displayedTimeSpan = newDisplayInterval
+            graphView.maxDisplayDate = Date()
+            graphView.minDisplayDate = graphView.maxDisplayDate.addingTimeInterval(-graphView.displayedTimeSpan)
+        } else {
+            graphView.minDisplayDate = toDates![0]
+            graphView.maxDisplayDate = toDates![1]
+            graphView.displayedTimeSpan = graphView.maxDisplayDate.timeIntervalSince(graphView.minDisplayDate)
+        }
+        
+        graphView.setNeedsDisplay()
+    }
+
 
 }
 

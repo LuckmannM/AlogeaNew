@@ -152,33 +152,7 @@ class GraphView: UIView {
         refreshPointsFlag = false
         setNeedsDisplay()
     }
-
-    
-    func changeDisplayedInterval(toInterval: TimeInterval? = nil, toDates:[Date]? = nil) {
         
-        guard toInterval != nil || toDates != nil else {
-            return
-        }
-        
-        var newDisplayInterval: TimeInterval?
-        
-        if toInterval != nil {
-            newDisplayInterval = toInterval
-            if newDisplayInterval! < (24 * 3600) {
-                newDisplayInterval = 24 * 3600
-            }
-            displayedTimeSpan = newDisplayInterval
-            maxDisplayDate = Date()
-            minDisplayDate = maxDisplayDate.addingTimeInterval(-displayedTimeSpan)
-        } else {
-            minDisplayDate = toDates![0]
-            maxDisplayDate = toDates![1]
-            displayedTimeSpan = maxDisplayDate.timeIntervalSince(minDisplayDate)
-        }
-        
-        setNeedsDisplay()
-    }
-    
     func deviceRotation(notification: Notification) {
         
         setNeedsDisplay() //  doesn't work
