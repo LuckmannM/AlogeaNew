@@ -113,7 +113,7 @@ class GraphContainerView: UIView {
      
         lowerLimitLabel.frame.origin = CGPoint(
             x: self.frame.maxX - lowerLimitLabel.frame.width - 5,
-            y: clipView.frame.maxY - graphView.timeLineSpace - upperLimitLabel.frame.height / 2
+            y: clipView.frame.maxY - graphView.helper.timeLineSpace() - upperLimitLabel.frame.height / 2
         )
     }
     
@@ -125,6 +125,8 @@ class GraphContainerView: UIView {
     func deviceRotation(notification: Notification) {
         
         updateLabels()
+        clipView.setNeedsDisplay()
+        graphView.setNeedsDisplay()
     }
 
 }

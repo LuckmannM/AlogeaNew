@@ -30,6 +30,7 @@ class ClipView: UIView {
         
             let upperLineY = bounds.minY + 1.0
             let lowerLineY = bounds.maxY - GraphViewHelper.sharedInstance().timeLineSpace()
+            print("drawing lower line in clipView at y = \(lowerLineY)")
             let midLineY = (upperLineY + lowerLineY) / 2 + 0.5
             
             

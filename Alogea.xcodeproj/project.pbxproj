@@ -12,6 +12,7 @@
 		2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AC1DAE355300FF0484 /* ColorScheme.swift */; };
 		2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */; };
 		2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */; };
+		2645C5DC1DCC9B9300916596 /* GraphViewTimeLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */; };
 		2651FD681DB3B07700C1301A /* MVButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD671DB3B07700C1301A /* MVButtonView.swift */; };
 		2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD691DB3B90C00C1301A /* MVButtonController.swift */; };
 		2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD6B1DB3D8A600C1301A /* MVButton.swift */; };
@@ -64,6 +65,7 @@
 		2644B8AC1DAE355300FF0484 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchWheelView.swift; sourceTree = "<group>"; };
 		2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GetGradientColor Extension.swift"; path = "../../CircularSlider/CircularSlider/GetGradientColor Extension.swift"; sourceTree = "<group>"; };
+		2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewTimeLine.swift; sourceTree = "<group>"; };
 		2651FD671DB3B07700C1301A /* MVButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonView.swift; sourceTree = "<group>"; };
 		2651FD691DB3B90C00C1301A /* MVButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonController.swift; sourceTree = "<group>"; };
 		2651FD6B1DB3D8A600C1301A /* MVButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButton.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				267F78D01DC5264F008CC23E /* ClipView.swift */,
 				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
 				267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */,
+				2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */,
 			);
 			name = "GraphViews Group";
 			sourceTree = "<group>";
@@ -426,6 +429,7 @@
 				26F647721DAE70EC0061E560 /* GraphContainerView.swift in Sources */,
 				26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */,
 				26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */,
+				2645C5DC1DCC9B9300916596 /* GraphViewTimeLine.swift in Sources */,
 				26E3B90E1DA1816E00D157BB /* Exercise+CoreDataClass.swift in Sources */,
 				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,
 				26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */,

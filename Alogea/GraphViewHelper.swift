@@ -143,6 +143,8 @@ class GraphViewHelper: NSObject {
         }
     }
     
+    var timeLineHelper: TimeLineHelper!
+    
     //MARK: - methods
 
     convenience init(graphView: GraphView) {
@@ -150,6 +152,8 @@ class GraphViewHelper: NSObject {
         
         self.graphView = graphView
         selectedScoreEventsFRC.delegate = self
+        self.timeLineHelper = TimeLineHelper(helper: self)
+        
     }
     
     class func sharedInstance() -> GraphViewHelper {
@@ -198,7 +202,7 @@ class GraphViewHelper: NSObject {
         }
         
         // *** debug only
-        print("there are \(selectedScoreEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
+        // print("there are \(selectedScoreEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
         // *** debug only
         
         var dataArray = [scoreEventGraphData]()

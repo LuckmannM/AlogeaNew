@@ -158,14 +158,6 @@ class EventsDataController: NSObject {
     
     var eventTypes = [String]()
     var nonScoreEventTypes = [String]()
-//    var selectedScore: String {
-//        if UserDefaults.standard.value(forKey: "SelectedScore") != nil {
-//            return UserDefaults.standard.value(forKey: "SelectedScore") as! String
-//        } else {
-//            UserDefaults.standard.set("untitled", forKey: "SelectedScore")
-//            return "untitled"
-//        }
-//    }
     
     var recordTypesController: RecordTypesController {
         return RecordTypesController.sharedInstance()

@@ -42,13 +42,13 @@ class GraphView: UIView {
     var displayedTimeSpan: TimeInterval!
     var minDisplayDate: Date!
     var maxDisplayDate: Date!
-    
-    var timeLineSpace: CGFloat {
-        return helper.timeLineLabelHeight + helper.timeLineTickLength + 5
-    }
     var refreshPointsFlag: Bool = true
+    
+    var timeLinePoints: [CGPoint]!
+    var timeLineLabels = [UILabel]() // number is calculated and adapted upwards (only) in drawTimeLine() function
 
-    var rotationObserver: NotificationCenter!
+
+    // var rotationObserver: NotificationCenter!
     
     // MARK: - methods
     
@@ -74,6 +74,7 @@ class GraphView: UIView {
         }
         
         graphPoints = [CGPoint]()
+        timeLinePoints = [CGPoint]()
         
         
         // *** Debug
@@ -83,18 +84,21 @@ class GraphView: UIView {
         }
         // ***
 
-        rotationObserver = NotificationCenter.default
+        // rotationObserver = NotificationCenter.default
         
-        rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        // rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
 
     }
     
+    /*
     deinit {
         NotificationCenter.default.removeObserver(rotationObserver)
     }
+     */
     
     override func draw(_ rect: CGRect) {
 
+        drawTimeLine()
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
@@ -121,13 +125,13 @@ class GraphView: UIView {
         // create clipPath for gradient under lineGraph
         lineContext!.saveGState()
         let clipPath = graphPath.copy() as! UIBezierPath
-        clipPath.addLine(to: CGPoint(x:graphPoints[graphPoints.count - 1].x, y: bounds.maxY - timeLineSpace))
-        clipPath.addLine(to: CGPoint(x: graphPoints[0].x, y: bounds.maxY - timeLineSpace))
+        clipPath.addLine(to: CGPoint(x:graphPoints[graphPoints.count - 1].x, y: bounds.maxY - helper.timeLineSpace()))
+        clipPath.addLine(to: CGPoint(x: graphPoints[0].x, y: bounds.maxY - helper.timeLineSpace()))
         clipPath.close()
         clipPath.addClip()
         
         let gradientStartPoint = CGPoint(x: 0, y: highestGraphPoint)
-        let gradientEndPoint = CGPoint(x: 0, y: bounds.maxY - timeLineSpace)
+        let gradientEndPoint = CGPoint(x: 0, y: bounds.maxY - helper.timeLineSpace())
         lineContext!.drawLinearGradient(helper.lineGraphGradient(), start: gradientStartPoint, end: gradientEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
         lineContext!.restoreGState()
         
@@ -141,6 +145,75 @@ class GraphView: UIView {
             circle.fill()
         }
     }
+    
+    func drawTimeLine() {
+        
+//        var minTimeLineDate = Date()
+        let dataArray = TimeLineHelper.timeLineArray(timeSpan: displayedTimeSpan, viewWidth: frame.width, minEventDate: minGraphDate, minDisplayDate: minDisplayDate)
+//        (_,_,minTimeLineDate) = dataArray[0] // timeLineSet as building block for tlArray contains in its last
+        
+        let timeLineTicks = UIBezierPath()
+        let timeLineY = bounds.maxY - helper.timeLineSpace()
+//        print("graphView timeLineSpace = \(timeLineSpace)")
+//        print("graphView lowerLine y = \(timeLineY)")
+        for label in timeLineLabels {
+            label.text = ""
+        }
+        var count = 0
+        for tickSet in dataArray {
+            
+            timeLineTicks.move(to: CGPoint(x: tickSet.tickPosition, y: timeLineY))
+            timeLineTicks.addLine(to: CGPoint(x: tickSet.tickPosition, y: timeLineY + helper.timeLineTickLength))
+            
+            if count >= timeLineLabels.count { addTimeLineLabel() }
+            
+            let label = timeLineLabels[count]
+            label.text = tickSet.tickLabelText
+            label.sizeToFit()
+            label.frame.origin = CGPoint(
+                x:  tickSet.tickPosition - timeLineLabels[count].frame.width / 2,
+                y: timeLineY + helper.timeLineTickLength + 2
+            )
+            if label.superview != self {
+                self.addSubview(timeLineLabels[count])
+            }
+            count += 1
+        }
+        
+        colorScheme.lightGray.setStroke()
+        timeLineTicks.lineWidth = 1.0
+        timeLineTicks.stroke()
+        
+        
+    }
+    
+    func addTimeLineLabel() {
+        // called from drawTimeLine() in case more labels are needed, usually when zooming in; these can increase up to ca. 1500!!
+        // all labels for later zoom out are deleted in the MasterView.timeSegmentChosen() and GV2.zoompinch() functions
+        let label: UILabel = {
+            let aLabel = UILabel()
+            aLabel.text = ""
+            aLabel.font = UIFont(name: "AvenirNext-Regular", size: 12.0)
+            aLabel.textColor = colorScheme.lightGray
+            aLabel.sizeToFit()
+            aLabel.frame.origin = CGPoint(
+                x:  0.0,
+                y: 0.0
+            )
+            return aLabel
+        }()
+        self.addSubview(label)
+        timeLineLabels.append(label)
+    }
+    
+    func removeTimeLineLabels() {
+        
+        for label in timeLineLabels {
+            label.removeFromSuperview()
+        }
+        timeLineLabels = [UILabel]()
+    }
+
     
     func shiftGraphPoints(by: CGFloat) {
         
