@@ -12,6 +12,7 @@ import Foundation
 class GraphView: UIView {
     
     @IBOutlet weak var mainViewController: MainViewController!
+    @IBOutlet weak var graphContainerView: GraphContainerView!
     @IBOutlet weak var clipView: ClipView!
     @IBOutlet var leftFrameConstraint: NSLayoutConstraint!
     @IBOutlet var rightFrameConstraint: NSLayoutConstraint!
@@ -225,12 +226,14 @@ class GraphView: UIView {
         refreshPointsFlag = false
         setNeedsDisplay()
     }
-        
+    
+    /*
     func deviceRotation(notification: Notification) {
         
         setNeedsDisplay() //  doesn't work
         // also need to re-position UILabels in GraphContainer - this needs an observer as well
     }
+    */
     
     @IBAction func drag(recogniser: UIPanGestureRecognizer) {
         
@@ -277,13 +280,20 @@ class GraphView: UIView {
             timeChangeRight = now.timeIntervalSince(maxDisplayDate)
             timeChangeLeft = -(dTSChange - timeChangeRight)
         }
-        //        debugDisplayLabel.text = "\(displayedTimeSpan / 86400) days"
-        //        debugDisplayLabel.sizeToFit()
         
         minDisplayDate = minDisplayDate.addingTimeInterval(timeChangeLeft)
         maxDisplayDate = maxDisplayDate.addingTimeInterval(timeChangeRight)
         displayedTimeSpan = maxDisplayDate.timeIntervalSince(minDisplayDate)
         
+        if recognizer.state == .began {
+            mainViewController.displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
+        } else if recognizer.state == .ended {
+            graphContainerView.updateLabels()
+            if recognizer.scale > 1 {
+                // there may be far too many (up to 1500) timeLineLabels from a previous zoom in; remove these and calculate anew the required number
+                removeTimeLineLabels()
+            }
+        }
         setNeedsDisplay()
     }
 

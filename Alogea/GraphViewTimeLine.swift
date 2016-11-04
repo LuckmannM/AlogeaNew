@@ -238,7 +238,7 @@ class TimeLineHelper {
         
         let minDate = minEventDate
         
-        let (firstTimeLineDate, timeLineLabelFormatter, timeUnitName) = timeLineMinDatefromMinEventDate(minDate: minDate, timeLineTimeInterval: timeLineTimeInterval)
+        let (firstTimeLineDate, timeLineLabelFormatter, _) = timeLineMinDatefromMinEventDate(minDate: minDate, timeLineTimeInterval: timeLineTimeInterval)
         
         // the below is negative if firstTimeLineDate is earlier than minDisplayDate
 
@@ -246,25 +246,10 @@ class TimeLineHelper {
         // it has two elements: a CGFloat for the x-position of the label inside the graphView, and a Uilabel to hold the dateFormat and text for the tick
         var returnSet = [timeLineDataSet]()
         var currentTickDate = firstTimeLineDate
-        /*
-        let labelFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.locale = NSLocale.current
-            formatter.timeZone = NSTimeZone.local
-            formatter.dateFormat = "dd.MM.yyyy" // time/date symbols shown on the bottom timeLine
-            return formatter
-        }()
-         */
         
         while currentTickDate.compare(now) == .orderedAscending {
             // calculate tickPosition
             let tickX: CGFloat = (CGFloat(currentTickDate.timeIntervalSince(minDisplayDate)) / timeLineScale)
-            /*
-            if timeUnitName == "4 hours" {
-                if currentTickDate
-                
-            }
-            */
             // join into timeLineSet and append to returnSet array
             returnSet.append((tickX, timeLineLabelFormatter.string(from: currentTickDate), firstTimeLineDate))
             

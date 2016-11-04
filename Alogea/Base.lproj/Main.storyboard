@@ -53,6 +53,7 @@
                                                 <connections>
                                                     <outlet property="clipView" destination="3MZ-MM-gjS" id="J1e-Kx-kWU"/>
                                                     <outlet property="dragRecognizer" destination="erJ-PE-F4m" id="wqh-XT-pK5"/>
+                                                    <outlet property="graphContainerView" destination="lGD-MW-hsj" id="idf-Sr-HgU"/>
                                                     <outlet property="leftFrameConstraint" destination="ybk-X5-WP3" id="WWP-Qo-dk2"/>
                                                     <outlet property="mainViewController" destination="BYZ-38-t0r" id="LNT-g6-DMa"/>
                                                     <outlet property="rightFrameConstraint" destination="oap-xz-Q6y" id="QWn-dQ-fuP"/>
