@@ -294,8 +294,10 @@ extension GraphViewHelper {
             }
         }
         
-        print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
-        print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
+        if selectedScoreEventMinMaxDates?.count != nil {
+            print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
+            print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
+        }
     }
 
 }

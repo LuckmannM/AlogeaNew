@@ -84,6 +84,10 @@ class TouchWheelView: UIView {
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
         
+        print("touchWheel size for ScreenSize: \(UIScreen().bounds.size) is \(frame.size)")
+        print("touchWheel innerframe size is \((frame.insetBy(dx: radius, dy: radius)).size)")
+        print("touchWheel lineWidth is \(lineWidth)")
+        
         let context = UIGraphicsGetCurrentContext()
 
         context!.saveGState()
