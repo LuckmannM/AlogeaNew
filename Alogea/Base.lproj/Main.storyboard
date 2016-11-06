@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -100,21 +101,15 @@
                                     <outlet property="graphView" destination="Dj1-06-7rI" id="IsH-1K-pxt"/>
                                 </connections>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="45.5" y="336" width="284" height="282"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CircularLogo" translatesAutoresizingMaskIntoConstraints="NO" id="D40-di-YTD">
-                                        <rect key="frame" x="15" y="69" width="352" height="201"/>
-                                    </imageView>
-                                </subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
+                                <rect key="frame" x="46.5" y="336" width="282" height="282"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="D40-di-YTD" firstAttribute="leading" secondItem="iIW-Nc-pNj" secondAttribute="leading" constant="15" id="Hzv-0p-LQb"/>
-                                    <constraint firstItem="D40-di-YTD" firstAttribute="top" secondItem="iIW-Nc-pNj" secondAttribute="top" constant="69" id="WYy-rg-98q"/>
+                                    <constraint firstAttribute="width" secondItem="iIW-Nc-pNj" secondAttribute="height" multiplier="1:1" priority="250" identifier="touchWheelARConstraint" id="aht-uH-Vvm">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
+                                    </constraint>
                                     <constraint firstAttribute="height" identifier="touchViewHeightConstraint" id="fE1-J0-5hL"/>
-                                    <constraint firstAttribute="trailing" secondItem="D40-di-YTD" secondAttribute="trailing" constant="8" id="kmF-7B-BQK"/>
-                                    <constraint firstAttribute="bottom" secondItem="D40-di-YTD" secondAttribute="bottom" constant="12" id="pHb-Gt-1eD"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -127,6 +122,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
+                                    <outlet property="aspectRatioConstraint" destination="aht-uH-Vvm" id="Bfx-p5-hBt"/>
                                     <outlet property="panRecogniser" destination="ko5-0R-WEF" id="zHO-ZV-lwv"/>
                                     <outlet property="zeroHeightConstraint" destination="fE1-J0-5hL" id="9yl-zM-Rgi"/>
                                 </connections>
@@ -137,7 +133,7 @@
                         <constraints>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-18" id="5HX-bf-Nth"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
-                            <constraint firstItem="iIW-Nc-pNj" firstAttribute="trailing" secondItem="lGD-MW-hsj" secondAttribute="trailing" id="G7V-Pw-atx"/>
+                            <constraint firstItem="iIW-Nc-pNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUg-qH-Qns"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="HwF-k0-zvC"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" priority="750" id="TUa-od-DY8">
@@ -145,7 +141,6 @@
                                 <variation key="heightClass=compact-widthClass=regular" constant="186.97999999999999"/>
                                 <variation key="heightClass=regular-widthClass=regular" constant="50.68"/>
                             </constraint>
-                            <constraint firstItem="iIW-Nc-pNj" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" id="VFw-D4-NKl"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="Zep-kQ-hxe"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="iIW-Nc-pNj" secondAttribute="bottom" id="cUK-R7-fYd"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
@@ -210,7 +205,4 @@
             <point key="canvasLocation" x="2011.875" y="137.32394366197184"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="CircularLogo" width="261" height="201"/>
-    </resources>
 </document>
