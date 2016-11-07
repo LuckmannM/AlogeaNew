@@ -61,7 +61,8 @@ class TouchWheelView: UIView {
         mainViewController = (UIApplication.shared.delegate as! AppDelegate).tabBarViews[0] as! MainViewController
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
         logoView = UIImageView(image: UIImage(named: "CircularLogo"))
-//        addSubview(logoView)
+        logoView.alpha = 0.7
+        addSubview(logoView)
         
  
     }
@@ -82,16 +83,14 @@ class TouchWheelView: UIView {
     override func draw(_ rect: CGRect) {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
-                
+        logoView.frame = bounds.insetBy(dx: bounds.width * 0.05, dy: bounds.height * 0.05)
+        print("logoView frame is \(logoView.frame)")
+        
         // self.frame is only available in correct size while drawing, not after init() from NIB; it's then set to 0,0,1000,1000
         startAngle = 2 * π // ('east')
         endAngle = startAngle - circleSegment
         radius = -margin - lineWidth / 2 + frame.height / 2
         centerPoint = CGPoint(x: frame.height / 2, y: frame.width / 2)
-        
-        print("touchWheel size for ScreenSize: \(UIScreen().bounds.size) is \(frame.size)")
-        print("touchWheel innerframe size is \((frame.insetBy(dx: radius, dy: radius)).size)")
-        print("touchWheel lineWidth is \(lineWidth)")
         
         let context = UIGraphicsGetCurrentContext()
 
