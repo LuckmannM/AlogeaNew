@@ -102,10 +102,10 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="46.5" y="336" width="282" height="282"/>
+                                <rect key="frame" x="47" y="336" width="282" height="282"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="CircularLogo" translatesAutoresizingMaskIntoConstraints="NO" id="mh9-PS-KEX">
-                                        <rect key="frame" x="14" y="67" width="251" height="200"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="CircularLogo" translatesAutoresizingMaskIntoConstraints="NO" id="R2a-Wc-NC0">
+                                        <rect key="frame" x="11" y="11" width="260" height="260"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
@@ -212,6 +212,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="CircularLogo" width="261" height="201"/>
+        <image name="CircularLogo" width="300" height="300"/>
     </resources>
 </document>

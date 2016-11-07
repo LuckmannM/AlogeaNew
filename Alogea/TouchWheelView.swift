@@ -18,6 +18,8 @@ class TouchWheelView: UIView {
     @IBOutlet var aspectRatioConstraint: NSLayoutConstraint!
     @IBOutlet var zeroHeightConstraint: NSLayoutConstraint!
     
+    var logoView: UIImageView!
+    
     let π: CGFloat = CGFloat(M_PI)
     let margin: CGFloat = 5.0
     let themeColors = ColorScheme.sharedInstance()
@@ -58,6 +60,9 @@ class TouchWheelView: UIView {
         
         mainViewController = (UIApplication.shared.delegate as! AppDelegate).tabBarViews[0] as! MainViewController
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
+        logoView = UIImageView(image: UIImage(named: "CircularLogo"))
+//        addSubview(logoView)
+        
  
     }
     
