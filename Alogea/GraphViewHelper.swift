@@ -167,6 +167,17 @@ class GraphViewHelper: NSObject {
         let gradientEndColour = colorScheme.lightGray.withAlphaComponent(0.0)
         let graphGradientColours = [gradientStartColour.cgColor, gradientEndColour.cgColor]
         let graphColourLocations:[CGFloat] = [0.0, 1.0]
+        
+        /*
+         let gradientBar = UIImage(named: "GradientBar")
+         let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
+        let gradientColor1 = gradientBar?.getPixelColor(pos: CGPoint(x: 1, y: gradientBarHeight - 1))
+        let gradientColor2 = gradientBar?.getPixelColor(pos: CGPoint(x: 1, y: gradientBarHeight * 0.67))
+        let gradientColor3 = gradientBar?.getPixelColor(pos: CGPoint(x: 1, y: gradientBarHeight * 0.33))
+        let gradientColor4 = gradientBar?.getPixelColor(pos: CGPoint(x: 1, y:  1))
+        let graphGradientColours = [gradientColor1!.cgColor, gradientColor2!.cgColor,gradientColor3!.cgColor,gradientColor4!.cgColor]
+        let graphColourLocations:[CGFloat] = [0.0, 0.33, 0.67, 1.0]
+        */
         return CGGradient(colorsSpace: colourSpace, colors: graphGradientColours as CFArray, locations: graphColourLocations)!
         
     }

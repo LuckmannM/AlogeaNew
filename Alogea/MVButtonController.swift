@@ -53,9 +53,6 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
             buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePicker)
             
             buttonView.hideScore()
-            // create score event AFTER the above choice has been made
-            // e.g. create event now but modify time/date in buttonView.eventTimePicker
-            // for this, the buttonView needs access to the scoreEvent object
         }
     }
     
@@ -65,7 +62,6 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         eventsDataController.newEvent(ofType: "Score Event", withName: GraphViewHelper.sharedInstance().selectedScore ,withDate: eventDate, vas: temporaryVAScore)
         temporaryVAScore = nil
         
-        // display on graph, best via EventFRC delegate link to graoh object
     }
     
     func mvButtonTapped(sender: MVButton) {
@@ -80,12 +76,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     
     func receiveDiaryText(text: String, eventType: String) {
         
-        // eventType is the NAME of the eventRecord
-        // the type of eventRecord is 'Diary Entry'
-        
         eventsDataController.newEvent(ofType: "Diary Entry", withName: eventType, note: text)
 
-        // display on graph, best via EventFRC delegate link to graoh object
-        
     }
 }

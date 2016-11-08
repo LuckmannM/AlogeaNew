@@ -14,6 +14,7 @@ protocol MVButtonDelegate {
 
 class MVButton: UIButton {
     
+    var touchWheel: TouchWheelView!
     var colors: ColorScheme!
     weak var containingView: MVButtonView!
     var delegate: MVButtonDelegate!
@@ -21,19 +22,17 @@ class MVButton: UIButton {
     
     convenience init(frame: CGRect, controller: MVButtonController) {
         self.init(frame: frame)
+        self.init(type: .custom)
         self.delegate = controller
         self.controller = controller
+        self.touchWheel = controller.touchWheel
         colors = ColorScheme.sharedInstance()
-        setTitle("MVButton", for: .normal)
         addTarget(self, action: #selector(tapped), for: .touchUpInside)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("button override init")
-
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -42,12 +41,23 @@ class MVButton: UIButton {
     
     override func draw(_ rect: CGRect) {
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
-        colorScheme.seaGreen.setFill()
+        colorScheme.lightGray.setFill()
         buttonCircle.fill()
         
         colorScheme.darkBlue.setStroke()
         buttonCircle.lineWidth = 1
         buttonCircle.stroke()
+        
+        let crossPath = UIBezierPath()
+        crossPath.move(to: CGPoint(x: bounds.midX - frame.width * 0.25, y: bounds.midY))
+        crossPath.addLine(to: CGPoint(x: bounds.midX + frame.width * 0.25 , y: bounds.midY))
+        
+        crossPath.move(to: CGPoint(x: bounds.midX, y: bounds.midY - bounds.height * 0.25))
+        crossPath.addLine(to: CGPoint(x: bounds.midX, y: bounds.midY + bounds.height * 0.25))
+        
+        crossPath.lineWidth = 2.0
+        crossPath.stroke()
+
     }
     
     func tapped() {

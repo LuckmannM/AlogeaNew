@@ -62,7 +62,8 @@ class TouchWheelView: UIView {
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
         logoView = UIImageView(image: UIImage(named: "CircularLogo"))
         logoView.alpha = 0.7
-        addSubview(logoView)
+        insertSubview(logoView, belowSubview: mainButtonController.buttonView)
+        //addSubview(logoView)
         
  
     }

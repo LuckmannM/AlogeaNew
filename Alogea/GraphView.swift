@@ -104,7 +104,8 @@ class GraphView: UIView {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
         guard graphPoints.count > 0  else { return }
-        drawLineGraph()
+        // drawLineGraph()
+        drawBarGraph()
         refreshPointsFlag = true
     }
     
@@ -185,6 +186,47 @@ class GraphView: UIView {
         timeLineTicks.lineWidth = 1.0
         timeLineTicks.stroke()
         
+        
+    }
+    
+    func drawBarGraph() {
+        
+       //  let barContext = UIGraphicsGetCurrentContext()
+        let barWidth: CGFloat = 5.0
+        let cornerRadius: CGFloat = 8.0 / 6
+        
+        guard graphPoints.count > 0  else { return }
+        
+        let barsPath = UIBezierPath()
+        
+        for point in graphPoints {
+            let columnRect = CGRect(x: point.x - barWidth / 2,
+                                    y: point.y,
+                                    width: barWidth ,
+                                    height:bounds.maxY - helper.timeLineSpace() - point.y
+            )
+            let columnPath = UIBezierPath(roundedRect: columnRect, cornerRadius: cornerRadius)
+            barsPath.append(columnPath)
+        }
+        
+        // draw the Columns, gradientFills and circles
+        // let columnStartPoint = CGPointMake(0, formatter.topGraphBorder())
+        // let columnEndPoint = CGPointMake(0, formatter.bottomGraphBorder())
+        /*
+        let clipPath = barsPath.copy() as! UIBezierPath
+        
+        barContext!.saveGState()
+        clipPath.addClip()
+        
+        CGContextDrawLinearGradient(barContext!, formatter.barGraphGradient(), columnStartPoint, columnEndPoint, CGGradientDrawingOptions.DrawsAfterEndLocation)
+        barContext!.restoreGState()
+        */
+        
+        barsPath.lineWidth = 1.0
+        UIColor.white.setStroke()
+        barsPath.stroke()
+        colorScheme.lightGray.setFill()
+        barsPath.fill()
         
     }
     
