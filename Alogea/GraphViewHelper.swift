@@ -231,7 +231,7 @@ class GraphViewHelper: NSObject {
         var points = [CGPoint]()
         var maxVAS = CGFloat()
         
-        guard let scoreEventsData = helper.graphData() else {
+        guard let scoreEventsData = graphData() else {
             return points
         }
         
@@ -288,7 +288,7 @@ let helper = GraphViewHelper()
 extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("GV Helper selectedScoreEventsFRC has changed content")
+        print("GV Helper selectedScoreEventsFRC has changed content, now has \(selectedScoreEventsFRC.fetchedObjects!.count) sets")
         graphView.setNeedsDisplay()
     }
     

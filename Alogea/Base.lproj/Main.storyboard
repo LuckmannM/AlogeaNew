@@ -72,7 +72,17 @@
                                         </constraints>
                                     </view>
                                     <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
-                                        <rect key="frame" x="-70" y="93" width="100" height="101"/>
+                                        <rect key="frame" x="-69" y="5" width="100" height="25"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUS-LB-Fd3">
+                                                <rect key="frame" x="10" y="10" width="60" height="60"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="GraphButton"/>
+                                                <connections>
+                                                    <action selector="graphButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="B7f-IV-olS"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -80,6 +90,8 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="graphContainerView" destination="lGD-MW-hsj" id="G2Q-Sn-mhi"/>
+                                            <outlet property="graphTypeButton" destination="ZUS-LB-Fd3" id="L0B-s5-jO5"/>
+                                            <outlet property="graphView" destination="Dj1-06-7rI" id="a0m-Gx-mFc"/>
                                             <outlet property="tapGesture" destination="TQ9-A5-Hvg" id="aCi-tk-tQm"/>
                                             <outletCollection property="gestureRecognizers" destination="TQ9-A5-Hvg" appends="YES" id="6xV-Jg-eeb"/>
                                         </connections>
@@ -88,12 +100,12 @@
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="3MZ-MM-gjS" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="30" id="3yG-R4-BI7"/>
-                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="centerY" secondItem="lGD-MW-hsj" secondAttribute="centerY" id="Doe-Lq-sOE"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="5" id="6Rd-fd-mpd"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="height" secondItem="lGD-MW-hsj" secondAttribute="height" constant="-262" id="Fdu-mb-axV"/>
                                     <constraint firstItem="3MZ-MM-gjS" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="15" id="Qll-ux-Prm"/>
-                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-70" id="Y6d-fR-RgD"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-69" id="Y6d-fR-RgD"/>
                                     <constraint firstAttribute="trailing" secondItem="3MZ-MM-gjS" secondAttribute="trailing" constant="25" id="fpR-Jj-wim"/>
                                     <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="25" id="pbf-Di-hcC"/>
-                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="93" id="r0L-Mi-bju"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="clipView" destination="3MZ-MM-gjS" id="srL-nN-PQM"/>
@@ -205,4 +217,7 @@
             <point key="canvasLocation" x="2011.875" y="137.32394366197184"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="GraphButton" width="51" height="51"/>
+    </resources>
 </document>

@@ -45,6 +45,8 @@ class GraphView: UIView {
     var maxDisplayDate: Date!
     var refreshPointsFlag: Bool = true
     
+    var graphIsLineType: Bool = true
+    
     var timeLinePoints: [CGPoint]!
     var timeLineLabels = [UILabel]() // number is calculated and adapted upwards (only) in drawTimeLine() function
 
@@ -104,8 +106,12 @@ class GraphView: UIView {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
         guard graphPoints.count > 0  else { return }
-        // drawLineGraph()
-        drawBarGraph()
+        
+        if  graphIsLineType {
+            drawLineGraph()
+        } else {
+            drawBarGraph()
+        }
         refreshPointsFlag = true
     }
     
