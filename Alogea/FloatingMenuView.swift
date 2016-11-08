@@ -74,7 +74,7 @@ class FloatingMenuView: UIView {
         } else {
             graphView.graphIsLineType = true
             graphTypeButton.tag = 0
-            graphTypeButton.setImage(UIImage(named: "GraphButton"), for: .normal)
+            graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
         }
         graphView.setNeedsDisplay()
     }
