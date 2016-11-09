@@ -156,3 +156,24 @@ class GraphContainerView: UIView {
     }
 
 }
+
+extension GraphContainerView {
+    func renderAsImage() -> UIImage {
+        
+        //*** problme: floatingView is visible in image - it shouldn't
+        floatingMenuView.isHidden = true
+        floatingMenuView.removeFromSuperview()
+        
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
+        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        addSubview(floatingMenuView)
+        floatingMenuView.isHidden = false
+
+        return image!
+    }
+    
+}
+

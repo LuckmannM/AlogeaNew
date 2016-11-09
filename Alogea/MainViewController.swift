@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class MainViewController: UIViewController {
 
@@ -266,6 +267,65 @@ extension MainViewController: UITextViewDelegate {
         NotificationCenter.default.removeObserver(observer)
     }
 
+    @IBAction func exportDialog(sender: UIButton) {
+        
+        let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
+        
+        let exportDialog = UIAlertController(title: "Export options", message: nil, preferredStyle: .actionSheet)
+        
+        let printAction = UIAlertAction(title: "Print", style: UIAlertActionStyle.default, handler: { (exportDialog)
+            -> Void in
+            
+            PrintPageRenderer.printDialog(file: pdfFile, inView: self.view)
+            
+        })
+        
+        exportDialog.addAction(printAction)
+        
+        if MFMailComposeViewController.canSendMail() {
+            
+            let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (exportDialog)
+                -> Void in
+                
+                self.exportToEmailAction(file: pdfFile)
+                
+            })
+            
+            exportDialog.addAction(emailAction)
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (exportDialog)
+            -> Void in
+            
+            return
+            
+        })
+        
+        exportDialog.addAction(cancelAction)
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            let popUpController = exportDialog.popoverPresentationController
+            popUpController!.permittedArrowDirections = .up
+            popUpController?.sourceView = sender
+            popUpController?.sourceRect = sender.bounds
+        }
+        
+        self.present(exportDialog, animated: true, completion: nil)
+        
+    }
+   
+    func exportToEmailAction(file: NSURL) {
+        
+        if let attachmentData = NSData.init(contentsOf: file as URL) {
+            let emailer = MFMailComposeViewController()
+            emailer.mailComposeDelegate = self
+            emailer.setSubject("ScoreGraph")
+            emailer.addAttachmentData(attachmentData as Data, mimeType: "application/pdf", fileName: "ScoreGraph.pdf")
+            
+            self.present(emailer, animated: true, completion: nil)
+        }
+    }
 
     
 }
@@ -310,6 +370,36 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
 }
+
+extension MainViewController: MFMailComposeViewControllerDelegate {
+    
+    private func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        
+        //        switch result {
+        //        case MFMailComposeResultCancelled:
+        //            print("email cancelled")
+        //        case MFMailComposeResultSent:
+        //            print("email sent")
+        //        case MFMailComposeResultSaved:
+        //            print("email saved")
+        //        default:
+        //            print("email result default")
+        //        }
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+}
+
+extension MainViewController: UIPrintInteractionControllerDelegate {
+    
+    //    func printInteractionControllerParentViewController(printInteractionController: UIPrintInteractionController) -> UIViewController {
+    //        print("printINteractionController parentController = \()")
+    //    }
+    
+    
+}
+
 
 extension MainViewController {
     

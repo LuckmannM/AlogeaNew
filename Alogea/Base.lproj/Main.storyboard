@@ -87,8 +87,7 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Button" image="ExpoButton"/>
                                                 <connections>
-                                                    <action selector="expoButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="O61-wl-Twj"/>
-                                                    <action selector="graphButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="YuJ-yx-ZKI"/>
+                                                    <action selector="exportDialogWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="m3R-B0-Kol"/>
                                                 </connections>
                                             </button>
                                         </subviews>
