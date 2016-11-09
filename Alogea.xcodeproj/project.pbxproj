@@ -189,11 +189,11 @@
 			children = (
 				26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
-				2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
+				2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */,
 				267F78D21DC54214008CC23E /* GraphViews Group */,
 				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,

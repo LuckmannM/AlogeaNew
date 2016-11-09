@@ -16,7 +16,21 @@ enum ButtonViewPickers {
 class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
 
 
-    var scoreLabel: UILabel!
+    var scoreLabel: UILabel = {
+        let label = UILabel()
+        label.text = "0.0"
+        label.numberOfLines = 0
+        if UIDevice().userInterfaceIdiom == .pad {
+            label.font = UIFont.boldSystemFont(ofSize: 58)
+        } else {
+            label.font = UIFont.boldSystemFont(ofSize: 40)
+        }
+        label.textColor = ColorScheme.sharedInstance().darkBlue
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+
     var roundButton: MVButton!
     var colorScheme: ColorScheme!
     weak var touchWheel: TouchWheelView!
@@ -37,14 +51,6 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         self.touchWheel = controller.touchWheel
         self.backgroundColor = UIColor.clear
         colorScheme = ColorScheme.sharedInstance()
-        scoreLabel = {
-            let label = UILabel()
-            label.text = "0.0"
-            label.font = UIFont.boldSystemFont(ofSize: 64)
-            label.textColor = colorScheme.darkBlue
-            label.isHidden = true
-            return label
-        }()
         addSubview(scoreLabel)
         
         roundButton = MVButton(frame: CGRect.zero, controller: controller)
@@ -82,8 +88,10 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             formatter.minimumIntegerDigits = 1
             return formatter
         }()
+        let scoreName = GraphViewHelper.sharedInstance().selectedScore
+        let score = numberFormatter.string(from: scoreNumber)
+        scoreLabel.text = scoreName + "\n" + score!
         
-        scoreLabel.text = numberFormatter.string(from: scoreNumber)
         centerScoreLabel()
         roundButton.isHidden = true
         scoreLabel.isHidden = false
@@ -98,7 +106,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         scoreLabel.sizeToFit()
         scoreLabel.frame = CGRect(
             x: frame.width / 2 - scoreLabel.frame.width / 2,
-            y: frame.height / 2 - scoreLabel.frame.height / 2,
+            y: frame.height * 0.28, //frame.height / 2 - scoreLabel.frame.height / 2
             width: scoreLabel.frame.width,
             height: scoreLabel.frame.height
         )

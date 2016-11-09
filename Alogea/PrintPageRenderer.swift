@@ -77,13 +77,7 @@ class PrintPageRenderer: UIPrintPageRenderer {
         }
         scale = scaleHeight > scaleWidth ? scaleWidth : scaleHeight
         let leftInset = (paperSize.width - fromView.frame.width * scale) / 2
-        
-        print("")
-        print("view size = \(fromView.frame.size)")
-        print("scale = \(scale)")
-        print("scaleW: \(scaleWidth), scaleH:\(scaleHeight)")
-        print("scaled view size = w:\(fromView.frame.width * scale), h:\(fromView.frame.height * scale)")
-        
+
         let pdfPaperRect = CGRect(x: 0, y: 0, width: paperSize.width, height: paperSize.height)
         if UIGraphicsBeginPDFContextToFile(pdfFile, pdfPaperRect, nil) {
             UIGraphicsBeginPDFPage()
@@ -118,6 +112,7 @@ class PrintPageRenderer: UIPrintPageRenderer {
         return standardPDFSize
     }
     
+    /*
 //    class func printImageFromView(view: UIView, parentView: UIView?) {
 //        
 //        if let viewToPrint = view as? GraphContainerView {
@@ -141,6 +136,7 @@ class PrintPageRenderer: UIPrintPageRenderer {
 //            }
 //        }
 //    }
+    */
     
     class func printDialog(file: NSURL, inView: UIView?) {
         
