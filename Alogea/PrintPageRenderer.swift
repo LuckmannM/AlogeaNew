@@ -116,26 +116,29 @@ class PrintPageRenderer: UIPrintPageRenderer {
         return standardPDFSize
     }
     
-    class func printImageFromView(view: UIView, parentView: UIView?) {
-        
-        if let viewToPrint = view as? GraphContainerView {
-            let printImage = viewToPrint.renderAsImage()
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.outputType = UIPrintInfoOutputType.general
-            printInfo.jobName = "View Image Print job"
-            printInfo.orientation = UIPrintInfoOrientation.portrait
-            
-            let printController = UIPrintInteractionController.shared
-            printController.printInfo = printInfo
-            printController.printingItem = printImage
-            
-            if UIDevice().userInterfaceIdiom == .pad {
-                printController.present(from: parentView!.frame, in: parentView!, animated: true, completionHandler: nil)
-            } else {
-                printController.present(animated: true, completionHandler: nil)
-            }
-        }
-    }
+//    class func printImageFromView(view: UIView, parentView: UIView?) {
+//        
+//        if let viewToPrint = view as? GraphContainerView {
+//            viewToPrint.floatingMenuView.isHidden = true
+//            let printImage = viewToPrint.renderAsImage()
+//            let printInfo = UIPrintInfo(dictionary: nil)
+//            printInfo.outputType = UIPrintInfoOutputType.general
+//            printInfo.jobName = "View Image Print job"
+//            printInfo.orientation = UIPrintInfoOrientation.portrait
+//            
+//            let printController = UIPrintInteractionController.shared
+//            printController.printInfo = printInfo
+//            printController.printingItem = printImage
+//            
+//            if UIDevice().userInterfaceIdiom == .pad {
+//                printController.present(from: parentView!.frame, in: parentView!, animated: true, completionHandler: nil)
+//            } else {
+//                printController.present(animated: true, completionHandler: {(UIPrintInteractionCompletionHandler) in
+//                    viewToPrint.floatingMenuView.isHidden = false
+//                })
+//            }
+//        }
+//    }
     
     class func printDialog(file: NSURL, inView: UIView?) {
         

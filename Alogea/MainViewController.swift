@@ -15,7 +15,6 @@ class MainViewController: UIViewController {
     @IBOutlet weak var graphContainerView: GraphContainerView!
     @IBOutlet weak var floatingMenuView: FloatingMenuView!
     @IBOutlet weak var displayTimeSegmentedController: UISegmentedControl!
-
     
     var colorScheme = ColorScheme.sharedInstance()
     
@@ -54,12 +53,9 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
-        // it is therefore not possible - like with iPhone - to add a 0 height IB constraint for touchWheel for landScape orientation
-        // this (zeroHeightConstraint) needs to be manually toggled with touchWheel aspectRationConstraint depending on orientation
-        // if launched in ls orientation (not in portrait), the buttonView is not resized properly when orientation is changed to portrait
-        // this requires a manual call to mainButtonController.sizeViews AFTER the rotation is complete
-        /* doing this in the viewWillTransition function doesn't work as the rotated frame sizes of touchWheel are only available after rotation is complete at which time viewDidLayoutSubviews is called; in this function the manual call to sizeViews is done with the then updated touchWheel innerRect parameters but should only be called once; if calling initially after launch the inits aren't all complete resulting in crash due to nil value 
+        /*
+        Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
+        it is therefore not possible - like with iPhone - to add a 0 height IB constraint for touchWheel for landScape orientation this (zeroHeightConstraint) needs to be manually toggled with touchWheel aspectRationConstraint depending on orientation if launched in ls orientation (not in portrait), the buttonView is not resized properly when orientation is changed to portrait this requires a manual call to mainButtonController.sizeViews AFTER the rotation is complete doing this in the viewWillTransition function doesn't work as the rotated frame sizes of touchWheel are only available after rotation is complete at which time viewDidLayoutSubviews is called; in this function the manual call to sizeViews is done with the then updated touchWheel innerRect parameters but should only be called once; if calling initially after launch the inits aren't all complete resulting in crash due to nil value
          */
         if UIDevice().userInterfaceIdiom == .pad && view.frame.size.width > view.frame.size.height {
             iPadLandScapeStart = true
@@ -266,10 +262,14 @@ extension MainViewController: UITextViewDelegate {
         
         NotificationCenter.default.removeObserver(observer)
     }
+    
+    // MARK: - exporting / printing
 
     @IBAction func exportDialog(sender: UIButton) {
         
+        floatingMenuView.isHidden = true // hide flaotingView so it's not visible in the 'screenShot' pdf image
         let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
+        floatingMenuView.isHidden = false
         
         let exportDialog = UIAlertController(title: "Export options", message: nil, preferredStyle: .actionSheet)
         

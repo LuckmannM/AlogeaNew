@@ -97,7 +97,7 @@
                                             <constraint firstAttribute="width" constant="100" id="aMg-RL-DS0"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="graphContainerView" destination="lGD-MW-hsj" id="G2Q-Sn-mhi"/>
+                                            <outlet property="graphContainerView" destination="lGD-MW-hsj" id="YtA-5S-kx7"/>
                                             <outlet property="graphTypeButton" destination="ZUS-LB-Fd3" id="L0B-s5-jO5"/>
                                             <outlet property="graphView" destination="Dj1-06-7rI" id="a0m-Gx-mFc"/>
                                             <outlet property="printButton" destination="kX6-eK-UBg" id="v65-kU-CWJ"/>
@@ -118,7 +118,6 @@
                                 </constraints>
                                 <connections>
                                     <outlet property="clipView" destination="3MZ-MM-gjS" id="srL-nN-PQM"/>
-                                    <outlet property="floatingMenuView" destination="KFJ-pZ-cje" id="BiL-OE-FOE"/>
                                     <outlet property="graphView" destination="Dj1-06-7rI" id="IsH-1K-pxt"/>
                                 </connections>
                             </view>

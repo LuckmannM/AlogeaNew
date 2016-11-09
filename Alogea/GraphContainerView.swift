@@ -13,7 +13,6 @@ let labelFontName = "AvenirNext-Regular"
 class GraphContainerView: UIView {
 
     
-    @IBOutlet var floatingMenuView: FloatingMenuView!
     @IBOutlet weak var graphView: GraphView!
     @IBOutlet weak var clipView: ClipView!
     
@@ -157,21 +156,29 @@ class GraphContainerView: UIView {
 
 }
 
+
 extension GraphContainerView {
     func renderAsImage() -> UIImage {
         
-        //*** problme: floatingView is visible in image - it shouldn't
-        floatingMenuView.isHidden = true
-        floatingMenuView.removeFromSuperview()
+        var image: UIImage!
         
-        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
-        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        // Method 1
+//        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
+//        if self.drawHierarchy(in: self.bounds, afterScreenUpdates: true) {
+//            image = UIGraphicsGetImageFromCurrentImageContext()
+//        } else {
+//            print("error rendering GraphContainerView as Image")
+//        }
+//        
+//        UIGraphicsEndImageContext()
+        
+        // Method 2
+        UIGraphicsBeginImageContext(bounds.size)
+        layer.render(in: UIGraphicsGetCurrentContext()!)
+        image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        addSubview(floatingMenuView)
-        floatingMenuView.isHidden = false
-
         return image!
     }
     
