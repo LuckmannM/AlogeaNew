@@ -17,8 +17,8 @@ class FloatingMenuView: UIView {
     @IBOutlet var printButton: UIButton!
     @IBOutlet weak var graphView:GraphView!
     
-    let arrowInset: CGFloat = 20
-    var stickOutWidth: CGFloat! = 30
+    let arrowInset: CGFloat = 10
+    var stickOutWidth: CGFloat! = 70
     var arrowHeight: CGFloat!
     var arrowPath: UIBezierPath!
     
@@ -30,18 +30,18 @@ class FloatingMenuView: UIView {
         arrowPath = UIBezierPath()
         arrowHeight = 4/5 * frame.height
         
-        if self.frame.minX < 0 {
-            arrowPath.move(to: CGPoint(x: rect.maxX - arrowInset, y: rect.midY - arrowHeight/2))
-            arrowPath.addLine(to: CGPoint(x: rect.maxX - 10 , y: rect.midY))
-            arrowPath.addLine(to: CGPoint(x: rect.maxX - arrowInset, y: rect.midY + arrowHeight/2))
-        } else {
-            arrowPath.move(to: CGPoint(x: rect.maxX - 10, y: rect.midY - arrowHeight/2))
+        if graphTypeButton.isEnabled {
+            arrowPath.move(to: CGPoint(x: rect.maxX - 5, y: rect.midY - arrowHeight/2))
             arrowPath.addLine(to: CGPoint(x: rect.maxX - arrowInset , y: rect.midY))
-            arrowPath.addLine(to: CGPoint(x: rect.maxX - 10, y: rect.midY + arrowHeight/2))
+            arrowPath.addLine(to: CGPoint(x: rect.maxX - 5, y: rect.midY + arrowHeight/2))
+        } else {
+            arrowPath.move(to: CGPoint(x: rect.maxX - arrowInset, y: rect.midY - arrowHeight/2))
+            arrowPath.addLine(to: CGPoint(x: rect.maxX - 5 , y: rect.midY))
+            arrowPath.addLine(to: CGPoint(x: rect.maxX - arrowInset, y: rect.midY + arrowHeight/2))
         }
         
         UIColor.lightGray.setStroke()
-        arrowPath.lineWidth = 5.0
+        arrowPath.lineWidth = 3.0
         arrowPath.stroke()
         
     }
@@ -49,13 +49,13 @@ class FloatingMenuView: UIView {
     @IBAction func slideOut(tap: UITapGestureRecognizer) {
         
         let targetHeight = 5/6 * graphContainerView.frame.height
-        let targetY = graphContainerView.bounds.midY - targetHeight/2
+        let targetY = graphContainerView.frame.midY - targetHeight/2
         
         ibViewFrame = frame
 
         UIView.animate(withDuration: 0.5, animations: {
-            self.frame = CGRect(x: self.stickOutWidth - self.frame.width, y: targetY, width: self.frame.width, height: targetHeight)
-            self.frame = self.frame.offsetBy(dx: self.frame.minX * -1, dy: 0)
+            self.frame = CGRect(x: self.frame.minX, y: targetY, width: self.frame.width, height: targetHeight)
+            self.frame = self.frame.offsetBy(dx: self.stickOutWidth, dy: 0)
             self.alpha = 0.8
             }, completion: { (value: Bool) in
                 
@@ -91,7 +91,7 @@ class FloatingMenuView: UIView {
         // let targetY = graphContainerView.bounds.midY - targetHeight/2
         
         UIView.animate(withDuration: 0.5, animations: {
-            self.frame = self.frame.offsetBy(dx: -self.frame.width + self.stickOutWidth, dy: 0)
+            self.frame = self.frame.offsetBy(dx: -self.stickOutWidth, dy: 0)
             self.alpha = 0.5
             
             }, completion: { (value: Bool) in
