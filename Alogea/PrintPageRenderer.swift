@@ -52,6 +52,8 @@ class PrintPageRenderer: UIPrintPageRenderer {
         
     }
     
+    // onlt this function is used in Alogea
+    
     class func pdfFromView(fromView: UIView, name: String) -> NSURL {
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray

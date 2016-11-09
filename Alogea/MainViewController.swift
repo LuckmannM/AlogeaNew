@@ -29,7 +29,6 @@ class MainViewController: UIViewController {
     
     var eventsDataController = EventsDataController.sharedInstance()
     var eventPicker: UIPickerView!
-//    let eventPickerTitles = ["Cancel","My event", "Treatment","Fall","Holiday","New..."]
     var eventPickerTitles: [String] {
         var array = ["Cancel", "Event"]
         
@@ -264,8 +263,28 @@ extension MainViewController: UITextViewDelegate {
     }
     
     // MARK: - exporting / printing
-
+    
     @IBAction func exportDialog(sender: UIButton) {
+        
+        floatingMenuView.isHidden = true // hide floatingView so it's not visible in the 'screenShot' pdf image
+        let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
+        floatingMenuView.isHidden = false
+        
+        let expoController = UIActivityViewController(activityItems: [pdfFile], applicationActivities: nil)
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            let popUpController = expoController.popoverPresentationController
+            popUpController?.permittedArrowDirections = .unknown
+            popUpController?.sourceView = self.floatingMenuView
+            popUpController?.sourceRect = self.view.frame
+        }
+        
+        self.present(expoController, animated: true, completion: nil)
+        
+    }
+
+    /*
+    func export(sender: UIButton) {
         
         floatingMenuView.isHidden = true // hide flaotingView so it's not visible in the 'screenShot' pdf image
         let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
@@ -314,6 +333,7 @@ extension MainViewController: UITextViewDelegate {
         self.present(exportDialog, animated: true, completion: nil)
         
     }
+     */
    
     func exportToEmailAction(file: NSURL) {
         
@@ -399,7 +419,6 @@ extension MainViewController: UIPrintInteractionControllerDelegate {
     
     
 }
-
 
 extension MainViewController {
     
