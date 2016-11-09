@@ -85,7 +85,6 @@ class TouchWheelView: UIView {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
         logoView.frame = bounds.insetBy(dx: bounds.width * 0.05, dy: bounds.height * 0.05)
-        print("logoView frame is \(logoView.frame)")
         
         // self.frame is only available in correct size while drawing, not after init() from NIB; it's then set to 0,0,1000,1000
         startAngle = 2 * π // ('east')

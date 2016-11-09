@@ -44,10 +44,10 @@
                                 <rect key="frame" x="-2" y="49" width="375" height="287"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3MZ-MM-gjS" customClass="ClipView" customModule="Alogea" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="30" width="335" height="232"/>
+                                        <rect key="frame" x="15" y="30" width="335" height="242"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dj1-06-7rI" customClass="GraphView" customModule="Alogea" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="335" height="232"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="335" height="242"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <gestureRecognizers/>
                                                 <connections>
@@ -82,6 +82,15 @@
                                                     <action selector="graphButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="B7f-IV-olS"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kX6-eK-UBg" userLabel="printButton">
+                                                <rect key="frame" x="10" y="80" width="60" height="60"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="ExpoButton"/>
+                                                <connections>
+                                                    <action selector="expoButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="O61-wl-Twj"/>
+                                                    <action selector="graphButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="YuJ-yx-ZKI"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
@@ -92,6 +101,7 @@
                                             <outlet property="graphContainerView" destination="lGD-MW-hsj" id="G2Q-Sn-mhi"/>
                                             <outlet property="graphTypeButton" destination="ZUS-LB-Fd3" id="L0B-s5-jO5"/>
                                             <outlet property="graphView" destination="Dj1-06-7rI" id="a0m-Gx-mFc"/>
+                                            <outlet property="printButton" destination="kX6-eK-UBg" id="v65-kU-CWJ"/>
                                             <outlet property="tapGesture" destination="TQ9-A5-Hvg" id="aCi-tk-tQm"/>
                                             <outletCollection property="gestureRecognizers" destination="TQ9-A5-Hvg" appends="YES" id="6xV-Jg-eeb"/>
                                         </connections>
@@ -105,7 +115,7 @@
                                     <constraint firstItem="3MZ-MM-gjS" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="15" id="Qll-ux-Prm"/>
                                     <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-69" id="Y6d-fR-RgD"/>
                                     <constraint firstAttribute="trailing" secondItem="3MZ-MM-gjS" secondAttribute="trailing" constant="25" id="fpR-Jj-wim"/>
-                                    <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="25" id="pbf-Di-hcC"/>
+                                    <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="15" id="pbf-Di-hcC"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="clipView" destination="3MZ-MM-gjS" id="srL-nN-PQM"/>
@@ -114,7 +124,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-Nc-pNj" customClass="TouchWheelView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="46.5" y="336" width="282" height="282"/>
+                                <rect key="frame" x="47" y="336" width="282" height="282"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -218,6 +228,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="GraphButtonBar" width="51" height="51"/>
+        <image name="ExpoButton" width="45" height="53"/>
+        <image name="GraphButtonBar" width="52" height="52"/>
     </resources>
 </document>

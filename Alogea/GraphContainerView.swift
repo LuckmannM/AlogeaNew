@@ -34,9 +34,9 @@ class GraphContainerView: UIView {
     var centreBottomLabel: UILabel = {
         let label = UILabel()
         label.text = "centreBottomLabel"
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = NSTextAlignment.right
         label.textColor = ColorScheme.sharedInstance().lightGray
-        label.font =  UIFont(name: labelFontName, size: 14)
+        label.font =  UIFont(name: labelFontName, size: 16)
         label.sizeToFit()
         return label
     }()
@@ -113,7 +113,7 @@ class GraphContainerView: UIView {
         upperLabel.text = graphView.helper.selectedScore
         upperLabel.sizeToFit()
         upperLabel.frame.origin = CGPoint(
-            x: bounds.midX - upperLabel.frame.width / 2,
+            x: bounds.width * 1/3 - upperLabel.frame.width / 2,
             y: 5
         )
         
@@ -142,8 +142,8 @@ class GraphContainerView: UIView {
         centreBottomLabel.text = centerBottomText
         centreBottomLabel.sizeToFit()
         centreBottomLabel.frame.origin = CGPoint(
-            x: bounds.midX - centreBottomLabel.bounds.width / 2,
-            y: bounds.maxY - centreBottomLabel.frame.height - 5
+            x: clipView.frame.maxX - centreBottomLabel.bounds.width,
+            y: upperLabel.frame.midY - centreBottomLabel.frame.height / 2
         )
     }
     

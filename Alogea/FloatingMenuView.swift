@@ -14,6 +14,7 @@ class FloatingMenuView: UIView {
     @IBOutlet weak var graphContainerView: GraphContainerView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
     @IBOutlet var graphTypeButton: UIButton!
+    @IBOutlet var printButton: UIButton!
     @IBOutlet weak var graphView:GraphView!
     
     let arrowInset: CGFloat = 20
@@ -63,6 +64,10 @@ class FloatingMenuView: UIView {
                 self.tapGesture.addTarget(self, action: #selector(self.slideIn))
                 self.graphTypeButton.isEnabled = true
         })
+        
+        printButton.isEnabled = true
+        graphTypeButton.isEnabled = true
+
     }
     
     @IBAction func graphButtonAction(sender: UIButton) {
@@ -77,6 +82,11 @@ class FloatingMenuView: UIView {
             graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
         }
         graphView.setNeedsDisplay()
+    }
+    
+    
+    @IBAction func expoButtonAction(sender: UIButton) {
+        
     }
     
     func slideIn() {
@@ -98,6 +108,8 @@ class FloatingMenuView: UIView {
                 self.setNeedsDisplay()
                 self.tapGesture.removeTarget(self, action: #selector(self.slideIn))
                 self.tapGesture.addTarget(self, action: #selector(self.slideOut))
+                self.printButton.isEnabled = false
+                self.graphTypeButton.isEnabled = false
         })
         
     }
