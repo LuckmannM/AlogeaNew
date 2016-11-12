@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreData
+import UserNotifications
+
+var notificationsAuthorised: Bool = false
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -32,6 +35,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             else { return [] }
         }()
         
+        if notificationsAuthorised != true {
+            requestNotificationAuthorisation()
+        }
+        registerNotificationCategories()
+        
+        
         return true
     }
 
@@ -47,10 +56,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        
+        reviewNotificationsDeliveredInBackground()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -58,6 +70,103 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
     }
+    
+    // MARK: - Notifications
+    
+    func requestNotificationAuthorisation() {
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            
+            notificationsAuthorised = granted
+        }
+    }
+    
+    func registerNotificationCategories() {
+        
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationCategories(completionHandler: {
+            (categories) in
+            
+            for category in categories {
+                if category.identifier == "drugReminderCategory" { return }
+            }
+
+        })
+        
+        // defining actions displayed as buttons with the notifications
+        let dismissAction = UNNotificationAction(identifier: "dismissAction", title: "dismiss", options: UNNotificationActionOptions(rawValue: 0))
+        
+        // defining categories containing one or more actions
+        let drugReminderCategory = UNNotificationCategory(identifier: "drugReminderCategory", actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
+        
+        center.setNotificationCategories([drugReminderCategory])
+    }
+    
+    // possible option of checking notifications that have been displayed while App in background
+    func reviewNotificationsDeliveredInBackground() {
+        let center = UNUserNotificationCenter.current()
+        center.getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
+            for notification in notifications {
+                if notification.request.content.categoryIdentifier == "drugReminderCategory" {
+                    
+                    // do relevant stuff e.g. check if repeat is 3-daily and re-schedule next repeat manually
+                }
+            }
+            center.removeDeliveredNotifications(withIdentifiers: ["drugID here"])
+        })
+    }
+    
+    //removing specific notifications
+    func removeNotifications(withIdentifier: String?, withCategory: String?) {
+        
+        guard withIdentifier != nil || withCategory != nil else {
+            return
+        }
+        
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests(completionHandler: {
+            (requests: [UNNotificationRequest]) in
+            for request in requests {
+                if request.identifier == withIdentifier || request.content.categoryIdentifier == withCategory {
+                    center.removePendingNotificationRequests(withIdentifiers: [withIdentifier!])
+                }
+            }
+        })
+    }
+    
+    // handling notification actions received from system
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        // handling non-specific/non-action user actions e.g. deleting notification in NotificationCenter
+        if response.actionIdentifier == UNNotificationDismissActionIdentifier {
+            // The user dismissed the notification without taking action
+            print("user deleted action in NotificatioCenter")
+        }
+        else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
+            // The user launched the app
+            print("user launched app on notification")
+        }
+        
+        // handling category specific notification actions from the user
+        if response.notification.request.content.categoryIdentifier == "drugReminderCategory" {
+            // Handle the actions for the expired timer.
+            if response.actionIdentifier == "dismiss" {
+                // Invalidate the old timer and create a new one. . .
+                print("action dismiss received in notification")
+            }
+            else if response.actionIdentifier == "any other action" {
+                // Invalidate the timer. . .
+            }
+        }
+        
+        // Else handle actions for other notification types. . .
+    }
+
+
+
 
     // MARK: - Core Data stack
 

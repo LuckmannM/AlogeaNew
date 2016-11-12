@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0101DD4660300CD7963 /* DrugListCell.swift */; };
+		263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */; };
 		263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */; };
 		263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6061DBD4A2800A7BCF7 /* GraphView.swift */; };
 		2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AC1DAE355300FF0484 /* ColorScheme.swift */; };
@@ -61,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		263DA0101DD4660300CD7963 /* DrugListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListCell.swift; sourceTree = "<group>"; };
+		263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListViewController.swift; sourceTree = "<group>"; };
 		263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsDataController.swift; sourceTree = "<group>"; };
 		263DE6061DBD4A2800A7BCF7 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		2644B8AC1DAE355300FF0484 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
@@ -131,6 +135,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		263DA00F1DD464E500CD7963 /* MainView Group */ = {
+			isa = PBXGroup;
+			children = (
+				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
+				267F78D21DC54214008CC23E /* GraphViews Group */,
+				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
+			);
+			name = "MainView Group";
+			sourceTree = "<group>";
+		};
+		263DA0141DD4D42600CD7963 /* DrugList Group */ = {
+			isa = PBXGroup;
+			children = (
+				263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */,
+				263DA0101DD4660300CD7963 /* DrugListCell.swift */,
+			);
+			name = "DrugList Group";
+			sourceTree = "<group>";
+		};
 		263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,10 +215,9 @@
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
-				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */,
-				267F78D21DC54214008CC23E /* GraphViews Group */,
-				263DE6031DBCDCEE00A7BCF7 /* TouchWheel & Button Group */,
+				263DA00F1DD464E500CD7963 /* MainView Group */,
+				263DA0141DD4D42600CD7963 /* DrugList Group */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
 				26E3B8D61DA177D000D157BB /* LaunchScreen.storyboard */,
 				26E3B8D91DA177D000D157BB /* Info.plist */,
@@ -425,6 +447,7 @@
 				26E3B90B1DA1816E00D157BB /* Event+CoreDataProperties.swift in Sources */,
 				267F78D11DC5264F008CC23E /* ClipView.swift in Sources */,
 				26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */,
+				263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */,
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
@@ -443,6 +466,7 @@
 				2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
+				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
 				2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */,
 				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,
 				2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */,
