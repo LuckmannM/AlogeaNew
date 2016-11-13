@@ -29,7 +29,7 @@ public class DrugEpisode: NSManagedObject {
     var frequencyVar: TimeInterval = 24*3600 {
         didSet {
             calculateDoseTimes()                    // sets [doseTimeDates]
-            if doses == nil { return }
+            if dosesVar == nil { return }
             if dosesVar.count != numberOfDailyDoses() {
                 setDoseArray(sentDose: dosesVar[0])
             }
