@@ -90,13 +90,13 @@ public class DrugEpisode: NSManagedObject {
         
         newDateComponents.second = 0
         newDateComponents.minute = Int(round(Double(newDateComponents.minute!) / 5.0) * 5.0)
-        startDateVar = calendar.date(from: newDateComponents)
+        startDate = calendar.date(from: newDateComponents) as NSDate?
         
-        nameVar = "name"
+        name = "name"
         classesVar = ["classes"]
         ingredientsVar = ["substances"]
-        regularlyVar = true
-        frequencyVar = 86400 // one day
+        regularly = true
+        frequency = 86400 // one day
         
         convertFromStorage()
     }
@@ -135,13 +135,13 @@ public class DrugEpisode: NSManagedObject {
         
         regularlyVar = regularly
         
-        if let _ = NSKeyedUnarchiver.unarchiveObject(with: doses as! Data) {
+        if doses != nil {
             dosesVar = NSKeyedUnarchiver.unarchiveObject(with: doses as! Data) as! [Double]
         } else {
             dosesVar = [0.0]
         }
         
-        if let _ = NSKeyedUnarchiver.unarchiveObject(with: reminders as! Data) {
+        if reminders != nil {
             remindersVar = NSKeyedUnarchiver.unarchiveObject(with: reminders as! Data) as! [Bool]
         } else {
             remindersVar = [Bool]()
@@ -150,7 +150,11 @@ public class DrugEpisode: NSManagedObject {
             }
         }
         
-        doseUnitVar = doseUnit
+        if doseUnit != nil {
+            doseUnitVar = doseUnit
+        } else {
+            doseUnitVar = "mg"
+        }
         
         if let text = notes {
             notesVar = text
@@ -256,6 +260,17 @@ public class DrugEpisode: NSManagedObject {
         
         return freqString
     }
+    
+    func resetReminders(default: [Bool] = [false]) {
+        
+        var i = 0
+        remindersVar.removeAll()
+        while i < numberOfDailyDoses() {
+            remindersVar.append(Bool())
+            i += 1
+        }
+    }
+
 
     
     // MARK: functions for DrugListViewController
@@ -484,6 +499,186 @@ public class DrugEpisode: NSManagedObject {
         } else {
             return (numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar)
         }
+    }
+
+    // MARK:- NewDrug helper methods
+    
+    func storeObjectAndNotifications() {
+        
+        //createNotificationsWithoutActions()
+        scheduleReminderNotifications()
+        
+        name = nameVar
+        if ingredients != nil {
+            ingredients = NSKeyedArchiver.archivedData(withRootObject: ingredientsVar!) as NSData!
+        }
+        if classes != nil {
+            classes = NSKeyedArchiver.archivedData(withRootObject: classesVar!) as NSData!
+        }
+        startDate = startDateVar as NSDate!
+        endDate = endDateVar as NSDate!
+        frequency = frequencyVar
+        regularly = regularlyVar
+        doses = NSKeyedArchiver.archivedData(withRootObject: dosesVar) as NSData!
+        reminders = NSKeyedArchiver.archivedData(withRootObject: remindersVar) as NSData!
+        doseUnit = doseUnitVar
+        notes = notesVar
+        sideEffects = NSKeyedArchiver.archivedData(withRootObject: sideEffectsVar!) as NSData!
+        isCurrent = "Current Medicines"
+        isCurrentUpdate()
+    }
+
+    func timesString() -> String {
+        
+        if regularlyVar == false {
+            return "\(frequencyString())"
+        }
+        
+        calculateDoseTimes()
+        
+        var times$ = String()
+        var i = 0
+        for aTime in times {
+            if remindersVar[i] { times$ += "  🔔" + aTime }
+            else { times$ += "  " + aTime }
+            i += 1
+        }
+        
+        return times$
+    }
+
+    func dosesString() -> String {
+        
+        var doses$ = String()
+        
+        if regularlyVar == true {
+            let minimum = dosesVar.min()
+            let maximum = dosesVar.max()
+            
+            if minimum == maximum {
+                doses$ = frequencyString() + "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar
+            } else {
+                doses$ = frequencyString() + ", " + numberFormatter.string(from: NSNumber( value: minimum!))! + "-" + numberFormatter.string(from: NSNumber( value: minimum!))! + doseUnitVar
+            }
+        } else { // as required drugs only have one dose
+            doses$ = "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar
+        }
+        
+        return doses$
+    }
+
+    func startDateString() -> String {
+        return dateFormatter.string(from: startDateVar)
+    }
+    
+    func trialPeriodToEndDate(trialPeriodNo: Int, trialPeriodMetric: String) -> String {
+        
+        var trialPeriod: TimeInterval
+        
+        switch trialPeriodMetric {
+        case "days":
+            trialPeriod = 24.0 * 3600.0
+        case "weeks":
+            trialPeriod = 7.0 * 24.0 * 3600.0
+        case "months":
+            trialPeriod = 30.0 * 24.0 * 3600.0
+        default:
+            trialPeriod = -24.0 * 3600.0
+        }
+        
+        let timeInterval: TimeInterval = Double(trialPeriodNo) * trialPeriod
+        endDateVar = startDateVar.addingTimeInterval(timeInterval)
+        
+        return endDateString()
+        
+    }
+    
+    func frequencyStringToTimeInterval(term: String) {
+        
+        for aTerm in frequencyTerms {
+            let (presetTerm,duration) = aTerm
+            if term == presetTerm {
+                frequencyVar = duration
+            }
+        }
+    }
+    
+    func frequencyToPickerViewRow() -> Int {
+        
+        var pickerRow = 5
+        
+        var i = 0
+        for aTerm in frequencyTerms {
+            let (_,duration) = aTerm
+            if frequencyVar == duration {
+                pickerRow = i
+            }
+            i += 1
+        }
+        
+        return pickerRow
+        
+    }
+    
+    func doseUnitIndex() -> Int {
+        switch doseUnitVar {
+        case "mg":
+            return 0
+        case "grams":
+            return 1
+        case "µg/h":
+            return 2
+        case "units":
+            return 3
+        default:
+            return 0
+        }
+    }
+    
+    func saveDoseUnit(index: Int) {
+        
+        switch index {
+        case 0:
+            doseUnitVar = "mg"
+        case 1:
+            doseUnitVar = "grams"
+        case 2:
+            doseUnitVar = "µg/h"
+        case 3:
+            doseUnitVar = "units"
+        default:
+            doseUnitVar = "error"
+        }
+        
+    }
+
+    func getDetailsFromCloudDrug(publicDrug: CloudDrug) {
+        
+        name = publicDrug.displayName
+        if publicDrug.substances != nil {
+            ingredientsVar = publicDrug.substances
+        }
+        if publicDrug.classes != nil {
+            classesVar = publicDrug.classes
+        }
+        if publicDrug.doseUnit != nil {
+            doseUnitVar = publicDrug.doseUnit
+            
+        }
+        if publicDrug.startingDoses != nil {
+            dosesVar = publicDrug.startingDoses
+        }
+        if publicDrug.regular != nil {
+            if publicDrug.regular == 1 { regularlyVar = true }
+            else {regularlyVar = false }
+        }
+        if publicDrug.startingDoseInterval != nil {
+            frequency = publicDrug.startingDoseInterval as TimeInterval
+        }
+        
+        resetReminders()
+        
+        // *** also transfer other parameter here...
     }
 
 

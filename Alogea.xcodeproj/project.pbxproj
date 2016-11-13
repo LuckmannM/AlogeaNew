@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0101DD4660300CD7963 /* DrugListCell.swift */; };
 		263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */; };
+		263DA0161DD764E500CD7963 /* NewDrug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0151DD764E500CD7963 /* NewDrug.swift */; };
+		263DA0181DD7655C00CD7963 /* NewDrugHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */; };
 		263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */; };
 		263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6061DBD4A2800A7BCF7 /* GraphView.swift */; };
 		2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AC1DAE355300FF0484 /* ColorScheme.swift */; };
@@ -19,6 +21,9 @@
 		2651FD681DB3B07700C1301A /* MVButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD671DB3B07700C1301A /* MVButtonView.swift */; };
 		2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD691DB3B90C00C1301A /* MVButtonController.swift */; };
 		2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD6B1DB3D8A600C1301A /* MVButton.swift */; };
+		2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */; };
+		2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */; };
+		2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA691DD8D2280063CCB4 /* InAppStore.swift */; };
 		267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */; };
 		267F78D11DC5264F008CC23E /* ClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78D01DC5264F008CC23E /* ClipView.swift */; };
 		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
@@ -65,6 +70,8 @@
 /* Begin PBXFileReference section */
 		263DA0101DD4660300CD7963 /* DrugListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListCell.swift; sourceTree = "<group>"; };
 		263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListViewController.swift; sourceTree = "<group>"; };
+		263DA0151DD764E500CD7963 /* NewDrug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewDrug.swift; sourceTree = "<group>"; };
+		263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewDrugHelper.swift; sourceTree = "<group>"; };
 		263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsDataController.swift; sourceTree = "<group>"; };
 		263DE6061DBD4A2800A7BCF7 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		2644B8AC1DAE355300FF0484 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
@@ -75,6 +82,9 @@
 		2651FD671DB3B07700C1301A /* MVButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonView.swift; sourceTree = "<group>"; };
 		2651FD691DB3B90C00C1301A /* MVButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonController.swift; sourceTree = "<group>"; };
 		2651FD6B1DB3D8A600C1301A /* MVButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButton.swift; sourceTree = "<group>"; };
+		2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrugDictionary.swift; path = ../DrugDictionary.swift; sourceTree = "<group>"; };
+		2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudDrug.swift; path = ../CloudDrug.swift; sourceTree = "<group>"; };
+		2657FA691DD8D2280063CCB4 /* InAppStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppStore.swift; sourceTree = "<group>"; };
 		267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewHelper.swift; sourceTree = "<group>"; };
 		267F78D01DC5264F008CC23E /* ClipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipView.swift; sourceTree = "<group>"; };
 		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -149,7 +159,11 @@
 			isa = PBXGroup;
 			children = (
 				263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */,
+				263DA0151DD764E500CD7963 /* NewDrug.swift */,
+				263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */,
 				263DA0101DD4660300CD7963 /* DrugListCell.swift */,
+				2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */,
+				2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */,
 			);
 			name = "DrugList Group";
 			sourceTree = "<group>";
@@ -216,6 +230,7 @@
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
 				2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */,
+				2657FA691DD8D2280063CCB4 /* InAppStore.swift */,
 				263DA00F1DD464E500CD7963 /* MainView Group */,
 				263DA0141DD4D42600CD7963 /* DrugList Group */,
 				26E3B8D41DA177D000D157BB /* Assets.xcassets */,
@@ -449,6 +464,7 @@
 				26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */,
 				263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */,
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
+				2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */,
 				263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
 				267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */,
@@ -461,12 +477,16 @@
 				26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */,
 				2645C5DE1DD30E4100916596 /* PrintPageRenderer.swift in Sources */,
 				26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */,
+				2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */,
 				263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */,
 				2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */,
 				2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */,
+				263DA0161DD764E500CD7963 /* NewDrug.swift in Sources */,
+				2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
 				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
+				263DA0181DD7655C00CD7963 /* NewDrugHelper.swift in Sources */,
 				2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */,
 				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,
 				2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */,

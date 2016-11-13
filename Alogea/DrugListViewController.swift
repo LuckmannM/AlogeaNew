@@ -18,9 +18,11 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var actionButton: UIBarButtonItem!
     
-    var stack : CoreDataStack!
-    // var drugFormulary: DrugFormulary!
-    // var inAppStore: InAppStore!
+    lazy var stack : CoreDataStack = {
+        return (UIApplication.shared.delegate as! AppDelegate).stack
+    }()
+    var drugDictionary: DrugDictionary!
+    var inAppStore: InAppStore!
     var searchController: UISearchController!
     
     lazy var managedObjectContext: NSManagedObjectContext = {
@@ -78,7 +80,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         tableView.contentOffset = CGPoint(x: 0.0, y: self.tableView.tableHeaderView!.frame.size.height)
         
         /***
-        drugFormulary = DrugFormulary.sharedInstance()
+        drugDictionary = drugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
         */
         
@@ -191,6 +193,12 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         let aDrug = drugList.object(at: indexPath) 
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
+        
+        if indexPath.row % 2 == 0 {
+            cell.backgroundColor = ColorScheme.sharedInstance().lightGray
+        } else {
+            cell.backgroundColor = ColorScheme.sharedInstance().lightBlue
+        }
         
         switch indexPath.section {
         case 0: // CURRENT DRUGS
@@ -483,16 +491,15 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     
     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        /*
-        if let nextViewController = segue.destinationViewController as? NewDrugTVC {
+
+        if let nextViewController = segue.destination as? NewDrug {
             nextViewController.rootViewController = self
-            nextViewController.context = stack.context
-            nextViewController.drugFormulary = drugFormulary
+            nextViewController.drugDictionary = drugDictionary
             
             if segue.identifier == "editDrug" {
-                if let indexPath = sender as? NSIndexPath {
+                if let indexPath = sender {
                     // if creating new drug don't pass anything and a new will be generated in nextTVC
-                    nextViewController.drugFromList = drugList.objectAtIndexPath(indexPath) as? DrugEpisode
+                    nextViewController.drugFromList = drugList.object(at: indexPath as! IndexPath)
                 }
             } else if segue.identifier == "createNew" {
                 
@@ -503,7 +510,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 print("error createNew segue: destinationViewcontrolle not defined")
             }
         }
-        */
+
     }
     
     @IBAction
