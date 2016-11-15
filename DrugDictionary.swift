@@ -49,10 +49,9 @@ class DrugDictionary {
             (accountStatus, error) -> Void in
             if accountStatus == CKAccountStatus.noAccount {
                 self.iCloudStatus = CKAccountStatus.noAccount
-                print("iCLoud access for public drug formulary not available")
+                print("iCloud access for Cloud Dictionary not available")
             } else {
                 self.iCloudStatus = CKAccountStatus.available
-                print("iCLoud access for public drug formulary ok")
             }
         })
 

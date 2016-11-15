@@ -192,13 +192,11 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
         
-        /*
         if indexPath.row % 2 == 0 {
-            cell.backgroundColor = ColorScheme.sharedInstance().lightGray
+            cell.backgroundColor = UIColor.lightGray
         } else {
-            cell.backgroundColor = ColorScheme.sharedInstance().lightBlue
+            cell.backgroundColor = UIColor.white
         }
-        */
         
         switch indexPath.section {
         case 0: // CURRENT DRUGS
@@ -219,8 +217,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             
             
         case 1: // DISCONTINUED DRUGS
-            print("discontinued drugs required inAppStore - not ye implemented")
-            /*
+
             if inAppStore.checkDrugFormularyAccess() == true {
                 cell.isUserInteractionEnabled = true
                 cell.accessoryType = .disclosureIndicator
@@ -239,7 +236,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 cell.startDateLabel.text = ""
                 cell.otherInfoLabel.text = "Full version required for details"
             }
-             */
+
         default:
             print("error in DrugListVC - section number wrong: \(indexPath.section)")
         }
@@ -516,6 +513,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBAction
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
+        /*
         print("returning from 'New Drug' and saving")
         save()
         print("drugList now has \(drugList.fetchedObjects?.count) drugs")
@@ -527,6 +525,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 print("----------")
             }
         }
+        */
         
     }
     

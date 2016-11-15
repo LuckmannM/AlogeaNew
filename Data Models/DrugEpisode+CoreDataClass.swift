@@ -277,7 +277,7 @@ public class DrugEpisode: NSManagedObject {
 
     func returnName() -> String {
         
-        guard  nameVar  != nil else { return nameVar }
+        guard  nameVar  != nil else { return name! }
         
         if nameVar == "name" && name != "name" {
             return nameVar
