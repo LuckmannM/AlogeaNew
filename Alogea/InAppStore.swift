@@ -103,8 +103,12 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         
         print("productRequest successful")
         
+        for products in response.products {
+            print("valid product ID in InAppStore: \(products.localizedDescription)")
+        }
+        
         for invalidID in response.invalidProductIdentifiers {
-            print("invalid product ID in StoreVC: \(invalidID)")
+            print("invalid product ID in InAppStore: \(invalidID)")
             // handle invalid product identifiers
         }
         productRequest = nil

@@ -298,6 +298,24 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     
     // MARK: - Export actions
     
+    @IBAction func newExportDialog(sender: UIBarButtonItem) {
+        
+        let pdfFile = PrintPageRenderer.createPDF(fromText: self.preRenderPDFText())
+       
+        
+        let expoController = UIActivityViewController(activityItems: [pdfFile], applicationActivities: nil)
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            let popUpController = expoController.popoverPresentationController
+            popUpController?.permittedArrowDirections = .unknown
+            popUpController?.sourceView = self.view
+            popUpController?.sourceRect = self.view.frame
+        }
+        
+        self.present(expoController, animated: true, completion: nil)
+
+    }
+    
     
     @IBAction func exportDialog(sender: UIBarButtonItem) {
         

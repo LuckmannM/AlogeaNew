@@ -286,7 +286,11 @@
                                     <segue destination="ydz-SS-MW0" kind="show" identifier="createNew" id="5bR-q3-pkn"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="action" id="GRL-k9-w1A"/>
+                            <barButtonItem systemItem="action" id="GRL-k9-w1A">
+                                <connections>
+                                    <action selector="newExportDialogWithSender:" destination="BeJ-B2-Vbc" id="HpW-Jl-06q"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
