@@ -47,7 +47,7 @@ class DrugListCell: UITableViewCell {
     func loadRatingImages() {
         
         let redStar = UIImage(named: "RedStar")
-        let greyStar = UIImage(named: "GreyStar")
+        let grayStar = UIImage(named: "GrayStar")
         let yellowStar = UIImage(named: "YellowStar")
         let orangeStar = UIImage(named: "OrangeStar")
         let redCircle = UIImage(named: "RedCircle")
@@ -67,7 +67,7 @@ class DrugListCell: UITableViewCell {
         // not rated Image
         UIGraphicsBeginImageContext(threeImageFrame.size)
         for _ in 0 ..< 3 {
-            greyStar!.draw(in: oneImageFrame)
+            grayStar!.draw(in: oneImageFrame)
             oneImageFrame.offsetBy(dx: oneImageFrame.width, dy: 0)
         }
         notRatedImage = UIGraphicsGetImageFromCurrentImageContext()

@@ -31,7 +31,7 @@ class DrugDictionary {
     
     var iCloudContainer: CKContainer!
     var publicDB : CKDatabase!
-    var publicDrugArray = [CloudDrug]()
+    var cloudDrugArray = [CloudDrug]()
     var iCloudStatus: CKAccountStatus!
     
     var delegate: PublicDrugFormularyDelegate?
@@ -62,8 +62,8 @@ class DrugDictionary {
     }
     
     func fetchRecordsByName(name: String) {
-        let searchForName = NSPredicate(format: "(drugName = %@)", name)
-        let databaseQuery = CKQuery(recordType: "PublicDrugFormulary", predicate: searchForName)
+        let searchForName = NSPredicate(format: "(displayName = %@)", name)
+        let databaseQuery = CKQuery(recordType: "CloudMedicinesDictionary", predicate: searchForName)
         
         publicDB.perform(databaseQuery, inZoneWith: nil, completionHandler: { results, error in
             if error != nil {
@@ -72,11 +72,11 @@ class DrugDictionary {
                     print("DrugDictionary - fetchRecordsByName. performQuery, error loading: \(error)")
                 }
             } else {
-                self.publicDrugArray.removeAll(keepingCapacity: true)
+                self.cloudDrugArray.removeAll(keepingCapacity: true)
                 for record in results! {
                     let medDataSet = CloudDrug(record: record , database:self.publicDB)
-                    self.publicDrugArray.append(medDataSet)
-                    //                    print("found \(self.publicDrugArray.count) sets in public iCloud Med Database")
+                    self.cloudDrugArray.append(medDataSet)
+                    //                    print("found \(self.cloudDrugArray.count) sets in public iCloud Med Database")
                 }
                 DispatchQueue.main.async() {
                     self.delegate?.modelUpdated()
@@ -89,7 +89,7 @@ class DrugDictionary {
     
     func fetchAllRecords() {
         let searchForAll = NSPredicate(value: true)
-        let databaseQuery = CKQuery(recordType: "PublicDrugFormulary", predicate: searchForAll)
+        let databaseQuery = CKQuery(recordType: "CloudMedicinesDictionary", predicate: searchForAll)
         
         publicDB.perform(databaseQuery, inZoneWith: nil, completionHandler: { results, error in
             if error != nil {
@@ -98,11 +98,11 @@ class DrugDictionary {
                     print("DrugDictionary - fetchAllRecords. performQuery error loading: \(error)")
                 }
             } else {
-                self.publicDrugArray.removeAll(keepingCapacity: true)
+                self.cloudDrugArray.removeAll(keepingCapacity: true)
                 for record in results! {
                     let medDataSet = CloudDrug(record: record , database:self.publicDB)
-                    self.publicDrugArray.append(medDataSet)
-                    //                    print("found \(self.publicDrugArray.count) sets in public iCloud Med Database")
+                    self.cloudDrugArray.append(medDataSet)
+                    //                    print("found \(self.cloudDrugArray.count) sets in public iCloud Med Database")
                 }
                 DispatchQueue.main.async() {
                     self.delegate?.modelUpdated()
@@ -118,9 +118,9 @@ class DrugDictionary {
         
         var nameArray = [String]()
         
-        //        print("public drug array contain \(publicDrugArray)")
+        //        print("public drug array contain \(cloudDrugArray)")
         
-        for drug in publicDrugArray {
+        for drug in cloudDrugArray {
             nameArray.append(drug.displayName.lowercased())
         }
         
@@ -133,7 +133,7 @@ class DrugDictionary {
         
         var ingredientArray = [[String]]()
         
-        for drug in publicDrugArray {
+        for drug in cloudDrugArray {
             ingredientArray.append(drug.substances)
         }
         
@@ -144,7 +144,7 @@ class DrugDictionary {
         
         var classesArray = [[String]]()
         
-        for drug in publicDrugArray {
+        for drug in cloudDrugArray {
             classesArray.append(drug.classes)
         }
         
@@ -164,7 +164,7 @@ class DrugDictionary {
         //        let matchingNames = drugFormularyNameArray().filter({$0.rangeOfString(name.lowercaseString,options: NSStringCompareOptions.AnchoredSearch) != nil})
         //        if matchingNames.count > 0 {
         //            selectedDrugIndex = drugFormularyNameArray().indexOf(matchingNames[0])
-        //            return publicDrugArray[selectedDrugIndex!].name
+        //            return cloudDrugArray[selectedDrugIndex!].name
         //        }
         //        else {return "" }
         
@@ -209,9 +209,9 @@ class DrugDictionary {
         
         
         if index == -1  {
-            return publicDrugArray[matchingDrugIndexes[0]]
+            return cloudDrugArray[matchingDrugIndexes[0]]
         }
-        else if index < publicDrugArray.count { return publicDrugArray[matchingDrugIndexes[index]] }
+        else if index < cloudDrugArray.count { return cloudDrugArray[matchingDrugIndexes[index]] }
         else { return nil }
     }
     

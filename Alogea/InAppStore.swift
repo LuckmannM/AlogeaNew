@@ -86,7 +86,7 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         var qualifiesForAccess = false
         
         for productID in purchasedProductIDs {
-            if productID.contains("FullVersion") || productID.contains("OnlineFormularyAccess") {
+            if productID.contains("FullVersion") || productID.contains("UnlimitedMedicines") {
                 qualifiesForAccess = true
             }
         }

@@ -30,7 +30,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             } else {
                 return NSEntityDescription.insertNewObject(forEntityName: "DrugEpisode", into: self.managedObjectContext) as? DrugEpisode
             }
-            return .none
     }()
     
 
@@ -87,15 +86,17 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             if theEnd.compare(now) == .orderedAscending { // is old drug - not modifiable
                 isDiscontinuedDrug = true
                 //                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Save, target: self, action: "saveAction")
-                self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(NewDrug.cancelAction))
+                self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(cancelAction))
             } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(NewDrug.saveAction))
-                self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(NewDrug.cancelAction))
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
+                self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAction))
             }
         } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(NewDrug.saveAction))
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(NewDrug.cancelAction))
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAction))
         }
+        
+        print("drug in NewDrug is \(theDrug?.name)")
         
         cellRowHelper = NewDrugHelper()
         cellRowHelper.initHelper(regularly: theDrug!.regularly)

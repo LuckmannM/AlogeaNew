@@ -39,14 +39,14 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         return dL
         
     }()
-    /*
+
     var persistentStoreCoordinatorChangesObserver:NotificationCenter? {
         didSet {
             oldValue?.removeObserver(self, name: NSNotification.Name.NSPersistentStoreCoordinatorStoresDidChange, object: stack.coordinator)
             persistentStoreCoordinatorChangesObserver?.addObserver(self, selector: #selector(persistentStoreCoordinatorDidChangeStores(notification:)), name: NSNotification.Name.NSPersistentStoreCoordinatorStoresDidChange, object: stack.coordinator)
         }
     }
-    */
+
     // MARK: - View functions
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,11 +79,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         // the next hides the search bar until it is dragged down by user
         tableView.contentOffset = CGPoint(x: 0.0, y: self.tableView.tableHeaderView!.frame.size.height)
         
-        /***
-        drugDictionary = drugDictionary.sharedInstance()
+
+        drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
-        */
-        
         
     }
     
@@ -194,11 +192,13 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
         
+        /*
         if indexPath.row % 2 == 0 {
             cell.backgroundColor = ColorScheme.sharedInstance().lightGray
         } else {
             cell.backgroundColor = ColorScheme.sharedInstance().lightBlue
         }
+        */
         
         switch indexPath.section {
         case 0: // CURRENT DRUGS
@@ -516,7 +516,17 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBAction
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
+        print("returning from 'New Drug' and saving")
         save()
+        print("drugList now has \(drugList.fetchedObjects?.count) drugs")
+        for object in drugList.fetchedObjects! {
+            if let drug = object as DrugEpisode? {
+                print("name: \(drug.name)")
+                print("startDate: \(drug.startDate)")
+                print("isCurrent: \(drug.isCurrent)")
+                print("----------")
+            }
+        }
         
     }
     
@@ -546,12 +556,12 @@ extension DrugListViewController: UITableViewDataSource {
         }
     }
     
-    private func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
- 
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
         let cell =
             tableView.dequeueReusableCell(
                 withIdentifier: cellIdentifier, for: indexPath as IndexPath)
@@ -562,15 +572,15 @@ extension DrugListViewController: UITableViewDataSource {
         return cell
     }
     
-    private func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-    {
-        
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let sectionInfo = drugList.sections?[section] {
             return sectionInfo.name
         } else {
             return ""
         }
+
     }
+    
 }
 
 // MARK: - TableView Delegate
@@ -578,22 +588,18 @@ extension DrugListViewController: UITableViewDataSource {
 
 extension DrugListViewController: UITableViewDelegate {
     
-    private func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath)
-    {
-        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // action when tapping a row - segue to detailView to modify drug or
         // segue to ratingViewController to rate
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         
         performSegue(withIdentifier: "editDrug", sender: indexPath)
-        
+
     }
     
-    private func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]?
-    {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        
-        let endAction = UITableViewRowAction(style: UITableViewRowActionStyle.normal, title: "End", handler:
+        let endAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "End", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
                 
                 let drugToStop = self.drugList.object(at: indexPath) 
@@ -601,9 +607,10 @@ extension DrugListViewController: UITableViewDelegate {
                 drugToStop.storeObjectForEnding() // essential for FRC to change display
                 drugToStop.cancelNotifications()
                 self.save()
-                self.fetchDrugList()
+                //self.fetchDrugList()
                 
         } )
+        
         
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
@@ -654,22 +661,21 @@ extension DrugListViewController: UITableViewDelegate {
 
 extension DrugListViewController: NSFetchedResultsControllerDelegate {
     
-    private func controllerWillChangeContent(controller: NSFetchedResultsController<NSFetchRequestResult>)
-    {
+   
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
-    private func controllerDidChangeContent(controller: NSFetchedResultsController<NSFetchRequestResult>)
-    {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+
         tableView.endUpdates()
     }
     
-    //  declaration of didChangeObject - from WorldCup Project
-    private func controller(controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeObject anObject: AnyObject, atIndexPath indexPath: IndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
-    {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
         switch type {
         case .insert:
+            print("drugList FRC will inserts new row")
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .automatic)
@@ -707,7 +713,7 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
 
 extension DrugListViewController: MFMailComposeViewControllerDelegate {
     
-    private func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         
         //        switch result {
         //        case MFMailComposeResultCancelled:

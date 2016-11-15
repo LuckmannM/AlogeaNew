@@ -248,8 +248,8 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJw-vT-DSr">
-                                                    <rect key="frame" x="281" y="14" width="46" height="30"/>
-                                                    <state key="normal" title="Button">
+                                                    <rect key="frame" x="297" y="14" width="30" height="30"/>
+                                                    <state key="normal">
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
@@ -265,7 +265,7 @@
                                                 <constraint firstItem="SXE-VM-IQt" firstAttribute="leading" secondItem="MOx-iY-WCs" secondAttribute="leading" id="qXU-ZM-HQA"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <connections>
                                             <outlet property="nameLabel" destination="MOx-iY-WCs" id="KJN-UM-9Hw"/>
                                             <outlet property="otherInfoLabel" destination="SXE-VM-IQt" id="GBg-Q9-XEO"/>
@@ -275,6 +275,10 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BeJ-B2-Vbc" id="MhB-2O-ych"/>
+                                    <outlet property="delegate" destination="BeJ-B2-Vbc" id="9a7-iy-KiN"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -291,7 +295,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="actionButton" destination="GRL-k9-w1A" id="d0E-59-oUv"/>
-                        <outlet property="tableView" destination="Z9i-hD-5I7" id="Slh-h0-tuQ"/>
+                        <outlet property="tableView" destination="Z9i-hD-5I7" id="GIg-81-NTR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3ea-i9-7Ve" userLabel="First Responder" sceneMemberID="firstResponder"/>
