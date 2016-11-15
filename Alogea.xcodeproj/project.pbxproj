@@ -17,6 +17,7 @@
 		2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */; };
 		2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */; };
 		2645230C1DDB1F3800D62CC1 /* InAppProductIDs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2645230B1DDB1F3800D62CC1 /* InAppProductIDs.plist */; };
+		2645230E1DDB596B00D62CC1 /* DrugRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645230D1DDB596B00D62CC1 /* DrugRating.swift */; };
 		2645C5DC1DCC9B9300916596 /* GraphViewTimeLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */; };
 		2645C5DE1DD30E4100916596 /* PrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */; };
 		2651FD681DB3B07700C1301A /* MVButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD671DB3B07700C1301A /* MVButtonView.swift */; };
@@ -79,6 +80,7 @@
 		2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchWheelView.swift; sourceTree = "<group>"; };
 		2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GetGradientColor Extension.swift"; path = "../../CircularSlider/CircularSlider/GetGradientColor Extension.swift"; sourceTree = "<group>"; };
 		2645230B1DDB1F3800D62CC1 /* InAppProductIDs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = InAppProductIDs.plist; sourceTree = "<group>"; };
+		2645230D1DDB596B00D62CC1 /* DrugRating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugRating.swift; sourceTree = "<group>"; };
 		2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewTimeLine.swift; sourceTree = "<group>"; };
 		2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrintPageRenderer.swift; sourceTree = "<group>"; };
 		2651FD671DB3B07700C1301A /* MVButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonView.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */,
+				2645230D1DDB596B00D62CC1 /* DrugRating.swift */,
 				263DA0151DD764E500CD7963 /* NewDrug.swift */,
 				263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */,
 				263DA0101DD4660300CD7963 /* DrugListCell.swift */,
@@ -475,6 +478,7 @@
 				26F647721DAE70EC0061E560 /* GraphContainerView.swift in Sources */,
 				26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */,
 				26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */,
+				2645230E1DDB596B00D62CC1 /* DrugRating.swift in Sources */,
 				2645C5DC1DCC9B9300916596 /* GraphViewTimeLine.swift in Sources */,
 				26E3B90E1DA1816E00D157BB /* Exercise+CoreDataClass.swift in Sources */,
 				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,

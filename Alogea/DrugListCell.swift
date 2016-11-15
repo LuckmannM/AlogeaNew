@@ -237,7 +237,7 @@ class DrugListCell: UITableViewCell {
         default:
             imageToReturn = notRatedImage
         }
-        //        ratingButton.frame = CGRect(x: ratingButton.frame.maxX - imageToReturn.size.width, y: ratingButton.frame.origin.y, width: imageToReturn.size.width, height: imageToReturn.size.height)
+        // ratingButton.frame = CGRect(x: ratingButton.frame.maxX - imageToReturn.size.width, y: ratingButton.frame.origin.y, width: imageToReturn.size.width, height: imageToReturn.size.height)
         ratingButton.setImage(imageToReturn, for: .normal)
         ratingButton.setBackgroundImage(imageToReturn, for: .normal)
         ratingButton.setNeedsLayout()

@@ -681,6 +681,14 @@ public class DrugEpisode: NSManagedObject {
         // *** also transfer other parameter here...
     }
 
+    
+    // MARK: - DrugRating helper methods
+    
+    func saveEffectAndSideEffects() {
+        effectiveness = effectivenessVar
+        sideEffects = NSKeyedArchiver.archivedData(withRootObject: sideEffectsVar ?? [""]) as NSData?
+    }
+
 
 
 }

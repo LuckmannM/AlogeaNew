@@ -11,8 +11,6 @@ import CoreData
 import CloudKit
 import MessageUI
 
-private let cellIdentifier = "drugListCell"
-
 class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -83,6 +81,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
         
+//        tableView.register(DrugListCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -211,7 +210,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             }
             //                print("effectiveness of selected drug is \((drugList.objectAtIndexPath(indexPath) as! DrugEpisode).effectivenessStore)")
             cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
-            cell.ratingButton.addTarget(self, action: #selector(goToRatingView(sender:)), for: .touchUpInside)
+            cell.ratingButton.addTarget(self, action: #selector(popUpRatingView(sender:)), for: .touchUpInside)
             cell.ratingButton.tag = indexPath.row
             cell.ratingButton.isEnabled = true
             
@@ -243,11 +242,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
     }
     
-    func goToRatingView(sender: UIButton) {
+    func popUpRatingView(sender: UIButton) {
         
-        /*
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let ratingViewController = storyBoard.instantiateViewControllerWithIdentifier("RatingPopUp") as! RatingTableViewController
+        let ratingViewController = storyBoard.instantiateViewController(withIdentifier: "DrugRatingPopUp") as! DrugRating
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedDrug = drugList.object(at: indexPath) 
         
@@ -255,19 +253,19 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         ratingViewController.sideEffectSelected = selectedDrug.returnSideEffect()
         ratingViewController.sendingButtonInRow = sender.tag
         
-        ratingViewController.modalPresentationStyle = .Popover
-        ratingViewController.preferredContentSize = CGSizeMake(280, 360)
+        ratingViewController.modalPresentationStyle = .popover
+        ratingViewController.preferredContentSize = CGSize(width: 280, height: 360)
         
         
         let popUpController = ratingViewController.popoverPresentationController
-        popUpController!.permittedArrowDirections = .Any
+        popUpController!.permittedArrowDirections = .any
         popUpController!.sourceView = sender
         popUpController?.sourceRect = sender.bounds
         popUpController!.delegate = self
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
-        self.presentViewController(ratingViewController, animated: true, completion: nil)
-        */
+        self.present(ratingViewController, animated: true, completion: nil)
+
     }
     
     func save() {
@@ -475,30 +473,34 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     
     // MARK: - UIPopoverPresentationController delegate methods
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         
         return UIModalPresentationStyle.none
     }
     
-    private func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
-        /*
-        if let presentedController = popoverPresentationController.presentedViewController as? RatingTableViewController {
+
+        if let presentedController = popoverPresentationController.presentedViewController as? DrugRating {
             
-            let indexPath = NSIndexPath(forRow: presentedController.sendingButtonInRow, inSection: 0)
-            let selectedDrug = drugList.objectAtIndexPath(indexPath) as! DrugEpisode
+            let indexPath = IndexPath(row: presentedController.sendingButtonInRow, section: 0)
+            let selectedDrug = drugList.object(at: indexPath)
             
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as! DrugListCell
-            cell.ratingImageForButton(presentedController.effectSelected, sideEffects: presentedController.sideEffectSelected)
-            selectedDrug.effectiveness = presentedController.effectSelected
-            selectedDrug.sideEffects = [presentedController.sideEffectSelected]
+            let cell = tableView.cellForRow(at: indexPath) as! DrugListCell
+            cell.ratingImageForButton(effect: presentedController.effectSelected, sideEffects: presentedController.sideEffectSelected)
+            // tableView.reloadRows(at: [indexPath], with: .automatic)
+            
+            selectedDrug.effectivenessVar = presentedController.effectSelected
+            selectedDrug.sideEffectsVar = [presentedController.sideEffectSelected]
             selectedDrug.saveEffectAndSideEffects()
+            
             save()
         } else {
             // return from deleteAlertController on iPad only
             
         }
-         */
+
         
     }
     
@@ -531,19 +533,22 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBAction
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
-        /*
-        print("returning from 'New Drug' and saving")
+        
         save()
-        print("drugList now has \(drugList.fetchedObjects?.count) drugs")
-        for object in drugList.fetchedObjects! {
-            if let drug = object as DrugEpisode? {
-                print("name: \(drug.name)")
-                print("startDate: \(drug.startDate)")
-                print("isCurrent: \(drug.isCurrent)")
-                print("----------")
-            }
-        }
-        */
+        
+        /*
+         print("returning from 'New Drug' and saving")
+         print("drugList now has \(drugList.fetchedObjects?.count) drugs")
+         for object in drugList.fetchedObjects! {
+         if let drug = object as DrugEpisode? {
+         print("name: \(drug.name)")
+         print("startDate: \(drug.startDate)")
+         print("isCurrent: \(drug.isCurrent)")
+         print("----------")
+         }
+         }
+         */
+
         
     }
     
@@ -581,7 +586,7 @@ extension DrugListViewController: UITableViewDataSource {
     
         let cell =
             tableView.dequeueReusableCell(
-                withIdentifier: cellIdentifier, for: indexPath as IndexPath)
+                withIdentifier: "drugListCell", for: indexPath)
                 as! DrugListCell
         
         configureCell(cell: cell, indexPath: indexPath)
@@ -692,7 +697,6 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
         
         switch type {
         case .insert:
-            print("drugList FRC will inserts new row")
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .delete:
             tableView.deleteRows(at: [indexPath!], with: .automatic)
@@ -712,7 +716,7 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
         
     }
     
-    func controller(controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType)
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
         let indexSet = NSIndexSet(index: sectionIndex)
         switch type {

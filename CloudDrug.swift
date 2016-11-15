@@ -37,11 +37,30 @@ class CloudDrug {
         let nameFirstCharacter = (displayName as NSString).substring(to: 1).uppercased()
         let nameRestString = (displayName as NSString).substring(from: 1).lowercased()
         displayName = nameFirstCharacter + nameRestString
-        self.substances = self.record.object(forKey: "ingredients") as! [String]
-        self.classes = self.record.object(forKey: "classes") as! [String]
-        self.doseUnit = self.record.object(forKey: "doseUnit") as! String
-        self.regular = self.record.object(forKey: "regular") as! Int
-        self.startingDoseInterval = TimeInterval(self.record.object(forKey: "startingDoseInterval") as! Double) * 3600
+        
+        if let names = self.record.object(forKey: "brandNames") as! [String]? {
+            self.brandNames = names
+        } else  { brandNames = [""] }
+        
+        if let substances = self.record.object(forKey: "medicineSubstances") as! [String]? {
+            self.substances = substances
+        } else { substances = [""] }
+        
+        if let objects = self.record.object(forKey: "classes") as! [String]? {
+            self.classes = objects
+        } else { classes = [""] }
+
+        if let unit = self.record.object(forKey: "doseUnit") as! String? {
+            self.doseUnit = unit
+        } else { doseUnit = "" }
+
+        if let reg = self.record.object(forKey: "regular") as! Int? {
+            self.regular = reg
+        } else { regular = 0 }
+
+        if let dI = self.record.object(forKey: "startingDoseEffectTime") as! Double? {
+            self.startingDoseInterval = TimeInterval(dI * 3600)
+        } else { startingDoseInterval = 0.0 }
         
         if self.record.object(forKey: "maxSingleDoses") != nil {
             self.maxSingleDoses = self.record.object(forKey: "maxSingleDoses") as? [Double]
@@ -55,8 +74,8 @@ class CloudDrug {
             self.startingDoses = self.record.object(forKey: "startingDoses") as! [Double]
         }
         
-        if self.record.object(forKey: "recommendDuration") != nil {
-            self.recommendDuration = TimeInterval((self.record.object(forKey: "recommendDuration") as? Double)!) * 24*3600
+        if self.record.object(forKey: "recommendedDuration") != nil {
+            self.recommendDuration = TimeInterval((self.record.object(forKey: "recommendedDuration") as? Double)!) * 24*3600
             
         }
         
