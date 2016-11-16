@@ -210,6 +210,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             }
             //                print("effectiveness of selected drug is \((drugList.objectAtIndexPath(indexPath) as! DrugEpisode).effectivenessStore)")
             cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
+            cell.ratingButton.sizeToFit()
             cell.ratingButton.addTarget(self, action: #selector(popUpRatingView(sender:)), for: .touchUpInside)
             cell.ratingButton.tag = indexPath.row
             cell.ratingButton.isEnabled = true
@@ -240,32 +241,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             print("error in DrugListVC - section number wrong: \(indexPath.section)")
         }
         
-    }
-    
-    func popUpRatingView(sender: UIButton) {
-        
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let ratingViewController = storyBoard.instantiateViewController(withIdentifier: "DrugRatingPopUp") as! DrugRating
-        let indexPath = IndexPath(row: sender.tag, section: 0)
-        let selectedDrug = drugList.object(at: indexPath) 
-        
-        ratingViewController.effectSelected = selectedDrug.returnEffect()
-        ratingViewController.sideEffectSelected = selectedDrug.returnSideEffect()
-        ratingViewController.sendingButtonInRow = sender.tag
-        
-        ratingViewController.modalPresentationStyle = .popover
-        ratingViewController.preferredContentSize = CGSize(width: 280, height: 360)
-        
-        
-        let popUpController = ratingViewController.popoverPresentationController
-        popUpController!.permittedArrowDirections = .any
-        popUpController!.sourceView = sender
-        popUpController?.sourceRect = sender.bounds
-        popUpController!.delegate = self
-        
-        // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
-        self.present(ratingViewController, animated: true, completion: nil)
-
     }
     
     func save() {
@@ -471,7 +446,34 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     }
     
     
-    // MARK: - UIPopoverPresentationController delegate methods
+    // MARK: - UIPopoverPresentationController methods
+    
+    func popUpRatingView(sender: UIButton) {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let ratingViewController = storyBoard.instantiateViewController(withIdentifier: "DrugRatingPopUp") as! DrugRating
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        let selectedDrug = drugList.object(at: indexPath)
+        
+        ratingViewController.effectSelected = selectedDrug.returnEffect()
+        ratingViewController.sideEffectSelected = selectedDrug.returnSideEffect()
+        ratingViewController.sendingButtonInRow = sender.tag
+        
+        ratingViewController.modalPresentationStyle = .popover
+        ratingViewController.preferredContentSize = CGSize(width: 280, height: 360)
+        
+        
+        let popUpController = ratingViewController.popoverPresentationController
+        popUpController!.permittedArrowDirections = .unknown
+        popUpController!.sourceView = sender
+        popUpController?.sourceRect = sender.bounds
+        popUpController!.delegate = self
+        
+        // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
+        self.present(ratingViewController, animated: true, completion: nil)
+        
+    }
+    
     
     
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
@@ -488,12 +490,13 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             let selectedDrug = drugList.object(at: indexPath)
             
             let cell = tableView.cellForRow(at: indexPath) as! DrugListCell
-            cell.ratingImageForButton(effect: presentedController.effectSelected, sideEffects: presentedController.sideEffectSelected)
-            // tableView.reloadRows(at: [indexPath], with: .automatic)
             
             selectedDrug.effectivenessVar = presentedController.effectSelected
             selectedDrug.sideEffectsVar = [presentedController.sideEffectSelected]
             selectedDrug.saveEffectAndSideEffects()
+            
+            cell.ratingImageForButton(effect: presentedController.effectSelected, sideEffects: presentedController.sideEffectSelected)
+            // tableView.reloadRows(at: [indexPath], with: .automatic)
             
             save()
         } else {
