@@ -11,9 +11,9 @@ import UIKit
 class DrugListCell: UITableViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var startDateLabel: UILabel!
     @IBOutlet weak var otherInfoLabel: UILabel!
     @IBOutlet weak var ratingButton: UIButton!
+    @IBOutlet weak var doseLabel: UILabel!
     
     var notRatedImage: UIImage!
     var goodRatingImages: [UIImage]!
@@ -35,7 +35,7 @@ class DrugListCell: UITableViewCell {
     
     override func prepareForReuse() {
         nameLabel.text = ""
-        startDateLabel.text = ""
+        doseLabel.text = ""
         ratingButton.setImage(UIImage(named: "3Gray"), for: .normal)
         ratingButton.setImage(UIImage(named: "3Gray"), for: .disabled)
         ratingButton.titleLabel?.text = ""

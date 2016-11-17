@@ -192,9 +192,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         formatter.dateFormat = "dd.MM.yy"
         
         if indexPath.row % 2 == 0 {
-            cell.backgroundColor = UIColor.lightGray
+            cell.backgroundColor = colorScheme.drugRowWhite
         } else {
-            cell.backgroundColor = UIColor.white
+            cell.backgroundColor = colorScheme.drugRowLightGray
         }
         
         switch indexPath.section {
@@ -202,7 +202,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
             cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-            cell.startDateLabel.text = ""
+            cell.doseLabel.text = aDrug.individualDoseString(index: 0, numberOnly: false)
             if aDrug.endDate != nil {
                 cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
             } else {
@@ -222,7 +222,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 cell.isUserInteractionEnabled = true
                 cell.accessoryType = .disclosureIndicator
                 cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.startDateLabel.text = aDrug.returnTimeOnDrug()
+                cell.doseLabel.text = aDrug.returnTimeOnDrug()
                 if aDrug.endDate != nil {
                     cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
                 } else { cell.otherInfoLabel.text = "no end date" }
@@ -233,7 +233,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 cell.nameLabel.text = "Discontinued"
                 cell.isUserInteractionEnabled = false
                 cell.accessoryType = .none
-                cell.startDateLabel.text = ""
+                cell.doseLabel.text = ""
                 cell.otherInfoLabel.text = "Full version required for details"
             }
 
@@ -509,6 +509,41 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     
     // MARK: - Navigation
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        
+        if identifier == "createNew" {
+            if inAppStore.checkDrugFormularyAccess() == false {
+                if (drugList.fetchedObjects?.count)! > 0 {
+                    
+                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                    let storeView = storyBoard.instantiateViewController(withIdentifier: "StoreViewID") as! StoreView
+                    
+                    storeView.modalPresentationStyle = .popover
+                    storeView.preferredContentSize = CGSize(width: 280, height: 360)
+                    
+                    
+//                    let popUpController = storeView.popoverPresentationController
+                    self.present(storeView, animated: true, completion: nil)
+                    /*
+                    popUpController!.permittedArrowDirections = .unknown
+                    popUpController!.sourceView = sender
+                    popUpController?.sourceRect = sender.bounds
+                    popUpController!.delegate = self
+                    */
+                    // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
+
+                    return false
+                } else {
+                    return true
+                }
+            } else {
+                return true
+            }
+        } else {
+            return true
+        }
+    }
+    
     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
 
@@ -521,11 +556,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     // if creating new drug don't pass anything and a new will be generated in nextTVC
                     nextViewController.drugFromList = drugList.object(at: indexPath as! IndexPath)
                 }
-            } else if segue.identifier == "createNew" {
-                
-                // check that IAP has been made
-                // otherwise alert that only one drug can be active and offer link to IAPStore
-                
             } else {
                 print("error createNew segue: destinationViewcontrolle not defined")
             }
@@ -597,7 +627,37 @@ extension DrugListViewController: UITableViewDataSource {
         return cell
     }
     
+    /*
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60 )
+        let header =
+        
+        let titleLabel = UILabel(frame: CGRect(x: 15, y: 20, width: 0, height:0))
+        
+        
+        
+    }
+    */
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        var textSize: CGFloat = 24
+        header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        header.textLabel?.sizeToFit()
+
+        while header.textLabel!.frame.height > view.frame.height {
+            textSize = textSize - 2
+            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+            header.textLabel?.sizeToFit()
+        }
+        
+        header.textLabel?.textColor = UIColor.white
+    }
+
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
         if let sectionInfo = drugList.sections?[section] {
             return sectionInfo.name
         } else {
@@ -605,7 +665,7 @@ extension DrugListViewController: UITableViewDataSource {
         }
 
     }
-    
+
 }
 
 // MARK: - TableView Delegate
