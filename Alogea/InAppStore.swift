@@ -101,12 +101,6 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         products = response.products
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: InAppStoreProductRequestCompleted), object: nil)
         
-        print("productRequest successful")
-        
-        for products in response.products {
-            print("valid product ID in InAppStore: \(products.localizedDescription)")
-        }
-        
         for invalidID in response.invalidProductIdentifiers {
             print("invalid product ID in InAppStore: \(invalidID)")
             // handle invalid product identifiers
@@ -205,25 +199,26 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         //        checkPurchasePersistence(transaction)
     }
     
-    /*
+    
     func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
         let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
-            SCNetworkReachabilityCreateWithAddress(nil, <#T##address: UnsafePointer<sockaddr>##UnsafePointer<sockaddr>#>)
-            SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0))
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                zeroSockAddress in
+                    SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+            }
         }
         var flags = SCNetworkReachabilityFlags()
-        if !SCNetworkReachabilityGetFlags(defaultRouteReachability as! SCNetworkReachability, &flags) {
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
             return false
         }
         let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
         let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
         return (isReachable && !needsConnection)
+
     }
-    */
-    
     //** DEBUG
     func checkPurchasePersistence(transaction: SKPaymentTransaction) {
         
@@ -231,9 +226,9 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         if let purchasedLocal: Bool = UserDefaults.standard.value(forKey: transaction.payment.productIdentifier) as? Bool {
             print("local storage of FullVersion purchase is \(purchasedLocal)")
         }
-        if let purchasediCloud: Bool = NSUbiquitousKeyValueStore.default().bool(forKey: transaction.payment.productIdentifier) {
-            print("iCloud storage of FullVersion purchase is \(purchasediCloud)")
-        }
+        
+        let purchasediCloud = NSUbiquitousKeyValueStore.default().bool(forKey: transaction.payment.productIdentifier)
+        print("iCloud storage of FullVersion purchase is \(purchasediCloud)")
         
     }
     
