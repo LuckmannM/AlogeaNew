@@ -19,6 +19,8 @@ class StoreView: UITableViewController {
         formatter.numberStyle = .currency
         return formatter
     }()
+    
+    var rootView: UIViewController!
         
     // MARK: - ViewController methods
     

@@ -517,20 +517,13 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     
                     let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                     let storeView = storyBoard.instantiateViewController(withIdentifier: "StoreViewID") as! StoreView
+                    storeView.rootView = self
                     
                     storeView.modalPresentationStyle = .popover
                     storeView.preferredContentSize = CGSize(width: 280, height: 360)
                     
                     
-//                    let popUpController = storeView.popoverPresentationController
-                    self.present(storeView, animated: true, completion: nil)
-                    /*
-                    popUpController!.permittedArrowDirections = .unknown
-                    popUpController!.sourceView = sender
-                    popUpController?.sourceRect = sender.bounds
-                    popUpController!.delegate = self
-                    */
-                    // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
+                    self.navigationController!.pushViewController(storeView, animated: true)
 
                     return false
                 } else {

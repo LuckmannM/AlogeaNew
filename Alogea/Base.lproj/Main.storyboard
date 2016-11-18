@@ -552,13 +552,10 @@
                             <outlet property="delegate" destination="g2j-gh-JYh" id="J6Y-Q3-EiX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="0bx-lI-wxl">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="JqF-YK-mTU"/>
-                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p4H-4b-yTo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4880.8000000000002" y="1537.7811094452775"/>
+            <point key="canvasLocation" x="3942" y="1533"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sx4-I1-IEg">
@@ -780,24 +777,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BFI-gp-pjh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3941" y="320"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="caI-OS-W5x">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JFw-9d-ZsR" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="akI-k9-VQk">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="g2j-gh-JYh" kind="relationship" relationship="rootViewController" id="jz0-EH-62w"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lFg-bs-FwC" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3941.5999999999999" y="1537.7811094452775"/>
         </scene>
     </scenes>
     <resources>
