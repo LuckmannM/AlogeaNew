@@ -11,7 +11,8 @@ import UIKit
 class StoreView: UITableViewController {
     
     var inAppStore = InAppStore.sharedInstance()
-    var defaultMessage = String()
+    var defaultMessage1 = String()
+    var defaultMessage2 = String()
     
     lazy var priceFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -26,7 +27,7 @@ class StoreView: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.tabBarController?.tabBar.isHidden = true
         
         if inAppStore.products == nil {
             inAppStore.refreshProductRequest()
@@ -123,9 +124,11 @@ class StoreView: UITableViewController {
             return inAppStore.products!.count
         } else {
             if inAppStore.isConnectedToNetwork() {
-                defaultMessage = "There are currently no products available"
+                defaultMessage1 = "We are sorry!"
+                defaultMessage2 = "Expansions currently unavailable. Please try again later"
             } else {
-                defaultMessage = "No network connection - can't connect to the App Store"
+                defaultMessage1 = "No network connection"
+                defaultMessage2 = "can't connect to App Store. Please try again when connected to the internet"
             }
             return 1
         }
@@ -154,22 +157,16 @@ class StoreView: UITableViewController {
                 cell.priceLabel.text = priceFormatter.string(from: product.price)
                 cell.buyButton.tag = indexPath.row
                 cell.accessoryType = .none
+                cell.buyButton.isEnabled = true
             }
         } else {
             
-            cell.titleLabel.text = defaultMessage
-            cell.descriptionLabel.text = ""
+            cell.titleLabel.text = defaultMessage1
+            cell.descriptionLabel.text = defaultMessage2
             var titleTextSize: CGFloat = 28
             cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: titleTextSize)
-            
-            while cell.titleLabel.frame.size.width > self.view.frame.width * 0.7 {
-                titleTextSize = titleTextSize - 2
-                cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: titleTextSize)
-                cell.titleLabel.sizeToFit()
-                
-            }
-
             cell.priceLabel.text = ""
+            cell.buyButton.isEnabled = false
         }
         
         // cell.titleLabel.sizeToFit()
@@ -243,15 +240,15 @@ class StoreView: UITableViewController {
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+
+        print("segue back")
+        rootView.tabBarController?.tabBar.isHidden = false
     }
-    */
+
 
 }
 

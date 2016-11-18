@@ -53,6 +53,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         super.viewWillAppear(animated)
         
         // stack.updateContextWithUbiquitousChangesObserver = true
+        self.tabBarController?.tabBar.isHidden = false
         drugCurrentStatusUpdate()
         fetchDrugList()
         
@@ -81,8 +82,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
         drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
-        
-//        tableView.register(DrugListCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -527,7 +526,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                         
                         storeView.modalPresentationStyle = .popover
                         storeView.preferredContentSize = CGSize(width: 280, height: 360)
-                        
                         
                         self.navigationController!.pushViewController(storeView, animated: true)
                         
