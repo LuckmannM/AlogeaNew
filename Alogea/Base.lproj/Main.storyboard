@@ -296,7 +296,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="g1m-XB-TE4">
                             <connections>
-                                <segue destination="ydz-SS-MW0" kind="show" identifier="createNew" id="5bR-q3-pkn"/>
+                                <segue destination="ydz-SS-MW0" kind="show" identifier="createNew" id="vsx-kj-81V"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -494,7 +494,7 @@
             </objects>
             <point key="canvasLocation" x="4873" y="847"/>
         </scene>
-        <!--Purchase additions-->
+        <!--Store View-->
         <scene sceneID="hhF-Zv-P9z">
             <objects>
                 <tableViewController storyboardIdentifier="StoreViewID" id="g2j-gh-JYh" customClass="StoreView" customModule="Alogea" customModuleProvider="target" sceneMemberID="viewController">
@@ -552,17 +552,13 @@
                             <outlet property="delegate" destination="g2j-gh-JYh" id="J6Y-Q3-EiX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Purchase additions" id="ftd-Bs-RqD">
-                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="TKj-Ir-nHQ">
-                            <connections>
-                                <action selector="dismissWithSender:" destination="g2j-gh-JYh" id="svJ-QV-Och"/>
-                            </connections>
-                        </barButtonItem>
+                    <navigationItem key="navigationItem" id="0bx-lI-wxl">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="JqF-YK-mTU"/>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p4H-4b-yTo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3942" y="1538"/>
+            <point key="canvasLocation" x="4880.8000000000002" y="1537.7811094452775"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sx4-I1-IEg">
@@ -786,22 +782,22 @@
             <point key="canvasLocation" x="3941" y="320"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="FHR-ev-z5l">
+        <scene sceneID="caI-OS-W5x">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="egO-Mx-mIp" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JFw-9d-ZsR" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qaP-hh-Ms0">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="akI-k9-VQk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="g2j-gh-JYh" kind="relationship" relationship="rootViewController" id="SO1-r6-Yt1"/>
+                        <segue destination="g2j-gh-JYh" kind="relationship" relationship="rootViewController" id="jz0-EH-62w"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fmC-jf-Qnu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lFg-bs-FwC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3246" y="1538"/>
+            <point key="canvasLocation" x="3941.5999999999999" y="1537.7811094452775"/>
         </scene>
     </scenes>
     <resources>
@@ -817,6 +813,6 @@
         <image name="PainBucket_Yellow" width="45" height="38"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="nY9-FP-HZt"/>
+        <segue reference="vsx-kj-81V"/>
     </inferredMetricsTieBreakers>
 </document>

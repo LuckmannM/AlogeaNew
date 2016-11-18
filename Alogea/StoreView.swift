@@ -19,10 +19,13 @@ class StoreView: UITableViewController {
         formatter.numberStyle = .currency
         return formatter
     }()
-    
+        
     // MARK: - ViewController methods
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
         if inAppStore.products == nil {
             inAppStore.refreshProductRequest()
         }
