@@ -302,6 +302,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="actionButton" destination="GRL-k9-w1A" id="d0E-59-oUv"/>
+                        <outlet property="addButton" destination="g1m-XB-TE4" id="Kmz-E9-d2h"/>
                         <outlet property="tableView" destination="Z9i-hD-5I7" id="GIg-81-NTR"/>
                         <segue destination="ydz-SS-MW0" kind="show" identifier="editDrug" id="nY9-FP-HZt"/>
                     </connections>
@@ -501,7 +502,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="1yR-sY-7vy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.3977748156" green="0.46152013539999998" blue="0.42404398319999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="storeCell" rowHeight="150" id="fgj-ya-uQ7" customClass="StoreViewCell" customModule="Alogea" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="56" width="375" height="150"/>
@@ -510,31 +511,46 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ProductTitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FYD-B8-5Ps">
-                                            <rect key="frame" x="8" y="18" width="158" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FYD-B8-5Ps" customClass="DescriptionLabel" customModule="Alogea" customModuleProvider="target">
+                                            <rect key="frame" x="8" y="13" width="270" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                            <nil key="textColor"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="ProductTitle">
+                                                    <attributes>
+                                                        <font key="NSFont" size="28" name="HelveticaNeue-Light"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aNd-63-DXk">
-                                            <rect key="frame" x="325" y="18" width="39" height="21"/>
+                                            <rect key="frame" x="318" y="18" width="46" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="FFQ-Yz-iTl">
-                                            <rect key="frame" x="8" y="56" width="270" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="FFQ-Yz-iTl" customClass="DescriptionLabel" customModule="Alogea" customModuleProvider="target">
+                                            <rect key="frame" x="8" y="56" width="270" height="88"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="Description">
+                                                    <attributes>
+                                                        <font key="NSFont" size="20" name="HelveticaNeue"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2mX-Ce-6UI">
-                                            <rect key="frame" x="318" y="111" width="46" height="30"/>
+                                            <rect key="frame" x="318" y="116" width="46" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                             <state key="normal" title="Buy"/>
+                                            <connections>
+                                                <action selector="buyButtonActionWithSender:" destination="g2j-gh-JYh" eventType="touchUpInside" id="jQx-ge-SVp"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -555,7 +571,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p4H-4b-yTo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3942" y="1533"/>
+            <point key="canvasLocation" x="3941.5999999999999" y="1532.3838080959522"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sx4-I1-IEg">

@@ -18,6 +18,8 @@ class StoreViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        descriptionLabel.adjustsFontSizeToFitWidth = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

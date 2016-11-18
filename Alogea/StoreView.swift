@@ -34,10 +34,6 @@ class StoreView: UITableViewController {
         
     }
     
-    @IBAction func dismiss(sender: AnyObject) {
-        self.navigationController?.popToRootViewController(animated: true)
-    }
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +51,8 @@ class StoreView: UITableViewController {
         if inAppStore.isConnectedToNetwork() == false {
             noNetworkAlert()
         }
+        
+        tableView.allowsSelection = false
 }
     
     deinit {
@@ -76,11 +74,21 @@ class StoreView: UITableViewController {
         
         alert.addAction(goBackAction)
         alert.addAction(stayAction)
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            let popUpController = alert.popoverPresentationController
+            popUpController!.permittedArrowDirections = .up
+            popUpController?.sourceView = self.view
+        }
+        
+
         self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func buyButtonAction(sender: UIButton) {
-        self.inAppStore.createPurchaseRequest(product: self.inAppStore.products![sender.tag])
+        
+        print("request to buy product \(sender.tag)")
+        //self.inAppStore.createPurchaseRequest(product: self.inAppStore.products![sender.tag])
         
     }
 
@@ -129,13 +137,15 @@ class StoreView: UITableViewController {
 
         if inAppStore.products != nil {
             let product = inAppStore.products![indexPath.row]
+            cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: 28)
             cell.titleLabel.text = product.localizedTitle
-            cell.descriptionLabel.text = product.localizedDescription
             
+            // cell.descriptionLabel.font = UIFont(name: "AvenirNext-Regular", size: 14)
+            cell.descriptionLabel.text = product.localizedDescription
+           
             if inAppStore.purchasedProductIDs.contains(product.productIdentifier) {
-                //                cell.accessoryType = .Checkmark
+                cell.accessoryType = .checkmark
                 //                cell.accessoryView = nil
-                //                cell.productPrice.text = ""
                 cell.buyButton.isEnabled = false
                 cell.priceLabel.text = "purchased"
             }
@@ -143,23 +153,59 @@ class StoreView: UITableViewController {
                 priceFormatter.locale = product.priceLocale
                 cell.priceLabel.text = priceFormatter.string(from: product.price)
                 cell.buyButton.tag = indexPath.row
-//                cell.buyButton.addTarget(self, action: #selector(InAppStoreViewController.buyButtonAction(_:)), forControlEvents: .TouchUpInside)
                 cell.accessoryType = .none
             }
         } else {
+            
             cell.titleLabel.text = defaultMessage
+            cell.descriptionLabel.text = ""
+            var titleTextSize: CGFloat = 28
+            cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: titleTextSize)
+            
+            while cell.titleLabel.frame.size.width > self.view.frame.width * 0.7 {
+                titleTextSize = titleTextSize - 2
+                cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: titleTextSize)
+                cell.titleLabel.sizeToFit()
+                
+            }
+
             cell.priceLabel.text = ""
         }
         
-        cell.titleLabel.sizeToFit()
-        cell.descriptionLabel.sizeToFit()
+        // cell.titleLabel.sizeToFit()
+        // cell.descriptionLabel.sizeToFit()
         cell.priceLabel.sizeToFit()
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        return self.view.frame.height / 4
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        return "The Alogea Store"
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 75
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        let header = view as! UITableViewHeaderFooterView
+        var textSize: CGFloat = 24
+        header.textLabel?.font = UIFont(name: "AvenirNext-Bold", size: textSize)
+        header.textLabel?.sizeToFit()
+        
+        while header.textLabel!.frame.height > view.frame.height {
+            textSize = textSize - 2
+            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+            header.textLabel?.sizeToFit()
+        }
+        
+        header.textLabel?.textColor = ColorScheme.sharedInstance().lightGray
     }
 
     /*
@@ -207,4 +253,14 @@ class StoreView: UITableViewController {
     }
     */
 
+}
+
+class DescriptionLabel: UILabel {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.preferredMaxLayoutWidth =  self.frame.width
+    }
+    
+    
 }

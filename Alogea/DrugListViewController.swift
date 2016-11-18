@@ -13,6 +13,7 @@ import MessageUI
 
 class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate {
     
+    @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var actionButton: UIBarButtonItem!
     
@@ -515,15 +516,40 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             if inAppStore.checkDrugFormularyAccess() == false {
                 if (drugList.fetchedObjects?.count)! > 0 {
                     
-                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                    let storeView = storyBoard.instantiateViewController(withIdentifier: "StoreViewID") as! StoreView
-                    storeView.rootView = self
+                    let purchaseAlert = UIAlertController(title: "Free version limit", message: "to add medicines you need to purchase an expansion.    Alternatively, you can delete the existing medicine and create another", preferredStyle: .actionSheet)
                     
-                    storeView.modalPresentationStyle = .popover
-                    storeView.preferredContentSize = CGSize(width: 280, height: 360)
+                    let goToStore = UIAlertAction(title: "View expansions", style: UIAlertActionStyle.default, handler: { (storeAction)
+                        -> Void in
+                        
+                        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                        let storeView = storyBoard.instantiateViewController(withIdentifier: "StoreViewID") as! StoreView
+                        storeView.rootView = self
+                        
+                        storeView.modalPresentationStyle = .popover
+                        storeView.preferredContentSize = CGSize(width: 280, height: 360)
+                        
+                        
+                        self.navigationController!.pushViewController(storeView, animated: true)
+                        
+                    })
+                    
+                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: { (cancelAction)
+                        -> Void in
+                        
+                        //do nothing and dimiss
+                    })
+                    
+                    purchaseAlert.addAction(goToStore)
+                    purchaseAlert.addAction(cancelAction)
+                    
+                    if UIDevice().userInterfaceIdiom == .pad {
+                        let popUpController = purchaseAlert.popoverPresentationController
+                        popUpController!.permittedArrowDirections = .up
+                        popUpController?.barButtonItem = addButton
+                    }
                     
                     
-                    self.navigationController!.pushViewController(storeView, animated: true)
+                    self.present(purchaseAlert, animated: true, completion: nil)
 
                     return false
                 } else {
