@@ -38,6 +38,8 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
     var availableProductIDs = Set<ProductIdentifier>()
     var purchasedProductIDs = Set<ProductIdentifier>()
     
+    var callingViewController: UIViewController?
+    
     override init() {
         super.init()
         
@@ -115,9 +117,13 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         productRequest = nil
     }
     
-    func createPurchaseRequest(product: SKProduct) {
+    func createPurchaseRequest(product: SKProduct, fromViewController: UIViewController?) {
         let payment = SKMutablePayment(product: product)
         payment.quantity = 1
+        
+        if fromViewController != nil {
+            callingViewController = fromViewController!
+        }
         
         SKPaymentQueue.default().add(payment)
     }
@@ -172,12 +178,34 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
     }
     
     func transactionFailed(transaction: SKPaymentTransaction) {
+        
         print("transaction failed")
         // if transaction.error!.code != SKErrorCode.PaymentCancelled {
+        
         if transaction.transactionState == SKPaymentTransactionState.failed {
             //        if transaction.error!.code != SKErrorCode.PaymentCancelled {
             print("Transaction error: \(transaction.error!.localizedDescription)")
-            //        }
+            
+            if callingViewController != nil {
+                let alert = UIAlertController(title: "Purchase error", message: transaction.error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                
+                let dismiss = UIAlertAction(title: "Dimiss", style: UIAlertActionStyle.cancel, handler: {
+                    (alert) -> Void in
+                })
+                
+                alert.addAction(dismiss)
+                
+                if UIDevice().userInterfaceIdiom == .pad {
+                    let popUpController = alert.popoverPresentationController
+                    popUpController!.permittedArrowDirections = .up
+                    popUpController?.sourceView = callingViewController!.view
+                }
+                
+                
+                callingViewController!.present(alert, animated: true, completion: nil)
+                
+            }
+ 
         }
         SKPaymentQueue.default().finishTransaction(transaction)
     }

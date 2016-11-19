@@ -11,15 +11,16 @@ import UIKit
 class StoreViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var buyButton: UIButton!
+    @IBOutlet weak var backgroundImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
         descriptionLabel.adjustsFontSizeToFitWidth = true
+        buyButton.setBackgroundImage(UIImage(named: "PriceButtonBG"), for: .normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -33,9 +34,7 @@ class StoreViewCell: UITableViewCell {
         
         titleLabel.text = ""
         descriptionLabel.text = ""
-        priceLabel.text = ""
-        // backgroundImage.image = nil
-        // productIcon.image = nil
+        buyButton.titleLabel?.text = ""
     }
 
 

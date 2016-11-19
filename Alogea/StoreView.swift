@@ -88,8 +88,7 @@ class StoreView: UITableViewController {
     
     @IBAction func buyButtonAction(sender: UIButton) {
         
-        print("request to buy product \(sender.tag)")
-        //self.inAppStore.createPurchaseRequest(product: self.inAppStore.products![sender.tag])
+        self.inAppStore.createPurchaseRequest(product: self.inAppStore.products![sender.tag], fromViewController: self)
         
     }
 
@@ -125,7 +124,7 @@ class StoreView: UITableViewController {
         } else {
             if inAppStore.isConnectedToNetwork() {
                 defaultMessage1 = "We are sorry!"
-                defaultMessage2 = "Expansions currently unavailable. Please try again later"
+                defaultMessage2 = "Expansions are currently unavailable. Please try again later"
             } else {
                 defaultMessage1 = "No network connection"
                 defaultMessage2 = "can't connect to App Store. Please try again when connected to the internet"
@@ -140,39 +139,56 @@ class StoreView: UITableViewController {
 
         if inAppStore.products != nil {
             let product = inAppStore.products![indexPath.row]
-            cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: 28)
-            cell.titleLabel.text = product.localizedTitle
+            let text = NSAttributedString(
+                string: product.localizedTitle,
+                attributes: [NSFontAttributeName: UIFont(name: "HelveticaNeue-Light", size: 28)!,
+                             NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue,
+                             NSUnderlineColorAttributeName: UIColor.black
+                ]
+            )
+            cell.titleLabel.attributedText = text
             
-            // cell.descriptionLabel.font = UIFont(name: "AvenirNext-Regular", size: 14)
             cell.descriptionLabel.text = product.localizedDescription
            
             if inAppStore.purchasedProductIDs.contains(product.productIdentifier) {
                 cell.accessoryType = .checkmark
-                //                cell.accessoryView = nil
                 cell.buyButton.isEnabled = false
-                cell.priceLabel.text = "purchased"
+                cell.buyButton.setTitle("purchased", for: .normal)
             }
             else {
                 priceFormatter.locale = product.priceLocale
-                cell.priceLabel.text = priceFormatter.string(from: product.price)
+                let title = NSAttributedString(
+                    string: priceFormatter.string(from: product.price)!,
+                    attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 24)!,
+                                 NSForegroundColorAttributeName: UIColor.white]
+                )
+
+                cell.buyButton.setAttributedTitle(title, for: .normal)
                 cell.buyButton.tag = indexPath.row
                 cell.accessoryType = .none
                 cell.buyButton.isEnabled = true
             }
+            
+            switch indexPath.row {
+                case 0:
+                    cell.backgroundImageView.image = UIImage(named:"NoLimitsBG")
+                case 1:
+                    cell.backgroundImageView.image = UIImage(named:"UnlimitedSymptomsBG")
+                case 2:
+                    cell.backgroundImageView.image = UIImage(named:"UnlimitedMedicinesBG")
+                default:
+                cell.backgroundImageView = nil
+            }
+            
         } else {
             
             cell.titleLabel.text = defaultMessage1
             cell.descriptionLabel.text = defaultMessage2
-            var titleTextSize: CGFloat = 28
-            cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: titleTextSize)
-            cell.priceLabel.text = ""
+            cell.titleLabel.font = UIFont(name: "AvenirNext-Regular", size: 28)
+            cell.buyButton.setTitle("£-.-", for: .normal)
             cell.buyButton.isEnabled = false
         }
-        
-        // cell.titleLabel.sizeToFit()
-        // cell.descriptionLabel.sizeToFit()
-        cell.priceLabel.sizeToFit()
-        
+
         return cell
     }
     
@@ -242,13 +258,6 @@ class StoreView: UITableViewController {
 
 
     // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        print("segue back")
-        rootView.tabBarController?.tabBar.isHidden = false
-    }
-
 
 }
 

@@ -511,23 +511,20 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FYD-B8-5Ps" customClass="DescriptionLabel" customModule="Alogea" customModuleProvider="target">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoLimitsBG" translatesAutoresizingMaskIntoConstraints="NO" id="nQl-EM-wvE" userLabel="backgroundImageView">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FYD-B8-5Ps" customClass="DescriptionLabel" customModule="Alogea" customModuleProvider="target">
                                             <rect key="frame" x="8" y="13" width="270" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <attributedString key="attributedText">
                                                 <fragment content="ProductTitle">
                                                     <attributes>
                                                         <font key="NSFont" size="28" name="HelveticaNeue-Light"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                     </attributes>
                                                 </fragment>
                                             </attributedString>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Price" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aNd-63-DXk">
-                                            <rect key="frame" x="318" y="18" width="46" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
-                                            <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="FFQ-Yz-iTl" customClass="DescriptionLabel" customModule="Alogea" customModuleProvider="target">
@@ -543,21 +540,36 @@
                                             </attributedString>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2mX-Ce-6UI">
-                                            <rect key="frame" x="318" y="116" width="46" height="30"/>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2mX-Ce-6UI">
+                                            <rect key="frame" x="279" y="12" width="88" height="33"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                            <state key="normal" title="Buy"/>
+                                            <state key="normal">
+                                                <attributedString key="attributedTitle">
+                                                    <fragment content="Buy">
+                                                        <attributes>
+                                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <font key="NSFont" size="24" name="AvenirNext-DemiBold"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                            </state>
                                             <connections>
                                                 <action selector="buyButtonActionWithSender:" destination="g2j-gh-JYh" eventType="touchUpInside" id="jQx-ge-SVp"/>
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="nQl-EM-wvE" firstAttribute="leading" secondItem="xt6-gv-TfB" secondAttribute="leading" id="5qa-k0-mS9"/>
+                                        <constraint firstItem="nQl-EM-wvE" firstAttribute="top" secondItem="xt6-gv-TfB" secondAttribute="top" id="DEj-K3-bmP"/>
+                                        <constraint firstAttribute="bottom" secondItem="nQl-EM-wvE" secondAttribute="bottom" id="W3o-hu-l6P"/>
+                                        <constraint firstAttribute="trailing" secondItem="nQl-EM-wvE" secondAttribute="trailing" id="mYK-Cm-eUe"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="backgroundImageView" destination="nQl-EM-wvE" id="Iw3-Qm-fpM"/>
                                     <outlet property="buyButton" destination="2mX-Ce-6UI" id="HY0-6o-jSB"/>
                                     <outlet property="descriptionLabel" destination="FFQ-Yz-iTl" id="3iq-3b-b1C"/>
-                                    <outlet property="priceLabel" destination="aNd-63-DXk" id="sos-n5-8r1"/>
                                     <outlet property="titleLabel" destination="FYD-B8-5Ps" id="0Vc-tC-9aB"/>
                                 </connections>
                             </tableViewCell>
@@ -803,6 +815,7 @@
         <image name="ExpoButton" width="45" height="53"/>
         <image name="GraphButtonBar" width="52" height="52"/>
         <image name="NewDrugButtonImage" width="25" height="25"/>
+        <image name="NoLimitsBG" width="375" height="167"/>
         <image name="PainBucket_Orange" width="45" height="38"/>
         <image name="PainBucket_Red" width="45" height="39"/>
         <image name="PainBucket_Yellow" width="45" height="38"/>
