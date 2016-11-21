@@ -96,15 +96,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAction))
         }
         
-        print("drug in NewDrug is \(theDrug?.name)")
-        
         cellRowHelper = NewDrugHelper()
         cellRowHelper.initHelper(regularly: theDrug!.regularly)
         
-//        inAppStore  = InAppStore.sharedInstance()
+        inAppStore  = InAppStore.sharedInstance()
         initiateClassObjects()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -162,7 +158,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     private func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
         
-        print("return from popOver")
     }
     
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -179,7 +174,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         }
         if textFieldOpen.isOpen {
             print("need to save open textField")
-            textFieldShouldReturn(textField: textFieldOpen.textField )
+            _ = textFieldShouldReturn(textFieldOpen.textField )
         }
         
         theDrug!.storeObjectAndNotifications()
@@ -374,8 +369,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             cell.isUserInteractionEnabled = false
         }
         
-        
-        
         switch cellName {
         // SECTION 0
         case "nameCell":
@@ -499,7 +492,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         }
     }
     
-    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -507,7 +500,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         var textField: UITextField!
         var detailLabel: UILabel!
         let cell = self.tableView.cellForRow(at: indexPath)
-        
+
         switch cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath) {
             
         // SECTI0N 0
@@ -745,6 +738,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         else { return 1 }
 
     }
+
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
@@ -755,16 +749,20 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
     }
     
-    private func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
-        if pickerView.isEqual(trialDurationPicker) { return trialDurationPickerValues[component][row] }
-        else if pickerView.isEqual(frequencyPicker) {return frequencyPickerValues[row] }
+        if pickerView.isEqual(trialDurationPicker) {
+            return trialDurationPickerValues[component][row]
+        }
+        else if pickerView.isEqual(frequencyPicker) {
+            return frequencyPickerValues[row]
+        }
         else if pickerView.isEqual(drugNamePicker) { return drugNamePickerValues[row] }
         else { return "" }
         
     }
     
-    private func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if pickerView.isEqual(trialDurationPicker) {
             if component == 1 {
@@ -789,7 +787,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     // MARK: - TextField functions
     
-    private func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         
         switch textFieldOpen.text{
         case "doseCell":
@@ -809,7 +807,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     func textFieldEntryAction(sender: UITextField) {
-        
         
         if sender.text == "" { return } // if no text was yet entered, ie. at the beginning
         
@@ -848,7 +845,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     if names.count > 1 {
                         dropDownButton.isEnabled = true
                     }
-                    print("drugNamePickerValues are \(drugNamePickerValues)")
                     sender.textColor = UIColor.gray
                 }
             }
@@ -866,10 +862,10 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     
-    private func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         textField.resignFirstResponder()
-        
+
         if textFieldOpen.isOpen == false {
             return false
         }
@@ -887,8 +883,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             print("textFieldOpen[3] is \(textFieldOpen.textField)")
             return false
         }
-        //        let textField = cell?.contentView.viewWithTag(textFieldTag) as! UITextField
-        
         switch textFieldOpen.text {
         case "nameCell":
             
@@ -901,7 +895,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     tableView.reloadData()
                 }
             }
-                // if titleLabel = "" as set in didSelectRow then take text entered in textField as name
             else if let entry = textField.text {
                 if entry != "" {
                     theDrug!.nameVar = entry
@@ -964,7 +957,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     func doneButton() {
-        textFieldShouldReturn(textField: textFieldOpen.textField)
+        _ = textFieldShouldReturn(textFieldOpen.textField)
     }
     
     /*

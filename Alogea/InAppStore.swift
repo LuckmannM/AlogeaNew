@@ -82,9 +82,7 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
     
     
     func checkDrugFormularyAccess() -> Bool {
-        
-        //        let predicate = NSPredicate(format: "(purchasedProductIDs contains %@)", argumentArray: ["FullVersion","OnlineFormularyAccess"])
-        
+               
         var qualifiesForAccess = false
         
         for productID in purchasedProductIDs {

@@ -513,11 +513,27 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         if identifier == "createNew" {
             if inAppStore.checkDrugFormularyAccess() == false {
-                if (drugList.fetchedObjects?.count)! > 0 {
+                
+                let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+                request.predicate = NSPredicate(format: "isCurrent = %@", "Current Medicines")
+                
+                var currentDrugs: [DrugEpisode]?
+                do {
+                    currentDrugs = try managedObjectContext.fetch(request)
+                }
+                catch let error as NSError {
+                    print("error fetching earliest selected event date in EventsDataController: \(error)")
+                }
+                
+                print("fetched current drugs")
+                print("there are \(currentDrugs?.count) drugs")
+                if currentDrugs == nil { return true }
+                
+                if currentDrugs!.count > 0 {
                     
-                    let purchaseAlert = UIAlertController(title: "Free version limit", message: "to add medicines you need to purchase an expansion.    Alternatively, you can delete the existing medicine and create another", preferredStyle: .actionSheet)
+                    let purchaseAlert = UIAlertController(title: "Free version limit", message: "To add more medicines please purchase the 'No Limits' or 'Unlimited Medicines' expansion.   Alternatively, you can end or delete the existing medicine and create another", preferredStyle: .actionSheet)
                     
-                    let goToStore = UIAlertAction(title: "View expansions", style: UIAlertActionStyle.default, handler: { (storeAction)
+                    let goToStore = UIAlertAction(title: "View expansion options", style: UIAlertActionStyle.default, handler: { (storeAction)
                         -> Void in
                         
                         let storyBoard = UIStoryboard(name: "Main", bundle: nil)

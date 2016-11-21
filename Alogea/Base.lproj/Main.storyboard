@@ -170,7 +170,7 @@
                             <outletCollection property="gestureRecognizers" destination="ko5-0R-WEF" appends="YES" id="AOX-UF-a2b"/>
                         </connections>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="ADY-CS-NDV"/>
+                    <tabBarItem key="tabBarItem" title="Diary" image="TabBar_GraphIcon" id="ADY-CS-NDV"/>
                     <navigationItem key="navigationItem" id="A2h-jV-1ed"/>
                     <connections>
                         <outlet property="displayTimeSegmentedController" destination="2f0-CN-u9e" id="RmA-Kq-crR"/>
@@ -334,7 +334,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" tag="50" contentMode="scaleAspectFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2F-lO-ry3">
-                                            <rect key="frame" x="302" y="10" width="25" height="25"/>
+                                            <rect key="frame" x="302" y="10.5" width="25" height="25"/>
                                             <state key="normal" image="NewDrugButtonImage">
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
@@ -402,13 +402,13 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="10" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2h9-4M-QMd">
-                                            <rect key="frame" x="21" y="11" width="34" height="21"/>
+                                            <rect key="frame" x="21" y="11.5" width="34" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <switch opaque="NO" tag="30" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JJk-YB-C8U">
-                                            <rect key="frame" x="296" y="6" width="51" height="31"/>
+                                            <rect key="frame" x="296" y="6.5" width="51" height="31"/>
                                         </switch>
                                     </subviews>
                                     <constraints>
@@ -593,10 +593,9 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" id="DiL-Kv-AKq">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="tintColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <color key="barTintColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="selectedImageTintColor" red="0.82753491400000001" green="0.8216925263" blue="0.73675972219999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="fls-XR-iXi"/>
@@ -607,11 +606,11 @@
             </objects>
             <point key="canvasLocation" x="2011.875" y="137.32394366197184"/>
         </scene>
-        <!--Item-->
+        <!--Medicines-->
         <scene sceneID="7h2-5G-N0M">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JrN-ze-uKm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="tSJ-Fx-tFL"/>
+                    <tabBarItem key="tabBarItem" title="Medicines" id="tSJ-Fx-tFL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wBy-Jl-6B7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -819,6 +818,7 @@
         <image name="PainBucket_Orange" width="45" height="38"/>
         <image name="PainBucket_Red" width="45" height="39"/>
         <image name="PainBucket_Yellow" width="45" height="38"/>
+        <image name="TabBar_GraphIcon" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="vsx-kj-81V"/>
