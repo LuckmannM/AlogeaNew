@@ -577,8 +577,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         }
     }
     
-    func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if let nextViewController = segue.destination as? NewDrug {
             nextViewController.rootViewController = self
@@ -589,9 +588,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     // if creating new drug don't pass anything and a new will be generated in nextTVC
                     nextViewController.drugFromList = drugList.object(at: indexPath as! IndexPath)
                 }
-            } else {
-                print("error createNew segue: destinationViewcontrolle not defined")
             }
+        } else {
+            print("error createNew segue: destinationViewcontrolle not defined")
         }
 
     }

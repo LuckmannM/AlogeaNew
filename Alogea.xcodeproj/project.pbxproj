@@ -26,6 +26,7 @@
 		2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */; };
 		2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */; };
 		2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA691DD8D2280063CCB4 /* InAppStore.swift */; };
+		265F9CA71DE309CA0031C762 /* DosesAndReminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F9CA61DE309CA0031C762 /* DosesAndReminders.swift */; };
 		267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */; };
 		267F78D11DC5264F008CC23E /* ClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78D01DC5264F008CC23E /* ClipView.swift */; };
 		269B9BFB1DDE52DE00C3BDA9 /* StoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */; };
@@ -91,6 +92,7 @@
 		2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrugDictionary.swift; path = ../DrugDictionary.swift; sourceTree = "<group>"; };
 		2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudDrug.swift; path = ../CloudDrug.swift; sourceTree = "<group>"; };
 		2657FA691DD8D2280063CCB4 /* InAppStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppStore.swift; sourceTree = "<group>"; };
+		265F9CA61DE309CA0031C762 /* DosesAndReminders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DosesAndReminders.swift; sourceTree = "<group>"; };
 		267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewHelper.swift; sourceTree = "<group>"; };
 		267F78D01DC5264F008CC23E /* ClipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipView.swift; sourceTree = "<group>"; };
 		269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreView.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				2645230D1DDB596B00D62CC1 /* DrugRating.swift */,
 				263DA0151DD764E500CD7963 /* NewDrug.swift */,
 				263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */,
+				265F9CA61DE309CA0031C762 /* DosesAndReminders.swift */,
 				263DA0101DD4660300CD7963 /* DrugListCell.swift */,
 				2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */,
 				2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */,
@@ -492,6 +495,7 @@
 				26E3B90A1DA1816E00D157BB /* Event+CoreDataClass.swift in Sources */,
 				26E3B9101DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift in Sources */,
 				2645C5DE1DD30E4100916596 /* PrintPageRenderer.swift in Sources */,
+				265F9CA71DE309CA0031C762 /* DosesAndReminders.swift in Sources */,
 				26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */,
 				2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */,
 				263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */,

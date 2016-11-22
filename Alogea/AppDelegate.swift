@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import UserNotifications
 
-var notificationsAuthorised: Bool = false
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var tabBarViews: [UIViewController]!
+    
+    var reminderNotificationCategoryRegistered = false
+    
+    var notificationsAuthorised: Bool = false
+    var authorisedNotificationSettings: UNNotificationSettings?
     
     lazy var stack : CoreDataStack = {
         let options  = [NSPersistentStoreUbiquitousContentNameKey: "Alogea", NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true] as [String : Any]
@@ -78,8 +83,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             
-            notificationsAuthorised = granted
+            self.notificationsAuthorised = granted
+            self.updateAuthorisedNotifications()
         }
+    }
+    
+    func updateAuthorisedNotifications() {
+        UNUserNotificationCenter.current().getNotificationSettings(completionHandler: {
+            (settings) in
+            self.authorisedNotificationSettings = settings
+            if settings.authorizationStatus == UNAuthorizationStatus.authorized {
+                self.notificationsAuthorised = true
+            } else {
+                self.notificationsAuthorised = false
+            }
+        })
+        
     }
     
     func registerNotificationCategories() {
@@ -89,7 +108,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             (categories) in
             
             for category in categories {
-                if category.identifier == "drugReminderCategory" { return }
+                if category.identifier == "drugReminderCategory" {
+                    print("drugReminderCategory found as already registered")
+                    self.reminderNotificationCategoryRegistered = true
+                    return
+                }
             }
 
         })

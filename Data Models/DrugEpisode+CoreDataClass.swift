@@ -60,7 +60,7 @@ public class DrugEpisode: NSManagedObject {
         return formatter
     }()
     
-    let frequencyTerms:[(String, Double)] = [("hourly",3600.0),("6x per day",4*3600.0),("4x per day",6*3600.0),("3x per day",8*3600.0),("twice daily",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
+    let frequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("4x per day",6*3600.0),("3x per day",8*3600.0),("twice daily",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
     
     var times = [""]
     var doseTimeDates = [Date]() {
@@ -196,11 +196,11 @@ public class DrugEpisode: NSManagedObject {
         doseTimeDates = [startDateVar]
         
         let calendar = NSCalendar.current
-        if frequency == 0 { frequency = 24 * 3600 }
-        if frequency < 24*3600 {
-            let dailyDoses = Int((24*3600)/frequency)
+        if frequencyVar == 0 { frequencyVar = 24 * 3600 }
+        if frequencyVar < 24*3600 {
+            let dailyDoses = Int((24*3600)/frequencyVar)
             for i in 1..<dailyDoses {
-                let dosingInterval_hours = frequency * Double(i)
+                let dosingInterval_hours = frequencyVar * Double(i)
                 let components: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
                 var newDateComponents = calendar.dateComponents(components, from: startDateVar.addingTimeInterval(dosingInterval_hours))
                 newDateComponents.second = 0
@@ -215,7 +215,7 @@ public class DrugEpisode: NSManagedObject {
         var dailyDoses = 1
         if frequencyVar == 0 { frequencyVar = 24 * 3600 }
         if frequencyVar < 24*3600 {
-            dailyDoses = Int((24*3600)/frequency)
+            dailyDoses = Int((24*3600)/frequencyVar)
         }
         return dailyDoses
     }
@@ -423,7 +423,7 @@ public class DrugEpisode: NSManagedObject {
         
         if cancelExisting { cancelNotifications() }
         
-        guard notificationsAuthorised else {
+        guard (UIApplication.shared.delegate as! AppDelegate).notificationsAuthorised else {
             return
         }
         
@@ -599,6 +599,7 @@ public class DrugEpisode: NSManagedObject {
             let (presetTerm,duration) = aTerm
             if term == presetTerm {
                 frequencyVar = duration
+                return
             }
         }
     }
