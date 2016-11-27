@@ -82,6 +82,14 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
         drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
+        
+        print("drugList first load")
+        if drugList.fetchedObjects != nil {
+            for object in drugList.fetchedObjects! {
+                print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
+            }
+        }
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -103,6 +111,12 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             try drugList.performFetch()
         } catch let error as NSError {
             print("Error fetching drugList \(error)")
+        }
+        
+        print("re-fetched drugList:...")
+        
+        for object in drugList.fetchedObjects! {
+            print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
         }
         
     }
@@ -197,8 +211,16 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.backgroundColor = colorScheme.drugRowLightGray
         }
         
-        switch indexPath.section {
-        case 0: // CURRENT DRUGS
+        print("cell for \(aDrug.name) with status \(aDrug.isCurrent)")
+        
+       //  switch indexPath.section {
+        // DEBUG***
+        if aDrug.isCurrent == nil {
+            aDrug.isCurrent = "isCurrent error"
+        }
+        
+        switch aDrug.isCurrent! {
+        case "Current Medicines": // CURRENT DRUGS
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
             cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
@@ -216,7 +238,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.ratingButton.isEnabled = true
             
             
-        case 1: // DISCONTINUED DRUGS
+        case "Discontinued Medicines": // DISCONTINUED DRUGS
 
             if inAppStore.checkDrugFormularyAccess() == true {
                 cell.isUserInteractionEnabled = true
@@ -239,6 +261,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
         default:
             print("error in DrugListVC - section number wrong: \(indexPath.section)")
+            
+            // DEBUG
+            managedObjectContext.delete(drugList.object(at: indexPath))
         }
         
     }
@@ -719,13 +744,28 @@ extension DrugListViewController: UITableViewDelegate {
         let endAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "End", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
                 
-                let drugToStop = self.drugList.object(at: indexPath) 
+                print("start ending drug...")
+                let drugToStop = self.drugList.object(at: indexPath)
+                // option 1 fails when deleting the last Current Medicines Drug
                 drugToStop.setTheEndDate(date: Date())
                 drugToStop.storeObjectForEnding() // essential for FRC to change display
                 drugToStop.cancelNotifications()
-                self.save()
-                //self.fetchDrugList()
+                // option 2
+//                var changedDrug = DrugEpisode(context: self.managedObjectContext)
+//                changedDrug = drugToStop
+//                    print("changedDrug name \(changedDrug.name) and status \(changedDrug.isCurrent)")
+//                changedDrug.setTheEndDate(date: Date())
+//                changedDrug.storeObjectForEnding() // essential for FRC to change display
+//                changedDrug.cancelNotifications()
+//                    print("changedDrug name \(changedDrug.name) and status \(changedDrug.isCurrent) and endDate \(changedDrug.endDate)")
+//                self.managedObjectContext.insert(changedDrug)
+//                self.managedObjectContext.delete(drugToStop)
                 
+                //self.save()
+                print("finish ending drug...")
+                self.fetchDrugList()
+                tableView.reloadData()
+
         } )
         
         
@@ -799,8 +839,11 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
             let cell = tableView.cellForRow(at: indexPath!) as! DrugListCell!
             configureCell(cell: cell!, indexPath: indexPath!)
         case .move:
+            print("moving row at path \(indexPath)...")
+            print("to path \(newIndexPath)...")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
+            // tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
         
         if drugList.fetchedObjects != nil {
@@ -813,12 +856,18 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
-        let indexSet = NSIndexSet(index: sectionIndex)
+        
+        let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
         switch type {
         case .insert:
-            tableView.insertSections(indexSet as IndexSet, with: .automatic)
+            print("inserting section \(sectionInfo.name)")
+            tableView.insertSections(indexSet, with: .automatic)
         case .delete:
-            tableView.deleteSections(indexSet as IndexSet, with: .automatic)
+            print("deleting section \(sectionInfo.name)")
+           tableView.deleteSections(indexSet, with: .automatic)
+        case .update:
+            print("deleting section \(sectionInfo.name)")
+            tableView.reloadSections([sectionIndex], with: .automatic)
         default:
             break
         }

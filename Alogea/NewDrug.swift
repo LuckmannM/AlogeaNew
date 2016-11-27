@@ -129,39 +129,34 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     @IBAction
     func showDrugDetails(sender: UITableViewCell) {
         
-        print("drugDetails popOver not yet implemented")
-        
-        /*
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let ingredientsViewController = storyBoard.instantiateViewControllerWithIdentifier("IngredientsPopUp") as! Ingredient_ClassTVC
+        let ingredientsViewController = storyBoard.instantiateViewController(withIdentifier: "SubstanceAndClassPopUp") as! SubstanceAndClassPopUp
 
         let originViewRect = sender.contentView.frame
         
         let originRect: CGRect = CGRect(x: originViewRect.maxX , y: originViewRect.origin.y + 10, width: 25, height: 25)
         
-        ingredientsViewController.modalPresentationStyle = .Popover
-        ingredientsViewController.preferredContentSize = CGSizeMake(280, 144)
+        ingredientsViewController.modalPresentationStyle = .popover
+        ingredientsViewController.preferredContentSize = CGSize(width: 280, height: 144)
         ingredientsViewController.theDrug = theDrug
         
         
         let popUpController = ingredientsViewController.popoverPresentationController
-        popUpController!.permittedArrowDirections = .Any
+        popUpController!.permittedArrowDirections = .any
         popUpController!.sourceView = sender.contentView
         popUpController?.sourceRect = originRect
         popUpController!.delegate = self
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
-        self.presentViewController(ingredientsViewController, animated: true, completion: nil)
-       */
+        self.present(ingredientsViewController, animated: true, completion: nil)
     }
     
     
-    private func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
     }
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.none
     }
     
@@ -969,13 +964,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 destinationVC.callingViewController = self
             }
         } else if segue.identifier ==  "ingredientSegue" {
-            /*
-            if let destinationVC = segue.destinationViewController as? Ingredient_ClassTVC {
+
+            if let destinationVC = segue.destination as? SubstanceAndClassPopUp {
                 destinationVC.theDrug = theDrug
             }
-            */
         }
-            
         else {
             print("destinationVC from NewDrug could not be cast to DosesDetailTVC")
         }

@@ -93,6 +93,7 @@ public class DrugEpisode: NSManagedObject {
         startDate = calendar.date(from: newDateComponents) as NSDate?
         
         name = "name"
+        isCurrent = "Current Medicines"
         classesVar = ["classes"]
         ingredientsVar = ["substances"]
         regularly = true
@@ -354,6 +355,7 @@ public class DrugEpisode: NSManagedObject {
 
     func setTheEndDate(date: Date) {
         endDateVar = date
+        endDate = endDateVar as NSDate?
         isCurrentUpdate()
         
     }
@@ -364,7 +366,7 @@ public class DrugEpisode: NSManagedObject {
         if ingredientsVar != nil {
             ingredients = NSKeyedArchiver.archivedData(withRootObject: ingredientsVar!) as NSData?
         }
-        if classes != nil {
+        if classesVar != nil {
             classes = NSKeyedArchiver.archivedData(withRootObject: classesVar!) as NSData?
         }
         startDate = startDateVar as NSDate?
@@ -378,7 +380,7 @@ public class DrugEpisode: NSManagedObject {
         sideEffects = NSKeyedArchiver.archivedData(withRootObject: sideEffectsVar!) as NSData?
         isCurrent = "Discontinued Medicines"
         isCurrentUpdate()
-        
+
     }
 
     // MARK: - Notifications
@@ -558,7 +560,7 @@ public class DrugEpisode: NSManagedObject {
             if minimum == maximum {
                 doses$ = frequencyString() + "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar
             } else {
-                doses$ = frequencyString() + ", " + numberFormatter.string(from: NSNumber( value: minimum!))! + "-" + numberFormatter.string(from: NSNumber( value: minimum!))! + doseUnitVar
+                doses$ = frequencyString() + ", " + numberFormatter.string(from: NSNumber( value: minimum!))! + "-" + numberFormatter.string(from: NSNumber( value: maximum!))! + doseUnitVar
             }
         } else { // as required drugs only have one dose
             doses$ = "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar
@@ -689,6 +691,39 @@ public class DrugEpisode: NSManagedObject {
         effectiveness = effectivenessVar
         sideEffects = NSKeyedArchiver.archivedData(withRootObject: sideEffectsVar ?? [""]) as NSData?
     }
+
+    // MARK: - SubstanceAndClassPopUp methods
+    
+    func substancesString() -> String {
+        
+        if ingredientsVar?.count == 0 {
+            return "unkown"
+        } else if ingredientsVar?[0] == "ingredients" || ingredientsVar?[0] == "substances" {
+            return "unkown"
+        }
+        
+        var ingredient$ = String()
+        for aString in ingredientsVar! {
+            ingredient$ += aString + ", "
+        }
+        return (ingredient$ as NSString).substring(to: (ingredient$ as NSString).length - 2)
+    }
+    
+    func classesString() -> String {
+        
+        if (classesVar?.count)! == 0 {
+            return "unknown"
+        } else if classesVar?[0] == "classes" {
+            return "unkown"
+        }
+        
+        var class$ = String()
+        for aString in classesVar! {
+            class$ += aString + ", "
+        }
+        return (class$ as NSString).substring(to: (class$ as NSString).length - 2)
+    }
+
 
 
 
