@@ -34,9 +34,9 @@ class DrugListCell: UITableViewCell {
     //    }
     
     override func prepareForReuse() {
-        nameLabel.text = ""
-        doseLabel.text = ""
-        otherInfoLabel.text = ""
+        nameLabel.text = nil
+        doseLabel.text = nil
+        otherInfoLabel.text = nil
         ratingButton.setImage(UIImage(named: "3Gray"), for: .normal)
         ratingButton.setImage(UIImage(named: "3Gray"), for: .disabled)
         ratingButton.titleLabel?.text = ""

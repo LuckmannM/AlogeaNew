@@ -276,6 +276,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         do {
             try  managedObjectContext.save()
+            print("saving drugList moc")
         }
         catch let error as NSError {
             print("Error saving \(error)", terminator: "")
@@ -623,8 +624,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBAction
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
-        
+        print("DrugList - returning from NewDrug")
+
         save()
+        tableView.reloadData()
         
         /*
          print("returning from 'New Drug' and saving")
@@ -651,16 +654,18 @@ extension DrugListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         
-        if let sections = drugList.sections {
-            return sections.count
-        } else {
+        guard let sections = drugList.sections else {
             return 0
         }
+        print("drugList numberOfSections = \(sections.count)")
+        return sections.count
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if let sectionInfo = drugList.sections?[section] {
+            print("drugList numberOfObjects in section \(section) = \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects
         }
         else {
@@ -698,16 +703,19 @@ extension DrugListViewController: UITableViewDataSource {
     */
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        print("willDisplayHeaderView for section \(section)")
         let header = view as! UITableViewHeaderFooterView
-        var textSize: CGFloat = 24
+        var textSize: CGFloat = 22
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
 
-        while header.textLabel!.frame.height > view.frame.height {
-            textSize = textSize - 2
-            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
-            header.textLabel?.sizeToFit()
-        }
+//        while header.textLabel!.frame.height > view.frame.height {
+//            print("reducing headerView font size...")
+//            textSize = textSize - 2
+//            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+//            header.textLabel?.sizeToFit()
+//        }
         
         header.textLabel?.textColor = UIColor.white
     }
@@ -715,6 +723,8 @@ extension DrugListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
+        print("titleForSection \(section)")
+
         if let sectionInfo = drugList.sections?[section] {
             return sectionInfo.name
         } else {
@@ -743,28 +753,44 @@ extension DrugListViewController: UITableViewDelegate {
         
         let endAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "End", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
-                
+                print("")
                 print("start ending drug...")
-                let drugToStop = self.drugList.object(at: indexPath)
-                // option 1 fails when deleting the last Current Medicines Drug
-                drugToStop.setTheEndDate(date: Date())
-                drugToStop.storeObjectForEnding() // essential for FRC to change display
-                drugToStop.cancelNotifications()
-                // option 2
-//                var changedDrug = DrugEpisode(context: self.managedObjectContext)
-//                changedDrug = drugToStop
-//                    print("changedDrug name \(changedDrug.name) and status \(changedDrug.isCurrent)")
-//                changedDrug.setTheEndDate(date: Date())
-//                changedDrug.storeObjectForEnding() // essential for FRC to change display
-//                changedDrug.cancelNotifications()
-//                    print("changedDrug name \(changedDrug.name) and status \(changedDrug.isCurrent) and endDate \(changedDrug.endDate)")
-//                self.managedObjectContext.insert(changedDrug)
-//                self.managedObjectContext.delete(drugToStop)
                 
+                /*
+                modifying the last remaining object in a section (resulting in section delete) in the below way is interpreted by drugList FRC as and .update action, as while if an object remains in section (no section delete) the modification is a .move action.
+                This is because - when deleting the last row in section 0 ('Current Medicines')  - section 1 ('Discontinued Medicines') becomes section 0 and indexPath 0,0 remains 0,0 but is in the 'new' section 0
+                 However, the 'new' section 0 doesn't seem to receive a message that one row has been inserted in the process
+                in order to display correctly 
+                option 1 - the FRC .update method should use delete/insert or
+                option 2 - a new object/ copy of the old should be inserted and the old deleted
+                */
+                
+                guard let info = self.drugList.sections?[indexPath.section]  else {
+                    print("error in DrugList.editRowActions.endAction - section \(indexPath.section) doesn't exist")
+                    return
+                }
+                
+                let drugToStop = self.drugList.object(at: indexPath)
+                drugToStop.storeObjectForEnding(endingDate: Date()) // essential for FRC to change display
+
+                /*
+                if info.numberOfObjects > 1 {
+                    let drugToStop = self.drugList.object(at: indexPath)
+                    drugToStop.storeObjectForEnding(endingDate: Date()) // essential for FRC to change display
+                } else {
+                    let drugToMove = DrugEpisode(context: self.managedObjectContext)
+                    drugToMove.copyFromDrug(drugToCopy: self.drugList.object(at: indexPath) as DrugEpisode)
+                    drugToMove.storeObjectForEnding(endingDate: Date())
+                    
+                    // DELETE or INSERT first???
+                    self.managedObjectContext.delete(self.drugList.object(at: indexPath))
+                    self.managedObjectContext.insert(drugToMove)
+                }
+                */
+                print("...finish ending drug")
+                //self.tableView.reloadData()
                 //self.save()
-                print("finish ending drug...")
                 self.fetchDrugList()
-                tableView.reloadData()
 
         } )
         
@@ -807,7 +833,9 @@ extension DrugListViewController: UITableViewDelegate {
         deleteAction.backgroundColor = UIColor.red
         endAction.backgroundColor = UIColor.orange
         
-        if indexPath.section == 0 { return [endAction, deleteAction] }
+        let sectionInfo = drugList.sections?[indexPath.section]
+        
+        if sectionInfo?.name == "Current Medicines" { return [endAction, deleteAction] }
         else { return [deleteAction] }
     }
     
@@ -820,30 +848,53 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     
    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("drugList FRC will change content")
         tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 
         tableView.endUpdates()
+        print("drugList FRC finished changing content")
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        var sectionInfo: AnyObject?
+        var newSectionInfo: AnyObject?
         
+        if indexPath != nil {
+            sectionInfo = drugList.sections?[(indexPath?.section)!]
+        }
+        
+        if newIndexPath != nil {
+            newSectionInfo = drugList.sections?[(newIndexPath?.section)!]
+        }
+        
+        print("drugList FRC changed object: ...")
         switch type {
+        case .update:
+            print("update object at \(indexPath)")
+            print("name of section\(indexPath?.section) = \(sectionInfo?.name)")
+            print("name of section\(newIndexPath?.section) = \(newSectionInfo?.name)")
+            tableView.reloadRows(at: [indexPath!], with: .automatic)
+            /*
+             let cell = tableView.cellForRow(at: indexPath!) as! DrugListCell!
+             configureCell(cell: cell!, indexPath: indexPath!)
+             */
         case .insert:
+            print("inserting object @ \(newIndexPath)")
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .delete:
+            print("deleting object @ \(indexPath)")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
-        case .update:
-            let cell = tableView.cellForRow(at: indexPath!) as! DrugListCell!
-            configureCell(cell: cell!, indexPath: indexPath!)
         case .move:
-            print("moving row at path \(indexPath)...")
+            print("moving object at path \(indexPath)...")
             print("to path \(newIndexPath)...")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
-            // tableView.moveRow(at: indexPath!, to: newIndexPath!)
+            // using .moveRow() causes a problem as the moved row fails to fade away the rowActionMenu
+            // using .deselectRow doesn't help
         }
         
         if drugList.fetchedObjects != nil {
@@ -857,6 +908,8 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
         
+        print("drugList FRC changed section: ...")
+
         let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
         switch type {
         case .insert:
@@ -866,8 +919,10 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
             print("deleting section \(sectionInfo.name)")
            tableView.deleteSections(indexSet, with: .automatic)
         case .update:
-            print("deleting section \(sectionInfo.name)")
+            print("updating section \(sectionInfo.name)")
             tableView.reloadSections([sectionIndex], with: .automatic)
+        case .move:
+            print("move section \(sectionInfo.name) at index \(sectionIndex)")
         default:
             break
         }

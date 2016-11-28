@@ -112,6 +112,28 @@ public class DrugEpisode: NSManagedObject {
         convertFromStorage()
     }
     
+    func copyFromDrug(drugToCopy: DrugEpisode) {
+        self.name = drugToCopy.name
+        self.startDate = drugToCopy.startDate
+        self.endDate = drugToCopy.endDate
+        self.ingredients = drugToCopy.ingredients
+        self.classes = drugToCopy.classes
+        self.doses = drugToCopy.doses
+        self.regularly = drugToCopy.regularly
+        self.reminders = drugToCopy.reminders
+        self.frequency = drugToCopy.frequency
+        self.doseUnit = drugToCopy.doseUnit
+        self.effectiveness = drugToCopy.effectiveness
+        self.sideEffects = drugToCopy.sideEffects
+        self.notes = drugToCopy.notes
+        self.attribute1 = drugToCopy.attribute1
+        self.attribute2 = drugToCopy.attribute2
+        self.attribute3 = drugToCopy.attribute3
+        
+        convertFromStorage()
+        
+    }
+    
     func convertFromStorage() {
         
         nameVar = name
@@ -353,15 +375,16 @@ public class DrugEpisode: NSManagedObject {
         return doses$
     }
 
-    func setTheEndDate(date: Date) {
-        endDateVar = date
-        endDate = endDateVar as NSDate?
-        isCurrentUpdate()
-        
-    }
+//    func setTheEndDate(date: Date) {
+//        endDateVar = date
+//        //endDate = endDateVar as NSDate?
+//        isCurrentUpdate()
+//        
+//    }
     
-    func storeObjectForEnding() {
+    func storeObjectForEnding(endingDate: Date) {
         
+        endDateVar = endingDate
         name = nameVar
         if ingredientsVar != nil {
             ingredients = NSKeyedArchiver.archivedData(withRootObject: ingredientsVar!) as NSData?
@@ -380,6 +403,15 @@ public class DrugEpisode: NSManagedObject {
         sideEffects = NSKeyedArchiver.archivedData(withRootObject: sideEffectsVar!) as NSData?
         isCurrent = "Discontinued Medicines"
         isCurrentUpdate()
+        cancelNotifications()
+        
+        do {
+            try  self.managedObjectContext?.save()
+            print("saving drug \(name) in DrugEpisode")
+        }
+        catch let error as NSError {
+            print("Error saving \(error)", terminator: "")
+        }
 
     }
 
