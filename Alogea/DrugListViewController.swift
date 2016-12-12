@@ -625,7 +625,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
         print("DrugList - returning from NewDrug")
-
+        
         save()
         tableView.reloadData()
         
@@ -673,10 +673,11 @@ extension DrugListViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 60
+//    }
     
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
         let cell =

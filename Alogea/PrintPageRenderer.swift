@@ -59,7 +59,7 @@ class PrintPageRenderer: UIPrintPageRenderer {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
         let documentDirectory = path.object(at: 0)
         let fileName: String = name + ".pdf"
-        let pdfFile = (documentDirectory as AnyObject).appending(fileName)
+        let pdfFile = (documentDirectory as! String).appending("/" + fileName)
         
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.outputType = UIPrintInfoOutputType.general
@@ -82,9 +82,18 @@ class PrintPageRenderer: UIPrintPageRenderer {
         if UIGraphicsBeginPDFContextToFile(pdfFile, pdfPaperRect, nil) {
             UIGraphicsBeginPDFPage()
             if let pdfContext = UIGraphicsGetCurrentContext() {
+                //pdfContext.setFillColor(ColorScheme.sharedInstance().darkBlue as! CGColor)
+                //CGContextFillRect(pdfContext, CGRect(origin: CGPoint(x: 0, y: 0), size: bigSize))
                 pdfContext.scaleBy(x: scale, y: scale)
                 pdfContext.translateBy(x: leftInset, y: 72)
                 fromView.layer.render(in: pdfContext)
+                
+//                if let gCView = fromView as? GraphContainerView {
+//                    gCView.clipView.layer.render(in: pdfContext)
+//                } else {
+//                    fromView.layer.render(in: pdfContext)
+//                }
+
             }
             UIGraphicsEndPDFContext()
         }

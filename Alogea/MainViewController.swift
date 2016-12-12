@@ -266,9 +266,10 @@ extension MainViewController: UITextViewDelegate {
     
     @IBAction func exportDialog(sender: UIButton) {
         
-        floatingMenuView.isHidden = true // hide floatingView so it's not visible in the 'screenShot' pdf image
+        //floatingMenuView.isHidden = true // hide floatingView so it's not visible in the 'screenShot' pdf image
+        floatingMenuView.slideIn()
         let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
-        floatingMenuView.isHidden = false
+        //floatingMenuView.isHidden = false
         
         let expoController = UIActivityViewController(activityItems: [pdfFile], applicationActivities: nil)
         

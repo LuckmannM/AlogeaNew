@@ -181,7 +181,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     func cancelAction() {
         
-        if drugFromList == nil {
+        if drugFromList == nil { // this protects against deleting an existing drug that was loaded for editing (rather than a new drug)
             self.managedObjectContext.delete(theDrug!)
         }
         
@@ -435,7 +435,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 regularitySwitch = (cell.contentView.viewWithTag(controlTag) as! UISwitch)
                 regularitySwitch.addTarget(self, action: #selector(switchControlAction(sender:)), for: UIControlEvents.valueChanged)
             }
-            regularitySwitch.setOn(theDrug!.regularly, animated: false)
+            regularitySwitch.setOn(theDrug!.regularlyVar, animated: false)
             
         case "timesCell":
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Times"
@@ -665,7 +665,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             print("timesPickerCell can't be selected")
             
         case "dosesCell":
-            if theDrug!.regularly == false { // One dose only, edit directly in cellRow textField
+            if theDrug!.regularlyVar == false { // One dose only, edit directly in cellRow textField
                 
                 detailLabel = cell?.contentView.viewWithTag(detailTag) as! UILabel
                 if textField == nil {
@@ -959,6 +959,16 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
         if let destinationVC = segue.destination as? DosesAndReminders {
             if segue.identifier == "doseDetailSegue" {
+                // convert any unsaved entries
+                if theDrug?.notes != nil {
+                    theDrug!.notes = notesTextView.text
+                }
+                if textFieldOpen.isOpen {
+                    print("need to save open textField")
+                    _ = textFieldShouldReturn(textFieldOpen.textField )
+                }
+                theDrug!.storeObjectAndNotifications()
+                
                 destinationVC.drugData = theDrug
                 destinationVC.context = managedObjectContext
                 destinationVC.callingViewController = self
