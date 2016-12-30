@@ -248,7 +248,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     func switchControlAction(sender: UISwitch) {
         
         if sender.isOn {
-            theDrug!.regularly = true
+            theDrug!.regularlyVar = true
             
             cellRowHelper.insertNonPickerCellRow(forIndexPath: cellRowHelper.pathForCellInAllCellArray(cellType: "timesCell"))
             tableView.insertRows(at: [cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell")], with: UITableViewRowAnimation.automatic)
@@ -262,7 +262,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             }
             
         } else {
-            theDrug!.regularly = false
+            theDrug!.regularlyVar = false
             
             let indexPath = cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell")
             cellRowHelper.removeVisibleRow(row: indexPath.row, inSection: indexPath.section)
@@ -295,25 +295,25 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         let changeAtPath = IndexPath(row: 1, section: 0)
         let nameCellIndexpath = IndexPath(row: 0, section: 0)
         
-        //        if cellRowHelper.pickerViewVisible("namePickerCell") {
-        //            let cell = tableView.cellForRowAtIndexPath(changeAtPath)
-        //            (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.grayColor()
-        //            cellRowHelper.removeVisibleRow(nameCellIndexpath.row+1, inSection: 0)
-        //            tableView.deleteRowsAtIndexPaths([changeAtPath], withRowAnimation: .Top)
-        //
-        //            // drugNamePickerValues[0] needs correction taking into account selection in drugNamePicker
-        //            if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(drugNameChosen) {
-        //                theDrug!.getDetailsFromPublicDrug(selectedPublicDrug)
-        //                tableView.reloadData()
-        //            }
-        //
-        //            drugNamePicker.removeFromSuperview()
-        //        } else {
-        let cell = tableView.cellForRow(at: nameCellIndexpath)
-        cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
-        tableView.insertRows(at: [changeAtPath], with: .top)
-        (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
-        //        }
+        if cellRowHelper.pickerViewVisible(name: "namePickerCell") {
+            let cell = tableView.cellForRow(at: changeAtPath)
+            (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
+            cellRowHelper.removeVisibleRow(row: nameCellIndexpath.row+1, inSection: 0)
+            tableView.deleteRows(at: [changeAtPath], with: .top)
+
+            // drugNamePickerValues[0] needs correction taking into account selection in drugNamePicker
+            if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(name: drugNameChosen) {
+                theDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug)
+                tableView.reloadData()
+            }
+
+            drugNamePicker.removeFromSuperview()
+        } else {
+            let cell = tableView.cellForRow(at: nameCellIndexpath)
+            cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
+            tableView.insertRows(at: [changeAtPath], with: .top)
+            (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
+        }
         
     }
     
@@ -745,9 +745,24 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         else if pickerView.isEqual(frequencyPicker) {
             return frequencyPickerValues[row]
         }
-        else if pickerView.isEqual(drugNamePicker) { return drugNamePickerValues[row] }
+        else if pickerView.isEqual(drugNamePicker) { return nil }
         else { return "" }
         
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        
+        if pickerView.isEqual(drugNamePicker) {
+            let attribute = UIFont(name: "AvenirNext-Regular", size: 11)!
+            let titleText = NSAttributedString(
+                string: drugNamePickerValues[row],
+                attributes: [NSFontAttributeName: attribute,
+                             NSUnderlineColorAttributeName: UIColor.black]
+            )
+
+            return titleText
+        }
+        else  { return nil }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -807,37 +822,19 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
         switch textFieldOpen.text {
         case "nameCell":
-            //                let name = drugDictionary.matchingDrugNames(sender.text!)
-            //                if name != "" {
-            //                    if titleLabel != nil {
-            //                        titleLabel.text = name
-            //                        sender.textColor = UIColor.grayColor()
-            //                    }
-            //                }
             
-            //                if let cell = tableView.cellForRowAtIndexPath(textFieldOpen[1] as! IndexPath) {
-            //                    dropDownButton = cell.contentView.viewWithTag(50) as! UIButton
-            //                }
-            
-            var names = drugDictionary.matchingDrugNames(name: sender.text!)
-            if names.count > 0 {
-                
-                // Capitalise first character
-                for i in 0 ..< names.count {
-                    names[i] = (names[i] as NSString).substring(to: 1).uppercased() + (names[i] as NSString).substring(from: 1)
-                }
+            var name = drugDictionary.matchingDrugNames(name: sender.text!)
+            if name != nil {
                 
                 if titleLabel != nil {
-                    titleLabel.text = names[0]
-                    drugNamePickerValues = names
-                    if names.count > 1 {
+                    titleLabel.text = name!.localizedCapitalized
+                    drugNamePickerValues = drugDictionary.drugSelectionTerms
+                    if drugNamePickerValues.count > 1 {
                         dropDownButton.isEnabled = true
                     }
                     sender.textColor = UIColor.gray
                 }
-            }
-                
-            else {
+            } else {
                 dropDownButton.isEnabled = false
                 titleLabel.text = ""
                 sender.textColor = UIColor.black

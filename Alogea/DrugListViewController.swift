@@ -83,12 +83,12 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
         
-        print("drugList first load")
-        if drugList.fetchedObjects != nil {
-            for object in drugList.fetchedObjects! {
-                print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
-            }
-        }
+        // print("drugList first load")
+//        if drugList.fetchedObjects != nil {
+//            for object in drugList.fetchedObjects! {
+//                print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
+//            }
+//        }
 
     }
     
@@ -113,11 +113,11 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             print("Error fetching drugList \(error)")
         }
         
-        print("re-fetched drugList:...")
-        
-        for object in drugList.fetchedObjects! {
-            print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
-        }
+//        print("re-fetched drugList:...")
+//        
+//        for object in drugList.fetchedObjects! {
+//            print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
+//        }
         
     }
     
@@ -142,10 +142,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 // OPTION 2
                 aDrug.isCurrentUpdate()
                 //                aDrug.setValue(aDrug.isCurrentUpdate(), forKey: "isCurrentStore")
-                print("\(aDrug.name) status updated to \(aDrug.isCurrent)")
+                // print("\(aDrug.name) status updated to \(aDrug.isCurrent)")
                 do {
                     try aDrug.managedObjectContext!.save()
-                    print("\(aDrug.name) individually saved to moc")
+                    // print("\(aDrug.name) individually saved to moc")
                 } catch let error as NSError {
                     print("error when saving single drug object, \(error), \(error.userInfo)")
                 }
@@ -211,8 +211,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.backgroundColor = colorScheme.drugRowLightGray
         }
         
-        print("cell for \(aDrug.name) with status \(aDrug.isCurrent)")
-        
        //  switch indexPath.section {
         // DEBUG***
         if aDrug.isCurrent == nil {
@@ -276,7 +274,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         do {
             try  managedObjectContext.save()
-            print("saving drugList moc")
+            // print("saving drugList moc")
         }
         catch let error as NSError {
             print("Error saving \(error)", terminator: "")
@@ -332,7 +330,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 PrintPageRenderer.printDialog(file: pdfFile, inView: nil)
             }
             
-            print("returning to graphViewContainer from presenting print dialog")
+            // print("returning to graphViewContainer from presenting print dialog")
             
         })
         
@@ -551,8 +549,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     print("error fetching earliest selected event date in EventsDataController: \(error)")
                 }
                 
-                print("fetched current drugs")
-                print("there are \(currentDrugs?.count) drugs")
+//                print("fetched current drugs")
+//                print("there are \(currentDrugs?.count) drugs")
                 if currentDrugs == nil { return true }
                 
                 if currentDrugs!.count > 0 {
@@ -624,7 +622,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBAction
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
-        print("DrugList - returning from NewDrug")
+        // print("DrugList - returning from NewDrug")
         
         save()
         tableView.reloadData()
@@ -657,7 +655,7 @@ extension DrugListViewController: UITableViewDataSource {
         guard let sections = drugList.sections else {
             return 0
         }
-        print("drugList numberOfSections = \(sections.count)")
+        // print("drugList numberOfSections = \(sections.count)")
         return sections.count
 
     }
@@ -665,7 +663,7 @@ extension DrugListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if let sectionInfo = drugList.sections?[section] {
-            print("drugList numberOfObjects in section \(section) = \(sectionInfo.numberOfObjects)")
+            // print("drugList numberOfObjects in section \(section) = \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects
         }
         else {
@@ -705,7 +703,7 @@ extension DrugListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
-        print("willDisplayHeaderView for section \(section)")
+        // print("willDisplayHeaderView for section \(section)")
         let header = view as! UITableViewHeaderFooterView
         var textSize: CGFloat = 22
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
@@ -724,7 +722,7 @@ extension DrugListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        print("titleForSection \(section)")
+        // print("titleForSection \(section)")
 
         if let sectionInfo = drugList.sections?[section] {
             return sectionInfo.name
@@ -872,26 +870,26 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
             newSectionInfo = drugList.sections?[(newIndexPath?.section)!]
         }
         
-        print("drugList FRC changed object: ...")
+        //print("drugList FRC changed object: ...")
         switch type {
         case .update:
-            print("update object at \(indexPath)")
-            print("name of section\(indexPath?.section) = \(sectionInfo?.name)")
-            print("name of section\(newIndexPath?.section) = \(newSectionInfo?.name)")
+//            print("update object at \(indexPath)")
+//            print("name of section\(indexPath?.section) = \(sectionInfo?.name)")
+//            print("name of section\(newIndexPath?.section) = \(newSectionInfo?.name)")
             tableView.reloadRows(at: [indexPath!], with: .automatic)
             /*
              let cell = tableView.cellForRow(at: indexPath!) as! DrugListCell!
              configureCell(cell: cell!, indexPath: indexPath!)
              */
         case .insert:
-            print("inserting object @ \(newIndexPath)")
+            // print("inserting object @ \(newIndexPath)")
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .delete:
-            print("deleting object @ \(indexPath)")
+            // print("deleting object @ \(indexPath)")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
         case .move:
-            print("moving object at path \(indexPath)...")
-            print("to path \(newIndexPath)...")
+//            print("moving object at path \(indexPath)...")
+//            print("to path \(newIndexPath)...")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
             // using .moveRow() causes a problem as the moved row fails to fade away the rowActionMenu
@@ -909,18 +907,18 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
         
-        print("drugList FRC changed section: ...")
+        // print("drugList FRC changed section: ...")
 
         let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
         switch type {
         case .insert:
-            print("inserting section \(sectionInfo.name)")
+            // print("inserting section \(sectionInfo.name)")
             tableView.insertSections(indexSet, with: .automatic)
         case .delete:
-            print("deleting section \(sectionInfo.name)")
+            // print("deleting section \(sectionInfo.name)")
            tableView.deleteSections(indexSet, with: .automatic)
         case .update:
-            print("updating section \(sectionInfo.name)")
+            // print("updating section \(sectionInfo.name)")
             tableView.reloadSections([sectionIndex], with: .automatic)
         case .move:
             print("move section \(sectionInfo.name) at index \(sectionIndex)")

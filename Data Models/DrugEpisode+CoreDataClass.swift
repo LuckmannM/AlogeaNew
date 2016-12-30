@@ -756,6 +756,37 @@ public class DrugEpisode: NSManagedObject {
         return (class$ as NSString).substring(to: (class$ as NSString).length - 2)
     }
 
+    // NewDrug TVC methods
+    
+    func getDetailsFromPublicDrug(publicDrug: CloudDrug) {
+        
+        name = publicDrug.brandNames[0]
+        if publicDrug.substances != nil {
+            ingredientsVar = publicDrug.substances
+        }
+        if publicDrug.classes != nil {
+            classesVar = publicDrug.classes
+        }
+        if publicDrug.doseUnit != nil {
+            doseUnit = publicDrug.doseUnit
+            
+        }
+        if publicDrug.startingDoses != nil {
+            dosesVar = publicDrug.startingDoses
+        }
+        if publicDrug.regular != nil {
+            if publicDrug.regular == 1 { regularlyVar = true }
+            else {regularlyVar = false }
+        }
+        if publicDrug.startingDoseInterval != nil {
+            frequencyVar = publicDrug.startingDoseInterval as TimeInterval
+        }
+        
+        resetReminders()
+        
+        // *** also transfer other parameter here...
+    }
+
 
 
 
