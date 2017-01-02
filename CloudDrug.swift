@@ -84,7 +84,7 @@ class CloudDrug {
         }
         return array
     }()
-    
+        
     init(record: CKRecord, database: CKDatabase) {
         
         //*** Build in safeguards if any of the fields in the Public database are empty!!!

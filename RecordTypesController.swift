@@ -62,7 +62,8 @@ class RecordTypesController: NSObject {
     
     override init() {
         super.init()
-        
+        print("init RecordTypesDataController")
+
         allTypes.delegate = self
     }
     
@@ -97,7 +98,14 @@ class RecordTypesController: NSObject {
     
     
     func save() {
-        (UIApplication.shared.delegate as! AppDelegate).stack.save()
+        
+        do {
+            try  managedObjectContext.save()
+            // print("saving drugList moc")
+        }
+        catch let error as NSError {
+            print("Error saving \(error)", terminator: "")
+        }
     }
 
     

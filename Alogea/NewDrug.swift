@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Foundation
+import CloudKit
 
 typealias TrialDuration = (number:Int, metric: String)
 
@@ -23,7 +24,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     var rootViewController: DrugListViewController!
     
     var drugFromList: DrugEpisode?
-    lazy var theDrug: DrugEpisode? =
+    lazy var theNewDrug: DrugEpisode? =
         {
             if self.drugFromList != nil {
                 return self.drugFromList!
@@ -53,10 +54,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     var trialDurationPickerValues:[[String]]!
     var frequencyPickerValues: [String]!
     var drugNamePickerValues: [String]!
+    var drugNamePickerIndexReferences: [Int]!
     
     var trialDurationChosen: TrialDuration!
     var frequencyChosen: String!
-    var drugNameChosen: String!
+    var drugIndexChosen: Int!
     var numberFormatter: NumberFormatter!
     var isDiscontinuedDrug: Bool!
     var initialTouchLocation: CGPoint = CGPoint.zero
@@ -79,25 +81,41 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
+        let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
+        
+        let cloudButton = UIButton(type: .custom)
+        
+        if drugDictionary.iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() {
+            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
+        } else {
+            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+        }
+        cloudButton.frame = CGRect(x: 0, y: 0, width: (75*20/50), height: 20)
+        let cloudIcon = UIBarButtonItem(customView: cloudButton)
+        cloudIcon.isEnabled = false
+        
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spacer.width = self.view.frame.width / 2 - cloudButton.frame.width / 2 - 50
+        
         
         isDiscontinuedDrug = false
-        if let theEnd = theDrug!.endDate {
+        if let theEnd = theNewDrug!.endDate {
             let now = Date()
             if theEnd.compare(now) == .orderedAscending { // is old drug - not modifiable
                 isDiscontinuedDrug = true
-                //                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Save, target: self, action: "saveAction")
+                
                 self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(cancelAction))
             } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
+                self.navigationItem.setRightBarButtonItems([saveButton, cloudIcon], animated: true)
                 self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAction))
             }
         } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAction))
+            self.navigationItem.setRightBarButtonItems([saveButton, spacer, cloudIcon], animated: true)
         }
         
         cellRowHelper = NewDrugHelper()
-        cellRowHelper.initHelper(regularly: theDrug!.regularly)
+        cellRowHelper.initHelper(regularly: theNewDrug!.regularly)
         
         inAppStore  = InAppStore.sharedInstance()
         initiateClassObjects()
@@ -138,7 +156,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
         ingredientsViewController.modalPresentationStyle = .popover
         ingredientsViewController.preferredContentSize = CGSize(width: 280, height: 144)
-        ingredientsViewController.theDrug = theDrug
+        ingredientsViewController.theDrug = theNewDrug
         
         
         let popUpController = ingredientsViewController.popoverPresentationController
@@ -164,15 +182,15 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     func saveAction () {
         
-        if theDrug?.notes != nil {
-            theDrug!.notes = notesTextView.text
+        if theNewDrug?.notes != nil {
+            theNewDrug!.notes = notesTextView.text
         }
         if textFieldOpen.isOpen {
             print("need to save open textField")
             _ = textFieldShouldReturn(textFieldOpen.textField )
         }
         
-        theDrug!.storeObjectAndNotifications()
+        theNewDrug!.storeObjectAndNotifications()
         
         performSegue(withIdentifier: "returnToDrugListAndSave", sender: self)
         
@@ -182,12 +200,10 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     func cancelAction() {
         
         if drugFromList == nil { // this protects against deleting an existing drug that was loaded for editing (rather than a new drug)
-            self.managedObjectContext.delete(theDrug!)
+            self.managedObjectContext.delete(theNewDrug!)
         }
         
         self.navigationController!.popToRootViewController(animated: true)
-        
-        
     }
     
     
@@ -220,7 +236,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         frequencyPicker = {
             let picker = UIPickerView()
             frequencyPickerValues = [String]()
-            for aSet in theDrug!.frequencyTerms {
+            for aSet in theNewDrug!.frequencyTerms {
                 let (term,_) = aSet
                 frequencyPickerValues.append(term)
             }
@@ -233,7 +249,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         drugNamePicker = {
             let picker = UIPickerView()
             drugNamePickerValues = [""]
-            drugNameChosen = drugNamePickerValues[0]
+            drugIndexChosen = 0
             picker.delegate = self
             picker.dataSource = self
             return picker
@@ -248,45 +264,45 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     func switchControlAction(sender: UISwitch) {
         
         if sender.isOn {
-            theDrug!.regularlyVar = true
+            theNewDrug!.regularlyVar = true
             
             cellRowHelper.insertNonPickerCellRow(forIndexPath: cellRowHelper.pathForCellInAllCellArray(cellType: "timesCell"))
             tableView.insertRows(at: [cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell")], with: UITableViewRowAnimation.automatic)
             
             if let timesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell")) {
-                (timesCell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.timesString()
+                (timesCell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.timesString()
             }
             if let dosesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "dosesCell")) {
-                (dosesCell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.dosesString()
+                (dosesCell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
                 dosesCell.accessoryType = .disclosureIndicator
             }
             
         } else {
-            theDrug!.regularlyVar = false
+            theNewDrug!.regularlyVar = false
             
             let indexPath = cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell")
             cellRowHelper.removeVisibleRow(row: indexPath.row, inSection: indexPath.section)
             tableView.deleteRows(at: [indexPath], with: .top)
             
             if let dosesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "dosesCell")) {
-                (dosesCell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.dosesString()
+                (dosesCell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
                 dosesCell.accessoryType = .none
             }
             
         }
         if let frequencyCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "frequencyCell")) {
-            (frequencyCell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.frequencyString()
+            (frequencyCell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.frequencyString()
         }
         
     }
     
     func doseUnitSelection(sender: UISegmentedControl) {
         
-        theDrug!.saveDoseUnit(index: sender.selectedSegmentIndex)
+        theNewDrug!.saveDoseUnit(index: sender.selectedSegmentIndex)
         let cell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "doseUnitCell"))
-        (cell?.contentView.viewWithTag(controlTag) as! UISegmentedControl).selectedSegmentIndex = theDrug!.doseUnitIndex()
+        (cell?.contentView.viewWithTag(controlTag) as! UISegmentedControl).selectedSegmentIndex = theNewDrug!.doseUnitIndex()
         let dosesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "dosesCell"))
-        (dosesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.dosesString()
+        (dosesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
         
     }
     
@@ -296,18 +312,21 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         let nameCellIndexpath = IndexPath(row: 0, section: 0)
         
         if cellRowHelper.pickerViewVisible(name: "namePickerCell") {
-            let cell = tableView.cellForRow(at: changeAtPath)
-            (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
-            cellRowHelper.removeVisibleRow(row: nameCellIndexpath.row+1, inSection: 0)
-            tableView.deleteRows(at: [changeAtPath], with: .top)
+            cellRowHelper.removeVisibleRow(row: changeAtPath.row, inSection: changeAtPath.section)
+            drugNamePicker.removeFromSuperview()
+            tableView.deleteRows(at: [changeAtPath], with: .automatic)
 
             // drugNamePickerValues[0] needs correction taking into account selection in drugNamePicker
-            if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(name: drugNameChosen) {
-                theDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug)
+            if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
+                theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)])
                 tableView.reloadData()
+                let cell = tableView.cellForRow(at: nameCellIndexpath)
+                (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
+                (cell?.contentView.viewWithTag(titleTag) as! UILabel).text = drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)]
+                
+                // need to complete and resolve name textField as the name text may only have been entered partially when dropDown menu activated and selected. This should 'close' and complete the textField entry
             }
 
-            drugNamePicker.removeFromSuperview()
         } else {
             let cell = tableView.cellForRow(at: nameCellIndexpath)
             cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
@@ -367,7 +386,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         switch cellName {
         // SECTION 0
         case "nameCell":
-            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = theDrug!.name
+            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = theNewDrug!.nameVar
             if dropDownButton == nil {
                 dropDownButton = cell.contentView.viewWithTag(50) as! UIButton
                 dropDownButton.addTarget(self, action: #selector(self.dropDownButtonFunction(sender:)), for: .touchUpInside)
@@ -389,7 +408,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 pickerXPosition = 0.0
             }
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Start Date"
-            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.startDateString()
+            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.startDateString()
             
         case "startDatePickerCell":
             pickerXPosition = viewWidth - datePicker.frame.width
@@ -397,12 +416,12 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 pickerXPosition = 0.0
             }
             datePicker.frame.origin = CGPoint(x: pickerXPosition, y: 0)
-            datePicker.date = theDrug!.startDateVar
+            datePicker.date = theNewDrug!.startDateVar
             cell.contentView.addSubview(datePicker)
             
         case "endDateCell":
-            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.endDateString()
-            if theDrug!.endDateString() == "" {
+            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.endDateString()
+            if theNewDrug!.endDateString() == "" {
                 (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "(For how long?)"
             } else {
                 (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Until"
@@ -418,7 +437,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             
         case "frequencyCell":
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Frequency"
-            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.frequencyString()
+            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.frequencyString()
             
         case "frequencyPickerCell":
             pickerXPosition = viewWidth - frequencyPicker.frame.width
@@ -426,7 +445,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 pickerXPosition = 0.0
             }
             frequencyPicker.frame.origin = CGPoint(x: pickerXPosition, y: 0)
-            frequencyPicker.selectRow(theDrug!.frequencyToPickerViewRow(), inComponent: 0, animated: false)
+            frequencyPicker.selectRow(theNewDrug!.frequencyToPickerViewRow(), inComponent: 0, animated: false)
             cell.contentView.addSubview(frequencyPicker)
             
         case "regularityCell":
@@ -435,11 +454,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 regularitySwitch = (cell.contentView.viewWithTag(controlTag) as! UISwitch)
                 regularitySwitch.addTarget(self, action: #selector(switchControlAction(sender:)), for: UIControlEvents.valueChanged)
             }
-            regularitySwitch.setOn(theDrug!.regularlyVar, animated: false)
+            regularitySwitch.setOn(theNewDrug!.regularlyVar, animated: false)
             
         case "timesCell":
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Times"
-            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.timesString()
+            (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.timesString()
             
         case "timesPickerCell":
             pickerXPosition = viewWidth - timesPicker.frame.width
@@ -447,21 +466,21 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 pickerXPosition = 0.0
             }
             timesPicker.frame.origin = CGPoint(x: pickerXPosition, y: 0)
-            timesPicker.setDate(theDrug!.startDateVar, animated: false)
+            timesPicker.setDate(theNewDrug!.startDateVar, animated: false)
             cell.contentView.addSubview(timesPicker)
             
         // SECTION 2
         case "dosesCell":
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Doses"
             doseDetailLabel = (cell.contentView.viewWithTag(detailTag) as! UILabel) // property to check wether touch is inside
-            doseDetailLabel.text = theDrug!.dosesString()
-            if (theDrug!.regularly == true) { cell.accessoryType = .disclosureIndicator}
+            doseDetailLabel.text = theNewDrug!.dosesString()
+            if (theNewDrug!.regularly == true) { cell.accessoryType = .disclosureIndicator}
             else { cell.accessoryType = .none }
             
         case "doseUnitCell":
             if doseUnitSelection == nil {
                 doseUnitSelection = cell.contentView.viewWithTag(controlTag) as! UISegmentedControl
-                doseUnitSelection.selectedSegmentIndex = theDrug!.doseUnitIndex()
+                doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
                 doseUnitSelection.addTarget(self, action: #selector(doseUnitSelection(sender:)), for: UIControlEvents.valueChanged)
             }
             
@@ -469,7 +488,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         // SECTION 3
         case "notesCell":
             notesTextView = cell.contentView.viewWithTag(textViewTag) as! UITextView
-            notesTextView.text = theDrug!.notes
+            notesTextView.text = theNewDrug!.notes
             
         default:
             print("ERROR; cell does not exist: for indexPath \(indexPath)")
@@ -510,8 +529,8 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 tableView.deleteRows(at: [changeAtPath], with: .top)
                 
                 // drugNamePickerValues[0] needs correction taking into account selection in drugNamePicker
-                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(name: drugNameChosen) {
-                    theDrug!.getDetailsFromCloudDrug(publicDrug: selectedPublicDrug)
+                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
+                    theNewDrug!.getDetailsFromCloudDrug(publicDrug: selectedPublicDrug)
                     //                        let indexSet = NSIndexSet(index: 0)
                     tableView.reloadData()
                 }
@@ -561,19 +580,19 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 cellRowHelper.removeVisibleRow(row: indexPath.row+1, inSection: indexPath.section)
                 tableView.deleteRows(at: [changeAtPath], with: .top)
                 
-                theDrug!.startDate = datePicker.date as NSDate?
-                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.startDateString()
+                theNewDrug!.startDate = datePicker.date as NSDate?
+                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.startDateString()
                 let endDateCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "endDateCell"))
-                (endDateCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.endDateString()
+                (endDateCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.endDateString()
                 datePicker.removeFromSuperview()
             } else {
                 cellRowHelper.insertVisibleRow(forIndexPath: indexPath)
                 tableView.insertRows(at: [changeAtPath], with: .top)
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.red
                 
-                if cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath).contains("startDate") { datePicker.date = theDrug!.startDateVar }
+                if cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath).contains("startDate") { datePicker.date = theNewDrug!.startDateVar }
                 else {
-                    if theDrug!.endDate != nil { datePicker.date = theDrug!.endDateVar!}
+                    if theNewDrug!.endDate != nil { datePicker.date = theNewDrug!.endDateVar!}
                     else { datePicker.date = Date() }
                 }
             }
@@ -581,7 +600,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         case "endDateCell":
             let changeAtPath = IndexPath(row: indexPath.row+1, section: indexPath.section)
             if cellRowHelper.pickerViewVisible(name: "endDatePickerCell") {
-                let endDate$ = theDrug!.trialPeriodToEndDate(trialPeriodNo: trialDurationChosen.number, trialPeriodMetric: trialDurationChosen.metric)
+                let endDate$ = theNewDrug!.trialPeriodToEndDate(trialPeriodNo: trialDurationChosen.number, trialPeriodMetric: trialDurationChosen.metric)
                 cellRowHelper.removeVisibleRow(row: indexPath.row+1, inSection: indexPath.section)
                 tableView.deleteRows(at: [changeAtPath], with: .top)
                 
@@ -589,7 +608,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = endDate$
                 trialDurationPicker.removeFromSuperview()
                 
-                if theDrug!.endDateString() == "" {
+                if theNewDrug!.endDateString() == "" {
                     (cell?.contentView.viewWithTag(titleTag) as! UILabel).text = "(For how long?)"
                 } else {
                     (cell?.contentView.viewWithTag(titleTag) as! UILabel).text = "Until"
@@ -613,17 +632,17 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 cellRowHelper.removeVisibleRow(row: indexPath.row+1, inSection: indexPath.section)
                 tableView.deleteRows(at: [changeAtPath], with: .top)
                 
-                theDrug!.frequencyStringToTimeInterval(term: frequencyChosen)
+                theNewDrug!.frequencyStringToTimeInterval(term: frequencyChosen)
                 
-                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.frequencyString()
+                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.frequencyString()
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.gray
-                if (theDrug!.regularly == true) {
+                if (theNewDrug!.regularly == true) {
                     let timesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell"))
-                    (timesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.timesString()
+                    (timesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.timesString()
                 }
                 let dosesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "dosesCell"))
-                (dosesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.dosesString()
-                if theDrug!.numberOfDailyDoses() > 1 {
+                (dosesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
+                if theNewDrug!.numberOfDailyDoses() > 1 {
                     dosesCell?.accessoryType = .disclosureIndicator
                 } else { dosesCell?.accessoryType = .none }
                 frequencyPicker.removeFromSuperview()
@@ -647,13 +666,13 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 cellRowHelper.removeVisibleRow(row: indexPath.row+1, inSection: indexPath.section)
                 tableView.deleteRows(at: [changeAtPath], with: .top)
                 
-                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.timesString()
+                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.timesString()
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.gray
                 timesPicker.removeFromSuperview()
                 
-                theDrug!.startDateVar = timesPicker.date
+                theNewDrug!.startDateVar = timesPicker.date
                 
-                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.timesString()
+                (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.timesString()
                 
             } else {
                 cellRowHelper.insertVisibleRow(forIndexPath: indexPath)
@@ -665,7 +684,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             print("timesPickerCell can't be selected")
             
         case "dosesCell":
-            if theDrug!.regularlyVar == false { // One dose only, edit directly in cellRow textField
+            if theNewDrug!.regularlyVar == false { // One dose only, edit directly in cellRow textField
                 
                 detailLabel = cell?.contentView.viewWithTag(detailTag) as! UILabel
                 if textField == nil {
@@ -694,7 +713,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
                 textFieldOpen.textField = textField
                 
-                textField.placeholder = numberFormatter.string(from: NSNumber(value: theDrug!.dosesVar[0]))
+                textField.placeholder = numberFormatter.string(from: NSNumber(value: theNewDrug!.dosesVar[0]))
                 detailLabel.text = ""
                 textField.becomeFirstResponder()
                 addDoneButtonToKeyboard(sender: textField)
@@ -782,7 +801,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             frequencyChosen  = frequencyPickerValues[row]
         } else if pickerView.isEqual(drugNamePicker) {
             // pick drug from array
-            drugNameChosen = drugNamePickerValues[row]
+            drugIndexChosen = drugNamePickerIndexReferences[row]
+            print("")
+            print("namePickerSelection is \(drugIndexChosen), (\(drugDictionary.cloudDrugArray[drugIndexChosen].displayName))")
+            print("")
+           
         }
         
         
@@ -823,13 +846,28 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         switch textFieldOpen.text {
         case "nameCell":
             
-            var name = drugDictionary.matchingDrugNames(name: sender.text!)
+            let name = drugDictionary.matchingDrugNames(name: sender.text!)
             if name != nil {
                 
                 if titleLabel != nil {
                     titleLabel.text = name!.localizedCapitalized
                     drugNamePickerValues = drugDictionary.drugSelectionTerms
-                    if drugNamePickerValues.count > 1 {
+                    
+                    drugNamePickerValues = [String]()
+                    drugNamePickerIndexReferences = [Int]()
+                    for index in drugDictionary.matchingCloudDictionaryIndexes {
+                        for term in drugDictionary.cloudDrugArray[index].dictionaryTerms {
+                            drugNamePickerValues.append(term)
+                            drugNamePickerIndexReferences.append(index)
+                        }
+                    }
+                    print("")
+                    print("NewDrug.name changed")
+                    print("pickerValues are \(drugNamePickerValues)")
+                    print("corresponding indexes \(drugNamePickerIndexReferences)")
+                    print("")
+                    
+                   if drugNamePickerValues.count > 1 {
                         dropDownButton.isEnabled = true
                     }
                     sender.textColor = UIColor.gray
@@ -875,14 +913,19 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             // this would only be the case if entered from public drugDictionary
             if titleLabel.text != "" {
                 
-                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(name: titleLabel.text!) {
-                    theDrug!.getDetailsFromCloudDrug(publicDrug: selectedPublicDrug)
+                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
+                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: titleLabel.text)
                     tableView.reloadData()
                 }
+                
+//                if let selectedPublicDrug = drugDictionary.setSelectedPublicDrug() {
+//                    theNewDrug!.getDetailsFromCloudDrug(publicDrug: selectedPublicDrug)
+//                    tableView.reloadData()
+//                }
             }
             else if let entry = textField.text {
                 if entry != "" {
-                    theDrug!.nameVar = entry
+                    theNewDrug!.nameVar = entry
                 } else { // check not empry string entered
                     textField.text = "name"
                 }
@@ -891,23 +934,23 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             }
         case "ingredientsCell":
             if let entry = textField.text {
-                theDrug!.ingredientsVar = entry.components(separatedBy: " ")
+                theNewDrug!.ingredientsVar = entry.components(separatedBy: " ")
                 titleLabel.text = textField.text
             }
         case "classCell":
             if let entry = textField.text {
-                theDrug!.classesVar = entry.components(separatedBy: " ")
+                theNewDrug!.classesVar = entry.components(separatedBy: " ")
                 titleLabel.text = textField.text
             }
         case "dosesCell":
             if let entry = textField.text {
                 if let doseFromString = numberFormatter.number(from: entry)?.doubleValue {
-                    theDrug!.setDoseArray(sentDose: doseFromString)
-                    (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theDrug!.dosesString()
+                    theNewDrug!.setDoseArray(sentDose: doseFromString)
+                    (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
                 }
             }
         default:
-            print("textField not associated with a cellType - content not transferred to theDrug object")
+            print("textField not associated with a cellType - content not transferred to theNewDrug object")
         }
         
         textField.isEnabled = false
@@ -957,23 +1000,23 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         if let destinationVC = segue.destination as? DosesAndReminders {
             if segue.identifier == "doseDetailSegue" {
                 // convert any unsaved entries
-                if theDrug?.notes != nil {
-                    theDrug!.notes = notesTextView.text
+                if theNewDrug?.notes != nil {
+                    theNewDrug!.notes = notesTextView.text
                 }
                 if textFieldOpen.isOpen {
                     print("need to save open textField")
                     _ = textFieldShouldReturn(textFieldOpen.textField )
                 }
-                theDrug!.storeObjectAndNotifications()
+                theNewDrug!.storeObjectAndNotifications()
                 
-                destinationVC.drugData = theDrug
+                destinationVC.drugData = theNewDrug
                 destinationVC.context = managedObjectContext
                 destinationVC.callingViewController = self
             }
         } else if segue.identifier ==  "ingredientSegue" {
 
             if let destinationVC = segue.destination as? SubstanceAndClassPopUp {
-                destinationVC.theDrug = theDrug
+                destinationVC.theDrug = theNewDrug
             }
         }
         else {

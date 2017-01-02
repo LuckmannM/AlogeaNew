@@ -51,6 +51,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("view did Load MVC")
         
         /*
         Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
@@ -93,6 +94,7 @@ class MainViewController: UIViewController {
         
         // this function is called on completion of individual subView layout display
         // as well as after viewWillTransition, with the then rotated view.frame parameters
+        print("view did LayoutSubiews - MVC")
         
         if iPadRotationFromLSStart {
             iPadRotationFromLSStart = false

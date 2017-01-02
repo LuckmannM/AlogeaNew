@@ -758,9 +758,11 @@ public class DrugEpisode: NSManagedObject {
 
     // NewDrug TVC methods
     
-    func getDetailsFromPublicDrug(publicDrug: CloudDrug) {
+    func getDetailsFromPublicDrug(publicDrug: CloudDrug, nameChosen: String? = nil) {
         
-        name = publicDrug.brandNames[0]
+        if nameChosen != nil {
+            nameVar = nameChosen
+        }
         if publicDrug.substances != nil {
             ingredientsVar = publicDrug.substances
         }
@@ -771,6 +773,7 @@ public class DrugEpisode: NSManagedObject {
             doseUnit = publicDrug.doseUnit
             
         }
+        // *** this needs more consideration, particularly if the are multiple substances and doses. In this case it may be better to use 'tablets' instead of mg/g etc!
         if publicDrug.startingDoses != nil {
             dosesVar = publicDrug.startingDoses
         }

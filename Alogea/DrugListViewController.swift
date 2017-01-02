@@ -705,7 +705,7 @@ extension DrugListViewController: UITableViewDataSource {
         
         // print("willDisplayHeaderView for section \(section)")
         let header = view as! UITableViewHeaderFooterView
-        var textSize: CGFloat = 22
+        let textSize: CGFloat = 22
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
 
@@ -764,7 +764,7 @@ extension DrugListViewController: UITableViewDelegate {
                 option 2 - a new object/ copy of the old should be inserted and the old deleted
                 */
                 
-                guard let info = self.drugList.sections?[indexPath.section]  else {
+                guard (self.drugList.sections?[indexPath.section]) != nil  else {
                     print("error in DrugList.editRowActions.endAction - section \(indexPath.section) doesn't exist")
                     return
                 }
@@ -859,37 +859,25 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
 
-        var sectionInfo: AnyObject?
-        var newSectionInfo: AnyObject?
+//        var sectionInfo: AnyObject?
+//        var newSectionInfo: AnyObject?
+//        
+//        if indexPath != nil {
+//            sectionInfo = drugList.sections?[(indexPath?.section)!]
+//        }
+//        
+//        if newIndexPath != nil {
+//            newSectionInfo = drugList.sections?[(newIndexPath?.section)!]
+//        }
         
-        if indexPath != nil {
-            sectionInfo = drugList.sections?[(indexPath?.section)!]
-        }
-        
-        if newIndexPath != nil {
-            newSectionInfo = drugList.sections?[(newIndexPath?.section)!]
-        }
-        
-        //print("drugList FRC changed object: ...")
         switch type {
         case .update:
-//            print("update object at \(indexPath)")
-//            print("name of section\(indexPath?.section) = \(sectionInfo?.name)")
-//            print("name of section\(newIndexPath?.section) = \(newSectionInfo?.name)")
             tableView.reloadRows(at: [indexPath!], with: .automatic)
-            /*
-             let cell = tableView.cellForRow(at: indexPath!) as! DrugListCell!
-             configureCell(cell: cell!, indexPath: indexPath!)
-             */
         case .insert:
-            // print("inserting object @ \(newIndexPath)")
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
         case .delete:
-            // print("deleting object @ \(indexPath)")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
         case .move:
-//            print("moving object at path \(indexPath)...")
-//            print("to path \(newIndexPath)...")
             tableView.deleteRows(at: [indexPath!], with: .automatic)
             tableView.insertRows(at: [newIndexPath!], with: .automatic)
             // using .moveRow() causes a problem as the moved row fails to fade away the rowActionMenu

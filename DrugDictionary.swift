@@ -42,6 +42,7 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     var termsDictionary = Dictionary<String, Int>() // this contains specific terms with indexes related to drug in cloudDrugArray, used for the NewDrug name row dropDown menu for selection
     var drugSelectionTerms = [String]() // contains strings only of the above specific terms to be displayed in NewDrug name namePicker
     var indexedNameDictionary = [String:[Int]]() // this contains all brandNames and substanceNames connected to the index in cloudDrugArray for return to NewDrug row name textField; it does contain a specfic name only once and the cloudDrugIndexes of drugs containing this term
+    var matchingCloudDictionaryIndexes = [Int]()
     
     init () {
         print("Cloud DrugDictionary init")
@@ -172,20 +173,43 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         })
 //        print("firstMatch is \(firstMatch)")
         
-        let matchingKVPair = indexedNameDictionary.lazy.filter({$0.0.contains(name)}).first
-//        print("firstMatchingPair is \(matchingKVPair)")
+        let matchingKVPairs = indexedNameDictionary.lazy.filter({$0.0.contains(name)})
+        print("matchingDrugNames____________")
+        print("matching for term: \(name)")
+        print("matchingKVPairs are \(matchingKVPairs)")
         
         
-        if firstMatch != nil {
-            for index in (matchingKVPair?.value)! {
-                if firstMatch!.contains("®") { selectedDrugIndex = index }
+        if firstMatch != nil && matchingKVPairs.first != nil {
+            for index in (matchingKVPairs.first?.value)! {
+                if firstMatch!.contains("®") {
+                    selectedDrugIndex = index
+                    print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
+                    print("currently selectedCloudDrug is \(cloudDrugArray[selectedDrugIndex!].displayName)")
+                }
                 else {
+                    // this loop should find the cloudDrug in cloudDrugArray that contains the firstMatch substance as single substance only, rather than as one of multiple substances, so that the name disdplayed in NewDrug.name row matches the selected drug, either as brandname(above) or as single substance drug
                     if cloudDrugArray[index].substances$ == firstMatch! as String {
                         selectedDrugIndex = index
+                        print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
+                        print("currently selectedCloudDrug is \(cloudDrugArray[selectedDrugIndex!])")
                         break
                     }
                 }
             }
+            // next there needs to be an exact match between cloudDrugArray[selectedDrugIndex] and the index of this drug in the drugSelectionTerms array; this index is passed on as selected drug of the drugSelectionTerms to the NewDrug.name drugNamePicker as array to chose from. When chosing the index number from this drugSelectionTerms array member is passed back and nneds to be translated to the cloudDrugArray inded number for the correct drug to be picked.
+            
+            matchingCloudDictionaryIndexes = [Int]()
+            for (_, indexes) in matchingKVPairs {
+                for index in indexes {
+                    if !matchingCloudDictionaryIndexes.contains(index) {
+                        matchingCloudDictionaryIndexes.append(index)
+                    }
+                }
+            }
+            // use these indexes instead of drugSelectionTerms for displaying the terms for drugNamePicker via CloudDrug.dictionaryTerms. Howver, this return [String] so this needs to be translated to individual string with maintained link to their CloudDrugDiciotnary index!
+            
+            print ("matchingCloudDrugIndexes are \(matchingCloudDictionaryIndexes)")
+            
             return firstMatch! as String
         } else {
             selectedDrugIndex = nil
@@ -194,11 +218,25 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     }
     
     
-    func returnSelectedPublicDrug(name: String, index: Int = -1) -> CloudDrug? {
+//    func setSelectedPublicDrug() -> CloudDrug? {
+//        
+//        guard inAppStore.checkDrugFormularyAccess() == true else { return nil }
+//        
+//        guard selectedDrugIndex != nil else { return nil }
+//        
+//        return cloudDrugArray[selectedDrugIndex!]
+//    }
+    
+    
+    func returnSelectedPublicDrug(index: Int?) -> CloudDrug? {
         
         guard inAppStore.checkDrugFormularyAccess() == true else { return nil }
         
-        guard selectedDrugIndex != nil else { return nil }
+        
+        // this is not right - either index = returned index of the drugSelectionTerms array
+        // or selectedDrugIndex needs to be adapted when namePickerChoise is made in NewDrug
+        
+        guard index != nil else { return nil }
         
         return cloudDrugArray[selectedDrugIndex!]
         
@@ -265,95 +303,17 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             drugIndex += 1
         }
         
-
-        print("cloud drug termsDictionary updated")
-        print("termsDictionary:")
-        for term in termsDictionary {
-            print(term)
-        }
-        print("")
-        print("indexedNameDictionary :")
-        for term in indexedNameDictionary {
-            print(term)
-        }
-
-        
-        /*
-        var drugIndex = 0
-        
-        termsDictionary.removeAll()
-        indexedNameDictionary.removeAll()
-        
-        for drug in cloudDrugArray {
-            for brandTerm in drug.brandNames {
-                
-                var substanceDose = String()
-                var brand = String()
-                
-                if brandTerm == "" {
-                    brand = drug.displayName
-                } else {
-                    brand = brandTerm + "®"
-                }
-                
-                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
-                    key == brandTerm })
-                {
-                    indexedNameDictionary[brand] = [drugIndex]
-                } else {
-                    if !indexedNameDictionary[brandTerm]!.contains(drugIndex)
-                    {
-                        (indexedNameDictionary[brand])?.append(drugIndex)
-                    }
-                }
-                
-                
-                if drug.substances.count == 1 {
-                    for doseIndex in 0..<drug.singleUnitDoses.count {
-                        if drug.substances[0] != brand {
-                            substanceDose = drug.substances[0] + " \(drug.singleUnitDoses[doseIndex])"
-                            termsDictionary[brand + " (" + substanceDose + ")"] = drugIndex
-                        } else {
-                            termsDictionary[brand + " \(drug.singleUnitDoses[doseIndex])"] = drugIndex
-                        }
-                    }
-                    
-                } else {
-                    guard drug.substances.count <= drug.singleUnitDoses.count else {
-                        print("error while building termsDictionary - number of singleUnitDoses lower than number of substances in drug \(drug.displayName)")
-                        drugIndex += 1
-                        break
-                    }
-                    for index in 0..<drug.substances.count {
-                        substanceDose = substanceDose + drug.substances[index] + " \(drug.singleUnitDoses[index])"
-                        if index < (drug.substances.count - 1) { substanceDose = substanceDose + " with " }
-                    }
-                    termsDictionary[brand + " (" + substanceDose + ")"] = drugIndex
-                    substanceDose = ""
-                }
-            }
-            
-            for substance in drug.substances {
-                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
-                    key == substance })
-                {
-                    indexedNameDictionary[substance] = [drugIndex]
-                } else {
-                    if !indexedNameDictionary[substance]!.contains(drugIndex)
-                    {
-                        (indexedNameDictionary[substance])?.append(drugIndex)
-                    }
-                }
-                
-            }
-            
-            drugIndex += 1
-        }
-        
-        print("cloud drug termsDictionary updated")
-        print(termsDictionary)
-        print(indexedNameDictionary)
-    */
+//
+//        print("cloud drug termsDictionary updated")
+//        print("termsDictionary:")
+//        for term in termsDictionary {
+//            print(term)
+//        }
+//        print("")
+//        print("indexedNameDictionary :")
+//        for term in indexedNameDictionary {
+//            print(term)
+//        }
     }
  
 }
