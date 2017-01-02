@@ -66,7 +66,7 @@ class StoreView: UITableViewController {
         
         let goBackAction = UIAlertAction(title: "Back", style: .default, handler: {
             (alert) -> Void in
-            self.navigationController?.popToRootViewController(animated: true)
+            self.navigationController!.popToRootViewController(animated: true)
         })
         
         let stayAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: {

@@ -45,7 +45,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     var matchingCloudDictionaryIndexes = [Int]()
     
     init () {
-        print("Cloud DrugDictionary init")
         iCloudContainer = CKContainer.default()
         publicDB = iCloudContainer.publicCloudDatabase
         
