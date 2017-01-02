@@ -71,6 +71,7 @@ class RecordTypesController: NSObject {
     
     func createNewRecordType(withName: String, minValue: Double? = 0, maxValue: Double? = 10) {
         
+        print("RecordTypesController.createNewRecordType of type: \(withName)")
         let newType = NSEntityDescription.insertNewObject(forEntityName: "RecordType", into: managedObjectContext) as! RecordType
         
         newType.name = withName

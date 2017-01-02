@@ -65,6 +65,22 @@ class EventsDataController: NSObject {
         return frc
     }()
     
+    lazy var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
+        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
+        request.predicate = anyScorePredicate
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("eventTypesFRC fetching error \(error)")
+        }
+        
+        return frc
+    }()
+
     // MARK: - other properties
     
     lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
@@ -109,28 +125,11 @@ class EventsDataController: NSObject {
         for sections in self.nonScoreEventTypesFRC.sections! {
             nonScoreEventTypes.append(sections.name)
         }
-        
         reconcileRecordTypesAndEventNames()
         
     }
     
     func reconcileRecordTypesAndEventNames() {
-        
-        let scoreEventTypesFRC: NSFetchedResultsController<Event> = {
-            let request = NSFetchRequest<Event>(entityName: "Event")
-            let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
-            request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
-            request.predicate = anyScorePredicate
-            let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
-            
-            do {
-                try frc.performFetch()
-            } catch let error as NSError{
-                print("eventTypesFRC fetching error \(error)")
-            }
-            
-            return frc
-        }()
         
         var scoreEventTypes = [String]()
         for sections in scoreEventTypesFRC.sections! {
@@ -213,6 +212,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
             }
             print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
         }
+        
         reconcileRecordTypesAndEventNames()
         graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
     }

@@ -90,12 +90,12 @@ class CoreDataStack: CustomStringConvertible {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.model)
         var storeError : NSError?
         let URLPersistentStore = self.applicationStoresDirectory().appendingPathComponent("PainDiaryModel.sqlite")
-        
         do {
-            self.store = try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                                            configurationName: nil,
-                                            at: self.storeURL as URL,
-                                            options: [NSPersistentStoreUbiquitousContentNameKey: "Alogea",
+            self.store = try coordinator.addPersistentStore(
+                ofType: NSSQLiteStoreType,
+                configurationName: nil,
+                at: self.storeURL as URL,
+                options: [NSPersistentStoreUbiquitousContentNameKey: "Alogea",
                                                                               NSMigratePersistentStoresAutomaticallyOption: true,
                                                                               NSInferMappingModelAutomaticallyOption: true])
         } catch  {
