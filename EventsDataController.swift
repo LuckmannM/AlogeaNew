@@ -99,8 +99,6 @@ class EventsDataController: NSObject {
     override init() {
         super.init()
         
-        print("init EventsDataController")
-
         allEventsFRC.delegate = self
         scoreEventsFRC.delegate = self
         eventTypeFRC.delegate = self

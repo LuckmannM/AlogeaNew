@@ -41,6 +41,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
     var persistentStoreCoordinatorChangesObserver:NotificationCenter? {
         didSet {
+            print("invoking DrugList.persistentStoreCoordinatorChangesObserver")
             oldValue?.removeObserver(self, name: NSNotification.Name.NSPersistentStoreCoordinatorStoresDidChange, object: stack.coordinator)
             persistentStoreCoordinatorChangesObserver?.addObserver(self, selector: #selector(persistentStoreCoordinatorDidChangeStores(notification:)), name: NSNotification.Name.NSPersistentStoreCoordinatorStoresDidChange, object: stack.coordinator)
         }

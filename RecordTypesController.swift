@@ -62,8 +62,6 @@ class RecordTypesController: NSObject {
     
     override init() {
         super.init()
-        print("init RecordTypesDataController")
-
         allTypes.delegate = self
     }
     

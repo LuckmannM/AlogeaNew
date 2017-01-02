@@ -825,6 +825,9 @@ public class DrugEpisode: NSManagedObject {
                     }
                 } else {
                     doseUnitVar = publicDrug.doseUnit
+                    if publicDrug.startingDoses != nil {
+                        dosesVar = publicDrug.startingDoses
+                    }
                 }
             } else {
                 doseUnit = publicDrug.doseUnit

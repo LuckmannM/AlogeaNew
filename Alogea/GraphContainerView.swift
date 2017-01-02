@@ -85,8 +85,6 @@ class GraphContainerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
-        print("init GraphContainerView")
-
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
         addSubview(lowerLimitLabel)

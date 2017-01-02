@@ -149,9 +149,6 @@ class GraphViewHelper: NSObject {
 
     convenience init(graphView: GraphView) {
         self.init()
-        
-        print("init GraohViewHelper")
-        
         self.graphView = graphView
         selectedScoreEventsFRC.delegate = self
         self.timeLineHelper = TimeLineHelper(helper: self)

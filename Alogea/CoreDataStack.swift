@@ -150,6 +150,7 @@ class CoreDataStack: CustomStringConvertible {
     
     var updateContextWithUbiquitousChangesObserver: Bool = false {
         willSet {
+            print("invoking updateContextWithUbiquitousChangesObserver")
             ubiquitousChangesObserver = newValue ? NotificationCenter.default : nil
         }
     }
@@ -157,6 +158,7 @@ class CoreDataStack: CustomStringConvertible {
     private var ubiquitousChangesObserver : NotificationCenter? {
         
         didSet {
+            print("invoked Stack.ubiquitousChangesObserver")
             oldValue?.removeObserver(self,name: NSNotification.Name.NSPersistentStoreDidImportUbiquitousContentChanges, object: coordinator)
             
             ubiquitousChangesObserver?.addObserver(self, selector: #selector(persistentStoreDidImportUbiquitousContentChanges(notification:)), name: .NSPersistentStoreDidImportUbiquitousContentChanges, object: coordinator)
@@ -169,6 +171,7 @@ class CoreDataStack: CustomStringConvertible {
     
     @objc func persistentStoreDidImportUbiquitousContentChanges (notification: NSNotification) {
         context.perform {
+            print("invoking Stack.persistentStoreDidImportUbiquitousContentChanges")
             self.context.mergeChanges(fromContextDidSave: notification as Notification)
         }
     }
@@ -176,6 +179,7 @@ class CoreDataStack: CustomStringConvertible {
     @objc func persistentStoreCoordinatorWillChangeStores (notification: NSNotification) {
         
         if context.hasChanges {
+            print("invoking Stack.persistentStoreCoordinatorWillChangeStores")
             do {
                 try context.save()
             } catch let error as NSError {
