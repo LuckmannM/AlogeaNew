@@ -801,7 +801,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     // MARK: - TextField functions
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func textFieldDidBeginEditing(textField: UITextField) {
         
         switch textFieldOpen.text{
         case "doseCell":
@@ -849,11 +849,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                             drugNamePickerIndexReferences.append(index)
                         }
                     }
-                    print("")
-                    print("NewDrug.name changed")
-                    print("pickerValues are \(drugNamePickerValues)")
-                    print("corresponding indexes \(drugNamePickerIndexReferences)")
-                    print("")
+//                    print("")
+//                    print("NewDrug.name changed")
+//                    print("pickerValues are \(drugNamePickerValues)")
+//                    print("corresponding indexes \(drugNamePickerIndexReferences)")
+//                    print("")
                     
                    if drugNamePickerValues.count > 1 {
                         dropDownButton.isEnabled = true

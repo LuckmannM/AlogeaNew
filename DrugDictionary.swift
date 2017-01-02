@@ -61,39 +61,9 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         inAppStore = InAppStore.sharedInstance()
         
         self.delegate = self
-        // a bit over the top. An alternative is to abollish the protocol and delegate and just decalre and call in the functions modelUpdated() and errorUpdating() when needed.
         
         fetchPublicRecords()
     }
-    /*
-    func fetchRecordsByName(name: String) {
-        let searchForName = NSPredicate(format: "(displayName = %@)", name)
-        let databaseQuery = CKQuery(recordType: "CloudMedicinesDictionary", predicate: searchForName)
-        
-        publicDB.perform(databaseQuery, inZoneWith: nil, completionHandler: { results, error in
-            if error != nil {
-                DispatchQueue.main.async() {
-                    self.delegate?.errorUpdating(error: error as! NSError)
-                    print("DrugDictionary - fetchRecordsByName. performQuery, error loading: \(error)")
-                    // *** show disabled iCloud connection icon in e.g. NewDrug VC
-                }
-            } else {
-                // *** show enabled oCloud connection icon in e.g. NewDrug VC
-                self.cloudDrugArray.removeAll(keepingCapacity: true)
-                for record in results! {
-                    let medDataSet = CloudDrug(record: record , database:self.publicDB)
-                    self.cloudDrugArray.append(medDataSet)
-                    //                    print("found \(self.cloudDrugArray.count) sets in public iCloud Med Database")
-                }
-                DispatchQueue.main.async() {
-                    self.delegate?.modelUpdated()
-                    print("")
-                }
-            }
-        }
-        )
-    }
- */
     
     func fetchPublicRecords(named: String? = nil) {
         
@@ -215,16 +185,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             return nil
         }
     }
-    
-    
-//    func setSelectedPublicDrug() -> CloudDrug? {
-//        
-//        guard inAppStore.checkDrugFormularyAccess() == true else { return nil }
-//        
-//        guard selectedDrugIndex != nil else { return nil }
-//        
-//        return cloudDrugArray[selectedDrugIndex!]
-//    }
     
     
     func returnSelectedPublicDrug(index: Int?) -> CloudDrug? {

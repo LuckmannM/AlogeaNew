@@ -27,20 +27,23 @@ class CloudDrug {
     var regular: Int!
     
     lazy var substances$: String = {
-        
+        // role is to select drugs in DrugDictionary.matchingDrugNames function to select single substance over multiple substance drugs
         var array = self.substances[0]
         
         for index in 1..<self.substances.count {
             array += self.substances[index] + " "
         }
         return array
-    }() // role is to select drugs in DrugDictionary.matchingDrugNames function to select single substance over multiple substance drugs
+    }()
+    
+    
     lazy var dictionaryTerms:[String] = {
         
         var array = [String]()
 
+        // ***  the entire loop requires repated .contains checks which may slow performance; review and check better options
         for brandTerm in self.brandNames {
-            
+            // if the CloudDashboard drug doesn't have a brandName a cloudDrug will be intialised with [""] as brandNames
             var substanceDose = String()
             var brand = String()
             var doses = String()
@@ -54,15 +57,15 @@ class CloudDrug {
             if self.substances.count == 1 {
                 for doseIndex in 0..<self.singleUnitDoses.count {
                     if self.substances[0] != brand {
-                        substanceDose = self.substances[0] + " \(String(format: "%g",self.singleUnitDoses[doseIndex]))"
                         doses = "\(String(format: "%g", self.singleUnitDoses[doseIndex]))"
-                        array.append(brand + " " + doses)
+                        array.append(self.substances[0] + " " + doses)
+                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
                     } else {
                         array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
                     }
                 }
-                array.append(self.substances[0] + " \(String(format: "%g", self.singleUnitDoses[0]))")
                 
+            
             } else {
                 guard self.substances.count <= self.singleUnitDoses.count else {
                     print("error in CloudDrug.dictionaryTerms - number of singleUnitDoses lower than number of substances in drug \(self.displayName)")
@@ -77,7 +80,9 @@ class CloudDrug {
                     }
                 }
                 array.append(brand + " (" + doses + ")")
-                array.append(substanceDose)
+                if !array.contains(substanceDose) {
+                    array.append(substanceDose)
+                }
                 substanceDose = ""
                 doses = ""
             }
