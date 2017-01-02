@@ -527,11 +527,19 @@ public class DrugEpisode: NSManagedObject {
     }
     
     func individualDoseString(index: Int, numberOnly: Bool = false) -> String {
-        
+
         if numberOnly {
-            return numberFormatter.string(from: NSNumber(value:dosesVar[0]))!
+            if index <= dosesVar.count {
+                return numberFormatter.string(from: NSNumber(value:dosesVar[index]))!
+            } else {
+                return numberFormatter.string(from: NSNumber(value:dosesVar[0]))!
+            }
         } else {
-            return (numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar)
+            if index <= dosesVar.count {
+                return (numberFormatter.string(from: NSNumber(value:dosesVar[index]))! + " " + doseUnitVar)
+            } else {
+                return (numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + " " + doseUnitVar)
+            }
         }
     }
 
@@ -589,17 +597,45 @@ public class DrugEpisode: NSManagedObject {
             let minimum = dosesVar.min()
             let maximum = dosesVar.max()
             
+            if maximum! > 1.0 && doseUnitVar.contains("tablet") {
+                doseUnitVar = "tablets"
+            }
+            
             if minimum == maximum {
-                doses$ = frequencyString() + "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar
+                doses$ = frequencyString() + "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + " " + doseUnitVar
             } else {
-                doses$ = frequencyString() + ", " + numberFormatter.string(from: NSNumber( value: minimum!))! + "-" + numberFormatter.string(from: NSNumber( value: maximum!))! + doseUnitVar
+                doses$ = frequencyString() + ", " + numberFormatter.string(from: NSNumber( value: minimum!))! + "-" + numberFormatter.string(from: NSNumber( value: maximum!))! + " " + doseUnitVar
             }
         } else { // as required drugs only have one dose
-            doses$ = "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + doseUnitVar
+            doses$ = "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + " " + doseUnitVar
         }
         
         return doses$
     }
+    func dosesShortString() -> String {
+        
+        var doses$ = String()
+        
+        if regularlyVar == true {
+            let minimum = dosesVar.min()
+            let maximum = dosesVar.max()
+            
+            if maximum! > 1.0 && doseUnitVar.contains("tablet") {
+                doseUnitVar = "tablets"
+            }
+            
+            if minimum == maximum {
+                doses$ = numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + " " + doseUnitVar
+            } else {
+                doses$ = numberFormatter.string(from: NSNumber( value: minimum!))! + "-" + numberFormatter.string(from: NSNumber( value: maximum!))! + " " + doseUnitVar
+            }
+        } else { // as required drugs only have one dose
+            doses$ = "  " + numberFormatter.string(from: NSNumber(value:dosesVar[0]))! + " " + doseUnitVar
+        }
+        
+        return doses$
+    }
+
 
     func startDateString() -> String {
         return dateFormatter.string(from: startDateVar)
@@ -663,7 +699,9 @@ public class DrugEpisode: NSManagedObject {
             return 1
         case "µg/h":
             return 2
-        case "units":
+        case "tablet":
+            return 3
+        case "tablets":
             return 3
         default:
             return 0
@@ -680,41 +718,45 @@ public class DrugEpisode: NSManagedObject {
         case 2:
             doseUnitVar = "µg/h"
         case 3:
-            doseUnitVar = "units"
+            if dosesVar[0] > 1.0 {
+                doseUnitVar = "tablets"
+            } else {
+                doseUnitVar = "tablet"
+            }
         default:
             doseUnitVar = "error"
         }
         
     }
 
-    func getDetailsFromCloudDrug(publicDrug: CloudDrug) {
-        
-        name = publicDrug.displayName
-        if publicDrug.substances != nil {
-            ingredientsVar = publicDrug.substances
-        }
-        if publicDrug.classes != nil {
-            classesVar = publicDrug.classes
-        }
-        if publicDrug.doseUnit != nil {
-            doseUnitVar = publicDrug.doseUnit
-            
-        }
-        if publicDrug.startingDoses != nil {
-            dosesVar = publicDrug.startingDoses
-        }
-        if publicDrug.regular != nil {
-            if publicDrug.regular == 1 { regularlyVar = true }
-            else {regularlyVar = false }
-        }
-        if publicDrug.startingDoseInterval != nil {
-            frequency = publicDrug.startingDoseInterval as TimeInterval
-        }
-        
-        resetReminders()
-        
-        // *** also transfer other parameter here...
-    }
+//    func getDetailsFromCloudDrug(publicDrug: CloudDrug) {
+//        
+//        name = publicDrug.displayName
+//        if publicDrug.substances != nil {
+//            ingredientsVar = publicDrug.substances
+//        }
+//        if publicDrug.classes != nil {
+//            classesVar = publicDrug.classes
+//        }
+//        if publicDrug.doseUnit != nil {
+//            doseUnitVar = publicDrug.doseUnit
+//            
+//        }
+//        if publicDrug.startingDoses != nil {
+//            dosesVar = publicDrug.startingDoses
+//        }
+//        if publicDrug.regular != nil {
+//            if publicDrug.regular == 1 { regularlyVar = true }
+//            else {regularlyVar = false }
+//        }
+//        if publicDrug.startingDoseInterval != nil {
+//            frequency = publicDrug.startingDoseInterval as TimeInterval
+//        }
+//        
+//        resetReminders()
+//        
+//        // *** also transfer other parameter here...
+//    }
 
     
     // MARK: - DrugRating helper methods
@@ -769,14 +811,36 @@ public class DrugEpisode: NSManagedObject {
         if publicDrug.classes != nil {
             classesVar = publicDrug.classes
         }
+        
+        
+        // link between doseUnit and doses: id multiple substances/ingredients, each withn it's own dose exist then switch the shown doseUnit from e.g. mg in cloudDrug to 'tablets' in this database to keep things simple. If not doseUnit is present (which shouldn't happen) use the cloudDrug's startingDoses to avoid empty variables
         if publicDrug.doseUnit != nil {
-            doseUnit = publicDrug.doseUnit
-            
+            if ingredientsVar != nil {
+                if ingredientsVar!.count > 1 {
+                    dosesVar[0] = publicDrug.startingDoses[0] / publicDrug.singleUnitDoses[0]
+                    if dosesVar[0] > 1 {
+                        doseUnitVar = "tablets"
+                    } else {
+                        doseUnitVar = "tablet"
+                    }
+                } else {
+                    doseUnitVar = publicDrug.doseUnit
+                }
+            } else {
+                doseUnit = publicDrug.doseUnit
+                if publicDrug.startingDoses != nil {
+                    dosesVar = publicDrug.startingDoses
+                }
+            }
+        } else {
+            if publicDrug.startingDoses != nil {
+                dosesVar = publicDrug.startingDoses
+            }
         }
+        
         // *** this needs more consideration, particularly if the are multiple substances and doses. In this case it may be better to use 'tablets' instead of mg/g etc!
-        if publicDrug.startingDoses != nil {
-            dosesVar = publicDrug.startingDoses
-        }
+
+        
         if publicDrug.regular != nil {
             if publicDrug.regular == 1 { regularlyVar = true }
             else {regularlyVar = false }

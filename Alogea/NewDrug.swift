@@ -306,7 +306,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
     }
     
-    @objc func dropDownButtonFunction(sender: UIButton) {
+    @objc func dropDownButtonFunction() {
         
         let changeAtPath = IndexPath(row: 1, section: 0)
         let nameCellIndexpath = IndexPath(row: 0, section: 0)
@@ -389,7 +389,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = theNewDrug!.nameVar
             if dropDownButton == nil {
                 dropDownButton = cell.contentView.viewWithTag(50) as! UIButton
-                dropDownButton.addTarget(self, action: #selector(self.dropDownButtonFunction(sender:)), for: .touchUpInside)
+                dropDownButton.addTarget(self, action: #selector(self.dropDownButtonFunction), for: .touchUpInside)
                 dropDownButton.isEnabled = false
             }
         case "namePickerCell":
@@ -474,7 +474,8 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Doses"
             doseDetailLabel = (cell.contentView.viewWithTag(detailTag) as! UILabel) // property to check wether touch is inside
             doseDetailLabel.text = theNewDrug!.dosesString()
-            if (theNewDrug!.regularly == true) { cell.accessoryType = .disclosureIndicator}
+            
+            if (theNewDrug!.regularlyVar == true) { cell.accessoryType = .disclosureIndicator}
             else { cell.accessoryType = .none }
             
         case "doseUnitCell":
@@ -482,13 +483,14 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 doseUnitSelection = cell.contentView.viewWithTag(controlTag) as! UISegmentedControl
                 doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
                 doseUnitSelection.addTarget(self, action: #selector(doseUnitSelection(sender:)), for: UIControlEvents.valueChanged)
+            } else {
+                doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
             }
-            
             
         // SECTION 3
         case "notesCell":
             notesTextView = cell.contentView.viewWithTag(textViewTag) as! UITextView
-            notesTextView.text = theNewDrug!.notes
+            notesTextView.text = theNewDrug!.notesVar
             
         default:
             print("ERROR; cell does not exist: for indexPath \(indexPath)")
@@ -521,56 +523,42 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         case "nameCell", "ingredientsCell", "classCell":
             
             // first check if namePicker is active
-            if cellRowHelper.pickerViewVisible(name: "namePickerCell") {
-                let changeAtPath = IndexPath(row: indexPath.row+1, section: indexPath.section)
-                
-                (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.black
-                cellRowHelper.removeVisibleRow(row: changeAtPath.row, inSection: 0)
-                tableView.deleteRows(at: [changeAtPath], with: .top)
-                
-                // drugNamePickerValues[0] needs correction taking into account selection in drugNamePicker
-                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
-                    theNewDrug!.getDetailsFromCloudDrug(publicDrug: selectedPublicDrug)
-                    //                        let indexSet = NSIndexSet(index: 0)
-                    tableView.reloadData()
-                }
-                
-                drugNamePicker.removeFromSuperview()
+            guard !cellRowHelper.pickerViewVisible(name: "namePickerCell") else {
+                return
+                // do nothing as de-selection should happen via dropDown menu function or textField return
             }
-                // ... if not, active name textField
-            else {
-                if textField == nil {
-                    textField = UITextField()
-                }
-                textField.isEnabled = true
-                titleLabel = cell?.contentView.viewWithTag(titleTag) as! UILabel
-                textField.text = titleLabel.text!
-                
-                if titleLabel != nil {
-                    titleLabel.text = ""
-                }
-                let spaceForTextField = (cell?.contentView.frame.width)! - titleLabel.frame.origin.x - 30.0
-                textField.delegate = self
-                textField.isEnabled = true
-                textField.clearsOnBeginEditing = false
-                textField.frame = CGRect(x: titleLabel.frame.origin.x, y: titleLabel.frame.origin.y, width: spaceForTextField, height: titleLabel.frame.height)
-                textField.keyboardType = UIKeyboardType.default
-                textField.returnKeyType = UIReturnKeyType.done
-                textField.becomeFirstResponder()
-                textField.clearButtonMode = .whileEditing
-                
-                if inAppStore.checkDrugFormularyAccess() {
-                    textField.addTarget(self, action: #selector(textFieldEntryAction(sender:)), for: UIControlEvents.editingChanged)
-                }
-                textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
-                
-                cell?.contentView.addSubview(textField)
-                
-                textFieldOpen.isOpen = true
-                textFieldOpen.path = indexPath
-                textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
-                textFieldOpen.textField = textField
+            
+            if textField == nil {
+                textField = UITextField()
             }
+            textField.isEnabled = true
+            titleLabel = cell?.contentView.viewWithTag(titleTag) as! UILabel
+            textField.text = titleLabel.text!
+            
+            if titleLabel != nil {
+                titleLabel.text = ""
+            }
+            let spaceForTextField = (cell?.contentView.frame.width)! - titleLabel.frame.origin.x - 30.0
+            textField.delegate = self
+            textField.isEnabled = true
+            textField.clearsOnBeginEditing = false
+            textField.frame = CGRect(x: titleLabel.frame.origin.x, y: titleLabel.frame.origin.y, width: spaceForTextField, height: titleLabel.frame.height)
+            textField.keyboardType = UIKeyboardType.default
+            textField.returnKeyType = UIReturnKeyType.done
+            textField.becomeFirstResponder()
+            textField.clearButtonMode = .whileEditing
+            
+            if inAppStore.checkDrugFormularyAccess() {
+                textField.addTarget(self, action: #selector(textFieldEntryAction(sender:)), for: UIControlEvents.editingChanged)
+            }
+            textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
+            
+            cell?.contentView.addSubview(textField)
+            
+            textFieldOpen.isOpen = true
+            textFieldOpen.path = indexPath
+            textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
+            textFieldOpen.textField = textField
             
         // SECTION 1
         case "startDateCell":
@@ -917,11 +905,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: titleLabel.text)
                     tableView.reloadData()
                 }
-                
-//                if let selectedPublicDrug = drugDictionary.setSelectedPublicDrug() {
-//                    theNewDrug!.getDetailsFromCloudDrug(publicDrug: selectedPublicDrug)
-//                    tableView.reloadData()
-//                }
             }
             else if let entry = textField.text {
                 if entry != "" {

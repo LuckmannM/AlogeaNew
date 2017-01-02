@@ -222,8 +222,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
             cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-            cell.doseLabel.text = aDrug.individualDoseString(index: 0, numberOnly: false)
-            if aDrug.endDate != nil {
+//            cell.doseLabel.text = aDrug.individualDoseString(index: 0, numberOnly: false)
+            cell.doseLabel.text = aDrug.dosesShortString()
+           if aDrug.endDate != nil {
                 cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
             } else {
                 cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"

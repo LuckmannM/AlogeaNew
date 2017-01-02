@@ -271,7 +271,7 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         }
         
         let theDose = tempDoses[indexPath.row] as NSNumber
-        doseTextField[indexPath.row] .text = numberFormatter.string(from: theDose)! + drugData.doseUnitVar!
+        doseTextField[indexPath.row] .text = numberFormatter.string(from: theDose)! + " " + drugData.doseUnitVar!
         
         return false
     }
