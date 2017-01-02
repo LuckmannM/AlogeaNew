@@ -314,19 +314,22 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         if cellRowHelper.pickerViewVisible(name: "namePickerCell") {
             cellRowHelper.removeVisibleRow(row: changeAtPath.row, inSection: changeAtPath.section)
             drugNamePicker.removeFromSuperview()
-            tableView.deleteRows(at: [changeAtPath], with: .automatic)
+            tableView.deleteRows(at: [changeAtPath], with: .none)
+            
+            let cell = tableView.cellForRow(at: nameCellIndexpath)
+            (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
+            (cell?.contentView.viewWithTag(titleTag) as! UILabel).text = drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)]
 
-            // drugNamePickerValues[0] needs correction taking into account selection in drugNamePicker
-            if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
-                theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)])
-                tableView.reloadData()
-                let cell = tableView.cellForRow(at: nameCellIndexpath)
-                (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
-                (cell?.contentView.viewWithTag(titleTag) as! UILabel).text = drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)]
-                
-                // need to complete and resolve name textField as the name text may only have been entered partially when dropDown menu activated and selected. This should 'close' and complete the textField entry
+            // need to complete and resolve any open name textField as the name text may only have been entered partially when dropDown menu activated and selected. This should 'close' and complete the textField entry
+            if textFieldOpen.isOpen {
+                let _ = textFieldShouldReturn(textFieldOpen.textField)
+            } else {
+                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
+                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)])
+                }
             }
-
+            
+            tableView.reloadData()
         } else {
             let cell = tableView.cellForRow(at: nameCellIndexpath)
             cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
@@ -894,6 +897,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             print("textFieldOpen[3] is \(textFieldOpen.textField)")
             return false
         }
+        
         switch textFieldOpen.text {
         case "nameCell":
             
