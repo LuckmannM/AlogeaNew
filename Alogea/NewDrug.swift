@@ -328,13 +328,22 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)])
                 }
             }
-            
+            dropDownButton.isEnabled = false
             tableView.reloadData()
         } else {
             let cell = tableView.cellForRow(at: nameCellIndexpath)
             cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
             tableView.insertRows(at: [changeAtPath], with: .top)
             (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
+            
+            // make drugNamePicker show the currently selected drug (if any), rather than [0]
+            let indexOfSelectedDrug = drugNamePickerIndexReferences.index(where: {
+                $0 == drugDictionary.selectedDrugIndex
+            })
+            print("")
+            print("indexOfSelectedDrug is \(indexOfSelectedDrug)")
+            
+            drugNamePicker.selectRow(indexOfSelectedDrug ?? 0, inComponent: 0, animated: false)
         }
         
     }
@@ -766,8 +775,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             let attribute = UIFont(name: "AvenirNext-Regular", size: 11)!
             let titleText = NSAttributedString(
                 string: drugNamePickerValues[row],
-                attributes: [NSFontAttributeName: attribute,
-                             NSUnderlineColorAttributeName: UIColor.black]
+                attributes: [NSFontAttributeName: attribute]
             )
 
             return titleText
@@ -804,7 +812,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     // MARK: - TextField functions
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         
         switch textFieldOpen.text{
         case "doseCell":
@@ -852,7 +860,15 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                             drugNamePickerIndexReferences.append(index)
                         }
                     }
-//                    print("")
+                    // make drugNamePicker show the currently selected drug (if any), rather than [0]
+                    let indexOfSelectedDrug = drugNamePickerIndexReferences.index(where: {
+                        $0 == drugDictionary.selectedDrugIndex
+                    })
+                    
+                    drugNamePicker.reloadComponent(0)
+                    drugNamePicker.selectRow(indexOfSelectedDrug ?? 0, inComponent: 0, animated: false)
+
+
 //                    print("NewDrug.name changed")
 //                    print("pickerValues are \(drugNamePickerValues)")
 //                    print("corresponding indexes \(drugNamePickerIndexReferences)")
@@ -919,6 +935,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 
                 titleLabel.text = textField.text
             }
+            dropDownButton.isEnabled = false
         case "ingredientsCell":
             if let entry = textField.text {
                 theNewDrug!.ingredientsVar = entry.components(separatedBy: " ")

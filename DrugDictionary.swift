@@ -37,6 +37,7 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     var delegate: PublicDrugDataBaseDelegate?
     
     var selectedDrugIndex: Int?
+    var selectedDrugIndexForNamePicker: Int?
     var inAppStore: InAppStore!
     
     var termsDictionary = Dictionary<String, Int>() // this contains specific terms with indexes related to drug in cloudDrugArray, used for the NewDrug name row dropDown menu for selection
@@ -138,12 +139,12 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         drugSelectionTerms.sort(by: < ) // these the terms used for the namePickerView in NewDrug name row
         
         let firstMatch = indexedNameDictionary.keys.first(where: { (key) -> Bool in
-            key.contains(name)
+            key.lowercased().contains(name.lowercased())
         })
-//        print("firstMatch is \(firstMatch)")
-        
-        let matchingKVPairs = indexedNameDictionary.lazy.filter({$0.0.contains(name)})
         print("matchingDrugNames____________")
+        print("firstMatch is \(firstMatch)")
+        
+        let matchingKVPairs = indexedNameDictionary.lazy.filter({$0.0.lowercased().contains(name.lowercased())})
         print("matching for term: \(name)")
         print("matchingKVPairs are \(matchingKVPairs)")
         
@@ -151,12 +152,13 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         if firstMatch != nil && matchingKVPairs.first != nil {
             for index in (matchingKVPairs.first?.value)! {
                 if firstMatch!.contains("®") {
-                    selectedDrugIndex = index
-                    print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
-                    print("currently selectedCloudDrug is \(cloudDrugArray[selectedDrugIndex!].displayName)")
+                        selectedDrugIndex = index
+                        // problem with this: if the brandName selected is not the [0] element in cloudDrugArray[index].brandNames then still brandName[0] is selected, which is the correct cloudDrug but under a different brandName than selected
+                        print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
+                        print("currently selectedCloudDrug is \(cloudDrugArray[selectedDrugIndex!].displayName)")
                 }
                 else {
-                    // this loop should find the cloudDrug in cloudDrugArray that contains the firstMatch substance as single substance only, rather than as one of multiple substances, so that the name disdplayed in NewDrug.name row matches the selected drug, either as brandname(above) or as single substance drug
+                    // this loop should find the cloudDrug in cloudDrugArray that contains the firstMatch substance as single substance only, rather than as one of multiple substances, so that the name displayed in NewDrug.name row matches the selected drug, either as brandname(above) or as single substance drug
                     if cloudDrugArray[index].substances$ == firstMatch! as String {
                         selectedDrugIndex = index
                         print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
@@ -179,6 +181,12 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             
             print ("matchingCloudDrugIndexes are \(matchingCloudDictionaryIndexes)")
             
+//            selectedDrugIndexForNamePicker = matchingCloudDictionaryIndexes.index(where: {
+//                $0 == selectedDrugIndex
+//            })
+//            
+//            print ("selectedDrugIndexForNamePicker is at index \(selectedDrugIndexForNamePicker)")
+
             return firstMatch! as String
         } else {
             selectedDrugIndex = nil

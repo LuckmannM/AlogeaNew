@@ -35,7 +35,17 @@ class CloudDrug {
         }
         return array
     }()
-    
+  
+    lazy var brands$: String = {
+        // role is to select drugs in DrugDictionary.matchingDrugNames function to select single substance over multiple substance drugs
+        var array = self.brandNames[0]
+        
+        for index in 1..<self.brandNames.count {
+            array += self.brandNames[index] + "® "
+        }
+        return array
+    }()
+
     
     lazy var dictionaryTerms:[String] = {
         
