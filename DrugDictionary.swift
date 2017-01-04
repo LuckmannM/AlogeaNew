@@ -5,15 +5,6 @@
 //  Created by mikeMBP on 13/11/2016.
 //  Copyright © 2016 AppToolFactory. All rights reserved.
 //
-
-//
-//  PublicFormulary.swift
-//  PainDiaryModelFramework
-//
-//  Created by mikeMBP on 11/01/2016.
-//  Copyright © 2016 AppToolFactory. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CloudKit
@@ -44,6 +35,15 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     var drugSelectionTerms = [String]() // contains strings only of the above specific terms to be displayed in NewDrug name namePicker
     var indexedNameDictionary = [String:[Int]]() // this contains all brandNames and substanceNames connected to the index in cloudDrugArray for return to NewDrug row name textField; it does contain a specfic name only once and the cloudDrugIndexes of drugs containing this term
     var matchingCloudDictionaryIndexes = [Int]()
+    
+    var namePickerIndexReferences = [Int]() // containing the cloudDrugArray indexes of drugNames passed to NewDrug.namePicker
+    
+    lazy var selectedNamePickerIndex: Int? = {
+        
+        return self.namePickerIndexReferences.index(where: {
+            $0 == self.selectedDrugIndex
+        })
+    }()
     
     init () {
         iCloudContainer = CKContainer.default()
@@ -115,7 +115,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
 
     }
     
-    
     func drugFormularyClassesArray() -> [[String]] {
         
         var classesArray = [[String]]()
@@ -181,12 +180,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             
             print ("matchingCloudDrugIndexes are \(matchingCloudDictionaryIndexes)")
             
-//            selectedDrugIndexForNamePicker = matchingCloudDictionaryIndexes.index(where: {
-//                $0 == selectedDrugIndex
-//            })
-//            
-//            print ("selectedDrugIndexForNamePicker is at index \(selectedDrugIndexForNamePicker)")
-
             return firstMatch! as String
         } else {
             selectedDrugIndex = nil
@@ -194,6 +187,20 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         }
     }
     
+    func namePickerTerms() -> [String] {
+        
+        var array = [String]()
+        namePickerIndexReferences = [Int]()
+        
+        for index in matchingCloudDictionaryIndexes {
+            for term in cloudDrugArray[index].dictionaryTerms {
+                array.append(term)
+                namePickerIndexReferences.append(index)
+            }
+        }
+        
+        return array
+    }
     
     func returnSelectedPublicDrug(index: Int?) -> CloudDrug? {
         

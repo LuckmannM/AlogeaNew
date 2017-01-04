@@ -332,18 +332,15 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             tableView.reloadData()
         } else {
             let cell = tableView.cellForRow(at: nameCellIndexpath)
+            
+            drugNamePickerValues = drugDictionary.namePickerTerms()
+            drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
+            drugNamePicker.selectRow(drugDictionary.selectedNamePickerIndex ?? 0, inComponent: 0, animated: false)
+            
             cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
             tableView.insertRows(at: [changeAtPath], with: .top)
             (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
             
-            // make drugNamePicker show the currently selected drug (if any), rather than [0]
-            let indexOfSelectedDrug = drugNamePickerIndexReferences.index(where: {
-                $0 == drugDictionary.selectedDrugIndex
-            })
-            print("")
-            print("indexOfSelectedDrug is \(indexOfSelectedDrug)")
-            
-            drugNamePicker.selectRow(indexOfSelectedDrug ?? 0, inComponent: 0, animated: false)
         }
         
     }
@@ -850,24 +847,12 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 
                 if titleLabel != nil {
                     titleLabel.text = name!.localizedCapitalized
-                    drugNamePickerValues = drugDictionary.drugSelectionTerms
                     
-                    drugNamePickerValues = [String]()
-                    drugNamePickerIndexReferences = [Int]()
-                    for index in drugDictionary.matchingCloudDictionaryIndexes {
-                        for term in drugDictionary.cloudDrugArray[index].dictionaryTerms {
-                            drugNamePickerValues.append(term)
-                            drugNamePickerIndexReferences.append(index)
-                        }
-                    }
-                    // make drugNamePicker show the currently selected drug (if any), rather than [0]
-                    let indexOfSelectedDrug = drugNamePickerIndexReferences.index(where: {
-                        $0 == drugDictionary.selectedDrugIndex
-                    })
+                    drugNamePickerValues = drugDictionary.namePickerTerms()
+                    drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
                     
                     drugNamePicker.reloadComponent(0)
-                    drugNamePicker.selectRow(indexOfSelectedDrug ?? 0, inComponent: 0, animated: false)
-
+                    drugNamePicker.selectRow(drugDictionary.selectedNamePickerIndex ?? 0, inComponent: 0, animated: false)
 
 //                    print("NewDrug.name changed")
 //                    print("pickerValues are \(drugNamePickerValues)")
