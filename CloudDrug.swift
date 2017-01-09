@@ -46,59 +46,6 @@ class CloudDrug {
         return array
     }()
     
-//    lazy var dictionaryTerms:[String] = {
-//        
-//        var array = [String]()
-//
-//        // ***  the entire loop requires repated .contains checks which may slow performance; review and check better options
-//        for brandTerm in self.brandNames {
-//            // if the CloudDashboard drug doesn't have a brandName a cloudDrug will be intialised with [""] as brandNames
-//            var substanceDose = String()
-//            var brand = String()
-//            var doses = String()
-//            
-//            if brandTerm == "" {
-//                brand = self.displayName
-//            } else {
-//                brand = brandTerm + "®"
-//            }
-//            
-//            if self.substances.count == 1 {
-//                for doseIndex in 0..<self.singleUnitDoses.count {
-//                    if self.substances[0] != brand {
-//                        doses = "\(String(format: "%g", self.singleUnitDoses[doseIndex]))"
-//                        array.append(self.substances[0] + " " + doses)
-//                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
-//                    } else {
-//                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
-//                    }
-//                }
-//                
-//            
-//            } else {
-//                guard self.substances.count <= self.singleUnitDoses.count else {
-//                    print("error in CloudDrug.dictionaryTerms - number of singleUnitDoses lower than number of substances in drug \(self.displayName)")
-//                    break
-//                }
-//                for index in 0..<self.substances.count {
-//                    substanceDose = substanceDose + self.substances[index] + " \(String(format: "%g", self.singleUnitDoses[index]))"
-//                    doses = doses + "\(String(format: "%g", self.singleUnitDoses[index]))"
-//                    if index < (self.substances.count - 1) {
-//                        substanceDose = substanceDose + " + "
-//                        doses = doses + "/"
-//                    }
-//                }
-//                array.append(brand + " (" + doses + ")")
-//                if !array.contains(substanceDose) {
-//                    array.append(substanceDose)
-//                }
-//                substanceDose = ""
-//                doses = ""
-//            }
-//        }
-//        return array
-//    }()
-    
     // MARK: - Functions
         
     init(record: CKRecord, database: CKDatabase) {
@@ -138,6 +85,15 @@ class CloudDrug {
             self.singleUnitDoses = self.record.object(forKey: "singeUnitDoses") as? [Double]
         }
         
+        // if there is no brandName then add combined substance term s brandName
+        var substances$ = self.substances[0]
+        if brandNames?.count == 0 {
+            for index in 1..<self.substances.count {
+                substances$ += "/" + substances[index]
+            }
+            self.brandNames?.append(substances$)
+        }
+
     }
     
     func substancesForSearch() -> String {
@@ -167,8 +123,8 @@ class CloudDrug {
                 // if a substance that begins with the searchterm is found then attach all substance names combined
                 array.append(substancesForDisplay())
                 // also attached all brandNames as these contain the searchTerm substance
-                if brandNames != nil {
-                    for name in brandNames! {
+                for name in brandNames! {
+                    if name != substance { // if no brandName then combined substance term is added as brandName; this avoid duplicating substance and brandName if equal
                         array.append(name)
                     }
                 }
