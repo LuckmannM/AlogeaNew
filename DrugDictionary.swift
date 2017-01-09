@@ -27,23 +27,22 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     
     var delegate: PublicDrugDataBaseDelegate?
     
-    var selectedDrugIndex: Int?
-    var selectedDrugIndexForNamePicker: Int?
-    var inAppStore: InAppStore!
+    var bestMatchingDrugIndex: Int?
+//    var inAppStore: InAppStore!
     
-    var termsDictionary = Dictionary<String, Int>() // this contains specific terms with indexes related to drug in cloudDrugArray, used for the NewDrug name row dropDown menu for selection
-    var drugSelectionTerms = [String]() // contains strings only of the above specific terms to be displayed in NewDrug name namePicker
-    var indexedNameDictionary = [String:[Int]]() // this contains all brandNames and substanceNames connected to the index in cloudDrugArray for return to NewDrug row name textField; it does contain a specfic name only once and the cloudDrugIndexes of drugs containing this term
-    var matchingCloudDictionaryIndexes = [Int]()
+//    var termsDictionary = Dictionary<String, Int>() // this contains specific terms with indexes related to drug in cloudDrugArray, used for the NewDrug name row dropDown menu for selection
+//    var drugSelectionTerms = [String]() // contains strings only of the above specific terms to be displayed in NewDrug name namePicker
+//    var indexedNameDictionary = [String:[Int]]() // this contains all brandNames and substanceNames connected to the index in cloudDrugArray for return to NewDrug row name textField; it does contain a specfic name only once and the cloudDrugIndexes of drugs containing this term
+//    var matchingCloudDictionaryIndexes = [Int]()
     
-    var namePickerIndexReferences = [Int]() // containing the cloudDrugArray indexes of drugNames passed to NewDrug.namePicker
+    var namePickerArray = [String]() // containing the cloudDrugArray indexes of drugNames passed to NewDrug.namePicker
     
-    lazy var selectedNamePickerIndex: Int? = {
-        
-        return self.namePickerIndexReferences.index(where: {
-            $0 == self.selectedDrugIndex
-        })
-    }()
+//    lazy var selectedNamePickerIndex: Int? = {
+//        
+//        return self.namePickerIndexReferences.index(where: {
+//            $0 == self.selectedDrugIndex
+//        })
+//    }()
     
     init () {
         iCloudContainer = CKContainer.default()
@@ -59,7 +58,7 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             }
         })
 
-        inAppStore = InAppStore.sharedInstance()
+//        inAppStore = InAppStore.sharedInstance()
         
         self.delegate = self
         
@@ -103,192 +102,180 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         
     }
     
-    func drugFormularyDisplayNamesArray() -> [String] {
-        
-        var nameArray = [String]()
-        
-        for drug in cloudDrugArray {
-            nameArray.append(drug.displayName.lowercased())
-        }
-        
-        return nameArray
-
-    }
-    
-    func drugFormularyClassesArray() -> [[String]] {
-        
-        var classesArray = [[String]]()
-        
-        for drug in cloudDrugArray {
-            classesArray.append(drug.classes)
-        }
-        
-        return classesArray
-    }
-    
-    func matchingDrugNames(name: String) -> String? {
-        
-        
-        if inAppStore.checkDrugFormularyAccess() == false {
-             return nil
-        }
-        
-        drugSelectionTerms = termsDictionary.keys.filter({$0.lowercased().contains(name.lowercased())})
-        
-        drugSelectionTerms.sort(by: < ) // these the terms used for the namePickerView in NewDrug name row
-        
-        let firstMatch = indexedNameDictionary.keys.first(where: { (key) -> Bool in
-            key.lowercased().contains(name.lowercased())
-        })
-        print("matchingDrugNames____________")
-        print("firstMatch is \(firstMatch)")
-        
-        let matchingKVPairs = indexedNameDictionary.lazy.filter({$0.0.lowercased().contains(name.lowercased())})
-        print("matching for term: \(name)")
-        print("matchingKVPairs are \(matchingKVPairs)")
-        
-        
-        if firstMatch != nil && matchingKVPairs.first != nil {
-            for index in (matchingKVPairs.first?.value)! {
-                if firstMatch!.contains("®") {
-                        selectedDrugIndex = index
-                        // problem with this: if the brandName selected is not the [0] element in cloudDrugArray[index].brandNames then still brandName[0] is selected, which is the correct cloudDrug but under a different brandName than selected
-                        print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
-                        print("currently selectedCloudDrug is \(cloudDrugArray[selectedDrugIndex!].displayName)")
-                }
-                else {
-                    // this loop should find the cloudDrug in cloudDrugArray that contains the firstMatch substance as single substance only, rather than as one of multiple substances, so that the name displayed in NewDrug.name row matches the selected drug, either as brandname(above) or as single substance drug
-                    if cloudDrugArray[index].substances$ == firstMatch! as String {
-                        selectedDrugIndex = index
-                        print("index of currently selectedCloudDrug is \(selectedDrugIndex)")
-                        print("currently selectedCloudDrug is \(cloudDrugArray[selectedDrugIndex!])")
-                        break
-                    }
-                }
-            }
-            // next there needs to be an exact match between cloudDrugArray[selectedDrugIndex] and the index of this drug in the drugSelectionTerms array; this index is passed on as selected drug of the drugSelectionTerms to the NewDrug.name drugNamePicker as array to chose from. When chosing the index number from this drugSelectionTerms array member is passed back and nneds to be translated to the cloudDrugArray inded number for the correct drug to be picked.
-            
-            matchingCloudDictionaryIndexes = [Int]()
-            for (_, indexes) in matchingKVPairs {
-                for index in indexes {
-                    if !matchingCloudDictionaryIndexes.contains(index) {
-                        matchingCloudDictionaryIndexes.append(index)
-                    }
-                }
-            }
-            // use these indexes instead of drugSelectionTerms for displaying the terms for drugNamePicker via CloudDrug.dictionaryTerms. Howver, this return [String] so this needs to be translated to individual string with maintained link to their CloudDrugDiciotnary index!
-            
-            print ("matchingCloudDrugIndexes are \(matchingCloudDictionaryIndexes)")
-            
-            return firstMatch! as String
-        } else {
-            selectedDrugIndex = nil
-            return nil
-        }
-    }
-    
-    func namePickerTerms() -> [String] {
-        
-        var array = [String]()
-        namePickerIndexReferences = [Int]()
-        
-        for index in matchingCloudDictionaryIndexes {
-            for term in cloudDrugArray[index].dictionaryTerms {
-                array.append(term)
-                namePickerIndexReferences.append(index)
-            }
-        }
-        
-        return array
-    }
-    
-    func returnSelectedPublicDrug(index: Int?) -> CloudDrug? {
-        
-        guard inAppStore.checkDrugFormularyAccess() == true else { return nil }
-        
-        
-        // this is not right - either index = returned index of the drugSelectionTerms array
-        // or selectedDrugIndex needs to be adapted when namePickerChoise is made in NewDrug
-        
-        guard index != nil else { return nil }
-        
-        return cloudDrugArray[selectedDrugIndex!]
-        
-    }
+//    func drugFormularyDisplayNamesArray() -> [String] {
+//        
+//        var nameArray = [String]()
+//        
+//        for drug in cloudDrugArray {
+//            nameArray.append(drug.displayName.lowercased())
+//        }
+//        
+//        return nameArray
+//
+//    }
+//    
+//    func drugFormularyClassesArray() -> [[String]] {
+//        
+//        var classesArray = [[String]]()
+//        
+//        for drug in cloudDrugArray {
+//            classesArray.append(drug.classes)
+//        }
+//        
+//        return classesArray
+//    }
     
     func errorUpdating(error: NSError) {
-
+        
         print("error loading DrugDictionary: \(error)")
         // *** consider displaying an alert prompting user to log into iCloud
-
+        
     }
     
     func modelUpdated() {
         
-        var drugIndex = 0
+//        var drugIndex = 0
+//        
+//        termsDictionary.removeAll()
+//        indexedNameDictionary.removeAll()
+//        
+//        for drug in cloudDrugArray {
+//            
+//            // build termDictionary: for NewDrug.name dropDown menu, all terms containing a string
+//            for term in drug.dictionaryTerms {
+//                termsDictionary[term] = drugIndex
+//            }
+//            
+//            // build indexedNameDictionary: for NewDrug.name textField, only one matching term for display
+//            for brandTerm in drug.brandNames {
+//                
+//                var brand = String()
+//                if brandTerm == "" {
+//                    brand = drug.displayName
+//                } else {
+//                    brand = brandTerm + "®"
+//                }
+//                
+//                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
+//                    key == brandTerm })
+//                {
+//                    indexedNameDictionary[brand] = [drugIndex]
+//                } else {
+//                    if !indexedNameDictionary[brandTerm]!.contains(drugIndex)
+//                    {
+//                        (indexedNameDictionary[brand])?.append(drugIndex)
+//                    }
+//                }
+//                
+//            }
+//            
+//            for substance in drug.substances {
+//                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
+//                    key == substance })
+//                {
+//                    indexedNameDictionary[substance] = [drugIndex]
+//                } else {
+//                    if !indexedNameDictionary[substance]!.contains(drugIndex)
+//                    {
+//                        (indexedNameDictionary[substance])?.append(drugIndex)
+//                    }
+//                }
+//                
+//            }
+//            
+//            drugIndex += 1
+//        }
         
-        termsDictionary.removeAll()
-        indexedNameDictionary.removeAll()
+        //
+        //        print("cloud drug termsDictionary updated")
+        //        print("termsDictionary:")
+        //        for term in termsDictionary {
+        //            print(term)
+        //        }
+        //        print("")
+        //        print("indexedNameDictionary :")
+        //        for term in indexedNameDictionary {
+        //            print(term)
+        //        }
+    }
+    
+    // MARK: - NewDrug selection functions
+    
+    func matchingDrug(forSearchTerm: String) -> (String?,CloudDrug?) {
         
+        var priority = 6
+        
+        // find all terms in brandNames and substances that begin with the searchTerm
+        let (namePickerArray, drugsWithMatchesArray,_) = namePickerNames(forTerm: forSearchTerm)
+        
+        if let selectedDrugName = namePickerArray.filter( {
+            $0.hasPrefix(forSearchTerm.lowercased())
+         }).first {
+        
+            print("drugsWithMatchesArray is \(drugsWithMatchesArray)")
+            // now find best match among drugsWithMatches and this will be the selected drug
+            for matchingDrugIndex in drugsWithMatchesArray  { // remember nil return!
+                if let currentPriority = cloudDrugArray[matchingDrugIndex].matchPriorityOf(selectedName: selectedDrugName) {
+                    if currentPriority < priority {
+                        // what if two or more drugs have the same priority
+                        priority = currentPriority
+                        bestMatchingDrugIndex = matchingDrugIndex
+                    }
+                    print("cloudDrug with index \(matchingDrugIndex) returns priority \(priority)")
+                } else {
+                    print("cloudDrug with index \(matchingDrugIndex) returns  nil priority indicating no match, however there should be one!")
+                    
+                }
+            }
+            return (selectedDrugName,cloudDrugArray[bestMatchingDrugIndex!])
+        }
+        return (nil,nil)
+    }
+    
+    func namePickerNames(forTerm: String) -> ([String],[Int],Int?) {
+        
+        var matchingTermsArray = [[String]]()
+        var drugsWithMatchesArray = [Int]()
+        var selectedDrugIndexInNamePickerArray: Int?
+        var index = 0
+        
+        // find all terms in brandNames and substances that begin with the searchTerm
+        // build namePicker names array
         for drug in cloudDrugArray {
-            
-            // build termDictionary: for NewDrug.name dropDown menu, all terms containing a string
-            for term in drug.dictionaryTerms {
-                termsDictionary[term] = drugIndex
-            }
-            
-            // build indexedNameDictionary: for NewDrug.name textField, only one matching term for display
-            for brandTerm in drug.brandNames {
-                
-                var brand = String()
-                if brandTerm == "" {
-                    brand = drug.displayName
-                } else {
-                    brand = brandTerm + "®"
-                }
-                
-                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
-                    key == brandTerm })
-                {
-                    indexedNameDictionary[brand] = [drugIndex]
-                } else {
-                    if !indexedNameDictionary[brandTerm]!.contains(drugIndex)
-                    {
-                        (indexedNameDictionary[brand])?.append(drugIndex)
+            let match = drug.namePickerNames(forSearchTerm: forTerm)
+            if match != [] {
+                // check if any of the matching terms in already included? If so don't attach but add cloudDrug
+                drugsWithMatchesArray.append(index)
+                var matchWithoutDuplicates = [String]()
+                for term in match {
+                    if !matchingTermsArray.joined().contains(term) {
+                        matchWithoutDuplicates.append(term)
                     }
                 }
-
+                if matchWithoutDuplicates != [] { matchingTermsArray.append(matchWithoutDuplicates) }
             }
-            
-            for substance in drug.substances {
-                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
-                    key == substance })
-                {
-                    indexedNameDictionary[substance] = [drugIndex]
-                } else {
-                    if !indexedNameDictionary[substance]!.contains(drugIndex)
-                    {
-                        (indexedNameDictionary[substance])?.append(drugIndex)
-                    }
-                }
-                
-            }
-            
-            drugIndex += 1
+            index += 1
         }
         
-//
-//        print("cloud drug termsDictionary updated")
-//        print("termsDictionary:")
-//        for term in termsDictionary {
-//            print(term)
-//        }
-//        print("")
-//        print("indexedNameDictionary :")
-//        for term in indexedNameDictionary {
-//            print(term)
-//        }
+        let namePickerArray = ((matchingTermsArray.joined()).map {$0.lowercased() }).sorted()
+            print("namePickerNames for term '\(forTerm)' are \(namePickerArray)")
+        
+        if let selectedDrugName = namePickerArray.filter( {
+            $0.hasPrefix(forTerm.lowercased())
+         }).first {
+            selectedDrugIndexInNamePickerArray = namePickerArray.index(of: selectedDrugName)
+        }
+        
+        print("position of selectedDrug in namePickerArray = \(selectedDrugIndexInNamePickerArray)")
+
+        return (namePickerArray, drugsWithMatchesArray,selectedDrugIndexInNamePickerArray)
     }
+    
+//    func drugFromNamePickerList(withIndex: String) -> CloudDrug {
+//        
+//        let name = namePickerArray[withIndex]
+//    }
+    
  
 }
 

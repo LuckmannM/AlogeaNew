@@ -54,7 +54,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     var trialDurationPickerValues:[[String]]!
     var frequencyPickerValues: [String]!
     var drugNamePickerValues: [String]!
-    var drugNamePickerIndexReferences: [Int]!
+//    var drugNamePickerIndexReferences: [Int]!
     
     var trialDurationChosen: TrialDuration!
     var frequencyChosen: String!
@@ -324,8 +324,12 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             if textFieldOpen.isOpen {
                 let _ = textFieldShouldReturn(textFieldOpen.textField)
             } else {
-                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
-                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)])
+                
+                // *** problem here: if combination substance chosen then this term 'a+b' is not showing in thr matchingDrug function
+                if case let(selectedDrugName?, publicDrug?) = drugDictionary.matchingDrug(forSearchTerm: drugNamePickerValues[drugIndexChosen]) {
+                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName)
+                    tableView.reloadData()
+                    
                 }
             }
             dropDownButton.isEnabled = false
@@ -333,12 +337,19 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         } else {
             let cell = tableView.cellForRow(at: nameCellIndexpath)
             
-            drugNamePickerValues = drugDictionary.namePickerTerms()
-            drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
-            drugNamePicker.selectRow(drugDictionary.selectedNamePickerIndex ?? 0, inComponent: 0, animated: false)
+            // pickerValues and drugIndexSelected should already have been set in textFieldEntryAction
+//            drugNamePickerValues = drugDictionary.namePickerTerms()
+//            drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
+//            drugNamePicker.selectRow(drugDictionary.selectedNamePickerIndex ?? 0, inComponent: 0, animated: false)
             
+            print("")
+            print("inserting drugNamePicker, row chosen if \(drugIndexChosen)")
             cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
+            
             tableView.insertRows(at: [changeAtPath], with: .top)
+            drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
+            //drugNamePicker.reloadComponent(0)
+            
             (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
             
         }
@@ -771,7 +782,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         if pickerView.isEqual(drugNamePicker) {
             let attribute = UIFont(name: "AvenirNext-Regular", size: 11)!
             let titleText = NSAttributedString(
-                string: drugNamePickerValues[row],
+                string: drugNamePickerValues[row].localizedCapitalized,
                 attributes: [NSFontAttributeName: attribute]
             )
 
@@ -797,10 +808,10 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             frequencyChosen  = frequencyPickerValues[row]
         } else if pickerView.isEqual(drugNamePicker) {
             // pick drug from array
-            drugIndexChosen = drugNamePickerIndexReferences[row]
-            print("")
-            print("namePickerSelection is \(drugIndexChosen), (\(drugDictionary.cloudDrugArray[drugIndexChosen].displayName))")
-            print("")
+            drugIndexChosen = row
+//            print("")
+//            print("namePickerSelection is \(drugIndexChosen), (\(drugDictionary.cloudDrugArray[drugIndexChosen].displayName))")
+//            print("")
            
         }
         
@@ -842,17 +853,22 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         switch textFieldOpen.text {
         case "nameCell":
             
-            let name = drugDictionary.matchingDrugNames(name: sender.text!)
-            if name != nil {
+            let (name,_) = drugDictionary.matchingDrug(forSearchTerm: sender.text!)
+            if  name != nil {
                 
                 if titleLabel != nil {
                     titleLabel.text = name!.localizedCapitalized
                     
-                    drugNamePickerValues = drugDictionary.namePickerTerms()
-                    drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
+                    // var indexSelected:Int?
+                    let (possibleNames,_,possibleIndex) = drugDictionary.namePickerNames(forTerm: titleLabel.text!)
+                    drugNamePickerValues = possibleNames
+                    drugIndexChosen = possibleIndex ?? 0
+                    
+                    print("drugNamePicker changed, drugIndexChosen = \(drugIndexChosen), nameArray = \(drugNamePickerValues)")
+//                    drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
                     
                     drugNamePicker.reloadComponent(0)
-                    drugNamePicker.selectRow(drugDictionary.selectedNamePickerIndex ?? 0, inComponent: 0, animated: false)
+                    drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
 
 //                    print("NewDrug.name changed")
 //                    print("pickerValues are \(drugNamePickerValues)")
@@ -906,8 +922,8 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             // this would only be the case if entered from public drugDictionary
             if titleLabel.text != "" {
                 
-                if let selectedPublicDrug = drugDictionary.returnSelectedPublicDrug(index: drugIndexChosen) {
-                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: selectedPublicDrug, nameChosen: titleLabel.text)
+                if case let (selectedDrugName?, publicDrug?) = drugDictionary.matchingDrug(forSearchTerm: titleLabel.text!) {
+                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName)
                     tableView.reloadData()
                 }
             }

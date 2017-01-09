@@ -45,60 +45,61 @@ class CloudDrug {
         }
         return array
     }()
-
     
-    lazy var dictionaryTerms:[String] = {
-        
-        var array = [String]()
-
-        // ***  the entire loop requires repated .contains checks which may slow performance; review and check better options
-        for brandTerm in self.brandNames {
-            // if the CloudDashboard drug doesn't have a brandName a cloudDrug will be intialised with [""] as brandNames
-            var substanceDose = String()
-            var brand = String()
-            var doses = String()
-            
-            if brandTerm == "" {
-                brand = self.displayName
-            } else {
-                brand = brandTerm + "®"
-            }
-            
-            if self.substances.count == 1 {
-                for doseIndex in 0..<self.singleUnitDoses.count {
-                    if self.substances[0] != brand {
-                        doses = "\(String(format: "%g", self.singleUnitDoses[doseIndex]))"
-                        array.append(self.substances[0] + " " + doses)
-                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
-                    } else {
-                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
-                    }
-                }
-                
-            
-            } else {
-                guard self.substances.count <= self.singleUnitDoses.count else {
-                    print("error in CloudDrug.dictionaryTerms - number of singleUnitDoses lower than number of substances in drug \(self.displayName)")
-                    break
-                }
-                for index in 0..<self.substances.count {
-                    substanceDose = substanceDose + self.substances[index] + " \(String(format: "%g", self.singleUnitDoses[index]))"
-                    doses = doses + "\(String(format: "%g", self.singleUnitDoses[index]))"
-                    if index < (self.substances.count - 1) {
-                        substanceDose = substanceDose + " + "
-                        doses = doses + "/"
-                    }
-                }
-                array.append(brand + " (" + doses + ")")
-                if !array.contains(substanceDose) {
-                    array.append(substanceDose)
-                }
-                substanceDose = ""
-                doses = ""
-            }
-        }
-        return array
-    }()
+//    lazy var dictionaryTerms:[String] = {
+//        
+//        var array = [String]()
+//
+//        // ***  the entire loop requires repated .contains checks which may slow performance; review and check better options
+//        for brandTerm in self.brandNames {
+//            // if the CloudDashboard drug doesn't have a brandName a cloudDrug will be intialised with [""] as brandNames
+//            var substanceDose = String()
+//            var brand = String()
+//            var doses = String()
+//            
+//            if brandTerm == "" {
+//                brand = self.displayName
+//            } else {
+//                brand = brandTerm + "®"
+//            }
+//            
+//            if self.substances.count == 1 {
+//                for doseIndex in 0..<self.singleUnitDoses.count {
+//                    if self.substances[0] != brand {
+//                        doses = "\(String(format: "%g", self.singleUnitDoses[doseIndex]))"
+//                        array.append(self.substances[0] + " " + doses)
+//                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
+//                    } else {
+//                        array.append(brand + " \(String(format: "%g", self.singleUnitDoses[doseIndex]))")
+//                    }
+//                }
+//                
+//            
+//            } else {
+//                guard self.substances.count <= self.singleUnitDoses.count else {
+//                    print("error in CloudDrug.dictionaryTerms - number of singleUnitDoses lower than number of substances in drug \(self.displayName)")
+//                    break
+//                }
+//                for index in 0..<self.substances.count {
+//                    substanceDose = substanceDose + self.substances[index] + " \(String(format: "%g", self.singleUnitDoses[index]))"
+//                    doses = doses + "\(String(format: "%g", self.singleUnitDoses[index]))"
+//                    if index < (self.substances.count - 1) {
+//                        substanceDose = substanceDose + " + "
+//                        doses = doses + "/"
+//                    }
+//                }
+//                array.append(brand + " (" + doses + ")")
+//                if !array.contains(substanceDose) {
+//                    array.append(substanceDose)
+//                }
+//                substanceDose = ""
+//                doses = ""
+//            }
+//        }
+//        return array
+//    }()
+    
+    // MARK: - Functions
         
     init(record: CKRecord, database: CKDatabase) {
         
@@ -106,34 +107,12 @@ class CloudDrug {
         
         self.record = record
         self.database = database
-        self.displayName = self.record.object(forKey: "displayName") as! String
-        // make first character capital letter
-        let nameFirstCharacter = (displayName as NSString).substring(to: 1).uppercased()
-        let nameRestString = (displayName as NSString).substring(from: 1).lowercased()
-        displayName = nameFirstCharacter + nameRestString
-        
-        if let names = self.record.object(forKey: "brandNames") as! [String]? {
-            self.brandNames = names
-        } else  { brandNames = [""] }
-        
-        if let substances = self.record.object(forKey: "medicineSubstances") as! [String]? {
-            self.substances = substances
-            for index in 0..<self.substances.count {
-                self.substances[index] = self.substances[index].localizedCapitalized
-            }
-        } else { substances = [""] }
-        
-        if let objects = self.record.object(forKey: "classes") as! [String]? {
-            self.classes = objects
-        } else { classes = [""] }
-
-        if let unit = self.record.object(forKey: "doseUnit") as! String? {
-            self.doseUnit = unit
-        } else { doseUnit = "" }
-
-        if let reg = self.record.object(forKey: "regular") as! Int? {
-            self.regular = reg
-        } else { regular = 0 }
+        self.displayName = (self.record.object(forKey: "displayName") as! String).localizedCapitalized
+        self.brandNames = ((self.record.object(forKey: "brandNames") as? [String])?.sorted() ?? [])!
+        self.substances = ((self.record.object(forKey: "medicineSubstances") as? [String]) ?? [])
+        self.classes = ((self.record.object(forKey: "classes") as? [String]) ?? [])
+        self.doseUnit = ((self.record.object(forKey: "doseUnit") as? String) ?? "")
+        self.regular = ((self.record.object(forKey: "regular") as? Int) ?? 0)
 
         if let dI = self.record.object(forKey: "startingDoseEffectTime") as! Double? {
             self.startingDoseInterval = TimeInterval(dI * 3600)
@@ -159,6 +138,94 @@ class CloudDrug {
             self.singleUnitDoses = self.record.object(forKey: "singeUnitDoses") as? [Double]
         }
         
+    }
+    
+    func substancesForSearch() -> String {
+        
+        var string = String()
+        for substance in substances {
+            string += substance.lowercased() + " "
+        }
+        return string
+    }
+    
+    func substancesForDisplay() -> String {
+        
+        var string = substances[0]
+        for index in 1..<substances.count {
+            string += " + " + substances[index]
+        }
+        return string
+    }
+    
+    func namePickerNames(forSearchTerm: String) -> [String] {
+        
+        var array = [String]()
+        
+        for substance in substances {
+            if substance.lowercased().hasPrefix(forSearchTerm.lowercased()) {
+                // if a substance that begins with the searchterm is found then attach all substance names combined
+                array.append(substancesForDisplay())
+                // also attached all brandNames as these contain the searchTerm substance
+                if brandNames != nil {
+                    for name in brandNames! {
+                        array.append(name)
+                    }
+                }
+            }
+        }
+        
+        // if a substance has been found then all brandNames are included already
+        // if no substance matches then check wether individual brandNames match
+        if array != [] { return array }
+        
+        // combined substance term 'a+b' may be passed on after selection in namePicker
+        if substancesForDisplay().lowercased().hasPrefix(forSearchTerm.lowercased()) {
+            array.append(substancesForDisplay())
+            // also attached all brandNames as these contain the searchTerm substance
+            if brandNames != nil {
+                for name in brandNames! {
+                    array.append(name)
+                }
+            }
+        }
+        
+        if array != [] { return array }
+        
+        for name in brandNames! {
+            if name.lowercased().hasPrefix(forSearchTerm.lowercased()) {
+                array.append(name)
+            }
+        }
+        
+        return array
+    }
+    
+    func matchPriorityOf(selectedName: String) -> Int? {
+        
+        //match in brandNames = highest priority for == and one lower for 'begins with'
+        for brand in brandNames! {
+            if brand.lowercased() == selectedName.lowercased() {
+                return 0
+            }
+            if brand.lowercased().hasPrefix(selectedName.lowercased()) {
+                return 1
+            }
+        }
+        
+        // selectedName may be a substance combination term 'a+b' after selection in namePicker
+        if substancesForDisplay().lowercased() == selectedName.lowercased() {
+            return 0
+        }
+        if substancesForDisplay().lowercased().hasPrefix(selectedName.lowercased()) {
+            return 2
+        }
+        if substancesForDisplay().lowercased().contains(selectedName.lowercased()) {
+            return 3
+        }
+        
+        
+        return nil
     }
     
     
