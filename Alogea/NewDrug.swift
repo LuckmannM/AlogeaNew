@@ -324,18 +324,25 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             if textFieldOpen.isOpen {
                 let _ = textFieldShouldReturn(textFieldOpen.textField)
             } else {
+                (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
                 
-                // *** problem here: if combination substance chosen then this term 'a+b' is not showing in thr matchingDrug function
                 if case let(selectedDrugName?, publicDrug?) = drugDictionary.matchingDrug(forSearchTerm: drugNamePickerValues[drugIndexChosen]) {
                     theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName)
                     tableView.reloadData()
-                    
                 }
             }
             dropDownButton.isEnabled = false
             tableView.reloadData()
         } else {
-            let cell = tableView.cellForRow(at: nameCellIndexpath)
+            // *** what to do with titleLabel and textField: keep open for further typing - this need ongoing adaptation of the namePicker and selection
+            // or simly disable further textField entry by treating this as 'return entered' into textField
+            
+            let _ = textFieldShouldReturn(textFieldOpen.textField)
+            if let cell = tableView.cellForRow(at: nameCellIndexpath) {
+                (cell.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
+                textFieldOpen.textField.textColor = UIColor.red
+            }
+            
             
             // pickerValues and drugIndexSelected should already have been set in textFieldEntryAction
 //            drugNamePickerValues = drugDictionary.namePickerTerms()
@@ -349,8 +356,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             tableView.insertRows(at: [changeAtPath], with: .top)
             drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
             //drugNamePicker.reloadComponent(0)
-            
-            (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.red
             
         }
         
@@ -540,46 +545,76 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         switch cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath) {
             
         // SECTI0N 0
-        case "nameCell", "ingredientsCell", "classCell":
+        case "nameCell": // not used: "ingredientsCell", "classCell"
             
             // first check if namePicker is active
-            guard !cellRowHelper.pickerViewVisible(name: "namePickerCell") else {
-                return
-                // do nothing as de-selection should happen via dropDown menu function or textField return
+//            guard !cellRowHelper.pickerViewVisible(name: "namePickerCell") else {
+//                return
+//                // do nothing as de-selection should happen via dropDown menu function or textField return
+//            }
+            
+            if cellRowHelper.pickerViewVisible(name: "namePickerCell") {
+                // treat as making selection from namePicker
+                let changeAtPath = IndexPath(row: 1, section: 0)
+                let nameCellIndexpath = IndexPath(row: 0, section: 0)
+                
+                cellRowHelper.removeVisibleRow(row: changeAtPath.row, inSection: changeAtPath.section)
+                drugNamePicker.removeFromSuperview()
+                tableView.deleteRows(at: [changeAtPath], with: .none)
+                
+                let cell = tableView.cellForRow(at: nameCellIndexpath)
+                (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
+                (cell?.contentView.viewWithTag(titleTag) as! UILabel).text = drugNamePickerValues[drugNamePicker.selectedRow(inComponent: 0)]
+                
+                // need to complete and resolve any open name textField as the name text may only have been entered partially when dropDown menu activated and selected. This should 'close' and complete the textField entry
+                if textFieldOpen.isOpen {
+                    let _ = textFieldShouldReturn(textFieldOpen.textField)
+                } else {
+                    (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
+                    
+                    if case let(selectedDrugName?, publicDrug?) = drugDictionary.matchingDrug(forSearchTerm: drugNamePickerValues[drugIndexChosen]) {
+                        theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName.localizedCapitalized)
+                        tableView.reloadData()
+                    }
+                }
+                dropDownButton.isEnabled = false
+                tableView.reloadData()
+                
+            } else {
+            // no namePicker visible, treat as starting text entry in name field
+                if textField == nil {
+                    textField = UITextField()
+                }
+                textField.isEnabled = true
+                titleLabel = cell?.contentView.viewWithTag(titleTag) as! UILabel
+                // transfer any text in the 'name' cell.titleLabel to the textField's text in the foreground, then set the titleLabel.text to "" = invisible
+                textField.text = titleLabel.text!
+                if titleLabel != nil {
+                    titleLabel.text = ""
+                }
+                
+                let spaceForTextField = (cell?.contentView.frame.width)! - titleLabel.frame.origin.x - 30.0
+                textField.delegate = self
+                textField.isEnabled = true
+                textField.clearsOnBeginEditing = false
+                textField.frame = CGRect(x: titleLabel.frame.origin.x, y: titleLabel.frame.origin.y, width: spaceForTextField, height: titleLabel.frame.height)
+                textField.keyboardType = UIKeyboardType.default
+                textField.returnKeyType = UIReturnKeyType.done
+                textField.becomeFirstResponder()
+                textField.clearButtonMode = .whileEditing
+                
+                if inAppStore.checkDrugFormularyAccess() {
+                    textField.addTarget(self, action: #selector(textFieldEntryAction(sender:)), for: UIControlEvents.editingChanged)
+                }
+                textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
+                
+                cell?.contentView.addSubview(textField)
+                
+                textFieldOpen.isOpen = true
+                textFieldOpen.path = indexPath
+                textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
+                textFieldOpen.textField = textField
             }
-            
-            if textField == nil {
-                textField = UITextField()
-            }
-            textField.isEnabled = true
-            titleLabel = cell?.contentView.viewWithTag(titleTag) as! UILabel
-            textField.text = titleLabel.text!
-            
-            if titleLabel != nil {
-                titleLabel.text = ""
-            }
-            let spaceForTextField = (cell?.contentView.frame.width)! - titleLabel.frame.origin.x - 30.0
-            textField.delegate = self
-            textField.isEnabled = true
-            textField.clearsOnBeginEditing = false
-            textField.frame = CGRect(x: titleLabel.frame.origin.x, y: titleLabel.frame.origin.y, width: spaceForTextField, height: titleLabel.frame.height)
-            textField.keyboardType = UIKeyboardType.default
-            textField.returnKeyType = UIReturnKeyType.done
-            textField.becomeFirstResponder()
-            textField.clearButtonMode = .whileEditing
-            
-            if inAppStore.checkDrugFormularyAccess() {
-                textField.addTarget(self, action: #selector(textFieldEntryAction(sender:)), for: UIControlEvents.editingChanged)
-            }
-            textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
-            
-            cell?.contentView.addSubview(textField)
-            
-            textFieldOpen.isOpen = true
-            textFieldOpen.path = indexPath
-            textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
-            textFieldOpen.textField = textField
-            
         // SECTION 1
         case "startDateCell":
             let changeAtPath = IndexPath(row: indexPath.row+1, section: indexPath.section)
@@ -822,7 +857,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
-        switch textFieldOpen.text{
+        switch textFieldOpen.text {
         case "doseCell":
             textField.keyboardType = UIKeyboardType.decimalPad
         default:
@@ -836,6 +871,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     func textFieldChangedContent(textField: UITextField) {
+        textField.text = textField.text!.localizedCapitalized
         textField.sizeToFit()
     }
     
@@ -853,31 +889,15 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         switch textFieldOpen.text {
         case "nameCell":
             
+            sender.text = sender.text!.localizedCapitalized
             let (name,_) = drugDictionary.matchingDrug(forSearchTerm: sender.text!)
             if  name != nil {
                 
                 if titleLabel != nil {
+                    // change titleLabel.text ('behind' the textField's text) to contain the preliminary found name
                     titleLabel.text = name!.localizedCapitalized
                     
-                    // var indexSelected:Int?
-                    let (possibleNames,_,possibleIndex) = drugDictionary.namePickerNames(forTerm: titleLabel.text!)
-                    drugNamePickerValues = possibleNames
-                    drugIndexChosen = possibleIndex ?? 0
-                    
-                    print("drugNamePicker changed, drugIndexChosen = \(drugIndexChosen), nameArray = \(drugNamePickerValues)")
-//                    drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
-                    
-                    drugNamePicker.reloadComponent(0)
-                    drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
-
-//                    print("NewDrug.name changed")
-//                    print("pickerValues are \(drugNamePickerValues)")
-//                    print("corresponding indexes \(drugNamePickerIndexReferences)")
-//                    print("")
-                    
-                   if drugNamePickerValues.count > 1 {
-                        dropDownButton.isEnabled = true
-                    }
+                    updateDrugNamePicker(withText: sender.text!)
                     sender.textColor = UIColor.gray
                 }
             } else {
@@ -900,14 +920,13 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         if textFieldOpen.isOpen == false {
             return false
         }
-        var titleLabel: UILabel!
-        let cell = self.tableView.cellForRow(at: textFieldOpen.path)
         
-        if cell != nil {
-            titleLabel = cell!.contentView.viewWithTag(titleTag) as! UILabel
+        var titleLabel: UILabel!
+        if let cell = self.tableView.cellForRow(at: textFieldOpen.path) {
+            titleLabel = cell.contentView.viewWithTag(titleTag) as! UILabel
         } else {
             print("error in NewDrug - textFieldShouldReturn function")
-            print("tried to find cell, but cell is empty")
+            print("tried to find cell, but cell is nil")
             print("textFieldOpen[0] is \(textFieldOpen.isOpen)")
             print("textFieldOpen[1] is \(textFieldOpen.path)")
             print("textFieldOpen[2] is \(textFieldOpen.text)")
@@ -923,9 +942,10 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             if titleLabel.text != "" {
                 
                 if case let (selectedDrugName?, publicDrug?) = drugDictionary.matchingDrug(forSearchTerm: titleLabel.text!) {
-                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName)
+                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName.localizedCapitalized)
                     tableView.reloadData()
                 }
+                updateDrugNamePicker(withText: titleLabel.text!)
             }
             else if let entry = textField.text {
                 if entry != "" {
@@ -951,7 +971,9 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             if let entry = textField.text {
                 if let doseFromString = numberFormatter.number(from: entry)?.doubleValue {
                     theNewDrug!.setDoseArray(sentDose: doseFromString)
-                    (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
+                    if let cell = self.tableView.cellForRow(at: textFieldOpen.path) {
+                        (cell.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.dosesString()
+                    }
                 }
             }
         default:
@@ -967,6 +989,23 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         textFieldOpen.path = IndexPath()
         
         return false
+    }
+    
+    func updateDrugNamePicker(withText: String) {
+        
+        let (possibleNames,_,possibleIndex) = drugDictionary.namePickerNames(forTerm: withText)
+        drugNamePickerValues = possibleNames
+        drugIndexChosen = possibleIndex ?? 0
+        
+        print("drugNamePicker changed, drugIndexChosen = \(drugIndexChosen), nameArray = \(drugNamePickerValues)")
+        
+        drugNamePicker.reloadComponent(0)
+        drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
+        
+        
+        if drugNamePickerValues.count > 1 {
+            dropDownButton.isEnabled = true
+        }
     }
     
     
