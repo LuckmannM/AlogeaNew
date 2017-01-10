@@ -288,7 +288,7 @@
                             <constraint firstItem="Z9i-hD-5I7" firstAttribute="top" secondItem="Ec7-CF-O6C" secondAttribute="top" id="z9b-o2-HHf"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="My List of Pain Medicines" id="o1N-69-i4h">
+                    <navigationItem key="navigationItem" title="List of Pain Medicines" id="o1N-69-i4h">
                         <barButtonItem key="leftBarButtonItem" systemItem="action" id="GRL-k9-w1A">
                             <connections>
                                 <action selector="newExportDialogWithSender:" destination="BeJ-B2-Vbc" id="HpW-Jl-06q"/>
@@ -335,20 +335,20 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" tag="50" contentMode="scaleAspectFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2F-lO-ry3">
-                                            <rect key="frame" x="302" y="10.5" width="25" height="25"/>
-                                            <state key="normal" image="NewDrugButtonImage">
+                                            <rect key="frame" x="293" y="7" width="32" height="32"/>
+                                            <state key="normal" image="NewDrugButtonImageLarge">
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="l2F-lO-ry3" firstAttribute="centerY" secondItem="oiE-8A-ZDp" secondAttribute="centerY" constant="1.25" id="GbL-1c-a9W"/>
                                         <constraint firstItem="2UL-WE-alr" firstAttribute="centerY" secondItem="oiE-8A-ZDp" secondAttribute="centerY" id="Gp5-KG-Vgp"/>
-                                        <constraint firstItem="l2F-lO-ry3" firstAttribute="centerY" secondItem="oiE-8A-ZDp" secondAttribute="centerY" constant="1" id="i3v-lP-faU"/>
                                         <constraint firstItem="2UL-WE-alr" firstAttribute="leading" secondItem="oiE-8A-ZDp" secondAttribute="leadingMargin" constant="13" id="weT-u0-Nud"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="l2F-lO-ry3" secondAttribute="trailing" constant="48" id="pxh-z5-UEU"/>
+                                    <constraint firstAttribute="trailing" secondItem="l2F-lO-ry3" secondAttribute="trailing" constant="50" id="pxh-z5-UEU"/>
                                 </constraints>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="titleAndDetailCell" id="Wee-dk-rvs" userLabel="Title and Detail Cell">
@@ -953,7 +953,7 @@
         <image name="3Yellow" width="71" height="25"/>
         <image name="ExpoButton" width="45" height="53"/>
         <image name="GraphButtonBar" width="52" height="52"/>
-        <image name="NewDrugButtonImage" width="25" height="25"/>
+        <image name="NewDrugButtonImageLarge" width="32" height="32"/>
         <image name="NoLimitsBG" width="375" height="167"/>
         <image name="PainBucket_Orange" width="45" height="38"/>
         <image name="PainBucket_Red" width="45" height="39"/>

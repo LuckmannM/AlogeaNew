@@ -63,6 +63,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     var isDiscontinuedDrug: Bool!
     var initialTouchLocation: CGPoint = CGPoint.zero
     var doseDetailLabel: UILabel!
+    var dosesTextFieldSize: CGSize! // used to shift dosesTF to the left during dose entries for regular drugs
     
     let titleTag = 10
     let detailTag = 20
@@ -327,7 +328,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 (cell?.contentView.viewWithTag(titleTag) as! UILabel).textColor = UIColor.gray
                 
                 if case let(selectedDrugName?, publicDrug?) = drugDictionary.matchingDrug(forSearchTerm: drugNamePickerValues[drugIndexChosen]) {
-                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName)
+                    theNewDrug!.getDetailsFromPublicDrug(publicDrug: publicDrug, nameChosen: selectedDrugName.localizedCapitalized)
                     tableView.reloadData()
                 }
             }
@@ -547,12 +548,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         // SECTI0N 0
         case "nameCell": // not used: "ingredientsCell", "classCell"
             
-            // first check if namePicker is active
-//            guard !cellRowHelper.pickerViewVisible(name: "namePickerCell") else {
-//                return
-//                // do nothing as de-selection should happen via dropDown menu function or textField return
-//            }
-            
+            // first check if namePicker is active            
             if cellRowHelper.pickerViewVisible(name: "namePickerCell") {
                 // treat as making selection from namePicker
                 let changeAtPath = IndexPath(row: 1, section: 0)
@@ -588,7 +584,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 textField.isEnabled = true
                 titleLabel = cell?.contentView.viewWithTag(titleTag) as! UILabel
                 // transfer any text in the 'name' cell.titleLabel to the textField's text in the foreground, then set the titleLabel.text to "" = invisible
-                textField.text = titleLabel.text!
+                textField.placeholder = titleLabel.text!
                 if titleLabel != nil {
                     titleLabel.text = ""
                 }
@@ -604,7 +600,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 textField.clearButtonMode = .whileEditing
                 
                 if inAppStore.checkDrugFormularyAccess() {
-                    textField.addTarget(self, action: #selector(textFieldEntryAction(sender:)), for: UIControlEvents.editingChanged)
+                    textField.addTarget(self, action: #selector(textFieldChangedContent(textField:)), for: UIControlEvents.editingChanged)
                 }
                 textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
                 
@@ -733,12 +729,19 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 if textField == nil {
                     textField = UITextField()
                     textField.delegate = self
+                    textField.placeholder = numberFormatter.string(from: NSNumber(value: theNewDrug!.dosesVar[0]))
                     textField.frame = CGRect(
-                        x: detailLabel.frame.origin.x - 30,
+                        x: detailLabel.frame.origin.x,
                         y: detailLabel.frame.origin.y,
-                        width: detailLabel.frame.width + 30,
+                        width: detailLabel.frame.width,
                         height: detailLabel.frame.height
                     )
+                    dosesTextFieldSize = textField.frame.size
+//                    textField.sizeToFit()
+//                    
+//                    print("doseLabel frame = \(detailLabel.frame)")
+//                    print("doseTextField frame = \(textField.frame)")
+                    
                     textField.textAlignment = .right
                     textField.delegate = self
                     textField.isEnabled = true
@@ -747,6 +750,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     textField.returnKeyType = UIReturnKeyType.done
                     textField.addTarget(self, action: #selector(textFieldChangedContent(textField:)), for: UIControlEvents.editingChanged)
                     cell?.contentView.addSubview(textField)
+                    //textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
                 }
                 textField.isEnabled = true
                 //                    textField.clearButtonMode = .Always
@@ -756,13 +760,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
                 textFieldOpen.textField = textField
                 
-                textField.placeholder = numberFormatter.string(from: NSNumber(value: theNewDrug!.dosesVar[0]))
+                //textField.placeholder = numberFormatter.string(from: NSNumber(value: theNewDrug!.dosesVar[0]))
                 detailLabel.text = ""
                 textField.becomeFirstResponder()
                 addDoneButtonToKeyboard(sender: textField)
-                
-                
-            } else { // multiple doses, edit in separate viewController individually
+            } else { // regular drug, edit in separate viewController individually
                 performSegue(withIdentifier: "doseDetailSegue", sender: nil)
             }
             
@@ -779,6 +781,25 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         }
         
     }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        // print("willDisplayHeaderView for section \(section)")
+        let header = view as! UITableViewHeaderFooterView
+        let textSize: CGFloat = 18 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+        header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        header.textLabel?.sizeToFit()
+        
+        //        while header.textLabel!.frame.height > view.frame.height {
+        //            print("reducing headerView font size...")
+        //            textSize = textSize - 2
+        //            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        //            header.textLabel?.sizeToFit()
+        //        }
+        
+        header.textLabel?.textColor = colorScheme.earthGreen
+    }
+
     
     // MARK: - PickerView functions
     
@@ -871,13 +892,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     func textFieldChangedContent(textField: UITextField) {
-        textField.text = textField.text!.localizedCapitalized
-        textField.sizeToFit()
-    }
-    
-    func textFieldEntryAction(sender: UITextField) {
         
-        if sender.text == "" { return } // if no text was yet entered, ie. at the beginning
+        if textField.text == "" { return } // if no text was yet entered, ie. at the beginning
+        
+        print("")
+        print("textFieldEntryAction()")
         
         var titleLabel: UILabel!
         
@@ -889,28 +908,85 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         switch textFieldOpen.text {
         case "nameCell":
             
-            sender.text = sender.text!.localizedCapitalized
-            let (name,_) = drugDictionary.matchingDrug(forSearchTerm: sender.text!)
+            textField.text = textField.text!.localizedCapitalized
+            let (name,_) = drugDictionary.matchingDrug(forSearchTerm: textField.text!)
             if  name != nil {
                 
                 if titleLabel != nil {
                     // change titleLabel.text ('behind' the textField's text) to contain the preliminary found name
                     titleLabel.text = name!.localizedCapitalized
                     
-                    updateDrugNamePicker(withText: sender.text!)
-                    sender.textColor = UIColor.gray
+                    updateDrugNamePicker(withText: textField.text!)
+                    textField.textColor = UIColor.gray
                 }
             } else {
                 dropDownButton.isEnabled = false
                 titleLabel.text = ""
-                sender.textColor = UIColor.black
+                textField.textColor = UIColor.black
             }
+        case "dosesCell":
+            dosesTextFieldSize = textField.frame.size
+            let dose = textField.text!.digits
+            textField.text = dose + " " + theNewDrug!.doseUnitVar
+            
+            // position cursor behind numbers, in front of doseUnit characters
+            if let cursorPosition = textField.position(from: textField.endOfDocument, offset: -theNewDrug!.doseUnitVar.characters.count-1) {
+                textField.selectedTextRange = textField.textRange(from: cursorPosition, to: cursorPosition)
+            }
+            
+            textField.sizeToFit()
+            
+            // move textField to the left to keep right end fixed
+            let sizeIncrease = textField.frame.size.width - dosesTextFieldSize.width
+            textField.frame = textField.frame.offsetBy(dx: -sizeIncrease, dy: 0)
+            
         default:
             return
             
         }
-        
+
     }
+    
+//    func textFieldEntryAction(sender: UITextField) {
+//        
+//        if sender.text == "" { return } // if no text was yet entered, ie. at the beginning
+//        
+//        print("")
+//        print("textFieldEntryAction()")
+//        
+//        var titleLabel: UILabel!
+//        
+//        // *** need detailLabel for dose entry!
+//        if let cell = tableView.cellForRow(at: textFieldOpen.path) {
+//            titleLabel = cell.contentView.viewWithTag(titleTag) as! UILabel
+//        }
+//        
+//        switch textFieldOpen.text {
+//        case "nameCell":
+//            
+//            sender.text = sender.text!.localizedCapitalized
+//            let (name,_) = drugDictionary.matchingDrug(forSearchTerm: sender.text!)
+//            if  name != nil {
+//                
+//                if titleLabel != nil {
+//                    // change titleLabel.text ('behind' the textField's text) to contain the preliminary found name
+//                    titleLabel.text = name!.localizedCapitalized
+//                    
+//                    updateDrugNamePicker(withText: sender.text!)
+//                    sender.textColor = UIColor.gray
+//                }
+//            } else {
+//                dropDownButton.isEnabled = false
+//                titleLabel.text = ""
+//                sender.textColor = UIColor.black
+//            }
+//            
+//        default:
+//            return
+//            
+//        }
+//        
+//    }
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -956,7 +1032,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 
                 titleLabel.text = textField.text
             }
-            dropDownButton.isEnabled = false
+            //dropDownButton.isEnabled = false
         case "ingredientsCell":
             if let entry = textField.text {
                 theNewDrug!.ingredientsVar = entry.components(separatedBy: " ")
@@ -968,7 +1044,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 titleLabel.text = textField.text
             }
         case "dosesCell":
-            if let entry = textField.text {
+            if let entry = textField.text?.digits {
                 if let doseFromString = numberFormatter.number(from: entry)?.doubleValue {
                     theNewDrug!.setDoseArray(sentDose: doseFromString)
                     if let cell = self.tableView.cellForRow(at: textFieldOpen.path) {

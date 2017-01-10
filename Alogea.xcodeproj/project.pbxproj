@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262F2AF91E2534EA00E8779E /* DigitsFromString.swift */; };
 		263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0101DD4660300CD7963 /* DrugListCell.swift */; };
 		263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */; };
 		263DA0161DD764E500CD7963 /* NewDrug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0151DD764E500CD7963 /* NewDrug.swift */; };
@@ -74,6 +75,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		262F2AF91E2534EA00E8779E /* DigitsFromString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigitsFromString.swift; sourceTree = "<group>"; };
 		263DA0101DD4660300CD7963 /* DrugListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListCell.swift; sourceTree = "<group>"; };
 		263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListViewController.swift; sourceTree = "<group>"; };
 		263DA0151DD764E500CD7963 /* NewDrug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewDrug.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 		26B5A14D1DAFE4760082DA40 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				262F2AF91E2534EA00E8779E /* DigitsFromString.swift */,
 				2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */,
 			);
 			name = Extensions;
@@ -486,6 +489,7 @@
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */,
 				263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */,
+				262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
 				267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */,
 				26F647721DAE70EC0061E560 /* GraphContainerView.swift in Sources */,

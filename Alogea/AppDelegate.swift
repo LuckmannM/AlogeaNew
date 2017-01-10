@@ -24,6 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationsAuthorised: Bool = false
     var authorisedNotificationSettings: UNNotificationSettings?
     
+    lazy var deviceBasedSizeFactor: CGSize = {
+        // relative to iPhone 6 screen dimensions
+        let screenSize = UIScreen.main.bounds
+        let size = CGSize(width: screenSize.width / 375.0, height: screenSize.height / 667.0)
+        return size
+
+    }()
+    
     lazy var stack : CoreDataStack = {
         let options  = [NSPersistentStoreUbiquitousContentNameKey: "Alogea", NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true] as [String : Any]
         

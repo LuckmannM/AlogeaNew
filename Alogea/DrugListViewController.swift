@@ -706,7 +706,7 @@ extension DrugListViewController: UITableViewDataSource {
         
         // print("willDisplayHeaderView for section \(section)")
         let header = view as! UITableViewHeaderFooterView
-        let textSize: CGFloat = 22
+        let textSize: CGFloat = 22 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
 
