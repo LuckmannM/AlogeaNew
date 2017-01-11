@@ -38,10 +38,6 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        //        context = stack.context
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelAction))
@@ -81,12 +77,7 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     // MARK: - Custom functions
     
     func saveAction() {
-        
-        //        if textFieldOpen[0] == true {
-        //            print("need to save open textField")
-        //            textFieldShouldReturn(textFieldOpen[2] as! UITextField)
-        //        }
-        
+                
         drugData!.dosesVar = tempDoses
         drugData.remindersVar = tempReminders
         

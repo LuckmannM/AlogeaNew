@@ -187,7 +187,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             theNewDrug!.notes = notesTextView.text
         }
         if textFieldOpen.isOpen {
-            print("need to save open textField")
             _ = textFieldShouldReturn(textFieldOpen.textField )
         }
         
@@ -227,7 +226,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
         trialDurationPicker = {
             let picker = UIPickerView()
-            trialDurationPickerValues = [["1","2","3","4","5","6","7","8","9","10","11","12"], ["off","days", "weeks","months"]]
+            trialDurationPickerValues = [["1","2","3","4","5","6","7","8","9","10","11","12"], ["none","days", "weeks","months"]]
             trialDurationChosen = (1,"")
             picker.delegate = self
             picker.dataSource = self
@@ -335,8 +334,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             dropDownButton.isEnabled = false
             tableView.reloadData()
         } else {
-            // *** what to do with titleLabel and textField: keep open for further typing - this need ongoing adaptation of the namePicker and selection
-            // or simly disable further textField entry by treating this as 'return entered' into textField
             
             let _ = textFieldShouldReturn(textFieldOpen.textField)
             if let cell = tableView.cellForRow(at: nameCellIndexpath) {
@@ -947,47 +944,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
 
     }
     
-//    func textFieldEntryAction(sender: UITextField) {
-//        
-//        if sender.text == "" { return } // if no text was yet entered, ie. at the beginning
-//        
-//        print("")
-//        print("textFieldEntryAction()")
-//        
-//        var titleLabel: UILabel!
-//        
-//        // *** need detailLabel for dose entry!
-//        if let cell = tableView.cellForRow(at: textFieldOpen.path) {
-//            titleLabel = cell.contentView.viewWithTag(titleTag) as! UILabel
-//        }
-//        
-//        switch textFieldOpen.text {
-//        case "nameCell":
-//            
-//            sender.text = sender.text!.localizedCapitalized
-//            let (name,_) = drugDictionary.matchingDrug(forSearchTerm: sender.text!)
-//            if  name != nil {
-//                
-//                if titleLabel != nil {
-//                    // change titleLabel.text ('behind' the textField's text) to contain the preliminary found name
-//                    titleLabel.text = name!.localizedCapitalized
-//                    
-//                    updateDrugNamePicker(withText: sender.text!)
-//                    sender.textColor = UIColor.gray
-//                }
-//            } else {
-//                dropDownButton.isEnabled = false
-//                titleLabel.text = ""
-//                sender.textColor = UIColor.black
-//            }
-//            
-//        default:
-//            return
-//            
-//        }
-//        
-//    }
-    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
@@ -1127,7 +1083,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     print("need to save open textField")
                     _ = textFieldShouldReturn(textFieldOpen.textField )
                 }
-                theNewDrug!.storeObjectAndNotifications()
                 
                 destinationVC.drugData = theNewDrug
                 destinationVC.context = managedObjectContext

@@ -375,12 +375,6 @@ public class DrugEpisode: NSManagedObject {
         return doses$
     }
 
-//    func setTheEndDate(date: Date) {
-//        endDateVar = date
-//        //endDate = endDateVar as NSDate?
-//        isCurrentUpdate()
-//        
-//    }
     
     func storeObjectForEnding(endingDate: Date) {
         
@@ -464,6 +458,7 @@ public class DrugEpisode: NSManagedObject {
         guard regularlyVar! else {
             return
         }
+        
         let center = UNUserNotificationCenter.current()
         let calendar = NSCalendar.current
         let components: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
@@ -472,58 +467,43 @@ public class DrugEpisode: NSManagedObject {
         var i = 0
         // each dose has it's own reminder
         for _ in remindersVar {
-            
-            // creating a notification via request
-            let content = UNMutableNotificationContent()
-            content.title = NSString.localizedUserNotificationString(forKey: "Medication reminder", arguments: nil)
-            content.body = NSString.localizedUserNotificationString(forKey: "time to take @%", arguments: [returnName(), individualDoseString(index: i)])
-            content.categoryIdentifier = "drugReminderCategory"
-            content.sound = UNNotificationSound.default()
-            
-            /*
-            let reminderDate: DateComponents = {
+            if remindersVar[i] {
+                // creating a notification via request
+                let content = UNMutableNotificationContent()
+                content.title = NSString.localizedUserNotificationString(forKey: "Medication reminder", arguments: nil)
+                content.body = NSString.localizedUserNotificationString(forKey: "it's time to take %@", arguments: [messageForDrugAlert(index: i)])
+                content.categoryIdentifier = "drugReminderCategory"
+                content.sound = UNNotificationSound.default()
+                    
+                let reminderDate = calendar.dateComponents(components, from: nextDoseDueDates[i])
                 
-                var alertDate = DateComponents()
-                if frequencyVar <= 24 * 3600 {
-                    // var nowDate = calendar.dateComponents(components, from: Date())
-                    let doseAlert = calendar.dateComponents(components, from: self.doseTimeDates[i])
-                    
-                    // this sets alert for defined time every day
-                    alertDate.hour = doseAlert.hour
-                    alertDate.minute = doseAlert.minute
-                } else {
-                    let components: Set<Calendar.Component> = [.day, .hour, .minute]
-                    let doseAlert = calendar.dateComponents(components, from: self.doseTimeDates[i])
-                    
-                    alertDate.day = doseAlert.day
-                    alertDate.hour = doseAlert.hour
-                    alertDate.minute = doseAlert.minute
-                }
-                // special cases: drugs not due every day but every other, third day or once weekly!
-                return alertDate
+                let alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
+                // another trigger using timerIntervals
+                // let alert2Trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                
+                let request = UNNotificationRequest(identifier: drugID!, content: content, trigger: alertTrigger)
+                
+                // scheduling a notification
+                center.add(request, withCompletionHandler: {
+                    (error: Error?) in
+                    if let theError = error {
+                        print("error in scheduling \(request.identifier) is \(theError.localizedDescription)")
+                    }
+                    print("scheduled notification \(request.identifier) with date \(reminderDate)")
+                    print("content body is \(content.body)")
 
-            }()
-             */
-            
-            let reminderDate = calendar.dateComponents(components, from: nextDoseDueDates[i])
-            
-            let alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
-            // another trigger using timerIntervals
-            // let alert2Trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-            
-            let request = UNNotificationRequest(identifier: drugID!, content: content, trigger: alertTrigger)
-            
-            // scheduling a notification
-            center.add(request, withCompletionHandler: {
-                (error: Error?) in
-                if let theError = error {
-                    print("error in scheduling \(request.identifier) is \(theError.localizedDescription)")
-                }
-            })
+                })
 
-            i = i+1
+                i = i+1
+            }
         }
         
+    }
+    
+    func messageForDrugAlert(index: Int) -> String {
+        
+            return returnName() + " " + individualDoseString(index: index)
+
     }
     
     func individualDoseString(index: Int, numberOnly: Bool = false) -> String {
@@ -548,6 +528,7 @@ public class DrugEpisode: NSManagedObject {
     func storeObjectAndNotifications() {
         
         //createNotificationsWithoutActions()
+        
         scheduleReminderNotifications()
         
         name = nameVar
