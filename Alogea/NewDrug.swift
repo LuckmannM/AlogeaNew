@@ -781,19 +781,10 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
-        // print("willDisplayHeaderView for section \(section)")
         let header = view as! UITableViewHeaderFooterView
         let textSize: CGFloat = 18 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
-        
-        //        while header.textLabel!.frame.height > view.frame.height {
-        //            print("reducing headerView font size...")
-        //            textSize = textSize - 2
-        //            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
-        //            header.textLabel?.sizeToFit()
-        //        }
-        
         header.textLabel?.textColor = colorScheme.earthGreen
     }
 

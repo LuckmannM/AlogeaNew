@@ -224,6 +224,16 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "dose details & reminders"
     }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        let header = view as! UITableViewHeaderFooterView
+        let textSize: CGFloat = 18 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+        header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        header.textLabel?.sizeToFit()
+        header.textLabel?.textColor = colorScheme.drugRowLightGray
+    }
+
 
     
 
