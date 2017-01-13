@@ -87,10 +87,6 @@ class GraphView: UIView {
         }
         // ***
 
-        // rotationObserver = NotificationCenter.default
-        
-        // rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
-
     }
     
     /*
