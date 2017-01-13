@@ -97,8 +97,26 @@ class EventsDataController: NSObject {
         return frc
     }()
     
-    var eventTypes = [String]()
-    var nonScoreEventTypes = [String]()
+    lazy var eventTypes: [String] = {
+        var array = [String]()
+        
+        for sections in self.eventTypeFRC.sections! {
+            array.append(sections.name)
+        }
+        
+        return array
+        
+    }()
+    
+    lazy var nonScoreEventTypes: [String] = {
+        var array = [String]()
+        
+        for sections in self.nonScoreEventTypesFRC.sections! {
+            array.append(sections.name)
+        }
+        
+        return array
+    }()
     
     var recordTypesController: RecordTypesController {
         return RecordTypesController.sharedInstance()
@@ -119,12 +137,12 @@ class EventsDataController: NSObject {
         scoreEventsFRC.delegate = self
         eventTypeFRC.delegate = self
         
-        for sections in self.eventTypeFRC.sections! {
-            eventTypes.append(sections.name)
-        }
-        for sections in self.nonScoreEventTypesFRC.sections! {
-            nonScoreEventTypes.append(sections.name)
-        }
+//        for sections in self.eventTypeFRC.sections! {
+//            eventTypes.append(sections.name)
+//        }
+//        for sections in self.nonScoreEventTypesFRC.sections! {
+//            nonScoreEventTypes.append(sections.name)
+//        }
         reconcileRecordTypesAndEventNames()
         
     }

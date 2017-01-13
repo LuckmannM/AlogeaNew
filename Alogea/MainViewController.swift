@@ -26,20 +26,14 @@ class MainViewController: UIViewController {
     var observer: NotificationCenter!
     var originalEntryWindowRect: CGRect!
     var textViewFrameInPortrait: CGRect!
+    let textFontName = "AvenirNext-Medium"
+    let textFontSize: CGFloat = 20
+
     
     var eventsDataController = EventsDataController.sharedInstance()
     var eventPicker: UIPickerView!
-    var eventPickerTitles: [String] {
-        var array = ["Cancel", "Event"]
-        
-        if eventsDataController.nonScoreEventTypes.count > 0 {
-            array = ["Cancel"]
-            for type in eventsDataController.nonScoreEventTypes {
-                array.append(type)
-            }
-        }
-        return array
-    }
+    var addedEventType: String?
+//    var eventPickerTitles = [String]
     let placeHolderText = "Dictate or type your diary entry here"
     var eventPickerSelection: Int!
     
@@ -111,6 +105,23 @@ class MainViewController: UIViewController {
         
     }
     
+    func eventPickerTitles() -> [String] {
+        var array = ["Cancel", "New event type...", "Event"]
+        
+        if eventsDataController.nonScoreEventTypes.count > 0 {
+            array = ["Cancel","New event type..."]
+            for type in self.eventsDataController.nonScoreEventTypes {
+                array.append(type)
+            }
+        }
+        if self.addedEventType != nil {
+            array.append(self.addedEventType!)
+        }
+        print ("eventPickerTitles are \(array)")
+        return array
+        
+    }
+    
     @IBAction func displayTimeSelection(_ sender: UISegmentedControl) {
         
         switch sender.selectedSegmentIndex {
@@ -133,6 +144,7 @@ extension MainViewController: UITextViewDelegate {
     
     func showDiaryEntryWindow(frame: CGRect) {
         
+        
         textEntryWindow.frame = frame
         originalEntryWindowRect = textEntryWindow.frame
         textEntryWindow.backgroundColor = UIColor(colorLiteralRed: 248/255, green: 248/255, blue: 245/255, alpha: 0.9)
@@ -150,8 +162,8 @@ extension MainViewController: UITextViewDelegate {
             return pV
         }()
         textEntryWindow.addSubview(eventPicker)
-        eventPicker.selectRow(1, inComponent: 0, animated: false)
-        eventPickerSelection = 1
+        eventPicker.selectRow(0, inComponent: 0, animated: false)
+        eventPickerSelection = 0
         
         let arrowView = UIImageView(image: UIImage(named: "UpDownArrows"))
         arrowView.frame = CGRect(x: 15, y: 15, width: 17, height: 40)
@@ -174,7 +186,7 @@ extension MainViewController: UITextViewDelegate {
             )
             tV.backgroundColor = UIColor.clear
             tV.text = placeHolderText
-            tV.font = UIFont(name: "AvenirNext-UltraLight", size: 22)
+            tV.font = UIFont(name: textFontName, size: textFontSize)
             tV.textColor = UIColor.black
             tV.delegate = self
             // place cursor at the beginning and delete placeholder text when typing
@@ -200,14 +212,14 @@ extension MainViewController: UITextViewDelegate {
                 eventPicker.isHidden = true
                 eventPicker.isUserInteractionEnabled = false
                 textView.frame = textEntryWindow.bounds.insetBy(dx: 5, dy: 5)
-                textView.font = UIFont(name: "AvenirNext-UltraLight", size: 28)
+                textView.font = UIFont(name: textFontName, size: textFontSize)
             }
             else {
                 textEntryWindow.frame = originalEntryWindowRect
                 eventPicker.isHidden = false
                 eventPicker.isUserInteractionEnabled = true
                 textView.frame = textViewFrameInPortrait
-                textView.font = UIFont(name: "AvenirNext-UltraLight", size: 20)
+                textView.font = UIFont(name: textFontName, size: textFontSize)
                 
                 slideUpTextEntryView(keyBoardTop: keyBoardTopBorder)
             }
@@ -238,8 +250,11 @@ extension MainViewController: UITextViewDelegate {
         let text = textView.text ?? ""
         textEntryController = touchWheel.mainButtonController
         
-        if eventPickerSelection != 0 {
-            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles[eventPickerSelection])
+        if eventPickerSelection > 1 {
+            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles()[eventPickerSelection])
+        } else if eventPickerSelection == 1 {
+            newEventTypeDialog(sourceViewForPad: textView)
+            return
         }
         
         UIView.animate(withDuration: 0.4, animations: {
@@ -260,20 +275,61 @@ extension MainViewController: UITextViewDelegate {
         NotificationCenter.default.removeObserver(observer)
     }
     
+    func newEventTypeDialog(sourceViewForPad: UIView?) {
+        
+        // this presents the same on iPads and iPhones
+        let newTypeDialog = UIAlertController(title: "new diary event type", message: "Enter name:", preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { (deleteAlert)
+            -> Void in
+            
+            self.addedEventType = ((newTypeDialog.textFields?[0])! as UITextField).text
+            print("saving newTypeDialog.textfield with text \(self.addedEventType)")
+            self.eventPicker.reloadComponent(0)
+            self.eventPickerSelection = self.eventPickerTitles().count - 1
+            self.eventPicker.selectRow(self.eventPickerSelection, inComponent: 0, animated: false)
+            print ("eventPicker titles are now \(self.eventPickerTitles)")
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (deleteAlert)
+            -> Void in
+
+        })
+        
+        newTypeDialog.addAction(saveAction)
+        newTypeDialog.addAction(cancelAction)
+        newTypeDialog.addTextField(configurationHandler: {
+            (textField) -> Void in
+            
+            textField.placeholder = "New Event"
+            textField.textAlignment = .center
+            
+        })
+        
+        self.present(newTypeDialog, animated: true, completion: nil)
+        
+    }
+    
     // MARK: - exporting / printing
     
     @IBAction func exportDialog(sender: UIButton) {
         
         //floatingMenuView.isHidden = true // hide floatingView so it's not visible in the 'screenShot' pdf image
         floatingMenuView.slideIn()
-        let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
-        //floatingMenuView.isHidden = false
+        // in iOS 10 on actual device (but not on simulator) the output from pdfRendering of this view is faulty
+        // let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView.clipView, name: "ScoreGraph")
         
-        let expoController = UIActivityViewController(activityItems: [pdfFile], applicationActivities: nil)
+        guard let printImage = PrintPageRenderer.renderAsImageForPrint(view: graphContainerView) else {
+            print("error rendering graphContainerView for print")
+            return
+        }
+        
+        let expoController = UIActivityViewController(activityItems: [printImage], applicationActivities: nil)
         
         if UIDevice().userInterfaceIdiom == .pad {
             let popUpController = expoController.popoverPresentationController
-            popUpController?.permittedArrowDirections = .unknown
+            popUpController?.permittedArrowDirections = .any
             popUpController?.sourceView = self.floatingMenuView
             popUpController?.sourceRect = self.view.frame
         }
@@ -364,7 +420,7 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         title.backgroundColor = colorScheme.darkBlue
         
         title.attributedText = NSAttributedString(
-            string: eventPickerTitles[row],
+            string: eventPickerTitles()[row],
             attributes: [
                 NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!,
                 NSForegroundColorAttributeName: UIColor.white,
@@ -376,7 +432,7 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
-        return eventPickerTitles.count
+        return eventPickerTitles().count
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -386,6 +442,10 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         eventPickerSelection = row
+        
+        if row == 1 {
+            newEventTypeDialog(sourceViewForPad: pickerView)
+        }
     }
     
 }

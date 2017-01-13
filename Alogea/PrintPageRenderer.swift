@@ -79,21 +79,15 @@ class PrintPageRenderer: UIPrintPageRenderer {
         let leftInset = (paperSize.width - fromView.frame.width * scale) / 2
 
         let pdfPaperRect = CGRect(x: 0, y: 0, width: paperSize.width, height: paperSize.height)
+        
         if UIGraphicsBeginPDFContextToFile(pdfFile, pdfPaperRect, nil) {
             UIGraphicsBeginPDFPage()
             if let pdfContext = UIGraphicsGetCurrentContext() {
-                //pdfContext.setFillColor(ColorScheme.sharedInstance().darkBlue as! CGColor)
-                //CGContextFillRect(pdfContext, CGRect(origin: CGPoint(x: 0, y: 0), size: bigSize))
+
                 pdfContext.scaleBy(x: scale, y: scale)
                 pdfContext.translateBy(x: leftInset, y: 72)
-                fromView.layer.render(in: pdfContext)
-                
-//                if let gCView = fromView as? GraphContainerView {
-//                    gCView.clipView.layer.render(in: pdfContext)
-//                } else {
-//                    fromView.layer.render(in: pdfContext)
-//                }
 
+                fromView.layer.render(in: pdfContext)
             }
             UIGraphicsEndPDFContext()
         }
@@ -101,6 +95,32 @@ class PrintPageRenderer: UIPrintPageRenderer {
         return NSURL(fileURLWithPath: pdfFile)
         
     }
+    
+    class func renderAsImageForPrint(view: UIView) -> Data? {
+        
+        let paperSize = CGSize(width: 612, height: 792)
+        let printablePaperSize = CGSize(width: paperSize.width - 144, height: paperSize.height - 144)
+        
+        let scaleWidth = printablePaperSize.width / view.frame.width
+        let scaleHeight = printablePaperSize.width / view.frame.height
+        let scale = scaleHeight > scaleWidth ? scaleWidth : scaleHeight
+        let inset = (printablePaperSize.width - view.frame.width * scale * 0.8) / 2
+        
+        UIGraphicsBeginImageContext(printablePaperSize)
+        guard let imageContext = UIGraphicsGetCurrentContext()  else {
+            print("error in converting graphView to PNG image")
+            return nil
+        }
+        imageContext.scaleBy(x: scale * 0.8, y: scale * 0.8)
+        imageContext.translateBy(x: inset, y: inset)
+        view.layer.render(in: imageContext)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+       
+        return UIImagePNGRepresentation(image!)
+    }
+
     
     static func findPaperSize() -> CGSize {
         
