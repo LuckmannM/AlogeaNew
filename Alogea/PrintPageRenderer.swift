@@ -52,8 +52,6 @@ class PrintPageRenderer: UIPrintPageRenderer {
         
     }
     
-    // onlt this function is used in Alogea
-    
     class func pdfFromView(fromView: UIView, name: String) -> NSURL {
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
@@ -96,23 +94,24 @@ class PrintPageRenderer: UIPrintPageRenderer {
         
     }
     
-    class func renderAsImageForPrint(view: UIView) -> Data? {
+    // only this function is used in Alogea
+    class func renderAsImage(view: UIView) -> Data? {
         
-        let paperSize = CGSize(width: 612, height: 792)
-        let printablePaperSize = CGSize(width: paperSize.width - 144, height: paperSize.height - 144)
+//        let paperSize = CGSize(width: 612, height: 792)
+//        let printablePaperSize = CGSize(width: paperSize.width - 144, height: paperSize.height - 144)
+//        
+//        let scaleWidth = printablePaperSize.width / view.frame.width
+//        let scaleHeight = printablePaperSize.width / view.frame.height
+//        let scale = scaleHeight > scaleWidth ? scaleWidth : scaleHeight
+//        let inset = (printablePaperSize.width - view.frame.width * scale * 0.8) / 2
         
-        let scaleWidth = printablePaperSize.width / view.frame.width
-        let scaleHeight = printablePaperSize.width / view.frame.height
-        let scale = scaleHeight > scaleWidth ? scaleWidth : scaleHeight
-        let inset = (printablePaperSize.width - view.frame.width * scale * 0.8) / 2
-        
-        UIGraphicsBeginImageContext(printablePaperSize)
+        UIGraphicsBeginImageContext(view.frame.size)
         guard let imageContext = UIGraphicsGetCurrentContext()  else {
             print("error in converting graphView to PNG image")
             return nil
         }
-        imageContext.scaleBy(x: scale * 0.8, y: scale * 0.8)
-        imageContext.translateBy(x: inset, y: inset)
+//        imageContext.scaleBy(x: scale * 0.8, y: scale * 0.8)
+//        imageContext.translateBy(x: inset, y: inset)
         view.layer.render(in: imageContext)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
@@ -141,31 +140,6 @@ class PrintPageRenderer: UIPrintPageRenderer {
         return standardPDFSize
     }
     
-    /*
-//    class func printImageFromView(view: UIView, parentView: UIView?) {
-//        
-//        if let viewToPrint = view as? GraphContainerView {
-//            viewToPrint.floatingMenuView.isHidden = true
-//            let printImage = viewToPrint.renderAsImage()
-//            let printInfo = UIPrintInfo(dictionary: nil)
-//            printInfo.outputType = UIPrintInfoOutputType.general
-//            printInfo.jobName = "View Image Print job"
-//            printInfo.orientation = UIPrintInfoOrientation.portrait
-//            
-//            let printController = UIPrintInteractionController.shared
-//            printController.printInfo = printInfo
-//            printController.printingItem = printImage
-//            
-//            if UIDevice().userInterfaceIdiom == .pad {
-//                printController.present(from: parentView!.frame, in: parentView!, animated: true, completionHandler: nil)
-//            } else {
-//                printController.present(animated: true, completionHandler: {(UIPrintInteractionCompletionHandler) in
-//                    viewToPrint.floatingMenuView.isHidden = false
-//                })
-//            }
-//        }
-//    }
-    */
     
     class func printDialog(file: NSURL, inView: UIView?) {
         

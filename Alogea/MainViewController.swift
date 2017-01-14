@@ -278,7 +278,7 @@ extension MainViewController: UITextViewDelegate {
     func newEventTypeDialog(sourceViewForPad: UIView?) {
         
         // this presents the same on iPads and iPhones
-        let newTypeDialog = UIAlertController(title: "new diary event type", message: "Enter name:", preferredStyle: .alert)
+        let newTypeDialog = UIAlertController(title: "New event category", message: "You will create a new event type that will be added to the menu options", preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { (deleteAlert)
             -> Void in
@@ -302,7 +302,7 @@ extension MainViewController: UITextViewDelegate {
         newTypeDialog.addTextField(configurationHandler: {
             (textField) -> Void in
             
-            textField.placeholder = "New Event"
+            textField.placeholder = "New category name"
             textField.textAlignment = .center
             
         })
@@ -320,7 +320,7 @@ extension MainViewController: UITextViewDelegate {
         // in iOS 10 on actual device (but not on simulator) the output from pdfRendering of this view is faulty
         // let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView.clipView, name: "ScoreGraph")
         
-        guard let printImage = PrintPageRenderer.renderAsImageForPrint(view: graphContainerView) else {
+        guard let printImage = PrintPageRenderer.renderAsImage(view: graphContainerView) else {
             print("error rendering graphContainerView for print")
             return
         }
