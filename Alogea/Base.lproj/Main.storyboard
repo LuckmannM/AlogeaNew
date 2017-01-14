@@ -247,7 +247,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJw-vT-DSr">
-                                                    <rect key="frame" x="657" y="13" width="30" height="34"/>
+                                                    <rect key="frame" x="690" y="13" width="30" height="34"/>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -618,7 +618,7 @@
         <scene sceneID="7h2-5G-N0M">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JrN-ze-uKm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Medicines" id="tSJ-Fx-tFL"/>
+                    <tabBarItem key="tabBarItem" title="Medicines" image="MedsIcon" id="tSJ-Fx-tFL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wBy-Jl-6B7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -955,6 +955,7 @@
         <image name="3Yellow" width="71" height="25"/>
         <image name="ExpoButton" width="45" height="53"/>
         <image name="GraphButtonBar" width="52" height="52"/>
+        <image name="MedsIcon" width="30" height="30"/>
         <image name="NewDrugButtonImageLarge" width="32" height="32"/>
         <image name="NoLimitsBG" width="375" height="167"/>
         <image name="PainBucket_Orange" width="45" height="38"/>
