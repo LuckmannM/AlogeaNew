@@ -203,8 +203,8 @@
 		26770D541E2C25C800DCCBA6 /* Settings Group */ = {
 			isa = PBXGroup;
 			children = (
-				26770D501E2C25C000DCCBA6 /* EventTypeSettings.swift */,
 				26770D511E2C25C000DCCBA6 /* SettingsViewController.swift */,
+				26770D501E2C25C000DCCBA6 /* EventTypeSettings.swift */,
 			);
 			name = "Settings Group";
 			path = ..;

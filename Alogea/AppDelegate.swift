@@ -24,6 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationsAuthorised: Bool = false
     var authorisedNotificationSettings: UNNotificationSettings?
     
+    var appVersion:String = {
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            return version
+        } else { return "Version Number not Available" }
+    }()
+    
+    var appBuild: String = {
+        if let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            return build
+        } else { return "Build Number not Available" }
+    }()
+    
     lazy var deviceBasedSizeFactor: CGSize = {
         // relative to iPhone 6 screen dimensions
         let screenSize = UIScreen.main.bounds
