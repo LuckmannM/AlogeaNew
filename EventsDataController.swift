@@ -68,9 +68,9 @@ class EventsDataController: NSObject {
     lazy var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
         request.predicate = anyScorePredicate
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
@@ -231,6 +231,12 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
             print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
         }
         
+        print("scoreEvent TYPES FRC has \(scoreEventTypesFRC.fetchedObjects?.count ?? 0) objects")
+        print("scoreEvent TYPES FRC has \(scoreEventTypesFRC.sections?.count ?? 0) sections")
+        for section in scoreEventTypesFRC.sections! {
+            print("section name is \(section.name)")
+        }
+       
         reconcileRecordTypesAndEventNames()
         graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
     }
