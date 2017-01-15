@@ -161,7 +161,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     //removing specific notifications
-    func removeNotifications(withIdentifier: String?, withCategory: String?) {
+    func removeSpecificNotifications(withIdentifier: String?, withCategory: String?) {
         
         guard withIdentifier != nil || withCategory != nil else {
             return
@@ -173,6 +173,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for request in requests {
                 if request.identifier == withIdentifier || request.content.categoryIdentifier == withCategory {
                     center.removePendingNotificationRequests(withIdentifiers: [withIdentifier!])
+                }
+            }
+        })
+    }
+    
+    //removing all notifications of a category
+    func removeCategoryNotifications(withCategory: String?) {
+        
+        guard withCategory != nil else {
+            return
+        }
+        
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests(completionHandler: {
+            (requests: [UNNotificationRequest]) in
+            for request in requests {
+                if request.content.categoryIdentifier == withCategory {
+                    center.removePendingNotificationRequests(withIdentifiers: [request.identifier])
                 }
             }
         })
