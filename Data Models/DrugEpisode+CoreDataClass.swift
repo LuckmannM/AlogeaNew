@@ -415,7 +415,7 @@ public class DrugEpisode: NSManagedObject {
         
        // let pendingNotifications = UIApplication.shared.scheduledLocalNotifications
         
-        ((UIApplication.shared).delegate as! AppDelegate).removeNotifications(withIdentifier: drugID!, withCategory: "drugReminderCategory")
+        ((UIApplication.shared).delegate as! AppDelegate).removeSpecificNotifications(withIdentifier: drugID!, withCategory: "drugReminderCategory")
     }
     
     func nextDoseDueDates() -> [Date] {

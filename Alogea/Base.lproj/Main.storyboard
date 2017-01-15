@@ -951,7 +951,7 @@
         <!--Settings-->
         <scene sceneID="DkJ-8Y-qAo">
             <objects>
-                <tableViewController id="xFZ-pi-nl2" customClass="SettingsViewController" customModule="Alogea" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="xFZ-pi-nl2" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="mzk-Fa-uvG">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
