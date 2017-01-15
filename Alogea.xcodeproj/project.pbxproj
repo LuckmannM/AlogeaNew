@@ -29,8 +29,8 @@
 		2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA691DD8D2280063CCB4 /* InAppStore.swift */; };
 		265F9CA71DE309CA0031C762 /* DosesAndReminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F9CA61DE309CA0031C762 /* DosesAndReminders.swift */; };
 		265F9CA91DE45E520031C762 /* SubstanceAndClassPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F9CA81DE45E520031C762 /* SubstanceAndClassPopUp.swift */; };
-		26770D521E2C25C000DCCBA6 /* EventTypeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D501E2C25C000DCCBA6 /* EventTypeSettings.swift */; };
-		26770D531E2C25C000DCCBA6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D511E2C25C000DCCBA6 /* SettingsViewController.swift */; };
+		26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */; };
+		26770D591E2C29F500DCCBA6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */; };
 		267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */; };
 		267F78D11DC5264F008CC23E /* ClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78D01DC5264F008CC23E /* ClipView.swift */; };
 		269B9BFB1DDE52DE00C3BDA9 /* StoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */; };
@@ -99,8 +99,8 @@
 		2657FA691DD8D2280063CCB4 /* InAppStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppStore.swift; sourceTree = "<group>"; };
 		265F9CA61DE309CA0031C762 /* DosesAndReminders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DosesAndReminders.swift; sourceTree = "<group>"; };
 		265F9CA81DE45E520031C762 /* SubstanceAndClassPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubstanceAndClassPopUp.swift; sourceTree = "<group>"; };
-		26770D501E2C25C000DCCBA6 /* EventTypeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTypeSettings.swift; sourceTree = "<group>"; };
-		26770D511E2C25C000DCCBA6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTypeSettings.swift; sourceTree = "<group>"; };
+		26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewHelper.swift; sourceTree = "<group>"; };
 		267F78D01DC5264F008CC23E /* ClipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipView.swift; sourceTree = "<group>"; };
 		269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreView.swift; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 		26770D541E2C25C800DCCBA6 /* Settings Group */ = {
 			isa = PBXGroup;
 			children = (
-				26770D511E2C25C000DCCBA6 /* SettingsViewController.swift */,
-				26770D501E2C25C000DCCBA6 /* EventTypeSettings.swift */,
+				26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */,
+				26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */,
 			);
 			name = "Settings Group";
 			path = ..;
@@ -527,7 +527,7 @@
 				2645C5DE1DD30E4100916596 /* PrintPageRenderer.swift in Sources */,
 				265F9CA91DE45E520031C762 /* SubstanceAndClassPopUp.swift in Sources */,
 				265F9CA71DE309CA0031C762 /* DosesAndReminders.swift in Sources */,
-				26770D531E2C25C000DCCBA6 /* SettingsViewController.swift in Sources */,
+				26770D591E2C29F500DCCBA6 /* SettingsViewController.swift in Sources */,
 				26E3B90C1DA1816E00D157BB /* RecordType+CoreDataClass.swift in Sources */,
 				2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */,
 				263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */,
@@ -538,7 +538,7 @@
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
 				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
-				26770D521E2C25C000DCCBA6 /* EventTypeSettings.swift in Sources */,
+				26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */,
 				263DA0181DD7655C00CD7963 /* NewDrugHelper.swift in Sources */,
 				2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */,
 				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,

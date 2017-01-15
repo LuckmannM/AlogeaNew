@@ -21,40 +21,40 @@ class EventTypeSettings: UITableViewController {
     let titleTag = 10
     let subTitleTag = 20
     
-    lazy var managedObjectContext: NSManagedObjectContext = {
-        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
-        return moc
-    }()
-    
-    lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Diary Entry"])
-        request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("nonScoreEventTypesFRC fetching error \(error)")
-        }
-        
-        return frc
-    }()
-
-    lazy var recordTypes: NSFetchedResultsController<RecordType> = {
-        let request = NSFetchRequest<RecordType>(entityName: "RecordType")
-        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("allRecordTypesFRC fetching error")
-        }
-        
-        return frc
-    }()
+//    lazy var managedObjectContext: NSManagedObjectContext = {
+//        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+//        return moc
+//    }()
+//    
+//    lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Diary Entry"])
+//        request.predicate = predicate
+//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("nonScoreEventTypesFRC fetching error \(error)")
+//        }
+//        
+//        return frc
+//    }()
+//
+//    lazy var recordTypes: NSFetchedResultsController<RecordType> = {
+//        let request = NSFetchRequest<RecordType>(entityName: "RecordType")
+//        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("allRecordTypesFRC fetching error")
+//        }
+//        
+//        return frc
+//    }()
 
     
 
@@ -85,11 +85,11 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if section == 0 {
-//            print("recordTypesController.recordTypeNames are \(recordTypesController.recordTypeNames)")
-            return recordTypes.fetchedObjects?.count ?? 0
+            print("recordTypesController.allTypes has \(recordTypesController.allTypes.fetchedObjects?.count) objects)")
+            return recordTypesController.allTypes.fetchedObjects?.count ?? 0
         } else {
-//            print("eventsController.nonScoreEventTypes are \(eventsController.nonScoreEventTypes)")
-            return nonScoreEventTypesFRC.fetchedObjects?.count ?? 0
+            print("eventsController.nonScoreEventTypesFRC has \(eventsController.nonScoreEventTypesFRC.fetchedObjects?.count) objects)")
+            return eventsController.nonScoreEventTypesFRC.fetchedObjects?.count ?? 0
         }
     }
 
@@ -98,9 +98,10 @@ class EventTypeSettings: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath)
 
         if indexPath.section == 0 {
-            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypes.object(at: indexPath).name!
+            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
         } else {
-            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = nonScoreEventTypesFRC.object(at: indexPath).name!
+            let modifiedPath = IndexPath(row: indexPath.row, section: 0)
+            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             
         }
 
