@@ -207,8 +207,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             if let nextViewController = segue.destination as? EventTypeSettings {
                 nextViewController.stack = stack
                 nextViewController.rootViewController = self
-                nextViewController.recordTypesController = recordTypesController
-                nextViewController.eventsController = EventsDataController.sharedInstance()
 
             } else {
                 print("error createNew segue: destinationViewcontrolle not defined")

@@ -15,8 +15,8 @@ class EventTypeSettings: UITableViewController {
     var stack: CoreDataStack!
     var rootViewController: UIViewController!
     
-    var recordTypesController: RecordTypesController!
-    var eventsController: EventsDataController!
+    var recordTypesController = RecordTypesController.sharedInstance()
+    var eventsController = EventsDataController.sharedInstance()
     
     let titleTag = 10
     let subTitleTag = 20
@@ -38,6 +38,7 @@ class EventTypeSettings: UITableViewController {
 //        } catch let error as NSError{
 //            print("nonScoreEventTypesFRC fetching error \(error)")
 //        }
+//        frc.delegate = self
 //        
 //        return frc
 //    }()
@@ -52,6 +53,7 @@ class EventTypeSettings: UITableViewController {
 //        } catch let error as NSError{
 //            print("allRecordTypesFRC fetching error")
 //        }
+//        frc.delegate = self
 //        
 //        return frc
 //    }()
@@ -67,7 +69,7 @@ class EventTypeSettings: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        print("load EventTypeSettings VC, scoreEventTypesFRC has \(EventsDataController.sharedInstance().scoreEventsFRC.fetchedObjects?.count ?? 0) objects")
+//        print("load EventTypeSettings VC, scoreEventTypesFRC has \(EventsDataController.sharedInstance().scoreEventsFRC.fetchedObjects?.count ?? 0) objects")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,6 +77,7 @@ class EventTypeSettings: UITableViewController {
         
         self.hidesBottomBarWhenPushed = true
         self.tabBarController!.tabBar.isHidden = true
+        tableView.reloadData()
 
     }
 
@@ -93,19 +96,21 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if section == 0 {
-            print("recordTypesController.allTypes has \(recordTypesController.allTypes.fetchedObjects?.count) objects)")
-            print("these are...")
-            for object in recordTypesController.allTypes.fetchedObjects! {
-                print("name \(object.name)")
-            }
+//            print("recordTypesController.allTypes has \(recordTypesController.allTypes.fetchedObjects?.count) objects)")
+//            print("these are...")
+//            for object in recordTypesController.allTypes.fetchedObjects! {
+//                print("name \(object.name)")
+//            }
             return recordTypesController.allTypes.fetchedObjects?.count ?? 0
+//            return recordTypes.fetchedObjects?.count ?? 0
         } else {
-            print("eventsController.nonScoreEventTypesFRC has \(eventsController.nonScoreEventTypesFRC.fetchedObjects?.count) objects)")
-            print("these are...")
-            for object in eventsController.nonScoreEventTypesFRC.fetchedObjects! {
-                print("name \(object.name), type is \(object.type)")
-            }
-            return eventsController.nonScoreEventTypesFRC.fetchedObjects?.count ?? 0
+//            print("eventsController.nonScoreEventTypesFRC has \(eventsController.nonScoreEventTypesFRC.fetchedObjects?.count) objects)")
+//            print("these are...")
+//            for object in eventsController.nonScoreEventTypesFRC.fetchedObjects! {
+//                print("name \(object.name), type is \(object.type)")
+//            }
+            return eventsController.nonScoreEventTypesFRC.sections?.count ?? 0
+//            return nonScoreEventTypesFRC.fetchedObjects?.count ?? 0
         }
     }
 
@@ -113,7 +118,6 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath)
 
-        print("row for  row \(indexPath.row) in section \(indexPath.section) ...")
         if indexPath.section == 0 {
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
         } else {
@@ -191,3 +195,62 @@ class EventTypeSettings: UITableViewController {
     */
 
 }
+
+//extension EventTypeSettings: NSFetchedResultsControllerDelegate {
+//
+//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        print("EventTypes FRCs will change content")
+//        tableView.beginUpdates()
+//    }
+//    
+//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        
+//        tableView.endUpdates()
+//        print("EventTypes FRCs finished changing content")
+//    }
+//    
+//
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//        
+//        // applies to recordTypes FRC
+//
+//        switch type {
+//        case .update:
+//            tableView.reloadRows(at: [indexPath!], with: .automatic)
+//        case .insert:
+//            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+//        case .delete:
+//            tableView.deleteRows(at: [indexPath!], with: .automatic)
+//        case .move:
+//            tableView.deleteRows(at: [indexPath!], with: .automatic)
+//            tableView.insertRows(at: [newIndexPath!], with: .automatic)
+//            // using .moveRow() causes a problem as the moved row fails to fade away the rowActionMenu
+//            // using .deselectRow doesn't help
+//        }
+//    }
+//    
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
+//    {
+//        
+//        // applies to nonScoreEventTypes FRC which is organised by sectionNameKeyPath 'name'
+//        
+//        let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
+//        
+//        
+//        switch type {
+//        case .insert:
+//            // print("inserting section \(sectionInfo.name)")
+//            tableView.insertSections(indexSet, with: .automatic)
+//        case .delete:
+//            // print("deleting section \(sectionInfo.name)")
+//            tableView.deleteSections(indexSet, with: .automatic)
+//        case .update:
+//            // print("updating section \(sectionInfo.name)")
+//            tableView.reloadSections([sectionIndex], with: .automatic)
+//        case .move:
+//            print("move section \(sectionInfo.name) at index \(sectionIndex)")
+//        }
+//    }
+//
+//
+//}

@@ -98,13 +98,13 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         let allowedNotifications = (UIApplication.shared.delegate as! AppDelegate).authorisedNotificationSettings
         
         guard (UIApplication.shared.delegate as! AppDelegate).notificationsAuthorised else {
-            showNotificationPermissionsAlert(message: "To receive medication reminders please allow Alogea to send you notifications in Settings > Notifications > Alogea. No reminder has been scheduled.")
+            showNotificationPermissionsAlert(message: "To receive medication reminders please allow Alogea to send you notifications in Settings > Notifications > Alogea. A reminder has NOT been scheduled, please try again after authorising notifications.")
             sender.isOn = false
             return
         }
         
         guard allowedNotifications?.alertStyle ==  UNAlertStyle.banner || allowedNotifications?.alertStyle ==  UNAlertStyle.alert else {
-            showNotificationPermissionsAlert(message: "To see medicaton reminders please permit Alogea notifications to include sounds and alerts or at least banners. You can do this in Settings > Notifications > Alogea. No reminder has been scheduled.")
+            showNotificationPermissionsAlert(message: "To see medicaton reminders please permit Alogea notifications to include sounds and alerts, or at least banners. You can do this in Settings > Notifications > Alogea. No reminder has been scheduled.")
             sender.isOn = false
             return
         }
@@ -130,7 +130,7 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     
     func showNotificationPermissionsAlert(message:String?) {
         
-        let alertMessage = message ?? "Notifcations are turned off. To enable reminders please turn on Notifications, in Settings > Notification > PDMF"
+        let alertMessage = message ?? "Notifcations are turned off. To enable reminders please turn on Notifications, in Settings > Notification > Alogea"
 
         let alertController = UIAlertController(title: title, message: alertMessage, preferredStyle: .alert)
         
@@ -180,7 +180,6 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return drugData.dosesVar.count
     }
     

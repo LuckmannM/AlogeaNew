@@ -34,6 +34,7 @@ class RecordTypesController: NSObject {
             print("allRecordTypesFRC fetching error")
         }
         
+        frc.delegate = self
         return frc
     }()
     
@@ -62,7 +63,13 @@ class RecordTypesController: NSObject {
     
     override init() {
         super.init()
-        allTypes.delegate = self
+        
+        print("recordTypes has \(allTypes.fetchedObjects?.count ?? 0) objects")
+        for object in allTypes.fetchedObjects! {
+            print("recordType name is \(object.name) ")
+        }
+
+
     }
     
     class func sharedInstance() -> RecordTypesController {
@@ -118,7 +125,10 @@ extension RecordTypesController: NSFetchedResultsControllerDelegate {
         // if a recordType is renamed or deleted the EventsDataController must be informed
         // so that all events with that name are renamed or deleted as well
         
-        print("recordTypes have been changed")
+        print("recordTypes have been changed, now have \(allTypes.fetchedObjects?.count ?? 0) objects")
+        for object in allTypes.fetchedObjects! {
+            print("recordType name is \(object.name) ")
+        }
         
     }
 }

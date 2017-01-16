@@ -29,6 +29,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("allEventsFRC fetching error")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -45,6 +46,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("scoreEventsFRC fetching error")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -61,7 +63,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("scoreEventsFRC fetching error")
         }
-        
+        frc.delegate = self
         return frc
     }()
 
@@ -78,7 +80,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("nonScoreEventTypesFRC fetching error \(error)")
         }
-        
+        frc.delegate = self
         return frc
     }()
     
@@ -94,6 +96,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("eventTypesFRC fetching error \(error)")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -110,6 +113,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("eventTypesFRC fetching error")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -154,12 +158,6 @@ class EventsDataController: NSObject {
         scoreEventsFRC.delegate = self
         eventTypeFRC.delegate = self
         
-//        for sections in self.eventTypeFRC.sections! {
-//            eventTypes.append(sections.name)
-//        }
-//        for sections in self.nonScoreEventTypesFRC.sections! {
-//            nonScoreEventTypes.append(sections.name)
-//        }
         reconcileRecordTypesAndEventNames()
         
     }
@@ -238,6 +236,10 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         
         // allEvents FRC changes always
         
+        print("")
+        print("some EventsDataController FRC have changed content")
+
+        
         if controller.isEqual(scoreEventsFRC) {
             print("scoreEventsFRC has changed")
             print("There are \(scoreEventsFRC.fetchedObjects?.count) score events")
@@ -255,11 +257,11 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
             print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
         }
         
-        print("scoreEvent TYPES FRC has \(scoreEventTypesFRC.fetchedObjects?.count ?? 0) objects")
-        print("scoreEvent TYPES FRC has \(scoreEventTypesFRC.sections?.count ?? 0) sections")
-        for section in scoreEventTypesFRC.sections! {
-            print("section name is \(section.name)")
-        }
+//        print("non-scoreEvent TYPES FRC has \(nonScoreEventTypesFRC.fetchedObjects?.count ?? 0) objects")
+//        print("non-scoreEvent TYPES FRC has \(nonScoreEventTypesFRC.sections?.count ?? 0) sections")
+//        for section in nonScoreEventTypesFRC.sections! {
+//            print("section name is \(section.name)")
+//        }
        
         reconcileRecordTypesAndEventNames()
         graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!

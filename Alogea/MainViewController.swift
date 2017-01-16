@@ -117,7 +117,6 @@ class MainViewController: UIViewController {
         if self.addedEventType != nil {
             array.append(self.addedEventType!)
         }
-        print ("eventPickerTitles are \(array)")
         return array
         
     }
