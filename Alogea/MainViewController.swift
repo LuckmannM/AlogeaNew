@@ -250,8 +250,10 @@ extension MainViewController: UITextViewDelegate {
         let text = textView.text ?? ""
         textEntryController = touchWheel.mainButtonController
         
-        if eventPickerSelection > 1 {
-            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles()[eventPickerSelection])
+        if eventPickerSelection > 1 { // not Cancel or New event
+            EventsDataController.sharedInstance().newEvent(ofType: "Diary Entry", withName: eventPickerTitles()[eventPickerSelection], note: text)
+
+//            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles()[eventPickerSelection])
         } else if eventPickerSelection == 1 {
             newEventTypeDialog(sourceViewForPad: textView)
             return
@@ -283,12 +285,14 @@ extension MainViewController: UITextViewDelegate {
         let saveAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { (deleteAlert)
             -> Void in
             
+            // can't add directly to EventsDataController.newEvent as the notes text may not yet have been entered
+            // so this newEvent creation should happen at the endedTextEntry() function
             self.addedEventType = ((newTypeDialog.textFields?[0])! as UITextField).text
-            print("saving newTypeDialog.textfield with text \(self.addedEventType)")
+//            RecordTypesController.sharedInstance().createNewRecordType(withName: ((newTypeDialog.textFields?[0])! as UITextField).text!)
+//            EventsDataController.sharedInstance().new
             self.eventPicker.reloadComponent(0)
             self.eventPickerSelection = self.eventPickerTitles().count - 1
             self.eventPicker.selectRow(self.eventPickerSelection, inComponent: 0, animated: false)
-            print ("eventPicker titles are now \(self.eventPickerTitles)")
             
         })
         

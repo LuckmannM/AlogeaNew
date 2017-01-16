@@ -69,6 +69,14 @@ class EventTypeSettings: UITableViewController {
         
         print("load EventTypeSettings VC, scoreEventTypesFRC has \(EventsDataController.sharedInstance().scoreEventsFRC.fetchedObjects?.count ?? 0) objects")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.hidesBottomBarWhenPushed = true
+        self.tabBarController!.tabBar.isHidden = true
+
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -86,9 +94,17 @@ class EventTypeSettings: UITableViewController {
         
         if section == 0 {
             print("recordTypesController.allTypes has \(recordTypesController.allTypes.fetchedObjects?.count) objects)")
+            print("these are...")
+            for object in recordTypesController.allTypes.fetchedObjects! {
+                print("name \(object.name)")
+            }
             return recordTypesController.allTypes.fetchedObjects?.count ?? 0
         } else {
             print("eventsController.nonScoreEventTypesFRC has \(eventsController.nonScoreEventTypesFRC.fetchedObjects?.count) objects)")
+            print("these are...")
+            for object in eventsController.nonScoreEventTypesFRC.fetchedObjects! {
+                print("name \(object.name), type is \(object.type)")
+            }
             return eventsController.nonScoreEventTypesFRC.fetchedObjects?.count ?? 0
         }
     }
@@ -97,10 +113,11 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath)
 
+        print("row for  row \(indexPath.row) in section \(indexPath.section) ...")
         if indexPath.section == 0 {
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
         } else {
-            let modifiedPath = IndexPath(row: indexPath.row, section: 0)
+            let modifiedPath = IndexPath(row: 0, section: indexPath.row)
             (cell.contentView.viewWithTag(titleTag) as! UILabel).text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             
         }

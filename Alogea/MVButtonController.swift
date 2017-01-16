@@ -74,9 +74,9 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         mainViewController.showDiaryEntryWindow(frame: frame)
     }
     
-    func receiveDiaryText(text: String, eventType: String) {
-        
-        eventsDataController.newEvent(ofType: "Diary Entry", withName: eventType, note: text)
-
-    }
+//    func receiveDiaryText(text: String, eventType: String) {
+//        
+//        eventsDataController.newEvent(ofType: "Diary Entry", withName: eventType, note: text)
+//
+//    }
 }

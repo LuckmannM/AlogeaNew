@@ -49,6 +49,23 @@ class EventsDataController: NSObject {
         return frc
     }()
     
+    lazy var nonScoreEventsByDateFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Diary Entry"])
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false), NSSortDescriptor(key: "name", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "date", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("scoreEventsFRC fetching error")
+        }
+        
+        return frc
+    }()
+
+    
     lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: ["Diary Entry"])
@@ -199,7 +216,14 @@ class EventsDataController: NSObject {
     }
     
     func save() {
-        (UIApplication.shared.delegate as! AppDelegate).stack.save()
+        
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch let error as NSError {
+                print("Error saving \(error)")
+            }
+        }
     }
     
     
