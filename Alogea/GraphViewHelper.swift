@@ -69,6 +69,7 @@ class GraphViewHelper: NSObject {
         } catch let error as NSError{
             print("selectedScoreEventsFRC fetching error")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -120,20 +121,6 @@ class GraphViewHelper: NSObject {
         return Date().timeIntervalSince(selectedScoreEventMinMaxDates![0])
     }
     
-//    lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
-//        let request = NSFetchRequest<Event>(entityName: "Event")
-//        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("eventTypesFRC fetching error")
-//        }
-//        
-//        return frc
-//    }()
-    
     lazy var eventTypeFRC: NSFetchedResultsController<Event>  = {
         return EventsDataController.sharedInstance().eventTypeFRC
     }()
@@ -159,10 +146,8 @@ class GraphViewHelper: NSObject {
     convenience init(graphView: GraphView) {
         self.init()
         self.graphView = graphView
-        selectedScoreEventsFRC.delegate = self
         self.timeLineHelper = TimeLineHelper(helper: self)
         
-        print ("GV Helper: There are \(nonScoreEventsFRC.fetchedObjects?.count ?? 0) non-score events")
     }
     
     class func sharedInstance() -> GraphViewHelper {

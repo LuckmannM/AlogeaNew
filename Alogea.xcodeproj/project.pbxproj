@@ -31,6 +31,7 @@
 		265F9CA91DE45E520031C762 /* SubstanceAndClassPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F9CA81DE45E520031C762 /* SubstanceAndClassPopUp.swift */; };
 		26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */; };
 		26770D591E2C29F500DCCBA6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */; };
+		26770D5B1E30032400DCCBA6 /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D5A1E30032400DCCBA6 /* TextInputCell.swift */; };
 		267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */; };
 		267F78D11DC5264F008CC23E /* ClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78D01DC5264F008CC23E /* ClipView.swift */; };
 		269B9BFB1DDE52DE00C3BDA9 /* StoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */; };
@@ -101,6 +102,7 @@
 		265F9CA81DE45E520031C762 /* SubstanceAndClassPopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubstanceAndClassPopUp.swift; sourceTree = "<group>"; };
 		26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTypeSettings.swift; sourceTree = "<group>"; };
 		26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		26770D5A1E30032400DCCBA6 /* TextInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextInputCell.swift; path = Alogea/TextInputCell.swift; sourceTree = "<group>"; };
 		267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewHelper.swift; sourceTree = "<group>"; };
 		267F78D01DC5264F008CC23E /* ClipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipView.swift; sourceTree = "<group>"; };
 		269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreView.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */,
+				26770D5A1E30032400DCCBA6 /* TextInputCell.swift */,
 				26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */,
 			);
 			name = "Settings Group";
@@ -518,6 +521,7 @@
 				26F647721DAE70EC0061E560 /* GraphContainerView.swift in Sources */,
 				269B9BFB1DDE52DE00C3BDA9 /* StoreView.swift in Sources */,
 				26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */,
+				26770D5B1E30032400DCCBA6 /* TextInputCell.swift in Sources */,
 				26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */,
 				2645230E1DDB596B00D62CC1 /* DrugRating.swift in Sources */,
 				2645C5DC1DCC9B9300916596 /* GraphViewTimeLine.swift in Sources */,

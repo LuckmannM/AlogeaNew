@@ -1038,7 +1038,7 @@
                                                 <switch opaque="NO" tag="40" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kn2-HA-FLb">
                                                     <rect key="frame" x="348" y="7" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="cloudSwitchAction:" destination="xFZ-pi-nl2" eventType="valueChanged" id="P5s-rv-XFa"/>
+                                                        <action selector="cloudSwitchActionWithSender:" destination="xFZ-pi-nl2" eventType="valueChanged" id="aMr-Ac-hcn"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -1069,7 +1069,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6GU-so-imd">
                                                     <rect key="frame" x="348" y="7" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="drugReminderSwitchAction:" destination="xFZ-pi-nl2" eventType="valueChanged" id="iNK-K1-vIk"/>
+                                                        <action selector="drugReminderSwitchActionWithSender:" destination="xFZ-pi-nl2" eventType="valueChanged" id="X3o-Bf-cTq"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -1089,8 +1089,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Settings" id="H6U-If-JIj"/>
                     <connections>
-                        <outlet property="cloudSwitch" destination="Kn2-HA-FLb" id="s9O-As-fFr"/>
-                        <outlet property="drugReminderSwitch" destination="6GU-so-imd" id="Khv-pH-Dic"/>
+                        <outlet property="cloudSwitch" destination="Kn2-HA-FLb" id="M7E-vX-LWv"/>
+                        <outlet property="drugReminderSwitch" destination="6GU-so-imd" id="kRG-j3-Vdb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gcj-By-euR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1125,29 +1125,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="eventTypeCell" textLabel="6jZ-8N-410" detailTextLabel="KWe-lD-qWM" style="IBUITableViewCellStyleSubtitle" id="b5o-KA-T9G">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventTypeCell" id="b5o-KA-T9G" customClass="TextInputCell" customModule="Alogea" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="56" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b5o-KA-T9G" id="Tdc-rQ-Fxz">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" tag="10" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6jZ-8N-410">
-                                            <rect key="frame" x="15" y="4" width="34" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="textField" textAlignment="natural" minimumFontSize="14" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="KaT-PW-q1O">
+                                            <rect key="frame" x="20" y="12" width="60" height="19"/>
                                             <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" tag="20" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KWe-lD-qWM">
-                                            <rect key="frame" x="15" y="25" width="44" height="15"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                        </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="20" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SubLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Fa-xs-q3h">
+                                            <rect key="frame" x="200" y="15" width="60.333333333333314" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="KaT-PW-q1O" firstAttribute="leading" secondItem="Tdc-rQ-Fxz" secondAttribute="leadingMargin" constant="12" id="6R7-pK-yHV"/>
+                                        <constraint firstItem="8Fa-xs-q3h" firstAttribute="leading" secondItem="KaT-PW-q1O" secondAttribute="leading" constant="180" id="K6Z-L5-hp3"/>
+                                        <constraint firstItem="KaT-PW-q1O" firstAttribute="centerY" secondItem="Tdc-rQ-Fxz" secondAttribute="centerY" id="X6X-VD-7pA"/>
+                                        <constraint firstItem="KaT-PW-q1O" firstAttribute="centerY" secondItem="8Fa-xs-q3h" secondAttribute="centerY" constant="-2" id="upq-sC-WJs"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="SubLabel" destination="8Fa-xs-q3h" id="uSz-aH-p1U"/>
+                                    <outlet property="textField" destination="KaT-PW-q1O" id="hY1-F6-mPw"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1158,7 +1166,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5u3-eJ-xp9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4774" y="-579"/>
+            <point key="canvasLocation" x="4773.913043478261" y="-579.61956521739137"/>
         </scene>
     </scenes>
     <resources>

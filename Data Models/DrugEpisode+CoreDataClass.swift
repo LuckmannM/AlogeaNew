@@ -137,25 +137,14 @@ public class DrugEpisode: NSManagedObject {
     func convertFromStorage() {
         
         nameVar = name
-        if ingredients != nil {
-            ingredientsVar = NSKeyedUnarchiver.unarchiveObject(with: ingredients! as Data) as? [String]
-        } else {
-            ingredientsVar = [String]()
-        }
-        
-        if classes != nil {
-            classesVar = NSKeyedUnarchiver.unarchiveObject(with: classes! as Data) as? [String]
-        } else {
-            classesVar = [String]()
-        }
+        ingredientsVar = NSKeyedUnarchiver.unarchiveObject(with: ingredients! as Data) as? [String] ?? [String]()
+        classesVar = NSKeyedUnarchiver.unarchiveObject(with: classes! as Data) as? [String] ?? [String]()
         
         startDateVar = startDate as Date!
         if endDate != nil {
-            endDateVar = endDate! as Date
+            endDateVar = endDate as? Date
         }
-        
         frequencyVar = frequency
-        
         regularlyVar = regularly
         
         if doses != nil {
@@ -173,18 +162,8 @@ public class DrugEpisode: NSManagedObject {
             }
         }
         
-        if doseUnit != nil {
-            doseUnitVar = doseUnit
-        } else {
-            doseUnitVar = "mg"
-        }
-        
-        if let text = notes {
-            notesVar = text
-        } else {
-            notesVar = String()
-        }
-        
+        doseUnitVar = doseUnit ?? "mg"
+        notesVar = notes ?? String()
         effectivenessVar = effectiveness
         if sideEffects != nil {
             sideEffectsVar = NSKeyedUnarchiver.unarchiveObject(with: sideEffects! as Data) as? [String]

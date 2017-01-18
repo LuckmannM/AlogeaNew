@@ -20,44 +20,7 @@ class EventTypeSettings: UITableViewController {
     
     let titleTag = 10
     let subTitleTag = 20
-    
-//    lazy var managedObjectContext: NSManagedObjectContext = {
-//        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
-//        return moc
-//    }()
-//    
-//    lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
-//        let request = NSFetchRequest<Event>(entityName: "Event")
-//        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Diary Entry"])
-//        request.predicate = predicate
-//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("nonScoreEventTypesFRC fetching error \(error)")
-//        }
-//        frc.delegate = self
-//        
-//        return frc
-//    }()
-//
-//    lazy var recordTypes: NSFetchedResultsController<RecordType> = {
-//        let request = NSFetchRequest<RecordType>(entityName: "RecordType")
-//        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: true)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("allRecordTypesFRC fetching error")
-//        }
-//        frc.delegate = self
-//        
-//        return frc
-//    }()
-
+    let textFieldTag = 30
     
 
     override func viewDidLoad() {
@@ -69,7 +32,6 @@ class EventTypeSettings: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-//        print("load EventTypeSettings VC, scoreEventTypesFRC has \(EventsDataController.sharedInstance().scoreEventsFRC.fetchedObjects?.count ?? 0) objects")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,7 +45,11 @@ class EventTypeSettings: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
+    }
+    
+    func receiveNewText(text: String, fromCellAtPath: IndexPath) {
+        print("text received is \(text) from textField at path \(fromCellAtPath)")
     }
 
     // MARK: - Table view data source
@@ -96,34 +62,25 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if section == 0 {
-//            print("recordTypesController.allTypes has \(recordTypesController.allTypes.fetchedObjects?.count) objects)")
-//            print("these are...")
-//            for object in recordTypesController.allTypes.fetchedObjects! {
-//                print("name \(object.name)")
-//            }
             return recordTypesController.allTypes.fetchedObjects?.count ?? 0
-//            return recordTypes.fetchedObjects?.count ?? 0
         } else {
-//            print("eventsController.nonScoreEventTypesFRC has \(eventsController.nonScoreEventTypesFRC.fetchedObjects?.count) objects)")
-//            print("these are...")
-//            for object in eventsController.nonScoreEventTypesFRC.fetchedObjects! {
-//                print("name \(object.name), type is \(object.type)")
-//            }
             return eventsController.nonScoreEventTypesFRC.sections?.count ?? 0
-//            return nonScoreEventTypesFRC.fetchedObjects?.count ?? 0
         }
     }
 
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath) as! TextInputCell
 
+        cell.setDelegate(delegate: self,indexPath: indexPath)
+        
         if indexPath.section == 0 {
-            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
+            // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
+            cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
         } else {
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)
-            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
-            
+            // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
+            cell.textField.text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
         }
 
         return cell
@@ -146,7 +103,72 @@ class EventTypeSettings: UITableViewController {
         header.textLabel?.sizeToFit()
         
         header.textLabel?.textColor = UIColor.darkGray
+        
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+        
+        cell.textField.becomeFirstResponder()
+    }
+//
+//    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//        
+//        let renameAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "End", handler:
+//            { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
+//
+//                // alert that all events will be renamed
+//                
+//                // open textField to allow new name entry
+//                
+//                // select and rename all events of this type
+//                
+//        } )
+//        
+//        
+//        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:
+//            { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
+//                
+//                let deleteAlert = UIAlertController(title: "Delete multiple events?", message: "This will remove all events of this type.", preferredStyle: .actionSheet)
+//                
+//                let proceedAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: { (deleteAlert)
+//                    -> Void in
+//                    
+//                    let objectToDelete = self.drugList.object(at: indexPath)
+//                    
+//                    objectToDelete.cancelNotifications()
+//                    self.managedObjectContext.delete(objectToDelete)
+//                    self.save()
+//                })
+//                
+//                let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (deleteAlert)
+//                    -> Void in
+//                    tableView.reloadRows(at: [indexPath], with: .automatic)
+//                })
+//                
+//                deleteAlert.addAction(proceedAction)
+//                deleteAlert.addAction(cancelAction)
+//                
+//                // iPads have different requirements for AlertControllers!
+//                if UIDevice().userInterfaceIdiom == .pad {
+//                    let cell = tableView.cellForRow(at: indexPath)
+//                    let popUpController = deleteAlert.popoverPresentationController
+//                    popUpController!.permittedArrowDirections = .up
+//                    popUpController!.sourceView = self.view
+//                    popUpController!.sourceRect = (cell?.contentView.bounds)!
+//                }
+//                
+//                self.present(deleteAlert, animated: true, completion: nil)
+//        })
+//        
+//        deleteAction.backgroundColor = UIColor.red
+//        renameAction.backgroundColor = ColorScheme.sharedInstance().darkBlue
+//        
+//        let sectionInfo = drugList.sections?[indexPath.section]
+//        
+//        if sectionInfo?.name == "Current Medicines" { return [renameAction, deleteAction] }
+//        else { return [deleteAction] }
+//    }
 
 
     /*
@@ -196,61 +218,20 @@ class EventTypeSettings: UITableViewController {
 
 }
 
-//extension EventTypeSettings: NSFetchedResultsControllerDelegate {
-//
-//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print("EventTypes FRCs will change content")
-//        tableView.beginUpdates()
+//extension EventTypeSettings: UITextFieldDelegate {
+//    
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        textField.sizeToFit()
+//        print("beginning text editing")
 //    }
 //    
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        
-//        tableView.endUpdates()
-//        print("EventTypes FRCs finished changing content")
-//    }
+////    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+////        <#code#>
+////    }
 //    
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+//        print("end text editing")
 //        
-//        // applies to recordTypes FRC
-//
-//        switch type {
-//        case .update:
-//            tableView.reloadRows(at: [indexPath!], with: .automatic)
-//        case .insert:
-//            tableView.insertRows(at: [newIndexPath!], with: .automatic)
-//        case .delete:
-//            tableView.deleteRows(at: [indexPath!], with: .automatic)
-//        case .move:
-//            tableView.deleteRows(at: [indexPath!], with: .automatic)
-//            tableView.insertRows(at: [newIndexPath!], with: .automatic)
-//            // using .moveRow() causes a problem as the moved row fails to fade away the rowActionMenu
-//            // using .deselectRow doesn't help
-//        }
+//        return true
 //    }
-//    
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
-//    {
-//        
-//        // applies to nonScoreEventTypes FRC which is organised by sectionNameKeyPath 'name'
-//        
-//        let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
-//        
-//        
-//        switch type {
-//        case .insert:
-//            // print("inserting section \(sectionInfo.name)")
-//            tableView.insertSections(indexSet, with: .automatic)
-//        case .delete:
-//            // print("deleting section \(sectionInfo.name)")
-//            tableView.deleteSections(indexSet, with: .automatic)
-//        case .update:
-//            // print("updating section \(sectionInfo.name)")
-//            tableView.reloadSections([sectionIndex], with: .automatic)
-//        case .move:
-//            print("move section \(sectionInfo.name) at index \(sectionIndex)")
-//        }
-//    }
-//
-//
 //}
