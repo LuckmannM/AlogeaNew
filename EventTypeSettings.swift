@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import CoreData
 
+
 class EventTypeSettings: UITableViewController {
     
     var stack: CoreDataStack!
@@ -48,9 +49,6 @@ class EventTypeSettings: UITableViewController {
 
     }
     
-    func receiveNewText(text: String, fromCellAtPath: IndexPath) {
-        print("text received is \(text) from textField at path \(fromCellAtPath)")
-    }
 
     // MARK: - Table view data source
 
@@ -72,7 +70,7 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath) as! TextInputCell
 
-        cell.setDelegate(delegate: self,indexPath: indexPath)
+        cell.setDelegate(delegate: self,indexPath: indexPath,tableView: self.tableView)
         
         if indexPath.section == 0 {
             // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
@@ -107,68 +105,117 @@ class EventTypeSettings: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
-        
-        cell.textField.becomeFirstResponder()
+        print("selected cell at \(indexPath)")
+//        let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+//        tableView.deselectRow(at: indexPath, animated: false)
+//        cell.textField.becomeFirstResponder()
     }
-//
-//    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-//        
-//        let renameAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "End", handler:
-//            { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
-//
-//                // alert that all events will be renamed
-//                
-//                // open textField to allow new name entry
-//                
-//                // select and rename all events of this type
-//                
-//        } )
-//        
-//        
-//        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:
-//            { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
-//                
-//                let deleteAlert = UIAlertController(title: "Delete multiple events?", message: "This will remove all events of this type.", preferredStyle: .actionSheet)
-//                
-//                let proceedAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: { (deleteAlert)
-//                    -> Void in
-//                    
+
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        print("edicAction  at \(indexPath)")
+        let renameAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Rename", handler:
+            { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
+
+                var cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+                tableView.reloadRows(at: [indexPath], with: .none)
+                cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+                cell.textField.becomeFirstResponder()
+                
+        } )
+        
+        
+        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:
+            { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
+                
+                let deleteAlert = UIAlertController(title: "Delete multiple events?", message: "This will remove all events with this name", preferredStyle: .actionSheet)
+                
+                let proceedAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: { (deleteAlert)
+                    -> Void in
+                    
 //                    let objectToDelete = self.drugList.object(at: indexPath)
 //                    
 //                    objectToDelete.cancelNotifications()
 //                    self.managedObjectContext.delete(objectToDelete)
 //                    self.save()
-//                })
-//                
-//                let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (deleteAlert)
-//                    -> Void in
-//                    tableView.reloadRows(at: [indexPath], with: .automatic)
-//                })
-//                
-//                deleteAlert.addAction(proceedAction)
-//                deleteAlert.addAction(cancelAction)
-//                
-//                // iPads have different requirements for AlertControllers!
-//                if UIDevice().userInterfaceIdiom == .pad {
-//                    let cell = tableView.cellForRow(at: indexPath)
-//                    let popUpController = deleteAlert.popoverPresentationController
-//                    popUpController!.permittedArrowDirections = .up
-//                    popUpController!.sourceView = self.view
-//                    popUpController!.sourceRect = (cell?.contentView.bounds)!
-//                }
-//                
-//                self.present(deleteAlert, animated: true, completion: nil)
-//        })
-//        
-//        deleteAction.backgroundColor = UIColor.red
-//        renameAction.backgroundColor = ColorScheme.sharedInstance().darkBlue
-//        
-//        let sectionInfo = drugList.sections?[indexPath.section]
-//        
-//        if sectionInfo?.name == "Current Medicines" { return [renameAction, deleteAction] }
-//        else { return [deleteAction] }
-//    }
+                })
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (deleteAlert)
+                    -> Void in
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                })
+                
+                deleteAlert.addAction(proceedAction)
+                deleteAlert.addAction(cancelAction)
+                
+                // iPads have different requirements for AlertControllers!
+                if UIDevice().userInterfaceIdiom == .pad {
+                    let cell = tableView.cellForRow(at: indexPath)
+                    let popUpController = deleteAlert.popoverPresentationController
+                    popUpController!.permittedArrowDirections = .up
+                    popUpController!.sourceView = self.view
+                    popUpController!.sourceRect = (cell?.contentView.bounds)!
+                }
+                
+                self.present(deleteAlert, animated: true, completion: nil)
+        })
+        
+        deleteAction.backgroundColor = UIColor.red
+        renameAction.backgroundColor = ColorScheme.sharedInstance().darkBlue
+        
+        return [renameAction, deleteAction]
+    
+    }
+    
+    func showRenameAlert(forIndexPath: IndexPath, newName: String) {
+        
+        var eventType = String()
+        if forIndexPath.section == 0 {
+            eventType = scoreEvent
+        } else {
+            eventType = nonScoreEvent
+        }
+        
+        let cell = tableView.cellForRow(at: forIndexPath) as! TextInputCell
+        
+        let originalName = cell.originalText
+        
+        let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: originalName!, type: eventType)
+        let recordCount = fetchedEventsFRC?.fetchedObjects?.count ?? 0
+        
+        let alert = UIAlertController(title: "Rename multiple events?", message: "This will change the name of all events (\(recordCount)) with this name", preferredStyle: .actionSheet)
+        
+        let proceedAction = UIAlertAction(title: "Rename", style: UIAlertActionStyle.default, handler: { (alert)
+            -> Void in
+            
+            //                    let objectToDelete = self.drugList.object(at: indexPath)
+            //
+            //                    objectToDelete.cancelNotifications()
+            //                    self.managedObjectContext.delete(objectToDelete)
+            //                    self.save()
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (alert)
+            -> Void in
+            
+            cell.textField.text = originalName
+        })
+        
+        alert.addAction(proceedAction)
+        alert.addAction(cancelAction)
+        
+        // iPads have different requirements for AlertControllers!
+        if UIDevice().userInterfaceIdiom == .pad {
+            let cell = tableView.cellForRow(at: forIndexPath)
+            let popUpController = alert.popoverPresentationController
+            popUpController!.permittedArrowDirections = .up
+            popUpController!.sourceView = self.view
+            popUpController!.sourceRect = (cell?.contentView.bounds)!
+        }
+        
+        self.present(alert, animated: true, completion: nil)
+
+    }
 
 
     /*
@@ -221,17 +268,27 @@ class EventTypeSettings: UITableViewController {
 //extension EventTypeSettings: UITextFieldDelegate {
 //    
 //    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        
+//        //        tableView.deselectRow(at: indexPath, animated: false)
+//        
+//        let entryField = textField as! TextInputCell
+//        originalText = textField.text
 //        textField.sizeToFit()
-//        print("beginning text editing")
+//        print("beginning text editing, original text is \(originalText)")
 //    }
 //    
-////    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-////        <#code#>
-////    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        
+//        textField.resignFirstResponder()
+//        return false
+//    }
 //    
 //    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
 //        print("end text editing")
-//        
+//        if textField.text != nil {
+//            delegate.receiveNewText(text: textField.text!, fromCellAtPath: indexPath)
+//            //            delegate.showRenameAlert(forIndexPath: indexPath, newName: textField.text!)
+//        }
 //        return true
 //    }
 //}

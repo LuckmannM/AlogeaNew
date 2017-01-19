@@ -753,8 +753,6 @@ extension DrugListViewController: UITableViewDelegate {
         
         let endAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "End", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
-                print("")
-                print("start ending drug...")
                 
                 /*
                 modifying the last remaining object in a section (resulting in section delete) in the below way is interpreted by drugList FRC as and .update action, as while if an object remains in section (no section delete) the modification is a .move action.
@@ -773,23 +771,6 @@ extension DrugListViewController: UITableViewDelegate {
                 let drugToStop = self.drugList.object(at: indexPath)
                 drugToStop.storeObjectForEnding(endingDate: Date()) // essential for FRC to change display
 
-                /*
-                if info.numberOfObjects > 1 {
-                    let drugToStop = self.drugList.object(at: indexPath)
-                    drugToStop.storeObjectForEnding(endingDate: Date()) // essential for FRC to change display
-                } else {
-                    let drugToMove = DrugEpisode(context: self.managedObjectContext)
-                    drugToMove.copyFromDrug(drugToCopy: self.drugList.object(at: indexPath) as DrugEpisode)
-                    drugToMove.storeObjectForEnding(endingDate: Date())
-                    
-                    // DELETE or INSERT first???
-                    self.managedObjectContext.delete(self.drugList.object(at: indexPath))
-                    self.managedObjectContext.insert(drugToMove)
-                }
-                */
-                print("...finish ending drug")
-                //self.tableView.reloadData()
-                //self.save()
                 self.fetchDrugList()
 
         } )

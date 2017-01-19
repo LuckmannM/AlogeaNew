@@ -15,6 +15,8 @@ class TextInputCell: UITableViewCell {
     
     var delegate: EventTypeSettings!
     var indexPath: IndexPath!
+    var originalText: String!
+    var tableView: UITableView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -37,17 +39,20 @@ class TextInputCell: UITableViewCell {
         
     }
     
-    func setDelegate(delegate: EventTypeSettings, indexPath: IndexPath) {
+    func setDelegate(delegate: EventTypeSettings, indexPath: IndexPath, tableView: UITableView) {
         self.delegate = delegate
         self.indexPath = indexPath
+        self.tableView = tableView
     }
 }
 
 extension TextInputCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+//        tableView.deselectRow(at: indexPath, animated: false)
+        originalText = textField.text
         textField.sizeToFit()
-        print("beginning text editing")
+        print("beginning text editing, original text is \(originalText)")
     }
     
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -58,10 +63,16 @@ extension TextInputCell: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         print("end text editing")
-        if textField.text != nil {
-            delegate.receiveNewText(text: textField.text!, fromCellAtPath: indexPath)
+        if textField.text?.characters.last == " " {
+            textField.text!.remove(at: textField.text!.index(before: textField.text!.endIndex))
         }
-        
         return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text != nil {
+//             delegate.receiveNewText(text: textField.text!, fromCellAtPath: indexPath)
+            delegate.showRenameAlert(forIndexPath: indexPath, newName: textField.text!)
+        }
     }
 }
