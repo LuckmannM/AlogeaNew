@@ -319,7 +319,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 //            print("section name is \(section.name)")
 //        }
        
-//        reconcileRecordTypesAndEventNames()
+        reconcileRecordTypesAndEventNames()
         graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
     }
     
@@ -329,10 +329,9 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 // *** For debuggin only ***
 extension EventsDataController {
     
-    func createExampleEvents(withName: String = "testScore") {
+    func createExampleEvents(withName: String = "untitled") {
         
-        return
-        
+
         for _ in 0..<Int(10 + drand48() * 100) {
             let _ = drand48()
         }
