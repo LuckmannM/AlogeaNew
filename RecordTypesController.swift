@@ -64,12 +64,22 @@ class RecordTypesController: NSObject {
     override init() {
         super.init()
         
+        print("starting RecordTypes Controller init...")
+
+        
         print("recordTypes has \(allTypes.fetchedObjects?.count ?? 0) objects")
         for object in allTypes.fetchedObjects! {
             print("recordType name is \(object.name) ")
         }
+        
+        // check all scoreEventTypes from EventsDataController to see whether a RecordType for each different scoreEvent exists
+//        for section in EventsDataController.sharedInstance().scoreEventTypesFRC.sections! {
+//            if !recordTypeNames.contains(section.name) {
+//                // create new RecordType
+//            }
+//        }
 
-
+        print("...ending RecordTypes Controller init")
     }
     
     class func sharedInstance() -> RecordTypesController {

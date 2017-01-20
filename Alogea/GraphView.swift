@@ -62,6 +62,9 @@ class GraphView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
+        print("starting GraphView init...")
+
+        
         self.helper = GraphViewHelper(graphView: self)
         self.graphPoints = [CGPoint]()
         self.eventsDataController.graphView = self
@@ -86,6 +89,8 @@ class GraphView: UIView {
             helper.printSelectedScoreEventDates()
         }
         // ***
+
+        print("...ending GraphView init")
 
     }
     

@@ -37,8 +37,13 @@ class CoreDataStack: CustomStringConvertible {
     
     init(modelName: String, storeName: String,
          options: NSDictionary? = nil) {
+        
+        print("starting CoreDataStack init...")
+
         self.modelName = modelName
         self.storeName = storeName
+        
+        print("...ending CoreDataStack init")
     }
     
     var description : String

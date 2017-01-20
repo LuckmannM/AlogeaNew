@@ -84,6 +84,8 @@ class GraphContainerView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        print("starting GraphContainer init...")
 
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
@@ -93,6 +95,8 @@ class GraphContainerView: UIView {
         rotationObserver = NotificationCenter.default
         
         rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        
+        print("... eding GraphContainer init")
     }
 
     deinit {

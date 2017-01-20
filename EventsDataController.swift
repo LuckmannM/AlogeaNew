@@ -22,20 +22,20 @@ class EventsDataController: NSObject {
         return moc
     }()
     
-    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("allEventsFRC fetching error: \(error)")
-        }
-        frc.delegate = self
-        
-        return frc
-    }()
+//    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("allEventsFRC fetching error: \(error)")
+//        }
+//        frc.delegate = self
+//        
+//        return frc
+//    }()
     
     lazy var scoreEventsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -69,7 +69,6 @@ class EventsDataController: NSObject {
         frc.delegate = self
         return frc
     }()
-
     
     lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -103,8 +102,6 @@ class EventsDataController: NSObject {
         
         return frc
     }()
-
-    // MARK: - other properties
     
     lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -121,6 +118,8 @@ class EventsDataController: NSObject {
         return frc
     }()
     
+    // MARK: - other properties
+
     lazy var eventTypes: [String] = {
         var array = [String]()
         
@@ -157,12 +156,12 @@ class EventsDataController: NSObject {
     override init() {
         super.init()
         
-        allEventsFRC.delegate = self
-        scoreEventsFRC.delegate = self
-        eventTypeFRC.delegate = self
+        print("starting EventsDataController init...")
         
         reconcileRecordTypesAndEventNames()
-        
+
+        print("...ending EventsDataController init")
+
     }
     
     func reconcileRecordTypesAndEventNames() {
@@ -173,7 +172,6 @@ class EventsDataController: NSObject {
         }
         
         guard scoreEventTypes.count > 0 else {
-            print("no events exist for reconciliation with recordTypes")
             return
         }
         
@@ -193,12 +191,12 @@ class EventsDataController: NSObject {
 //        createExampleEvents()
     }
     
-    func fetchSpecificEvents(name: String, type: String) -> NSFetchedResultsController<Event>? {
+    func fetchSpecificEvents(name: String, type: String) -> NSFetchedResultsController<Event> {
         
         
         guard type == "Diary Event" || type == "Score Event" else {
             print("request non-existing events of type \(type) with name \(name)")
-            return nil
+            return NSFetchedResultsController<Event>()
         }
         
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -211,7 +209,7 @@ class EventsDataController: NSObject {
             try frc.performFetch()
         } catch let error as NSError{
             print("eventsFRC fetching error: \(error)")
-            return nil
+            return NSFetchedResultsController<Event>()
         }
         return frc
     }
@@ -275,7 +273,6 @@ class EventsDataController: NSObject {
     }
     
     
-    
 }
 
 let eventsDataController = EventsDataController()
@@ -293,18 +290,27 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         if controller.isEqual(scoreEventsFRC) {
             print("scoreEventsFRC has changed")
             print("There are \(scoreEventsFRC.fetchedObjects?.count) score events")
+            
         } else if controller.isEqual(eventTypeFRC) {
             eventTypes.removeAll(keepingCapacity: true)
             for section in eventTypeFRC.sections! {
                 eventTypes.append(section.name)
             }
             print("eventTypeFRC has changed - found the following types: \(eventTypes)")
+            
         } else if controller.isEqual(nonScoreEventTypesFRC) {
             nonScoreEventTypes.removeAll()
             for sections in self.nonScoreEventTypesFRC.sections! {
                 nonScoreEventTypes.append(sections.name)
             }
             print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
+            
+        } else if controller.isEqual(scoreEventTypesFRC) {
+            print("scoreEventTypesFRC has changed")
+            
+        } else if controller.isEqual(nonScoreEventsByDateFRC) {
+            print("nonScoreEventsByDateFRC has changed")
+           
         }
         
 //        print("non-scoreEvent TYPES FRC has \(nonScoreEventTypesFRC.fetchedObjects?.count ?? 0) objects")
@@ -323,9 +329,10 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 // *** For debuggin only ***
 extension EventsDataController {
     
-    func createExampleEvents(withName: String = "untitled") {
+    func createExampleEvents(withName: String = "testScore") {
         
-
+        return
+        
         for _ in 0..<Int(10 + drand48() * 100) {
             let _ = drand48()
         }
@@ -340,6 +347,8 @@ extension EventsDataController {
             newEvent!.date = NSDate().addingTimeInterval(drand48() * -45 * 24 * 3600)
         }
         
+        save()
+        
 //        UserDefaults.standard.set("example", forKey: "SelectedEvent")
 //        
 //        do {
@@ -347,8 +356,8 @@ extension EventsDataController {
 //        }
 //        catch let error as NSError {
 //            print("Error saving \(error)", terminator: "")
-//        }
         
+//        }
     }
     
     func deleteAllScoreEvents() {

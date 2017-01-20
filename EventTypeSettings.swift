@@ -113,7 +113,7 @@ class EventTypeSettings: UITableViewController {
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        print("edicAction  at \(indexPath)")
+        print("editAction  at \(indexPath)")
         let renameAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Rename", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
 
@@ -181,7 +181,7 @@ class EventTypeSettings: UITableViewController {
         let originalName = cell.originalText
         
         let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: originalName!, type: eventType)
-        let recordCount = fetchedEventsFRC?.fetchedObjects?.count ?? 0
+        let recordCount = fetchedEventsFRC.fetchedObjects?.count ?? 0
         
         let alert = UIAlertController(title: "Rename multiple events?", message: "This will change the name of all events (\(recordCount)) with this name", preferredStyle: .actionSheet)
         

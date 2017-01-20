@@ -52,12 +52,14 @@ class TouchWheelView: UIView {
     }
     
     override init(frame: CGRect) {
+
         super.init(frame: frame)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
+        print("starting TouchWheel init...")
         mainViewController = (UIApplication.shared.delegate as! AppDelegate).tabBarViews[0] as! MainViewController
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
         logoView = UIImageView(image: UIImage(named: "CircularLogo"))
@@ -65,7 +67,7 @@ class TouchWheelView: UIView {
         insertSubview(logoView, belowSubview: mainButtonController.buttonView)
         //addSubview(logoView)
         
- 
+        print("...ending TouchWheel init")
     }
     
     func switchConstraints(forLandScape:Bool) {

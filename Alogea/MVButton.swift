@@ -36,6 +36,10 @@ class MVButton: UIButton {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
+        print("starting MV Button Class init...")
+        print("...ending MV Button Class init")
+
     }
     
     

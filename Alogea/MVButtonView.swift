@@ -66,6 +66,10 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
+        print("starting MV Button View init...")
+
+        print("...ending MV Button View init")
+        
     }
 
     override func draw(_ rect: CGRect) {
