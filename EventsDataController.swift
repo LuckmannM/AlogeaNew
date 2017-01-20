@@ -313,12 +313,7 @@ extension EventsDataController {
             newEvent!.date = NSDate().addingTimeInterval(drand48() * -45 * 24 * 3600)
         }
         
-        //        do {
-        //            try  managedObjectContext.save()
-        //        }
-        //        catch let error as NSError {
-        //            print("Error saving \(error)", terminator: "")
-        //        }
+        save()
         
     }
     
