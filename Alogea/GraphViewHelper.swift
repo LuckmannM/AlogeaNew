@@ -56,7 +56,7 @@ class GraphViewHelper: NSObject {
     }()
 
     
-//    lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
+//    lazy var graphEventsFRC: NSFetchedResultsController<Event> = {
 //        let request = NSFetchRequest<Event>(entityName: "Event")
 //        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
 //        let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
@@ -67,43 +67,43 @@ class GraphViewHelper: NSObject {
 //        do {
 //            try frc.performFetch()
 //        } catch let error as NSError{
-//            print("selectedScoreEventsFRC fetching error")
+//            print("graphEventsFRC fetching error")
 //        }
 //        frc.delegate = self
-//        print("GV Helper selectedScoreEventsFRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) objects")
+//        print("GV Helper graphEventsFRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) objects")
 //        
 //        return frc
 //    }()
     
-    lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
+    lazy var graphEventsFRC: NSFetchedResultsController<Event> = {
         let frc = EventsDataController.sharedInstance().fetchSpecificEvents(name: self.selectedScore, type: scoreEvent)
         frc.delegate = self
-        print("GV Helper selectedScoreEvent FRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) events)")
+//        print("GV Helper selectedScoreEvent FRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) events)")
         return frc
     }()
     
     var selectedScoreEventMinMaxDates: [Date]? {
         
-        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
+        guard graphEventsFRC.fetchedObjects != nil && (graphEventsFRC.fetchedObjects?.count)! > 0 else {
             return nil
         }
-        guard (selectedScoreEventsFRC.fetchedObjects![0] as Event?) != nil else {
+        guard (graphEventsFRC.fetchedObjects![0] as Event?) != nil else {
             return nil
         }
         
         var selectedEventDates = [Date]()
         
-        if selectedScoreEventsFRC.fetchedObjects!.count < 2 {
+        if graphEventsFRC.fetchedObjects!.count < 2 {
             let firstObjectPath = IndexPath(item: 0, section: 0)
-            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
+            let firstDate = (graphEventsFRC.object(at: firstObjectPath) as Event).date as! Date
             selectedEventDates.append(firstDate) // minDate from one and only event
             selectedEventDates.append(Date()) // maxDate is now
         } else {
             let firstObjectPath = IndexPath(item: 0, section: 0)
-            let lastObjectPath = IndexPath(item: selectedScoreEventsFRC.fetchedObjects!.count - 1, section: 0)
-            let firstDate = (selectedScoreEventsFRC.object(at: firstObjectPath) as Event).date as! Date
+            let lastObjectPath = IndexPath(item: graphEventsFRC.fetchedObjects!.count - 1, section: 0)
+            let firstDate = (graphEventsFRC.object(at: firstObjectPath) as Event).date as! Date
             selectedEventDates.append(firstDate) // minDate from one and only event
-            let lastDate = (selectedScoreEventsFRC.object(at: lastObjectPath) as Event).date as! Date
+            let lastDate = (graphEventsFRC.object(at: lastObjectPath) as Event).date as! Date
             selectedEventDates.append(lastDate) // maxDate is now
         }
         
@@ -204,16 +204,16 @@ class GraphViewHelper: NSObject {
     
     func graphData() -> [scoreEventGraphData]? {
         
-        guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
+        guard (graphEventsFRC.fetchedObjects?.count ?? 0)! > 0 else {
             return nil
         }
         
         // *** debug only
-        // print("there are \(selectedScoreEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
+        // print("there are \(graphEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
         // *** debug only
         
         var dataArray = [scoreEventGraphData]()
-        for object in selectedScoreEventsFRC.fetchedObjects! {
+        for object in graphEventsFRC.fetchedObjects! {
             if let event = object as Event? {
                 let data = (event.date! as Date, CGFloat(event.vas))
                 dataArray.append(data)
@@ -284,9 +284,11 @@ let helper = GraphViewHelper()
 extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("UserDefaults for selectedscore are \(UserDefaults.standard.value(forKey:"SelectedScore"))")
-        print("selectedScore is \(selectedScore)")
-        print("GV Helper selectedScoreEventsFRC has changed content, now of type '\(selectedScore)' , has \(controller.fetchedObjects!.count) sets")
+//        print("UserDefaults for selectedscore are \(UserDefaults.standard.value(forKey:"SelectedScore"))")
+//        print("selectedScore is \(selectedScore)")
+//        print("GV Helper graphEventsFRC has changed content, now of type '\(selectedScore)' , has \(controller.fetchedObjects!.count) sets")
+        // e.g. invoked when changing name of selectedScore
+        graphEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: selectedScore, type: scoreEvent)
         graphView.refreshPointsFlag = true
         graphView.setNeedsDisplay()
     }
@@ -298,7 +300,7 @@ extension GraphViewHelper {
   
     func printSelectedScoreEventDates() {
         
-        for object in selectedScoreEventsFRC.fetchedObjects! {
+        for object in graphEventsFRC.fetchedObjects! {
             if let event = object as Event? {
                 print("event date \(event.date)")
             }

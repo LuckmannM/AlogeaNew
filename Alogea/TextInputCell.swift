@@ -50,13 +50,9 @@ extension TextInputCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         originalText = textField.text!
+        textField.text! = textField.text! + "       "
         textField.sizeToFit()
         print("beginning text editing, original text is \(originalText)")
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        textField.sizeToFit()
-        return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -220,8 +220,7 @@ class EventsDataController: NSObject {
     
     func fetchSpecificEvents(name: String, type: String) -> NSFetchedResultsController<Event> {
         
-        
-        guard type == "Diary Event" || type == "Score Event" else {
+        guard type == nonScoreEvent || type == scoreEvent else {
             print("request non-existing events of type \(type) with name \(name)")
             return NSFetchedResultsController<Event>()
         }
@@ -238,14 +237,16 @@ class EventsDataController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("eventsFRC fetching error: \(error)")
+            print("specificEventsFRC fetching error: \(error)")
             return NSFetchedResultsController<Event>()
         }
+
         return frc
     }
     
     func renameEvents(ofType: String, oldName: String, newName: String) {
         
+        print("renaming events '\(oldName)' with \(newName)...")
         let request = NSFetchRequest<Event>(entityName: "Event")
         let typePredicate = NSPredicate(format: "type == %@", argumentArray: [ofType])
         let namePredicate = NSPredicate(format: "name == %@", argumentArray: [oldName])
