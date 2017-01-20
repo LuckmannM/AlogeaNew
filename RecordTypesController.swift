@@ -102,6 +102,25 @@ class RecordTypesController: NSObject {
         return nil
     }
     
+    func rename(oldName: String, newName: String) {
+        
+        let request = NSFetchRequest<RecordType>(entityName: "RecordType")
+        let predicate = NSPredicate(format: "name == %@", argumentArray: [oldName])
+        request.predicate = predicate
+        var record:[RecordType]!
+        
+        do {
+            record = try managedObjectContext.fetch(request)
+        } catch let error as NSError {
+            print("Error fetching drugList \(error)")
+        }
+        for object in record {
+            object.name = newName
+        }
+        
+        save()
+    }
+    
     
     func save() {
         

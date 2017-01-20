@@ -70,16 +70,20 @@ class GraphViewHelper: NSObject {
             print("selectedScoreEventsFRC fetching error")
         }
         frc.delegate = self
+        print("GV Helper selectedScoreEventsFRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) objects")
         
         return frc
     }()
+    
+//    var selectedScoreEventsFRC: NSFetchedResultsController<Event>? {
+//        return EventsDataController.sharedInstance().fetchSpecificEvents(name: scoreEvent, type: "Score Event")
+//    }
     
     var selectedScoreEventMinMaxDates: [Date]? {
         
         guard selectedScoreEventsFRC.fetchedObjects != nil && (selectedScoreEventsFRC.fetchedObjects?.count)! > 0 else {
             return nil
         }
-        
         guard (selectedScoreEventsFRC.fetchedObjects![0] as Event?) != nil else {
             return nil
         }
@@ -272,7 +276,10 @@ let helper = GraphViewHelper()
 extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("GV Helper selectedScoreEventsFRC has changed content, now has \(selectedScoreEventsFRC.fetchedObjects!.count) sets")
+        print("UserDefaults for selectedscore are \(UserDefaults.standard.value(forKey:"SelectedScore"))")
+        print("selectedScore is \(selectedScore)")
+        print("GV Helper selectedScoreEventsFRC has changed content, now of type '\(selectedScore)' , has \(controller.fetchedObjects!.count) sets")
+        graphView.refreshPointsFlag = true
         graphView.setNeedsDisplay()
     }
     

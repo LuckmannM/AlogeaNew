@@ -50,7 +50,7 @@ extension TextInputCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
 //        tableView.deselectRow(at: indexPath, animated: false)
-        originalText = textField.text
+        originalText = textField.text!
         textField.sizeToFit()
         print("beginning text editing, original text is \(originalText)")
     }

@@ -178,6 +178,9 @@ class EventsDataController: NSObject {
         }
         
         for type in scoreEventTypes {
+            // account for the possibility of renamed recordType
+            // in this case the old type should be deleted as well!
+            
             if !recordTypesController.recordTypeNames.contains(type) {
                 recordTypesController.createNewRecordType(withName: type)
                 print("there are stored events of type \(type) that have no matching recordType")
@@ -211,6 +214,27 @@ class EventsDataController: NSObject {
             return nil
         }
         return frc
+    }
+    
+    func renameEvents(ofType: String, oldName: String, newName: String) {
+        
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let typePredicate = NSPredicate(format: "type == %@", argumentArray: [ofType])
+        let namePredicate = NSPredicate(format: "name == %@", argumentArray: [oldName])
+        let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [typePredicate, namePredicate])
+        request.predicate = combinedPredicate
+        var events:[Event]!
+        
+        do {
+            events = try managedObjectContext.fetch(request)
+        } catch let error as NSError {
+            print("Error fetching drugList \(error)")
+        }
+        for object in events {
+            object.name = newName
+        }
+        
+        save()
     }
     
     
@@ -289,7 +313,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 //            print("section name is \(section.name)")
 //        }
        
-        reconcileRecordTypesAndEventNames()
+//        reconcileRecordTypesAndEventNames()
         graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
     }
     
@@ -316,6 +340,8 @@ extension EventsDataController {
             newEvent!.date = NSDate().addingTimeInterval(drand48() * -45 * 24 * 3600)
         }
         
+//        UserDefaults.standard.set("example", forKey: "SelectedEvent")
+//        
 //        do {
 //            try  managedObjectContext.save()
 //        }

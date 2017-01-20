@@ -43,6 +43,14 @@ class MainViewController: UIViewController {
 
     // MARK: - core functions
     
+    override func viewWillAppear(_ animated: Bool) {
+        // rretrun from other viewControllers
+        // the graph may have changed so need re-draw/refresh
+        
+        graphContainerView.updateAllViews()
+        // self.view.setNeedsDisplay()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         /*

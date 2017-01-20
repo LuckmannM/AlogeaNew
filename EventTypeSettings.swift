@@ -188,11 +188,19 @@ class EventTypeSettings: UITableViewController {
         let proceedAction = UIAlertAction(title: "Rename", style: UIAlertActionStyle.default, handler: { (alert)
             -> Void in
             
-            //                    let objectToDelete = self.drugList.object(at: indexPath)
-            //
-            //                    objectToDelete.cancelNotifications()
-            //                    self.managedObjectContext.delete(objectToDelete)
-            //                    self.save()
+            if originalName == UserDefaults.standard.value(forKey: "SelectedScore") as? String {
+                UserDefaults.standard.set(newName, forKey: "SelectedScore")
+            }
+            
+            if eventType == scoreEvent {
+                RecordTypesController.sharedInstance().rename(oldName: originalName!, newName: newName)
+            }
+            
+            EventsDataController.sharedInstance().renameEvents(ofType: eventType, oldName: originalName!, newName: newName)
+            
+            self.tableView.reloadRows(at: [forIndexPath], with: .automatic)
+            
+            
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (alert)
@@ -216,6 +224,48 @@ class EventTypeSettings: UITableViewController {
         self.present(alert, animated: true, completion: nil)
 
     }
+    
+    func ensureIsUniqueName(name: String) -> String {
+        // this functions checks whether name is already in the userRecordTypes array in AppSettings and if it is checks wether there is a number at the end of the name, which it increases by one, or add '2' if there is no number
+        
+        
+        var increment: Int!
+        var newName = name
+        let decimals = NSCharacterSet.decimalDigits
+        
+//        while appSettingsGlobal.userRecordTypes.contains(newName) {
+//            
+//            let decimalRange = newName.rangeOfCharacterFromSet(decimals, options: NSString.CompareOptions.BackwardsSearch, range: nil)
+//            
+//            if decimalRange != nil {
+//                increment = Int(newName.substringWithRange(decimalRange!))! + 1
+//                newName.replaceRange(decimalRange!, with: "\(increment)")
+//            } else {
+//                newName = name + " 2"
+//            }
+//            
+//        }
+        
+        return newName
+    }
+
+    
+    func save() {
+        // save to mOC only; changes to mOC will be spotted by (persistentStoreCoordinatorChangesObserver)?
+        // by the NSFetchedResultsController (fetchedSettings). This observes the mOC/stack and reports changes to the
+        // NSFetchedResultsController DElegate methods at the bottom (pSCDidChangeStores)
+        // this triggers pSCDidChangeStores func which carries out re-fetch and re-load
+        
+        do {
+            try  stack.context.save()
+            // print("saving drugList moc")
+        }
+        catch let error as NSError {
+            print("Error saving \(error)", terminator: "")
+        }
+        
+    }
+
 
 
     /*
@@ -264,31 +314,3 @@ class EventTypeSettings: UITableViewController {
     */
 
 }
-
-//extension EventTypeSettings: UITextFieldDelegate {
-//    
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        
-//        //        tableView.deselectRow(at: indexPath, animated: false)
-//        
-//        let entryField = textField as! TextInputCell
-//        originalText = textField.text
-//        textField.sizeToFit()
-//        print("beginning text editing, original text is \(originalText)")
-//    }
-//    
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        
-//        textField.resignFirstResponder()
-//        return false
-//    }
-//    
-//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-//        print("end text editing")
-//        if textField.text != nil {
-//            delegate.receiveNewText(text: textField.text!, fromCellAtPath: indexPath)
-//            //            delegate.showRenameAlert(forIndexPath: indexPath, newName: textField.text!)
-//        }
-//        return true
-//    }
-//}

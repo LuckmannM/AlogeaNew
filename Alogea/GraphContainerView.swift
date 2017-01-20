@@ -99,6 +99,10 @@ class GraphContainerView: UIView {
         NotificationCenter.default.removeObserver(rotationObserver)
     }
     
+    func updateAllViews() {
+        deviceRotation()
+    }
+    
     
     func updateLabels() {
         
@@ -147,7 +151,7 @@ class GraphContainerView: UIView {
     }
     
     
-    func deviceRotation(notification: Notification) {
+    func deviceRotation(notification: Notification? = nil) {
         
         updateLabels()
         clipView.setNeedsDisplay()
