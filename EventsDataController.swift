@@ -32,25 +32,27 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("allEventsFRC fetching error")
         }
+        frc.delegate = self
         
         return frc
     }()
     
-    lazy var scoreEventsFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
-        request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("scoreEventsFRC fetching error")
-        }
-        
-        return frc
-    }()
+//    lazy var scoreEventsFRC: NSFetchedResultsController<Event> = {
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
+//        request.predicate = predicate
+//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("scoreEventsFRC fetching error")
+//        }
+//        frc.delegate = self
+//        
+//        return frc
+//    }()
     
     lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -64,9 +66,27 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("nonScoreEventTypesFRC fetching error \(error)")
         }
+        frc.delegate = self
         
         return frc
     }()
+    
+    lazy var nonScoreEventsByDateFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false), NSSortDescriptor(key: "name", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "date", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("nonScoreEventsByDateFRC fetching error: \(error)")
+        }
+        frc.delegate = self
+        return frc
+    }()
+
     
     lazy var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -80,6 +100,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("eventTypesFRC fetching error \(error)")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -96,6 +117,7 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             print("eventTypesFRC fetching error")
         }
+        frc.delegate = self
         
         return frc
     }()
@@ -136,16 +158,6 @@ class EventsDataController: NSObject {
     override init() {
         super.init()
         
-        allEventsFRC.delegate = self
-        scoreEventsFRC.delegate = self
-        eventTypeFRC.delegate = self
-        
-        //        for sections in self.eventTypeFRC.sections! {
-        //            eventTypes.append(sections.name)
-        //        }
-        //        for sections in self.nonScoreEventTypesFRC.sections! {
-        //            nonScoreEventTypes.append(sections.name)
-        //        }
         reconcileRecordTypesAndEventNames()
         
     }
@@ -259,10 +271,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         
         // allEvents FRC changes always
         
-        if controller.isEqual(scoreEventsFRC) {
-            print("scoreEventsFRC has changed")
-            print("There are \(scoreEventsFRC.fetchedObjects?.count) score events")
-        } else if controller.isEqual(eventTypeFRC) {
+        if controller.isEqual(eventTypeFRC) {
             eventTypes.removeAll(keepingCapacity: true)
             for section in eventTypeFRC.sections! {
                 eventTypes.append(section.name)
@@ -318,17 +327,17 @@ extension EventsDataController {
         
     }
     
-    func deleteAllScoreEvents() {
-        
-        guard (scoreEventsFRC.fetchedObjects?.count)! > 0 else { return }
-        
-        print("deleting all 'Score Events'")
-        
-        for object in scoreEventsFRC.fetchedObjects! {
-            managedObjectContext.delete(object)
-        }
-        save()
-    }
+//    func deleteAllScoreEvents() {
+//        
+//        guard (scoreEventsFRC.fetchedObjects?.count)! > 0 else { return }
+//        
+//        print("deleting all 'Score Events'")
+//        
+//        for object in scoreEventsFRC.fetchedObjects! {
+//            managedObjectContext.delete(object)
+//        }
+//        save()
+//    }
     
 }
 
