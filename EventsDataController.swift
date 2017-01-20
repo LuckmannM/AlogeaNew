@@ -22,20 +22,20 @@ class EventsDataController: NSObject {
         return moc
     }()
     
-    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("allEventsFRC fetching error")
-        }
-        frc.delegate = self
-        
-        return frc
-    }()
+//    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("allEventsFRC fetching error")
+//        }
+//        frc.delegate = self
+//        
+//        return frc
+//    }()
     
 //    lazy var scoreEventsFRC: NSFetchedResultsController<Event> = {
 //        let request = NSFetchRequest<Event>(entityName: "Event")
@@ -105,33 +105,34 @@ class EventsDataController: NSObject {
         return frc
     }()
     
+    
+//    lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("eventTypesFRC fetching error")
+//        }
+//        frc.delegate = self
+//        
+//        return frc
+//    }()
+    
     // MARK: - other properties
     
-    lazy var eventTypeFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("eventTypesFRC fetching error")
-        }
-        frc.delegate = self
-        
-        return frc
-    }()
-    
-    lazy var eventTypes: [String] = {
-        var array = [String]()
-        
-        for sections in self.eventTypeFRC.sections! {
-            array.append(sections.name)
-        }
-        
-        return array
-        
-    }()
+//    lazy var eventTypes: [String] = {
+//        var array = [String]()
+//        
+//        for sections in self.eventTypeFRC.sections! {
+//            array.append(sections.name)
+//        }
+//        
+//        return array
+//        
+//    }()
     
     lazy var nonScoreEventTypes: [String] = {
         var array = [String]()
@@ -271,13 +272,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         
         // allEvents FRC changes always
         
-        if controller.isEqual(eventTypeFRC) {
-            eventTypes.removeAll(keepingCapacity: true)
-            for section in eventTypeFRC.sections! {
-                eventTypes.append(section.name)
-            }
-            print("eventTypeFRC has changed - found the following types: \(eventTypes)")
-        } else if controller.isEqual(nonScoreEventTypesFRC) {
+        if controller.isEqual(nonScoreEventTypesFRC) {
             nonScoreEventTypes.removeAll()
             for sections in self.nonScoreEventTypesFRC.sections! {
                 nonScoreEventTypes.append(sections.name)

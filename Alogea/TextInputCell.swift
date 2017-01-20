@@ -49,17 +49,21 @@ class TextInputCell: UITableViewCell {
 extension TextInputCell: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-//        tableView.deselectRow(at: indexPath, animated: false)
         originalText = textField.text!
         textField.sizeToFit()
         print("beginning text editing, original text is \(originalText)")
     }
     
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            
-            textField.resignFirstResponder()
-            return false
-        }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        textField.sizeToFit()
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        textField.resignFirstResponder()
+        return false
+    }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         print("end text editing")
@@ -71,7 +75,6 @@ extension TextInputCell: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text != nil {
-//             delegate.receiveNewText(text: textField.text!, fromCellAtPath: indexPath)
             delegate.showRenameAlert(forIndexPath: indexPath, newName: textField.text!)
         }
     }

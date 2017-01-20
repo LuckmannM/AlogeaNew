@@ -125,9 +125,9 @@ class GraphViewHelper: NSObject {
         return Date().timeIntervalSince(selectedScoreEventMinMaxDates![0])
     }
     
-    lazy var eventTypeFRC: NSFetchedResultsController<Event>  = {
-        return EventsDataController.sharedInstance().eventTypeFRC
-    }()
+//    lazy var eventTypeFRC: NSFetchedResultsController<Event>  = {
+//        return EventsDataController.sharedInstance().eventTypeFRC
+//    }()
     
     lazy var nonScoreEventsFRC: NSFetchedResultsController<Event>  = {
         return EventsDataController.sharedInstance().nonScoreEventsByDateFRC
