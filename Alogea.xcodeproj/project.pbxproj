@@ -165,6 +165,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2604F8311E32A6B000742FE6 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
+				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
+			);
+			name = Controllers;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		263DA00F1DD464E500CD7963 /* MainView Group */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +295,7 @@
 				26E3B8D91DA177D000D157BB /* Info.plist */,
 				26E3B8D11DA177D000D157BB /* Alogea.xcdatamodeld */,
 				26B5A14D1DAFE4760082DA40 /* Extensions */,
+				2604F8311E32A6B000742FE6 /* Controllers */,
 				26E3B9121DA1819B00D157BB /* Data Models */,
 			);
 			path = Alogea;
@@ -320,12 +331,10 @@
 		26E3B9121DA1819B00D157BB /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
-				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
 				26E3B9021DA1816E00D157BB /* Event+CoreDataClass.swift */,
 				26E3B9031DA1816E00D157BB /* Event+CoreDataProperties.swift */,
 				26E3B9041DA1816E00D157BB /* RecordType+CoreDataClass.swift */,
 				26E3B9051DA1816E00D157BB /* RecordType+CoreDataProperties.swift */,
-				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
 				26E3B9061DA1816E00D157BB /* Exercise+CoreDataClass.swift */,
 				26E3B9071DA1816E00D157BB /* Exercise+CoreDataProperties.swift */,
 				26E3B9081DA1816E00D157BB /* DrugEpisode+CoreDataClass.swift */,

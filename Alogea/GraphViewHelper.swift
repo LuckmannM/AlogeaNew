@@ -56,28 +56,28 @@ class GraphViewHelper: NSObject {
     }()
 
     
-//    lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
-//        let request = NSFetchRequest<Event>(entityName: "Event")
-//        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
-//        let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
-//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [anyScorePredicate, selectedScorePredicate])
-//        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("selectedScoreEventsFRC fetching error")
-//        }
-//        frc.delegate = self
-//        print("GV Helper selectedScoreEventsFRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) objects")
-//        
-//        return frc
-//    }()
+    lazy var selectedScoreEventsFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
+        let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [anyScorePredicate, selectedScorePredicate])
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("selectedScoreEventsFRC fetching error")
+        }
+        frc.delegate = self
+        print("GV Helper selectedScoreEventsFRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) objects")
+        
+        return frc
+    }()
     
-    var selectedScoreEventsFRC: NSFetchedResultsController<Event> {
-        return EventsDataController.sharedInstance().fetchSpecificEvents(name: scoreEvent, type: scoreEvent)
-    }
+//    var selectedScoreEventsFRC: NSFetchedResultsController<Event> {
+//        return EventsDataController.sharedInstance().fetchSpecificEvents(name: scoreEvent, type: scoreEvent)
+//    }
     
     var selectedScoreEventMinMaxDates: [Date]? {
         
