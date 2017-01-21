@@ -324,6 +324,32 @@ extension MainViewController: UITextViewDelegate {
         
     }
     
+    func ensureNameIsUnique(name: String) -> String {
+        // this functions checks whether name is already in the userRecordTypes array in AppSettings and if it is checks wether there is a number at the end of the name, which it increases by one, or add '2' if there is no number
+        
+        
+        var increment: Int!
+        var newName = name
+        let decimals = NSCharacterSet.decimalDigits
+        
+        //        while appSettingsGlobal.userRecordTypes.contains(newName) {
+        //
+        //            let decimalRange = newName.rangeOfCharacterFromSet(decimals, options: NSString.CompareOptions.BackwardsSearch, range: nil)
+        //
+        //            if decimalRange != nil {
+        //                increment = Int(newName.substringWithRange(decimalRange!))! + 1
+        //                newName.replaceRange(decimalRange!, with: "\(increment)")
+        //            } else {
+        //                newName = name + " 2"
+        //            }
+        //            
+        //        }
+        
+        return newName
+    }
+    
+
+    
     // MARK: - exporting / printing
     
     @IBAction func exportDialog(sender: UIButton) {
