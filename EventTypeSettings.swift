@@ -75,10 +75,12 @@ class EventTypeSettings: UITableViewController {
         if indexPath.section == 0 {
             // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
             cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
+            cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
         } else {
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)
             // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             cell.textField.text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
+            cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) events"
         }
 
         return cell
