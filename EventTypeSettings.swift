@@ -19,7 +19,6 @@ class EventTypeSettings: UITableViewController {
     var recordTypesController = RecordTypesController.sharedInstance()
     var eventsController = EventsDataController.sharedInstance()
     
-    let titleTag = 10
     let subTitleTag = 20
     let textFieldTag = 30
     
@@ -27,12 +26,6 @@ class EventTypeSettings: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,12 +66,10 @@ class EventTypeSettings: UITableViewController {
         cell.setDelegate(delegate: self,indexPath: indexPath,tableView: self.tableView)
         
         if indexPath.section == 0 {
-            // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = recordTypesController.allTypes.object(at: indexPath).name!
             cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
             cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
         } else {
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)
-            // (cell.contentView.viewWithTag(titleTag) as! UILabel).text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             cell.textField.text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) events"
         }
@@ -152,6 +143,7 @@ class EventTypeSettings: UITableViewController {
                     if indexPath.section == 0 { // scoreEvents only require active update of recordTypes controller
                         self.stack.context.delete(self.recordTypesController.allTypes.object(at: indexPath))
                     }
+                    
                     self.save()
                     tableView.reloadSections([indexPath.section], with: .automatic)
                 })

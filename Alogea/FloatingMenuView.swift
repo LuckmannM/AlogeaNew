@@ -15,6 +15,7 @@ class FloatingMenuView: UIView {
     @IBOutlet var tapGesture: UITapGestureRecognizer!
     @IBOutlet var graphTypeButton: UIButton!
     @IBOutlet var printButton: UIButton!
+    @IBOutlet var listButton: UIButton!
     @IBOutlet weak var graphView:GraphView!
     
     let arrowInset: CGFloat = 10
@@ -67,6 +68,7 @@ class FloatingMenuView: UIView {
         
         printButton.isEnabled = true
         graphTypeButton.isEnabled = true
+        listButton.isEnabled = true
 
     }
     
@@ -84,6 +86,9 @@ class FloatingMenuView: UIView {
         graphView.setNeedsDisplay()
     }
     
+    @IBAction func listButtonAction(sender: UIButton) {
+        
+    }
     
     func slideIn() {
         
@@ -106,6 +111,7 @@ class FloatingMenuView: UIView {
                 self.tapGesture.addTarget(self, action: #selector(self.slideOut))
                 self.printButton.isEnabled = false
                 self.graphTypeButton.isEnabled = false
+                self.listButton.isEnabled = false
         })
         
     }

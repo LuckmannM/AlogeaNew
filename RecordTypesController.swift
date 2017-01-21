@@ -131,6 +131,33 @@ class RecordTypesController: NSObject {
         save()
     }
     
+    func returnUniqueName(name: String) -> String {
+        
+        var increment: Int!
+        var uniqueName = name
+        let decimals = NSCharacterSet.decimalDigits
+        
+        var lowerRecordTypeNames = [String]()
+        for type in recordTypeNames {
+            lowerRecordTypeNames.append(type.lowercased())
+        }
+
+        
+        while lowerRecordTypeNames.contains(uniqueName) {
+            
+            let range = uniqueName.rangeOfCharacter(from: decimals, options: String.CompareOptions.backwards, range: nil)
+            
+            if range != nil {
+                increment = Int(uniqueName.substring(with: range!))! + 1
+                uniqueName.replaceSubrange(range!, with: "\(increment)")
+            } else {
+                uniqueName = name + " 2"
+            }
+        }
+        
+        return uniqueName
+    }
+    
     
     func save() {
         

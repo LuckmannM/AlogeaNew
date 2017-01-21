@@ -153,7 +153,7 @@ extension MainViewController: UITextViewDelegate {
     
     func showDiaryEntryWindow(frame: CGRect) {
         
-        
+        // only sappears once - when used doesn't appear again second time
         textEntryWindow.frame = frame
         originalEntryWindowRect = textEntryWindow.frame
         textEntryWindow.backgroundColor = UIColor(colorLiteralRed: 248/255, green: 248/255, blue: 245/255, alpha: 0.9)
@@ -294,11 +294,12 @@ extension MainViewController: UITextViewDelegate {
         let saveAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { (deleteAlert)
             -> Void in
             
+            let newEventName = ((newTypeDialog.textFields?[0])! as UITextField).text
+            let uniqueName = RecordTypesController.sharedInstance().returnUniqueName(name: newEventName!)
+            
             // can't add directly to EventsDataController.newEvent as the notes text may not yet have been entered
             // so this newEvent creation should happen at the endedTextEntry() function
-            self.addedEventType = ((newTypeDialog.textFields?[0])! as UITextField).text
-//            RecordTypesController.sharedInstance().createNewRecordType(withName: ((newTypeDialog.textFields?[0])! as UITextField).text!)
-//            EventsDataController.sharedInstance().new
+            self.addedEventType = uniqueName
             self.eventPicker.reloadComponent(0)
             self.eventPickerSelection = self.eventPickerTitles().count - 1
             self.eventPicker.selectRow(self.eventPickerSelection, inComponent: 0, animated: false)
@@ -323,31 +324,6 @@ extension MainViewController: UITextViewDelegate {
         self.present(newTypeDialog, animated: true, completion: nil)
         
     }
-    
-    func ensureNameIsUnique(name: String) -> String {
-        // this functions checks whether name is already in the userRecordTypes array in AppSettings and if it is checks wether there is a number at the end of the name, which it increases by one, or add '2' if there is no number
-        
-        
-        var increment: Int!
-        var newName = name
-        let decimals = NSCharacterSet.decimalDigits
-        
-        //        while appSettingsGlobal.userRecordTypes.contains(newName) {
-        //
-        //            let decimalRange = newName.rangeOfCharacterFromSet(decimals, options: NSString.CompareOptions.BackwardsSearch, range: nil)
-        //
-        //            if decimalRange != nil {
-        //                increment = Int(newName.substringWithRange(decimalRange!))! + 1
-        //                newName.replaceRange(decimalRange!, with: "\(increment)")
-        //            } else {
-        //                newName = name + " 2"
-        //            }
-        //            
-        //        }
-        
-        return newName
-    }
-    
 
     
     // MARK: - exporting / printing
