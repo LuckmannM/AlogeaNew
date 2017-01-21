@@ -105,10 +105,10 @@ class EventTypeSettings: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected cell at \(indexPath)")
-//        let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
-//        tableView.deselectRow(at: indexPath, animated: false)
-//        cell.textField.becomeFirstResponder()
+
+        let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+        tableView.deselectRow(at: indexPath, animated: false)
+        cell.textField.becomeFirstResponder()
     }
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
