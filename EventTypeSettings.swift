@@ -128,16 +128,27 @@ class EventTypeSettings: UITableViewController {
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
                 
-                let deleteAlert = UIAlertController(title: "Delete multiple events?", message: "This will remove all events with this name", preferredStyle: .actionSheet)
+                let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+                let name = cell.textField.text!
+                
+                var eventType = String()
+                if indexPath.section == 0 {
+                    eventType = scoreEvent
+                } else {
+                    eventType = nonScoreEvent
+                }
+                let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: name, type: eventType)
+
+                let deleteAlert = UIAlertController(title: "Delete multiple events?", message: "This will remove \(fetchedEventsFRC.fetchedObjects?.count ?? 0) events with this name", preferredStyle: .actionSheet)
                 
                 let proceedAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: { (deleteAlert)
                     -> Void in
                     
-//                    let objectToDelete = self.drugList.object(at: indexPath)
-//                    
-//                    objectToDelete.cancelNotifications()
-//                    self.managedObjectContext.delete(objectToDelete)
-//                    self.save()
+                    for object in fetchedEventsFRC.fetchedObjects! {
+                        self.stack.context.delete(object)
+                    }
+                    self.save()
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
                 })
                 
                 let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (deleteAlert)
