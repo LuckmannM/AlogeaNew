@@ -220,7 +220,8 @@ class GraphViewHelper: NSObject {
             let newPoint = CGPoint(x: xCoordinate, y: yCoordinate)
             points.append(newPoint)
         }
-
+        
+//        print("GV Helper returning \(points.count) graph points to GraphView for drawing")
         return points
     }
     

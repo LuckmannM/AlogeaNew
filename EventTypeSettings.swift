@@ -106,7 +106,6 @@ class EventTypeSettings: UITableViewController {
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        print("editAction  at \(indexPath)")
         let renameAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Rename", handler:
             { (action: UITableViewRowAction!, indexPath: IndexPath!) -> Void in
 
@@ -145,6 +144,19 @@ class EventTypeSettings: UITableViewController {
                     }
                     
                     self.save()
+                    
+                    // if deleting the currently selected score need to change selectedScore to some other
+                    // possibility of no remainig RecordType if deleted was the last remaining
+                    if name == UserDefaults.standard.value(forKey: "SelectedScore")as! String  {
+                        if (RecordTypesController.sharedInstance().allTypes.fetchedObjects?.count ?? 0) > 0 {
+                            UserDefaults.standard.set(RecordTypesController.sharedInstance().recordTypeNames[0], forKey: "SelectedScore")
+                        } else {
+                            // no more RecordTypes exist
+                            RecordTypesController.sharedInstance().createNewRecordType(withName: "default")
+                            UserDefaults.standard.set("default", forKey: "SelectedScore")
+                        }
+                    }
+
                     tableView.reloadSections([indexPath.section], with: .automatic)
                 })
                 
