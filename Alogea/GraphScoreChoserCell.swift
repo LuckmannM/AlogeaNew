@@ -11,7 +11,7 @@ import UIKit
 class GraphScoreChoserCell: UITableViewCell {
 
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var addButton: UIImageView!
     
 //    var delegate: GraphScoreChoser!
     var indexPath: IndexPath!
@@ -45,7 +45,8 @@ class GraphScoreChoserCell: UITableViewCell {
 //        self.tableView = tableView
 //    }
     
-    func activeTextField() {
+    func activateTextField() {
+        
         textField.isEnabled = true
         textField.becomeFirstResponder()
     }
@@ -61,6 +62,12 @@ extension GraphScoreChoserCell: UITextFieldDelegate {
         
         textField.resignFirstResponder()
         return false
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        textField.sizeToFit()
+        return true
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

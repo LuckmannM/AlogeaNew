@@ -1194,27 +1194,29 @@
                                     <rect key="frame" x="0.0" y="0.0" width="161" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button hidden="YES" opaque="NO" tag="40" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UBS-a3-Jhn">
-                                            <rect key="frame" x="17" y="11" width="22" height="22"/>
-                                        </button>
                                         <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dcy-T1-vgv">
-                                            <rect key="frame" x="8" y="7" width="97" height="30"/>
+                                            <rect key="frame" x="8" y="14" width="8" height="17"/>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GraphTitle Blue+" translatesAutoresizingMaskIntoConstraints="NO" id="Esp-Ba-xDT" userLabel="Add Button">
+                                            <rect key="frame" x="17" y="11" width="22" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="Nr2-2h-Axc"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="centerY" secondItem="dcy-T1-vgv" secondAttribute="centerY" id="1WG-zw-8WN"/>
                                         <constraint firstItem="dcy-T1-vgv" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" id="FXH-hV-Sow"/>
-                                        <constraint firstItem="UBS-a3-Jhn" firstAttribute="centerY" secondItem="LP9-AI-6FP" secondAttribute="centerY" id="Qrq-If-heO"/>
-                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="top" secondItem="LP9-AI-6FP" secondAttribute="topMargin" constant="-1" id="REL-YE-LJI"/>
-                                        <constraint firstItem="UBS-a3-Jhn" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" constant="9" id="SKq-lL-GwC"/>
-                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="centerY" secondItem="UBS-a3-Jhn" secondAttribute="centerY" id="hHQ-9W-Dym"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="dcy-T1-vgv" secondAttribute="trailing" constant="48" id="hkc-A4-m9d"/>
+                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="leading" secondItem="dcy-T1-vgv" secondAttribute="trailing" constant="1" id="a98-I3-RDZ"/>
+                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="centerY" secondItem="LP9-AI-6FP" secondAttribute="centerY" id="hfh-IU-I1d"/>
+                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="top" secondItem="LP9-AI-6FP" secondAttribute="topMargin" constant="3" id="mwC-hD-CM4"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="addButton" destination="UBS-a3-Jhn" id="vVj-PS-Off"/>
+                                    <outlet property="addButton" destination="Esp-Ba-xDT" id="xcQ-3s-blv"/>
                                     <outlet property="textField" destination="dcy-T1-vgv" id="MuE-VZ-QPf"/>
                                 </connections>
                             </tableViewCell>
@@ -1242,6 +1244,7 @@
         <image name="3Yellow" width="71" height="25"/>
         <image name="ExpoButton" width="45" height="53"/>
         <image name="GraphButtonBar" width="52" height="52"/>
+        <image name="GraphTitle Blue+" width="43" height="44"/>
         <image name="ListButton" width="52" height="52"/>
         <image name="MedsIcon" width="30" height="30"/>
         <image name="NewDrugButtonImageLarge" width="32" height="32"/>

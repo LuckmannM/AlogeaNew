@@ -18,9 +18,6 @@ class GraphScoreChoser: UITableViewController {
         return RecordTypesController.sharedInstance().recordTypeNames
     }
 
-    let titleTag = 10
-    let buttonTag = 40
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,7 +42,7 @@ class GraphScoreChoser: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return RecordTypesController.sharedInstance().recordTypeNames.count
+        return RecordTypesController.sharedInstance().recordTypeNames.count + 1
         // or RecordTypesController. sharedInstance().allTypes.fetchedObjects?.count ?? 0
     }
 
@@ -58,7 +55,6 @@ class GraphScoreChoser: UITableViewController {
             cell.textField.text = recordTypeNames[indexPath.row]
             cell.textField.isEnabled = false
             cell.addButton.isHidden = true
-            cell.addButton.isEnabled = false
             
             if recordTypeNames[indexPath.row] == selectedScore {
                 cell.accessoryType = .checkmark
@@ -68,8 +64,6 @@ class GraphScoreChoser: UITableViewController {
         } else {
             // active add button here dn when pressed active textField in didSelectRow
             cell.addButton.isHidden = false
-            cell.addButton.isEnabled = true
-            cell.addButton.addTarget(self, action: #selector(GraphScoreChoserCell.activeTextField), for: .touchUpInside)
             cell.accessoryType = .none
         }
 
@@ -79,12 +73,14 @@ class GraphScoreChoser: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // select and deselect checkmark and change selectedScore in UserDefaults
         
+        let cell = tableView.cellForRow(at: indexPath) as! GraphScoreChoserCell
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row < recordTypeNames.count {
             UserDefaults.standard.set(recordTypeNames[indexPath.row], forKey: "SelectedScore")
             tableView.reloadSections([indexPath.section], with: .automatic)
         } else {
-            // hide + button and activate textField for entry of new scoreEvent type
+            cell.activateTextField()
+            cell.addButton.isHidden = true
         }
 
     }
