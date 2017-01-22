@@ -47,8 +47,7 @@ class MainViewController: UIViewController {
         // rretrun from other viewControllers
         // the graph may have changed so need re-draw/refresh
         
-        graphContainerView.updateAllViews()
-        // self.view.setNeedsDisplay()
+        graphContainerView.reloadAllViews()
     }
     
     override func viewDidLoad() {
@@ -484,8 +483,6 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         popUpController!.permittedArrowDirections = .any
         popUpController!.sourceView = graphContainerView.upperLabel
         popUpController?.sourceRect = graphContainerView.upperLabel.bounds
-//        popUpController!.sourceView = self.floatingMenuView.listButton
-//        popUpController?.sourceRect = self.floatingMenuView.listButton.bounds
         popUpController!.delegate = self
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
@@ -498,9 +495,8 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
-        // notify graphViewContainer and subviews that the selectedScore has changed and reDraw their views
+        graphContainerView.reloadAllViews()
     }
-
 }
 
 extension MainViewController: MFMailComposeViewControllerDelegate {

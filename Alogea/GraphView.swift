@@ -84,7 +84,7 @@ class GraphView: UIView {
         
         
         // *** Debug
-        if helper.graphEventsFRC.fetchedObjects?.count == 0 {
+        if eventsDataController.allEventsFRC.fetchedObjects?.count == 0 {
             eventsDataController.createExampleEvents()
             helper.printSelectedScoreEventDates()
         }
@@ -94,19 +94,17 @@ class GraphView: UIView {
 
     }
     
-    /*
-    deinit {
-        NotificationCenter.default.removeObserver(rotationObserver)
-    }
-     */
-    
     override func draw(_ rect: CGRect) {
 
         drawTimeLine()
+//        print("-------------")
+//        print("graphView Draw(); selectedScore = \(helper.selectedScore), UserDefaults is \(UserDefaults.standard.value(forKey: "SelectedScore") as! String), refreshPointsFlag = \(refreshPointsFlag)")
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
-        guard graphPoints.count > 0  else { return }
+        guard graphPoints.count > 0  else {
+            return
+        }
         
         if  graphIsLineType {
             drawLineGraph()

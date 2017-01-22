@@ -22,21 +22,23 @@ class EventsDataController: NSObject {
         return moc
     }()
     
-//    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
-//        let request = NSFetchRequest<Event>(entityName: "Event")
-//        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("allEventsFRC fetching error")
-//        }
-//        frc.delegate = self
-//        
-//        return frc
-//    }()
-    
+    //  ** DEVELOPMENT only: used in GV Helper init() function only: if no events created ExampleEvents
+    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("allEventsFRC fetching error")
+        }
+        frc.delegate = self
+        
+        return frc
+    }()
+    //  ** DEVELOPMENT only
+
 //    lazy var scoreEventsFRC: NSFetchedResultsController<Event> = {
 //        let request = NSFetchRequest<Event>(entityName: "Event")
 //        let predicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])

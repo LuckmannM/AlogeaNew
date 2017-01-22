@@ -1186,19 +1186,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="200" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.73169362549999994" green="0.30168483559999998" blue="0.4997644081" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="graphViewChoserCell" rowHeight="44" id="m7W-Vo-8IY" customClass="GraphScoreChoserCell" customModule="Alogea" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="200" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m7W-Vo-8IY" id="LP9-AI-6FP">
-                                    <rect key="frame" x="0.0" y="0.0" width="161" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="161" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dcy-T1-vgv">
-                                            <rect key="frame" x="8" y="14" width="8" height="17"/>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dcy-T1-vgv">
+                                            <rect key="frame" x="8" y="13" width="8" height="19"/>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
+                                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                         </textField>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GraphTitle Blue+" translatesAutoresizingMaskIntoConstraints="NO" id="Esp-Ba-xDT" userLabel="Add Button">
                                             <rect key="frame" x="17" y="11" width="22" height="22"/>
@@ -1208,11 +1209,11 @@
                                         </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="centerY" secondItem="dcy-T1-vgv" secondAttribute="centerY" id="1WG-zw-8WN"/>
-                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" id="FXH-hV-Sow"/>
-                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="leading" secondItem="dcy-T1-vgv" secondAttribute="trailing" constant="1" id="a98-I3-RDZ"/>
+                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" id="2mV-9k-04F"/>
+                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="centerY" secondItem="Esp-Ba-xDT" secondAttribute="centerY" id="UH4-IO-8AY"/>
                                         <constraint firstItem="Esp-Ba-xDT" firstAttribute="centerY" secondItem="LP9-AI-6FP" secondAttribute="centerY" id="hfh-IU-I1d"/>
                                         <constraint firstItem="Esp-Ba-xDT" firstAttribute="top" secondItem="LP9-AI-6FP" secondAttribute="topMargin" constant="3" id="mwC-hD-CM4"/>
+                                        <constraint firstItem="Esp-Ba-xDT" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" constant="9" id="zd3-PM-LxJ"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

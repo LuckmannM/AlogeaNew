@@ -13,7 +13,7 @@ class GraphScoreChoserCell: UITableViewCell {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var addButton: UIImageView!
     
-//    var delegate: GraphScoreChoser!
+    var delegate: GraphScoreChoser!
     var indexPath: IndexPath!
     var originalText: String!
     var tableView: UITableView!
@@ -39,14 +39,16 @@ class GraphScoreChoserCell: UITableViewCell {
         
     }
     
-//    func setDelegate(delegate: GraphScoreChoser, indexPath: IndexPath, tableView: UITableView) {
-//        self.delegate = delegate
-//        self.indexPath = indexPath
-//        self.tableView = tableView
-//    }
+    func setDelegate(delegate: GraphScoreChoser, indexPath: IndexPath, tableView: UITableView) {
+        self.delegate = delegate
+        self.indexPath = indexPath
+        self.tableView = tableView
+    }
     
     func activateTextField() {
         
+        textField.placeholder = "Add new symptom..."
+        textField.clearButtonMode = .whileEditing
         textField.isEnabled = true
         textField.becomeFirstResponder()
     }
@@ -64,11 +66,11 @@ extension GraphScoreChoserCell: UITextFieldDelegate {
         return false
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        textField.sizeToFit()
-        return true
-    }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        
+//        textField.sizeToFit()
+//        return true
+//    }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         print("end text editing")
@@ -82,10 +84,11 @@ extension GraphScoreChoserCell: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text != "" {
             textField.isEnabled = false
-            // create new RecordType and make this the selectedScore
-            // redraw GraphScoreChoser section to show new row including new empty row
-        } else {
-            // no entry - revert cell back to show + button and disable textField
+            let uniqueName = RecordTypesController.sharedInstance().returnUniqueName(name: textField.text!)
+            RecordTypesController.sharedInstance().createNewRecordType(withName: uniqueName)
+            UserDefaults.standard.set(uniqueName, forKey: "SelectedScore")
         }
+        
+        tableView.reloadSections([indexPath.section], with: .automatic)
     }
 }

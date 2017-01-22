@@ -50,6 +50,7 @@ class GraphScoreChoser: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "graphViewChoserCell", for: indexPath) as! GraphScoreChoserCell
+        cell.setDelegate(delegate: self, indexPath: indexPath, tableView: self.tableView)
 
         if indexPath.row < recordTypeNames.count {
             cell.textField.text = recordTypeNames[indexPath.row]

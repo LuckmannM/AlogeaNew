@@ -103,11 +103,6 @@ class GraphContainerView: UIView {
         NotificationCenter.default.removeObserver(rotationObserver)
     }
     
-    func updateAllViews() {
-        deviceRotation()
-    }
-    
-    
     func updateLabels() {
         
         let numberFormatter: NumberFormatter = {
@@ -155,12 +150,19 @@ class GraphContainerView: UIView {
     }
     
     
-    func deviceRotation(notification: Notification? = nil) {
+    func deviceRotation(notification: Notification) {
+        
+        reloadAllViews()
+    }
+    
+    func reloadAllViews() {
         
         updateLabels()
         clipView.setNeedsDisplay()
+//        graphView.refreshPointsFlag = true
         graphView.setNeedsDisplay()
         self.setNeedsDisplay()
+        
     }
 
 }
