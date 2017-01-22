@@ -465,6 +465,44 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
 }
 
+extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate {
+
+    @IBAction func listButtonAction(sender: UIButton) {
+        
+        floatingMenuView.slideIn()
+        
+        var height: CGFloat = CGFloat((RecordTypesController.sharedInstance().recordTypeNames.count + 1) * 44)
+        if height > 220 { height = 220 }
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let choserView = storyBoard.instantiateViewController(withIdentifier: "GraphViewChoser") as! GraphScoreChoser
+        
+        choserView.modalPresentationStyle = .popover
+        choserView.preferredContentSize = CGSize(width: 175, height: height)
+        
+        let popUpController = choserView.popoverPresentationController
+        popUpController!.permittedArrowDirections = .any
+        popUpController!.sourceView = graphContainerView.upperLabel
+        popUpController?.sourceRect = graphContainerView.upperLabel.bounds
+//        popUpController!.sourceView = self.floatingMenuView.listButton
+//        popUpController?.sourceRect = self.floatingMenuView.listButton.bounds
+        popUpController!.delegate = self
+        
+        // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
+        present(choserView, animated: true, completion: nil)
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
+    }
+    
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        
+        // notify graphViewContainer and subviews that the selectedScore has changed and reDraw their views
+    }
+
+}
+
 extension MainViewController: MFMailComposeViewControllerDelegate {
     
     private func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {

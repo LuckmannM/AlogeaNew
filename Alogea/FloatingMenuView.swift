@@ -85,11 +85,7 @@ class FloatingMenuView: UIView {
         }
         graphView.setNeedsDisplay()
     }
-    
-    @IBAction func listButtonAction(sender: UIButton) {
         
-    }
-    
     func slideIn() {
         
         // let targetHeight = 2/5 * graphContainerView.frame.height

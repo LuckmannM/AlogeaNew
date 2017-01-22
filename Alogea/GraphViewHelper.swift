@@ -55,26 +55,6 @@ class GraphViewHelper: NSObject {
         return moc
     }()
 
-    
-//    lazy var graphEventsFRC: NSFetchedResultsController<Event> = {
-//        let request = NSFetchRequest<Event>(entityName: "Event")
-//        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: ["Score Event"])
-//        let selectedScorePredicate = NSPredicate(format: "name == %@", argumentArray: [self.selectedScore])
-//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [anyScorePredicate, selectedScorePredicate])
-//        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("graphEventsFRC fetching error")
-//        }
-//        frc.delegate = self
-//        print("GV Helper graphEventsFRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) objects")
-//        
-//        return frc
-//    }()
-    
     lazy var graphEventsFRC: NSFetchedResultsController<Event> = {
         let frc = EventsDataController.sharedInstance().fetchSpecificEvents(name: self.selectedScore, type: scoreEvent)
         frc.delegate = self
@@ -128,14 +108,9 @@ class GraphViewHelper: NSObject {
         return Date().timeIntervalSince(selectedScoreEventMinMaxDates![0])
     }
     
-//    lazy var eventTypeFRC: NSFetchedResultsController<Event>  = {
-//        return EventsDataController.sharedInstance().eventTypeFRC
-//    }()
-    
     lazy var nonScoreEventsFRC: NSFetchedResultsController<Event>  = {
         return EventsDataController.sharedInstance().nonScoreEventsByDateFRC
     }()
-//    var nonScoreEvents: NSFetchedResultsController<Event>!
     
     var selectedScore: String {
         if UserDefaults.standard.value(forKey: "SelectedScore") != nil {

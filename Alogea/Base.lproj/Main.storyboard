@@ -134,8 +134,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button" image="ListButton"/>
                                         <connections>
-                                            <action selector="exportDialogWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2oA-t8-llz"/>
-                                            <action selector="listButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="2dK-c0-AWr"/>
+                                            <action selector="listButtonActionWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A4W-Il-Of6"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1178,6 +1177,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5u3-eJ-xp9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4773.913043478261" y="-579.61956521739137"/>
+        </scene>
+        <!--Graph Score Choser-->
+        <scene sceneID="X7b-vv-tOR">
+            <objects>
+                <tableViewController storyboardIdentifier="GraphViewChoser" id="rgG-lt-GfX" customClass="GraphScoreChoser" customModule="Alogea" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" alpha="0.5" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="fAr-xY-AHD">
+                        <rect key="frame" x="0.0" y="0.0" width="200" height="100"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="graphViewChoserCell" rowHeight="44" id="m7W-Vo-8IY" customClass="GraphScoreChoserCell" customModule="Alogea" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="200" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m7W-Vo-8IY" id="LP9-AI-6FP">
+                                    <rect key="frame" x="0.0" y="0.0" width="161" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button hidden="YES" opaque="NO" tag="40" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UBS-a3-Jhn">
+                                            <rect key="frame" x="17" y="11" width="22" height="22"/>
+                                        </button>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dcy-T1-vgv">
+                                            <rect key="frame" x="8" y="7" width="97" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" id="FXH-hV-Sow"/>
+                                        <constraint firstItem="UBS-a3-Jhn" firstAttribute="centerY" secondItem="LP9-AI-6FP" secondAttribute="centerY" id="Qrq-If-heO"/>
+                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="top" secondItem="LP9-AI-6FP" secondAttribute="topMargin" constant="-1" id="REL-YE-LJI"/>
+                                        <constraint firstItem="UBS-a3-Jhn" firstAttribute="leading" secondItem="LP9-AI-6FP" secondAttribute="leadingMargin" constant="9" id="SKq-lL-GwC"/>
+                                        <constraint firstItem="dcy-T1-vgv" firstAttribute="centerY" secondItem="UBS-a3-Jhn" secondAttribute="centerY" id="hHQ-9W-Dym"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="dcy-T1-vgv" secondAttribute="trailing" constant="48" id="hkc-A4-m9d"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="addButton" destination="UBS-a3-Jhn" id="vVj-PS-Off"/>
+                                    <outlet property="textField" destination="dcy-T1-vgv" id="MuE-VZ-QPf"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="rgG-lt-GfX" id="VxR-wt-DvE"/>
+                            <outlet property="delegate" destination="rgG-lt-GfX" id="3Rj-pJ-c63"/>
+                        </connections>
+                    </tableView>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="200" height="100"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wSc-Gh-eis" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3487" y="-84"/>
         </scene>
     </scenes>
     <resources>
