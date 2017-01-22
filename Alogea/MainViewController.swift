@@ -288,13 +288,13 @@ extension MainViewController: UITextViewDelegate {
     func newEventTypeDialog(sourceViewForPad: UIView?) {
         
         // this presents the same on iPads and iPhones
-        let newTypeDialog = UIAlertController(title: "New event category", message: "You will create a new event type that will be added to the menu options", preferredStyle: .alert)
+        let newTypeDialog = UIAlertController(title: "New event category", message: "Create a new diary event type that will be added to the menu options", preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Save", style: UIAlertActionStyle.default, handler: { (deleteAlert)
             -> Void in
             
             let newEventName = ((newTypeDialog.textFields?[0])! as UITextField).text
-            let uniqueName = RecordTypesController.sharedInstance().returnUniqueName(name: newEventName!)
+            let uniqueName = EventsDataController.sharedInstance().returnUniqueName(name: newEventName!)
             
             // can't add directly to EventsDataController.newEvent as the notes text may not yet have been entered
             // so this newEvent creation should happen at the endedTextEntry() function

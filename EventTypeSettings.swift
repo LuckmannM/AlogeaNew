@@ -80,9 +80,9 @@ class EventTypeSettings: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         if section == 0 {
-            return "Symptoms"
+            return "Symptoms for Graph"
         } else {
-            return "Event categories"
+            return "Diary Event Types"
         }
     }
 

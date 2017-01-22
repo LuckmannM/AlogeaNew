@@ -137,7 +137,7 @@ class RecordTypesController: NSObject {
         var uniqueName = name
         let decimals = NSCharacterSet.decimalDigits
         
-        print("checking \(name) as unique RecordType; existing are \(recordTypeNames)")
+//        print("checking \(name) as unique RecordType; existing are \(recordTypeNames)")
         var lowerRecordTypeNames = [String]()
         for type in recordTypeNames {
             lowerRecordTypeNames.append(type.lowercased())
@@ -154,7 +154,7 @@ class RecordTypesController: NSObject {
                 uniqueName = name + " 2"
             }
         }
-        print("...returning unique variant \(uniqueName)")
+//        print("...returning unique variant \(uniqueName)")
         
         return uniqueName
     }

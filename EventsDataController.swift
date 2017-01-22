@@ -136,7 +136,7 @@ class EventsDataController: NSObject {
 //        
 //    }()
     
-    lazy var nonScoreEventTypes: [String] = {
+    var nonScoreEventTypes: [String] {
         var array = [String]()
         
         for sections in self.nonScoreEventTypesFRC.sections! {
@@ -144,7 +144,7 @@ class EventsDataController: NSObject {
         }
         
         return array
-    }()
+    }
     
     var recordTypesController: RecordTypesController {
         return RecordTypesController.sharedInstance()
@@ -268,6 +268,35 @@ class EventsDataController: NSObject {
         save()
     }
     
+    func returnUniqueName(name: String) -> String {
+        
+        var increment: Int!
+        var uniqueName = name
+        let decimals = NSCharacterSet.decimalDigits
+        
+        //        print("checking \(name) as unique RecordType; existing are \(recordTypeNames)")
+        var lowerEventTypeNames = [String]()
+        for type in nonScoreEventTypes {
+            lowerEventTypeNames.append(type.lowercased())
+        }
+        
+        while lowerEventTypeNames.contains(uniqueName) {
+            
+            let range = uniqueName.rangeOfCharacter(from: decimals, options: String.CompareOptions.backwards, range: nil)
+            
+            if range != nil {
+                increment = Int(uniqueName.substring(with: range!))! + 1
+                uniqueName.replaceSubrange(range!, with: "\(increment)")
+            } else {
+                uniqueName = name + " 2"
+            }
+        }
+        //        print("...returning unique variant \(uniqueName)")
+        
+        return uniqueName
+    }
+
+    
 }
 
 let eventsDataController = EventsDataController()
@@ -276,18 +305,11 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         
-        // allEvents FRC changes always
-        
-        if controller.isEqual(nonScoreEventTypesFRC) {
-            nonScoreEventTypes.removeAll()
-            for sections in self.nonScoreEventTypesFRC.sections! {
-                nonScoreEventTypes.append(sections.name)
-            }
-            print("nonScoreEventTypeFRC has changed - found the following types: \(nonScoreEventTypes)")
+        if controller != nonScoreEventsByDateFRC {
+            graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
         }
-                
+        
         reconcileRecordTypesAndEventNames()
-        graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
     }
     
 }
