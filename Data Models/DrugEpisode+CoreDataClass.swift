@@ -137,8 +137,16 @@ public class DrugEpisode: NSManagedObject {
     func convertFromStorage() {
         
         nameVar = name
-        ingredientsVar = NSKeyedUnarchiver.unarchiveObject(with: ingredients! as Data) as? [String] ?? [String]()
-        classesVar = NSKeyedUnarchiver.unarchiveObject(with: classes! as Data) as? [String] ?? [String]()
+        if ingredients != nil {
+            ingredientsVar = NSKeyedUnarchiver.unarchiveObject(with: ingredients as! Data) as? [String] ?? [String]()
+        } else {
+            ingredientsVar = [String]()
+        }
+        if classes != nil {
+            classesVar = NSKeyedUnarchiver.unarchiveObject(with: classes! as Data) as? [String] ?? [String]()
+        } else {
+            classesVar = [String]()
+        }
         
         startDateVar = startDate as Date!
         if endDate != nil {
@@ -394,7 +402,7 @@ public class DrugEpisode: NSManagedObject {
         
        // let pendingNotifications = UIApplication.shared.scheduledLocalNotifications
         
-        ((UIApplication.shared).delegate as! AppDelegate).removeSpecificNotifications(withIdentifier: drugID!, withCategory: "drugReminderCategory")
+        ((UIApplication.shared).delegate as! AppDelegate).removeSpecificNotifications(withIdentifier: drugID!, withCategory: notification_MedReminderCategory)
     }
     
     func nextDoseDueDates() -> [Date] {
@@ -445,13 +453,14 @@ public class DrugEpisode: NSManagedObject {
         
         var i = 0
         // each dose has it's own reminder
-        for _ in remindersVar {
-            if remindersVar[i] {
+//        print("...scheduling for \(nameVar); has \(remindersVar) remindersVar")
+        for aReminder in remindersVar {
+            if aReminder {
                 // creating a notification via request
                 let content = UNMutableNotificationContent()
                 content.title = NSString.localizedUserNotificationString(forKey: "Medication reminder", arguments: nil)
                 content.body = NSString.localizedUserNotificationString(forKey: "it's time to take %@", arguments: [messageForDrugAlert(index: i)])
-                content.categoryIdentifier = "drugReminderCategory"
+                content.categoryIdentifier = notification_MedReminderCategory
                 content.sound = UNNotificationSound.default()
                     
                 let reminderDate = calendar.dateComponents(components, from: nextDoseDueDates[i])
@@ -472,9 +481,8 @@ public class DrugEpisode: NSManagedObject {
                     print("content body is \(content.body)")
 
                 })
-
-                i = i+1
             }
+            i = i+1
         }
         
     }

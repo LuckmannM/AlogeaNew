@@ -50,16 +50,17 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        drugReminderSwitch.isOn = UserDefaults.standard.bool(forKey: "DrugReminderNotification")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.hidesBottomBarWhenPushed = false
         self.tabBarController!.tabBar.isHidden = false
         
-        cloudSwitch.isOn = UserDefaults.standard.bool(forKey: "iCloudBackups")
+        cloudSwitch.isOn = UserDefaults.standard.bool(forKey: iCloudBackUpsOn)
+        drugReminderSwitch.isOn = UserDefaults.standard.bool(forKey: notification_MedRemindersOn)
         
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -123,7 +124,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     
     @IBAction func cloudSwitchAction(sender: UISwitch) {
         
-        UserDefaults.standard.set(sender.isOn, forKey: "iCloudBackups")
+        UserDefaults.standard.set(sender.isOn, forKey: iCloudBackUpsOn)
         if !sender.isOn {
             removeCloudBackupsDialog(sender: sender)
         }
@@ -167,12 +168,12 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     @IBAction func drugReminderSwitchAction(sender: UISwitch) {
         
         
-        UserDefaults.standard.set(sender.isOn, forKey: "DrugReminders")
+        UserDefaults.standard.set(sender.isOn, forKey: notification_MedRemindersOn)
         
         
         // Switch off  - cancel all pending notifications for drugs
         if !sender.isOn {
-            (UIApplication.shared.delegate as! AppDelegate).removeCategoryNotifications(withCategory: "DrugReminderCategory")
+            (UIApplication.shared.delegate as! AppDelegate).removeCategoryNotifications(withCategory: notification_MedReminderCategory)
             
         }
         else {
@@ -189,9 +190,11 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             for drug in drugsList {
                 // for some reason the iteration doesn't trigger awakeFromFetch for the drug object
                 // the non-initiated local DrugEpisode variables can trigger crashes
+                print("request notificationCheck for drug \(drug.nameVar)...")
                 drug.convertFromStorage()
                 drug.scheduleReminderNotifications(cancelExisting: false)
             }
+
         }
         
         

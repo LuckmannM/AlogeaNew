@@ -115,7 +115,7 @@ class GraphContainerView: UIView {
         upperLabel.text = graphView.helper.selectedScore
         upperLabel.sizeToFit()
         upperLabel.frame.origin = CGPoint(
-            x: bounds.width * 1/3 - upperLabel.frame.width / 2,
+            x: clipView.frame.origin.x,
             y: 5
         )
         

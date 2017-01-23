@@ -11,6 +11,9 @@ import CoreData
 import UserNotifications
 
 
+let notification_MedRemindersOn = "MedRemindersOn"
+let iCloudBackUpsOn = "iCloudBackupsOn"
+let notification_MedReminderCategory = "DrugReminderCategory"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -131,8 +134,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             (categories) in
             
             for category in categories {
-                if category.identifier == "drugReminderCategory" {
-                    print("drugReminderCategory found as already registered")
+                if category.identifier == notification_MedReminderCategory {
+                    print("\(notification_MedReminderCategory) found as already registered")
                     self.reminderNotificationCategoryRegistered = true
                     return
                 }
@@ -144,7 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dismissAction = UNNotificationAction(identifier: "dismissAction", title: "dismiss", options: UNNotificationActionOptions(rawValue: 0))
         
         // defining categories containing one or more actions
-        let drugReminderCategory = UNNotificationCategory(identifier: "drugReminderCategory", actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
+        let drugReminderCategory = UNNotificationCategory(identifier: notification_MedReminderCategory, actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
         
         center.setNotificationCategories([drugReminderCategory])
     }
@@ -154,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let center = UNUserNotificationCenter.current()
         center.getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
             for notification in notifications {
-                if notification.request.content.categoryIdentifier == "drugReminderCategory" {
+                if notification.request.content.categoryIdentifier == notification_MedReminderCategory {
                     
                     // do relevant stuff e.g. check if repeat is 3-daily and re-schedule next repeat manually
                 }
@@ -193,6 +196,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             (requests: [UNNotificationRequest]) in
             for request in requests {
                 if request.content.categoryIdentifier == withCategory {
+                    print("cancelling notification\(request)")
                     center.removePendingNotificationRequests(withIdentifiers: [request.identifier])
                 }
             }
@@ -215,7 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // handling category specific notification actions from the user
-        if response.notification.request.content.categoryIdentifier == "drugReminderCategory" {
+        if response.notification.request.content.categoryIdentifier == notification_MedReminderCategory {
             // Handle the actions for the expired timer.
             if response.actionIdentifier == "dismiss" {
                 // Invalidate the old timer and create a new one. . .
