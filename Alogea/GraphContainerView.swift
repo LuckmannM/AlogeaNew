@@ -111,7 +111,6 @@ class GraphContainerView: UIView {
             return formatter
         }()
 
-        
         upperLabel.text = graphView.helper.selectedScore
         upperLabel.sizeToFit()
         upperLabel.frame.origin = CGPoint(
@@ -159,7 +158,6 @@ class GraphContainerView: UIView {
         
         updateLabels()
         clipView.setNeedsDisplay()
-//        graphView.refreshPointsFlag = true
         graphView.setNeedsDisplay()
         self.setNeedsDisplay()
         
@@ -173,18 +171,6 @@ extension GraphContainerView {
         
         var image: UIImage!
         
-        
-        // Method 1
-//        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
-//        if self.drawHierarchy(in: self.bounds, afterScreenUpdates: true) {
-//            image = UIGraphicsGetImageFromCurrentImageContext()
-//        } else {
-//            print("error rendering GraphContainerView as Image")
-//        }
-//        
-//        UIGraphicsEndImageContext()
-        
-        // Method 2
         UIGraphicsBeginImageContext(bounds.size)
         layer.render(in: UIGraphicsGetCurrentContext()!)
         image = UIGraphicsGetImageFromCurrentImageContext()

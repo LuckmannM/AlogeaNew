@@ -50,9 +50,6 @@ class GraphView: UIView {
     var timeLinePoints: [CGPoint]!
     var timeLineLabels = [UILabel]() // number is calculated and adapted upwards (only) in drawTimeLine() function
 
-
-    // var rotationObserver: NotificationCenter!
-    
     // MARK: - methods
     
 //    override init(frame: CGRect) {
@@ -62,24 +59,13 @@ class GraphView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        print("starting GraphView init...")
-
-        
         self.helper = GraphViewHelper(graphView: self)
         self.graphPoints = [CGPoint]()
         self.eventsDataController.graphView = self
         
-        // sometimes the mainViewController doesn't seem to lead from NIB causing crashes due to being nil below when setting displayTimeSegmentedController
-//        if mainViewController == nil {
-//            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//            self.mainViewController = storyBoard.instantiateViewController(withIdentifier: "MainVC") as! MainViewController
-//        }
-        
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
         if helper.selectedScoreEventsTimeSpan < (24 * 3600) {
-            // transferred to MainVC
-//            mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             displayedTimeSpan = 24 * 3600
         } else {
             displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
@@ -97,15 +83,11 @@ class GraphView: UIView {
         }
         // ***
 
-        print("...ending GraphView init")
-
     }
     
     override func draw(_ rect: CGRect) {
 
         drawTimeLine()
-//        print("-------------")
-//        print("graphView Draw(); selectedScore = \(helper.selectedScore), UserDefaults is \(UserDefaults.standard.value(forKey: "SelectedScore") as! String), refreshPointsFlag = \(refreshPointsFlag)")
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
@@ -162,14 +144,9 @@ class GraphView: UIView {
     
     func drawTimeLine() {
         
-//        var minTimeLineDate = Date()
         let dataArray = TimeLineHelper.timeLineArray(timeSpan: displayedTimeSpan, viewWidth: frame.width, minEventDate: minGraphDate, minDisplayDate: minDisplayDate)
-//        (_,_,minTimeLineDate) = dataArray[0] // timeLineSet as building block for tlArray contains in its last
-        
         let timeLineTicks = UIBezierPath()
         let timeLineY = bounds.maxY - helper.timeLineSpace()
-//        print("graphView timeLineSpace = \(timeLineSpace)")
-//        print("graphView lowerLine y = \(timeLineY)")
         for label in timeLineLabels {
             label.text = ""
         }
@@ -203,7 +180,6 @@ class GraphView: UIView {
     
     func drawBarGraph() {
         
-       //  let barContext = UIGraphicsGetCurrentContext()
         let barWidth: CGFloat = 5.0
         let cornerRadius: CGFloat = 8.0 / 6
         
@@ -220,19 +196,6 @@ class GraphView: UIView {
             let columnPath = UIBezierPath(roundedRect: columnRect, cornerRadius: cornerRadius)
             barsPath.append(columnPath)
         }
-        
-        // draw the Columns, gradientFills and circles
-        // let columnStartPoint = CGPointMake(0, formatter.topGraphBorder())
-        // let columnEndPoint = CGPointMake(0, formatter.bottomGraphBorder())
-        /*
-        let clipPath = barsPath.copy() as! UIBezierPath
-        
-        barContext!.saveGState()
-        clipPath.addClip()
-        
-        CGContextDrawLinearGradient(barContext!, formatter.barGraphGradient(), columnStartPoint, columnEndPoint, CGGradientDrawingOptions.DrawsAfterEndLocation)
-        barContext!.restoreGState()
-        */
         
         barsPath.lineWidth = 1.0
         UIColor.white.setStroke()
@@ -280,14 +243,6 @@ class GraphView: UIView {
         refreshPointsFlag = false
         setNeedsDisplay()
     }
-    
-    /*
-    func deviceRotation(notification: Notification) {
-        
-        setNeedsDisplay() //  doesn't work
-        // also need to re-position UILabels in GraphContainer - this needs an observer as well
-    }
-    */
     
     @IBAction func drag(recogniser: UIPanGestureRecognizer) {
         

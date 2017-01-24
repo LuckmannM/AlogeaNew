@@ -58,7 +58,6 @@ class GraphViewHelper: NSObject {
     var graphEventsFRC: NSFetchedResultsController<Event> {
         let frc = EventsDataController.sharedInstance().fetchSpecificEvents(name: self.selectedScore, type: scoreEvent)
         frc.delegate = self
-//        print("GV Helper selectedScoreEvent FRC for score '\(self.selectedScore)' has \(frc.fetchedObjects?.count ?? 0) events)")
         return frc
     }
     
@@ -259,11 +258,6 @@ let helper = GraphViewHelper()
 extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print("UserDefaults for selectedscore are \(UserDefaults.standard.value(forKey:"SelectedScore"))")
-//        print("selectedScore is \(selectedScore)")
-//        print("GV Helper graphEventsFRC has changed content, now of type '\(selectedScore)' , has \(controller.fetchedObjects!.count) sets")
-        // e.g. invoked when changing name of selectedScore
-        // graphEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: selectedScore, type: scoreEvent)
         graphView.refreshPointsFlag = true
         graphView.setNeedsDisplay()
     }

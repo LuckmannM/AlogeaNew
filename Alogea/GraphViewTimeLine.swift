@@ -166,7 +166,6 @@ class TimeLineHelper {
             } else {
                 dateFormatter.timeStyle = .short
             }
-            // dateFormatter.dateFormat = "d.M/h:mm"
         case Day..<Week:
             standardUnitComponents.second = 0
             standardUnitComponents.minute = 0
@@ -183,7 +182,6 @@ class TimeLineHelper {
                 standardUnitComponents.day! -= 1
             } else {
                 standardUnitComponents.day! -= 7
-                // standardUnitComponents.day -= 7 - (standardUnitComponents.weekday - 2)
             }
             timeUnitName = "Weeks"
             dateFormatter.dateFormat = "d.M"
@@ -194,7 +192,6 @@ class TimeLineHelper {
             standardUnitComponents.day = 1
             standardUnitComponents.month! -= 1
             timeUnitName = "Months"
-            //            dateFormatter.dateFormat = "MMM yy"
             dateFormatter.dateStyle = .short
         case Quarter...Year:
             standardUnitComponents.second = 0
@@ -262,6 +259,4 @@ class TimeLineHelper {
         
         return returnSet
     }
-
-
 }
