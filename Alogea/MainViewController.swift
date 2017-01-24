@@ -19,7 +19,7 @@ class MainViewController: UIViewController {
     var colorScheme = ColorScheme.sharedInstance()
     
     // MARK: - TextEntryWindow properties
-    var textEntryWindow = UIView()
+    var textEntryWindow:UIView!
     var textEntryController:MVButtonController!
     var textView: UITextView!
     var liftTextViewForKeyBoard: CGFloat?
@@ -46,6 +46,17 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         // rretrun from other viewControllers
         // the graph may have changed so need re-draw/refresh
+        
+        // transferred to here from GraphView.init()
+        if graphContainerView.graphView.helper.selectedScoreEventsTimeSpan < (24 * 3600) {
+            displayTimeSegmentedController.selectedSegmentIndex = 0
+            graphContainerView.graphView.displayedTimeSpan = 24 * 3600
+        } else {
+            graphContainerView.graphView.displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
+            graphContainerView.graphView.minDisplayDate = graphContainerView.graphView.maxDisplayDate.addingTimeInterval(-graphContainerView.graphView.displayedTimeSpan)
+        }
+        // transferred to here from GraphView.init()
+
         
         graphContainerView.reloadAllViews()
     }
@@ -152,6 +163,7 @@ extension MainViewController: UITextViewDelegate {
     
     func showDiaryEntryWindow(frame: CGRect) {
         
+        textEntryWindow = UIView()
         // only sappears once - when used doesn't appear again second time
         textEntryWindow.frame = frame
         originalEntryWindowRect = textEntryWindow.frame

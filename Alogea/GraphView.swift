@@ -69,10 +69,17 @@ class GraphView: UIView {
         self.graphPoints = [CGPoint]()
         self.eventsDataController.graphView = self
         
+        // sometimes the mainViewController doesn't seem to lead from NIB causing crashes due to being nil below when setting displayTimeSegmentedController
+//        if mainViewController == nil {
+//            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//            self.mainViewController = storyBoard.instantiateViewController(withIdentifier: "MainVC") as! MainViewController
+//        }
+        
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
         if helper.selectedScoreEventsTimeSpan < (24 * 3600) {
-            mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
+            // transferred to MainVC
+//            mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             displayedTimeSpan = 24 * 3600
         } else {
             displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now

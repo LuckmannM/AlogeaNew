@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */; };
 		2604F8391E34D03A00742FE6 /* GraphScoreChoserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */; };
+		260898791E36603200CBB6B6 /* Backups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260898781E36603200CBB6B6 /* Backups.swift */; };
+		2608987B1E36614800CBB6B6 /* BackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608987A1E36614800CBB6B6 /* BackupController.swift */; };
 		262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262F2AF91E2534EA00E8779E /* DigitsFromString.swift */; };
 		263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0101DD4660300CD7963 /* DrugListCell.swift */; };
 		263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */; };
@@ -82,6 +84,8 @@
 /* Begin PBXFileReference section */
 		2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphScoreChoser.swift; path = ../GraphScoreChoser.swift; sourceTree = "<group>"; };
 		2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphScoreChoserCell.swift; sourceTree = "<group>"; };
+		260898781E36603200CBB6B6 /* Backups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Backups.swift; sourceTree = "<group>"; };
+		2608987A1E36614800CBB6B6 /* BackupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupController.swift; sourceTree = "<group>"; };
 		262F2AF91E2534EA00E8779E /* DigitsFromString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigitsFromString.swift; sourceTree = "<group>"; };
 		263DA0101DD4660300CD7963 /* DrugListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListCell.swift; sourceTree = "<group>"; };
 		263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListViewController.swift; sourceTree = "<group>"; };
@@ -174,6 +178,7 @@
 			children = (
 				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
 				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
+				2608987A1E36614800CBB6B6 /* BackupController.swift */,
 			);
 			name = Controllers;
 			path = ..;
@@ -222,9 +227,10 @@
 		26770D541E2C25C800DCCBA6 /* Settings Group */ = {
 			isa = PBXGroup;
 			children = (
+				26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */,
 				26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */,
 				26770D5A1E30032400DCCBA6 /* TextInputCell.swift */,
-				26770D571E2C29F500DCCBA6 /* SettingsViewController.swift */,
+				260898781E36603200CBB6B6 /* Backups.swift */,
 			);
 			name = "Settings Group";
 			path = ..;
@@ -554,9 +560,11 @@
 				2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */,
 				2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */,
 				263DA0161DD764E500CD7963 /* NewDrug.swift in Sources */,
+				2608987B1E36614800CBB6B6 /* BackupController.swift in Sources */,
 				2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */,
 				2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
+				260898791E36603200CBB6B6 /* Backups.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
 				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
 				26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */,

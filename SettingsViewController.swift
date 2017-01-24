@@ -125,11 +125,37 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     @IBAction func cloudSwitchAction(sender: UISwitch) {
         
         UserDefaults.standard.set(sender.isOn, forKey: iCloudBackUpsOn)
+        
         if !sender.isOn {
             removeCloudBackupsDialog(sender: sender)
+        } else {
+            //check iCloud access available
+            if FileManager.default.ubiquityIdentityToken == nil {
+                showMissingfCloudAccessAlert(message: nil)
+            } else {
+                // first call establishes this container; only needs to be called once
+                let _ = FileManager.default.url(forUbiquityContainerIdentifier: nil)
+            }
         }
         
     }
+    
+    func showMissingfCloudAccessAlert(message:String?) {
+        
+        let alertMessage = message ?? "There currently is no iCloud access. If you have not logged in, please do so at Settings > iCloud"
+        
+        let alertController = UIAlertController(title: title, message: alertMessage, preferredStyle: .alert)
+        
+        // Configure Alert Controller
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: { (_) -> Void in
+            
+        }))
+        
+        // Present Alert Controller
+        self.present(alertController, animated: true, completion: nil)
+        
+    }
+
     
     func removeCloudBackupsDialog(sender: UISwitch) {
         
@@ -147,7 +173,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         let deleteAction = UIAlertAction(title: "Delete all iCloud backups", style: .default, handler: { (exportDialog)
             -> Void in
             
-// ***            DataIOBackUp.deleteCloudBackups()
+            BackupController.deleteCloudBackups()
         })
         
         optionsDialog.addAction(deleteAction)
@@ -214,9 +240,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             } else {
                 print("error createNew segue: destinationViewcontrolle not defined")
             }
-            
-        } else {
-            print("non-identified  segue with id \(segue.identifier)")
             
         }
     }
