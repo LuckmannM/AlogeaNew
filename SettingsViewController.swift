@@ -95,9 +95,9 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         
         switch section {
         case 0 :
-            return "Alogea ® Version " + (UIApplication.shared.delegate as! AppDelegate).appVersion + ", Build " + (UIApplication.shared.delegate as! AppDelegate).appBuild
+            return "Alogea®"
         case 1 :
-            return ""
+            return "Version " + (UIApplication.shared.delegate as! AppDelegate).appVersion + ", Build " + (UIApplication.shared.delegate as! AppDelegate).appBuild
         case 2 :
             return "Backup / Restore options"
         case 3 :
@@ -111,6 +111,27 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
 
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        let header = view as! UITableViewHeaderFooterView
+        var textSize: CGFloat!
+        
+        if section == 0 {
+            textSize = 24 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+            header.textLabel?.font = UIFont(name: "AvenirNext-Bold", size: textSize)
+        } else {
+            textSize = 16 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        }
+        
+//        header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        header.textLabel?.sizeToFit()
+        
+        header.textLabel?.textColor = ColorScheme.sharedInstance().darkBlue
+    }
+
     
     func persistentStoreCoordinatorDidChangeStores(notification: NSNotification) {
         
