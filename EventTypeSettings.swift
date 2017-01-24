@@ -218,7 +218,8 @@ class EventTypeSettings: UITableViewController {
             
             EventsDataController.sharedInstance().renameEvents(ofType: eventType, oldName: originalName!, newName: newName)
             
-            self.tableView.reloadRows(at: [forIndexPath], with: .automatic)
+//            self.tableView.reloadRows(at: [forIndexPath], with: .automatic)
+            self.tableView.reloadSections([forIndexPath.section], with: .automatic)
             
             
         })
