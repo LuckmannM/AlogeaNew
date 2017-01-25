@@ -32,12 +32,10 @@ class MedicationController: NSObject {
         
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         let prnPredicate = NSPredicate(format: "regularly == false")
-        let currentPredicate = NSPredicate(format: "isCurrent != %@",["Discontinued Medicines"]) // *** this may not work properly as isCurrent is only updated after fetch AND is an optional parameter which may not properly work as Predicate parameter
-        
-        // an alternative is using endDate which however, is alos optional so two exclusions would ahve to happen: Predicate would need to include: is either nil or later then current Date()
-        
-        //let currentPredicate = NSPredicate(format: "endDate == nil",["Current Medicines"])
-        let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [prnPredicate,currentPredicate])
+        let currentPredicate1 = NSPredicate(format: "endDate = nil")
+        let currentPredicate2 = NSPredicate(format: "endDate > %@",NSDate())
+        let currentCombinedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [currentPredicate1, currentPredicate2])
+        let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [prnPredicate,currentCombinedPredicate])
         
         request.predicate = combinedPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
@@ -53,6 +51,7 @@ class MedicationController: NSObject {
         /* DEBUG
         for object in frc.fetchedObjects! {
             print("prn drug isCurrent is \(object.isCurrent)")
+            print("prn drug endDate is \(object.endDate)")
         }
         */
         
