@@ -26,8 +26,9 @@ class MainViewController: UIViewController {
     var observer: NotificationCenter!
     var originalEntryWindowRect: CGRect!
     var textViewFrameInPortrait: CGRect!
-    let textFontName = "AvenirNext-Medium"
+    let textFontName = "AvenirNext-Regular"
     let textFontSize: CGFloat = 20
+    let textColor = ColorScheme.sharedInstance().darkBlue
 
     
     var eventsDataController = EventsDataController.sharedInstance()
@@ -164,7 +165,7 @@ extension MainViewController: UITextViewDelegate {
     func showDiaryEntryWindow(frame: CGRect) {
         
         textEntryWindow = UIView()
-        // only sappears once - when used doesn't appear again second time
+
         textEntryWindow.frame = frame
         originalEntryWindowRect = textEntryWindow.frame
         textEntryWindow.backgroundColor = UIColor(colorLiteralRed: 248/255, green: 248/255, blue: 245/255, alpha: 0.9)
@@ -176,7 +177,7 @@ extension MainViewController: UITextViewDelegate {
         observer.addObserver(self, selector: #selector(keyBoardAppeared(notification:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
         
         eventPicker = {
-            let pV = UIPickerView(frame: CGRect(x: 5, y: 5, width: textEntryWindow.frame.width - 10, height: 60))
+            let pV = UIPickerView(frame: CGRect(x: 5, y: 5, width: textEntryWindow.frame.width - 10, height: 90)) //60
             pV.backgroundColor = colorScheme.darkBlue
             pV.delegate = self
             return pV
@@ -207,7 +208,7 @@ extension MainViewController: UITextViewDelegate {
             tV.backgroundColor = UIColor.clear
             tV.text = placeHolderText
             tV.font = UIFont(name: textFontName, size: textFontSize)
-            tV.textColor = UIColor.black
+            tV.textColor = textColor
             tV.delegate = self
             // place cursor at the beginning and delete placeholder text when typing
             return tV

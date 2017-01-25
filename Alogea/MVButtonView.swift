@@ -184,7 +184,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         if pickerView.isEqual(eventSelectionPicker){
             if row == 1 {
                 resolvePicker(picker: pickerView)
-                controller.requestDiaryEntryWindow(frame: touchWheel.frame)
+                controller.requestDiaryEntryWindow(frame: touchWheel.frame.insetBy(dx: -20, dy: -20))
             } else {
                 resolvePicker(picker: pickerView)
                 EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: MedicationController.sharedInstance().asRequiredMedNames[row - 2], withDate: Date(), vas: -1, note: nil, duration: nil) // consider setting duration to the duration of med effect; this requires MedicationController function extracting the correct drug and returning the duration
