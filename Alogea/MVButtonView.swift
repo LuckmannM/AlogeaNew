@@ -9,8 +9,10 @@
 import UIKit
 
 enum ButtonViewPickers {
-    case diaryEntryTypePicker
-    case eventTimePicker
+    case eventSelectionPickerType
+    case eventTimePickerType
+    // case medEventPickerType
+    // case medsPickerType
 }
 
 class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
@@ -35,11 +37,12 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var colorScheme: ColorScheme!
     weak var touchWheel: TouchWheelView!
     weak var controller: MVButtonController!
-    var diaryEntryTypePicker: UIPickerView!
+    var eventSelectionPicker: UIPickerView!
     var eventTimePicker: UIPickerView!
+    var medicineEventPicker: UIPickerView!
     var eventTimeTimer: Timer!
     
-    var diaryEntryTypeTitles = ["Cancel","Diary entry","Medication"]
+    var diaryEventTypeTitles = ["Cancel","Diary entry"] // individual prn meds added in pickerView delegate functions
     var eventTimePickerOptions = ["Cancel", "Now", "30 minutes ago","1 hour ago", "2 hours ago", "4 hours ago"]
     var eventTimeIntervals: [TimeInterval] = [0,0,30*60,60*60,120*60,240*60]
     
@@ -120,10 +123,13 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
-        if pickerView.isEqual(diaryEntryTypePicker) {
-            return diaryEntryTypeTitles.count
-        } else {
+        if pickerView.isEqual(eventSelectionPicker) {
+            return diaryEventTypeTitles.count + MedicationController.sharedInstance().asRequiredMedNames.count
+        } else if pickerView.isEqual(eventTimePicker){
             return eventTimePickerOptions.count
+        } else {
+            // medicine event
+            return (MedicationController.sharedInstance().asRequiredMedsFRC.fetchedObjects?.count ?? 0)
         }
     }
     
@@ -147,10 +153,13 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         }
         title.textAlignment = .center
         
-        if pickerView.isEqual(diaryEntryTypePicker) {
-            options = diaryEntryTypeTitles
+        if pickerView.isEqual(eventSelectionPicker) {
+            options = diaryEventTypeTitles
+            options.append(contentsOf: MedicationController.sharedInstance().asRequiredMedNames)
         } else  if pickerView.isEqual(eventTimePicker) {
             options = eventTimePickerOptions
+        } else {
+            options = MedicationController.sharedInstance().asRequiredMedNames
         }
         
         let fontAttribute = UIFont(name: "AvenirNext-Medium", size: 32)! // fronName must be valid or crash
@@ -172,13 +181,13 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             return
         }
         
-        if pickerView.isEqual(diaryEntryTypePicker) {
+        if pickerView.isEqual(eventSelectionPicker){
             if row == 1 {
                 resolvePicker(picker: pickerView)
                 controller.requestDiaryEntryWindow(frame: touchWheel.frame)
             } else {
-                
-                // medication event
+                resolvePicker(picker: pickerView)
+                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: MedicationController.sharedInstance().asRequiredMedNames[row - 2], withDate: Date(), vas: -1, note: nil, duration: nil) // consider setting duration to the duration of med effect; this requires MedicationController function extracting the correct drug and returning the duration
                 
             }
         } else if pickerView.isEqual(eventTimePicker) {
@@ -196,18 +205,18 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         roundButton.isHidden = true
         
         switch pickerType {
-        case .diaryEntryTypePicker:
+        case .eventSelectionPickerType:
             
-            diaryEntryTypePicker = {
+            eventSelectionPicker = {
                 let pV = UIPickerView()
                 pV.frame = bounds.insetBy(dx: 15, dy: 15)
                 pV.delegate  = self
                 pV.dataSource = self
                 return pV
             }()
-            addSubview(diaryEntryTypePicker)
+            addSubview(eventSelectionPicker)
             
-        case .eventTimePicker:
+        case .eventTimePickerType:
             
             roundButton.enlargeButtonView(withTap: false)
             
@@ -222,7 +231,21 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             eventTimePicker.selectRow(1, inComponent: 0, animated: false)
           
             eventTimeTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(eventTimeSelected), userInfo: nil, repeats: false)
+        /*
+        case .medEventPickerType:
+            if (MedicationController.sharedInstance().asRequiredMedsFRC.fetchedObjects?.count ?? 0) > 0 {
+                medicineEventPicker = {
+                    let pV = UIPickerView()
+                    pV.frame = bounds.insetBy(dx: 15, dy: 15)
+                    pV.delegate  = self
+                    pV.dataSource = self
+                    return pV
+                }()
+                addSubview(medicineEventPicker)
+            }
+         */
         }
+    
     }
     
     func resolvePicker(picker: UIPickerView) {

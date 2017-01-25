@@ -28,6 +28,7 @@
 		2651FD681DB3B07700C1301A /* MVButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD671DB3B07700C1301A /* MVButtonView.swift */; };
 		2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD691DB3B90C00C1301A /* MVButtonController.swift */; };
 		2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD6B1DB3D8A600C1301A /* MVButton.swift */; };
+		265387051E38A1F800DE095E /* MedicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265387041E38A1F800DE095E /* MedicationController.swift */; };
 		2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */; };
 		2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */; };
 		2657FA6A1DD8D2280063CCB4 /* InAppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2657FA691DD8D2280063CCB4 /* InAppStore.swift */; };
@@ -103,6 +104,7 @@
 		2651FD671DB3B07700C1301A /* MVButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonView.swift; sourceTree = "<group>"; };
 		2651FD691DB3B90C00C1301A /* MVButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonController.swift; sourceTree = "<group>"; };
 		2651FD6B1DB3D8A600C1301A /* MVButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButton.swift; sourceTree = "<group>"; };
+		265387041E38A1F800DE095E /* MedicationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationController.swift; sourceTree = "<group>"; };
 		2657FA651DD88DF80063CCB4 /* DrugDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrugDictionary.swift; path = ../DrugDictionary.swift; sourceTree = "<group>"; };
 		2657FA671DD8C83A0063CCB4 /* CloudDrug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudDrug.swift; path = ../CloudDrug.swift; sourceTree = "<group>"; };
 		2657FA691DD8D2280063CCB4 /* InAppStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppStore.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
+				265387041E38A1F800DE095E /* MedicationController.swift */,
 				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
 				2608987A1E36614800CBB6B6 /* BackupController.swift */,
 			);
@@ -566,6 +569,7 @@
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
 				260898791E36603200CBB6B6 /* Backups.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
+				265387051E38A1F800DE095E /* MedicationController.swift in Sources */,
 				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
 				26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */,
 				263DA0181DD7655C00CD7963 /* NewDrugHelper.swift in Sources */,

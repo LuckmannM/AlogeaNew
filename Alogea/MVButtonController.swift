@@ -56,7 +56,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         
         if ended {
             temporaryVAScore = score
-            buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePicker)
+            buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
             
             buttonView.hideScore()
         }
@@ -71,7 +71,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     }
     
     func mvButtonTapped(sender: MVButton) {
-        buttonView.showPicker(pickerType: ButtonViewPickers.diaryEntryTypePicker)
+        buttonView.showPicker(pickerType: ButtonViewPickers.eventSelectionPickerType)
     }
     
     // MARK: - diaryEntryWindow

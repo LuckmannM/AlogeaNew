@@ -672,7 +672,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.frequencyString()
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.gray
-                if (theNewDrug!.regularly == true) {
+                if (theNewDrug!.regularlyVar == true) {
                     let timesCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "timesCell"))
                     (timesCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.timesString()
                 }
