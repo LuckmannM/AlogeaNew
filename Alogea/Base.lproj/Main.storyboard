@@ -957,7 +957,7 @@
             </objects>
             <point key="canvasLocation" x="4872" y="443"/>
         </scene>
-        <!--Settings View Controller-->
+        <!--ALOGEA® Settings-->
         <scene sceneID="DkJ-8Y-qAo">
             <objects>
                 <tableViewController id="xFZ-pi-nl2" customClass="SettingsViewController" customModule="Alogea" customModuleProvider="target" sceneMemberID="viewController">
@@ -1102,7 +1102,7 @@
                             <outlet property="delegate" destination="xFZ-pi-nl2" id="S6F-mf-XZR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="H6U-If-JIj"/>
+                    <navigationItem key="navigationItem" title="ALOGEA® Settings" id="H6U-If-JIj"/>
                     <connections>
                         <outlet property="cloudSwitch" destination="Kn2-HA-FLb" id="M7E-vX-LWv"/>
                         <outlet property="drugReminderSwitch" destination="6GU-so-imd" id="kRG-j3-Vdb"/>

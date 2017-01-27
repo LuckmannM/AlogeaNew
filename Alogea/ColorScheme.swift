@@ -29,6 +29,7 @@ class ColorScheme {
     let drugRowWhite = UIColor(colorLiteralRed: 235/255, green: 235/255, blue: 235/255, alpha: 1.0)
     
     let lightYellow = UIColor(colorLiteralRed: 249/255, green: 246/255, blue: 195/255, alpha: 1.0)
+    let white = UIColor.white
 
     class func sharedInstance() -> ColorScheme {
         return colorScheme

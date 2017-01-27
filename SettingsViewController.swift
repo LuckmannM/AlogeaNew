@@ -44,11 +44,10 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.default
+        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().white
+        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!, NSForegroundColorAttributeName: ColorScheme.sharedInstance().darkBlue]
+        //self.navigationController?.navigationBar.tintColor = ColorScheme.sharedInstance().darkBlue
         
     }
     
@@ -95,13 +94,13 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         
         switch section {
         case 0 :
-            return "Alogea® - Settings"
-        case 1 :
             return "Version " + (UIApplication.shared.delegate as! AppDelegate).appVersion + ", Build " + (UIApplication.shared.delegate as! AppDelegate).appBuild
+        case 1 :
+            return "Renaming and Deleting"
         case 2 :
-            return "Backup / Restore options"
+            return "Backup and Restore options"
         case 3 :
-            return "switch on/off timed medicine reminders"
+            return "Medicine reminders"
         default:
             return ""
         }
@@ -118,15 +117,8 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         let header = view as! UITableViewHeaderFooterView
         var textSize: CGFloat!
         
-        if section == 0 {
-            textSize = 24 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
-            header.textLabel?.font = UIFont(name: "AvenirNext-Bold", size: textSize)
-        } else {
-            textSize = 16 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
-            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
-        }
-        
-//        header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
+        textSize = 16 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+        header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
         
         header.textLabel?.textColor = ColorScheme.sharedInstance().darkBlue
