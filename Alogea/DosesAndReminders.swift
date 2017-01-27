@@ -230,7 +230,7 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         let textSize: CGFloat = 18 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
-        header.textLabel?.textColor = colorScheme.drugRowLightGray
+        header.textLabel?.textColor = colorScheme.lightGray
     }
 
 

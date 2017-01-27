@@ -69,7 +69,18 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // persistentStoreCoordinatorChangesObserver = NotificationCenter.default
+
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
+        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().darkBlue
+        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        
+        /*
+         if section == 0 {
+         textSize = 20 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+         header.textLabel?.font = UIFont(name: "AvenirNext-Bold", size: textSize)
+         } else {
+        */
         
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
@@ -83,13 +94,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
         drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
-        
-        // print("drugList first load")
-//        if drugList.fetchedObjects != nil {
-//            for object in drugList.fetchedObjects! {
-//                print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
-//            }
-//        }
 
     }
     
@@ -207,9 +211,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         formatter.dateFormat = "dd.MM.yy"
         
         if indexPath.row % 2 == 0 {
-            cell.backgroundColor = colorScheme.drugRowWhite
+            cell.backgroundColor = ColorScheme.sharedInstance().lightGray
         } else {
-            cell.backgroundColor = colorScheme.drugRowLightGray
+            cell.backgroundColor = UIColor.white
         }
         
        //  switch indexPath.section {
@@ -704,18 +708,12 @@ extension DrugListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
-        // print("willDisplayHeaderView for section \(section)")
         let header = view as! UITableViewHeaderFooterView
-        let textSize: CGFloat = 22 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+        var textSize: CGFloat!
+
+        textSize = 20 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
         header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
         header.textLabel?.sizeToFit()
-
-//        while header.textLabel!.frame.height > view.frame.height {
-//            print("reducing headerView font size...")
-//            textSize = textSize - 2
-//            header.textLabel?.font = UIFont(name: "AvenirNext-Regular", size: textSize)
-//            header.textLabel?.sizeToFit()
-//        }
         
         header.textLabel?.textColor = UIColor.white
     }
@@ -723,8 +721,6 @@ extension DrugListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        // print("titleForSection \(section)")
-
         if let sectionInfo = drugList.sections?[section] {
             return sectionInfo.name
         } else {

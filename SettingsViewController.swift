@@ -95,7 +95,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         
         switch section {
         case 0 :
-            return "Alogea®"
+            return "Alogea® - Settings"
         case 1 :
             return "Version " + (UIApplication.shared.delegate as! AppDelegate).appVersion + ", Build " + (UIApplication.shared.delegate as! AppDelegate).appBuild
         case 2 :
