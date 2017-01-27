@@ -18,6 +18,7 @@
 		263DA0181DD7655C00CD7963 /* NewDrugHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */; };
 		263DE6051DBCDD5E00A7BCF7 /* EventsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */; };
 		263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DE6061DBD4A2800A7BCF7 /* GraphView.swift */; };
+		26443F401E3B9536000A827C /* MedsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26443F3F1E3B9536000A827C /* MedsView.swift */; };
 		2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AC1DAE355300FF0484 /* ColorScheme.swift */; };
 		2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */; };
 		2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */; };
@@ -94,6 +95,7 @@
 		263DA0171DD7655C00CD7963 /* NewDrugHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewDrugHelper.swift; sourceTree = "<group>"; };
 		263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsDataController.swift; sourceTree = "<group>"; };
 		263DE6061DBD4A2800A7BCF7 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		26443F3F1E3B9536000A827C /* MedsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedsView.swift; sourceTree = "<group>"; };
 		2644B8AC1DAE355300FF0484 /* ColorScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		2644B8AE1DAE39B500FF0484 /* TouchWheelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchWheelView.swift; sourceTree = "<group>"; };
 		2644B8B31DAE479600FF0484 /* GetGradientColor Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GetGradientColor Extension.swift"; path = "../../CircularSlider/CircularSlider/GetGradientColor Extension.swift"; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				26F647711DAE70EC0061E560 /* GraphContainerView.swift */,
 				267F78D01DC5264F008CC23E /* ClipView.swift */,
 				263DE6061DBD4A2800A7BCF7 /* GraphView.swift */,
+				26443F3F1E3B9536000A827C /* MedsView.swift */,
 				267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */,
 				2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */,
 			);
@@ -573,6 +576,7 @@
 				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
 				26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */,
 				263DA0181DD7655C00CD7963 /* NewDrugHelper.swift in Sources */,
+				26443F401E3B9536000A827C /* MedsView.swift in Sources */,
 				2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */,
 				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,
 				2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */,

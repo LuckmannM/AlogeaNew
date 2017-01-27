@@ -24,6 +24,7 @@ class GraphView: UIView {
     var graphPoints: [CGPoint]!
     
     var helper: GraphViewHelper!
+    var medsView: MedsView!
     
     var maxGraphDate: Date {
         return Date()
@@ -62,6 +63,9 @@ class GraphView: UIView {
         self.helper = GraphViewHelper(graphView: self)
         self.graphPoints = [CGPoint]()
         self.eventsDataController.graphView = self
+        
+        self.medsView = MedsView(frame: self.bounds) // or add to GraphContainerView or ClipView
+        // need to later add/remove as subView when user selects
         
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
