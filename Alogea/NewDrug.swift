@@ -616,7 +616,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 cellRowHelper.removeVisibleRow(row: indexPath.row+1, inSection: indexPath.section)
                 tableView.deleteRows(at: [changeAtPath], with: .top)
                 
-                theNewDrug!.startDate = datePicker.date as NSDate?
+                theNewDrug!.startDateVar = datePicker.date
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.startDateString()
                 let endDateCell = self.tableView.cellForRow(at: cellRowHelper.returnPathForCellTypeInVisibleArray(cellType: "endDateCell"))
                 (endDateCell?.contentView.viewWithTag(detailTag) as! UILabel).text = theNewDrug!.endDateString()

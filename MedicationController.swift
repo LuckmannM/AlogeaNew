@@ -105,15 +105,15 @@ class MedicationController: NSObject {
     // - Methods:
     
     
-    func medsTakenBetween(startDate: Date, endDate: Date) -> NSFetchedResultsController<DrugEpisode> {
+    private func medsTakenBetween(startDate: Date, endDate: Date) -> NSFetchedResultsController<DrugEpisode> {
         
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
 
-        let startedBeforeEndDate = NSPredicate(format: "startDate < %@",endDate as CVarArg)
-        let notEndedBeforeStartDate = NSPredicate(format: "endDate > %@",startDate as CVarArg)
+        // let startedBeforeEndDate = NSPredicate(format: "startDate < %@",[endDate])
+        // let notEndedBeforeStartDate = NSPredicate(format: "endDate > %@",startDate as CVarArg)
         let regularly = NSPredicate(format: "regularly == true")
         
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [startedBeforeEndDate,notEndedBeforeStartDate,regularly])
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [regularly])
         request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         
@@ -132,8 +132,38 @@ class MedicationController: NSObject {
          */
         
         return frc
+    }
+    
+    func medViewRegularMedRects(minDate: Date, maxDate: Date, displayWidth: CGFloat) -> [CGRect]{
         
+        print("MedController calculting med rects...")
+
+        let displayedTimeSpan = maxDate.timeIntervalSince(minDate)
+        let timePerPixel = displayedTimeSpan / TimeInterval(displayWidth)
+        let medsToDisplay = medsTakenBetween(startDate: minDate, endDate: maxDate)
+        var medRects = [CGRect]()
         
+        let rectHeight: CGFloat = 15
+        
+        print("medsToDisplay count \(medsToDisplay.fetchedObjects?.count ?? 0)")
+
+        var count: CGFloat = 0
+        for med in medsToDisplay.fetchedObjects! {
+            let rectLength = med.graphicalDuration(scale: timePerPixel)
+            let rectStartX = CGFloat(med.startDateVar.timeIntervalSince(minDate) / timePerPixel)
+            let rect = CGRect(
+                x: rectStartX,
+                y: -count * 5 - count * rectHeight,
+                width: rectLength,
+                height: rectHeight
+            )
+            medRects.append(rect)
+            count += 1
+        }
+        print("... end MedController calculting med rects")
+    
+        return medRects
+    
     }
 
 }

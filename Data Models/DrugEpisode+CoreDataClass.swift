@@ -825,7 +825,15 @@ public class DrugEpisode: NSManagedObject {
         // *** also transfer other parameter here...
     }
 
-
+    // MARK: - MedsView functions
+    
+    func graphicalDuration(scale: TimeInterval) -> CGFloat {
+        
+        let endingDate = endDate ?? NSDate() // endDateVar is nil after fetching
+        let timeDuration = endingDate.timeIntervalSince(startDate as! Date)
+        
+        return CGFloat(timeDuration / scale)
+    }
 
 
 }

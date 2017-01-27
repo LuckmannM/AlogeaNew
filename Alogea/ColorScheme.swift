@@ -30,6 +30,8 @@ class ColorScheme {
     
     let lightYellow = UIColor(colorLiteralRed: 249/255, green: 246/255, blue: 195/255, alpha: 1.0)
     let white = UIColor.white
+    
+    let medBarGreen = UIColor(colorLiteralRed: 117/255, green: 171/255, blue: 144/255, alpha: 0.35)
 
     class func sharedInstance() -> ColorScheme {
         return colorScheme
