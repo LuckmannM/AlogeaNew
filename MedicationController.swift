@@ -136,31 +136,36 @@ class MedicationController: NSObject {
     
     func medViewRegularMedRects(minDate: Date, maxDate: Date, displayWidth: CGFloat) -> [CGRect]{
         
-        print("MedController calculting med rects...")
+        // print("MedController calculting med rects...")
 
         let displayedTimeSpan = maxDate.timeIntervalSince(minDate)
         let timePerPixel = displayedTimeSpan / TimeInterval(displayWidth)
         let medsToDisplay = medsTakenBetween(startDate: minDate, endDate: maxDate)
         var medRects = [CGRect]()
         
-        let rectHeight: CGFloat = 15
+        let rectHeight: CGFloat = 10
+        let rectGap: CGFloat = 2
         
-        print("medsToDisplay count \(medsToDisplay.fetchedObjects?.count ?? 0)")
+        // print("time per pixel =  \(timePerPixel)")
+        // print("medsToDisplay count \(medsToDisplay.fetchedObjects?.count ?? 0)")
 
         var count: CGFloat = 0
         for med in medsToDisplay.fetchedObjects! {
             let rectLength = med.graphicalDuration(scale: timePerPixel)
-            let rectStartX = CGFloat(med.startDateVar.timeIntervalSince(minDate) / timePerPixel)
+            let rectStartX = CGFloat(med.startDate!.timeIntervalSince(minDate) / timePerPixel)
+            // print("start of drugRect \(med.nameVar) is \(med.startDateVar)")
+            // print("...against \(minDate) as left minDD start position should be \(rectStartX)")
             let rect = CGRect(
                 x: rectStartX,
-                y: -count * 5 - count * rectHeight,
+                y: -count * rectGap - count * rectHeight - rectHeight,
                 width: rectLength,
                 height: rectHeight
             )
             medRects.append(rect)
+            print("medRect calculated: \(rect)")
             count += 1
         }
-        print("... end MedController calculting med rects")
+        // print("... end MedController calculting med rects")
     
         return medRects
     

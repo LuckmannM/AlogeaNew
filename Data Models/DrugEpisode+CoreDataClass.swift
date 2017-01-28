@@ -831,7 +831,9 @@ public class DrugEpisode: NSManagedObject {
         
         let endingDate = endDate ?? NSDate() // endDateVar is nil after fetching
         let timeDuration = endingDate.timeIntervalSince(startDate as! Date)
-        
+        // print("time duration for drug \(nameVar) wiht stop date \(endingDate) is \(timeDuration)")
+        // print("calculating with scale (tpp) \(scale) makes \(timeDuration / scale)")
+       
         return CGFloat(timeDuration / scale)
     }
 

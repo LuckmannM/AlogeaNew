@@ -28,7 +28,7 @@ class MedsView: UIView {
 
         self.graphView = graphView
         self.helper = graphView.helper
-        self.frame = graphView.frame
+        self.frame = graphView.bounds
         self.backgroundColor = UIColor.clear
         
         self.medController = MedicationController.sharedInstance()
@@ -46,22 +46,22 @@ class MedsView: UIView {
         
         self.frame = graphView.frame
         
-        print("MedView draw...")
+        print("______________________________________________________")
+        print("MedView draw with frame \(frame), bounds \(bounds)..")
+        /*
         print("MedView width = \(frame.width)")
         print("GraphView width = \(graphView.frame.width)")
-
-        
-        let medRects = medController.medViewRegularMedRects(minDate: graphView.minDisplayDate, maxDate: graphView.maxDisplayDate, displayWidth: frame.width)
-        /*
-        let barWidth: CGFloat = 5.0
+        print("GraphView minDates = \(graphView.minDisplayDate), maxDate = \(graphView.maxDisplayDate)")
+        print("GraphView timePerPixel = \(graphView.displayedTimeSpan / TimeInterval(graphView.frame.width))")
         */
         
-        let cornerRadius: CGFloat = 8.0 / 6
+        let medRects = medController.medViewRegularMedRects(minDate: graphView.minDisplayDate, maxDate: graphView.maxDisplayDate, displayWidth: frame.width)
+        let cornerRadius: CGFloat = 8.0 / 2
         let barsPath = UIBezierPath()
         
-        let verticalOffset = frame.maxY - helper.timeLineSpace() - 25
-                    print("vertOffset is \(verticalOffset), timeLineSpace = \(helper.timeLineSpace())")
-                    print("medView frame is \(frame)")
+        let verticalOffset = bounds.maxY - helper.timeLineSpace()
+                    //print("vertOffset is \(verticalOffset), timeLineSpace = \(helper.timeLineSpace())")
+                    //print("medView frame is \(frame)")
         for rect in medRects {
             let shiftedRect = rect.offsetBy(dx: 0, dy: verticalOffset)
             let medRectPath = UIBezierPath(roundedRect: shiftedRect, cornerRadius: cornerRadius)
@@ -75,7 +75,7 @@ class MedsView: UIView {
         colorScheme.medBarGreen.setFill()
         barsPath.fill()
         
-        print("...end MedView draw")
+        // print("...end MedView draw")
 
     }
 
