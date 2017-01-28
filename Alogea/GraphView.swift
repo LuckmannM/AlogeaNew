@@ -169,7 +169,6 @@ class GraphView: UIView {
         let dataArray = TimeLineHelper.timeLineArray(timeSpan: displayedTimeSpan, viewWidth: frame.width, minEventDate: minGraphDate, minDisplayDate: minDisplayDate)
         let timeLineTicks = UIBezierPath()
         let timeLineY = bounds.maxY - helper.timeLineSpace()
-        print("GraphView timeLine @ \(timeLineY)")
         for label in timeLineLabels {
             label.text = ""
         }

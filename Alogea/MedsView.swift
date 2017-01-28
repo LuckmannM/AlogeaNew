@@ -44,22 +44,39 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        let medRects = medController.medViewRegularMedRects(minDate: graphView.minDisplayDate, maxDate: graphView.maxDisplayDate, displayWidth: frame.width)
+        let regMedRects = medController.medViewRegularMedRects(minDate: graphView.minDisplayDate, maxDate: graphView.maxDisplayDate, displayWidth: frame.width)
+        let prnMedRects = eventsDataController.medViewPRNMedRects(minDate: graphView.minDisplayDate, maxDate: graphView.maxDisplayDate, displayWidth: frame.width)
         let cornerRadius: CGFloat = 8.0 / 2
-        let barsPath = UIBezierPath()
+        let regBarsPath = UIBezierPath()
+        let prnBarsPath = UIBezierPath()
         
         let verticalOffset = bounds.maxY - helper.timeLineSpace()
-        for rect in medRects {
+        var topOfRegMedRects = verticalOffset // to find vertical lowest position for prnMedRect
+        
+        for rect in regMedRects {
             let shiftedRect = rect.offsetBy(dx: 0, dy: verticalOffset)
             let medRectPath = UIBezierPath(roundedRect: shiftedRect, cornerRadius: cornerRadius)
-            barsPath.append(medRectPath)
+            regBarsPath.append(medRectPath)
+            topOfRegMedRects = shiftedRect.origin.y - shiftedRect.height - 5
+        }
+        for rect in prnMedRects {
+            let shiftedRect = rect.offsetBy(dx: 0, dy: topOfRegMedRects)
+            let medRectPath = UIBezierPath(roundedRect: shiftedRect, cornerRadius: cornerRadius)
+            prnBarsPath.append(medRectPath)
         }
         
-        barsPath.lineWidth = 1.0
+        regBarsPath.lineWidth = 1.0
+        prnBarsPath.lineWidth = 1.0
+        
         UIColor.white.setStroke()
-        barsPath.stroke()
+        
+        regBarsPath.stroke()
         colorScheme.medBarGreen.setFill()
-        barsPath.fill()
-    }
+        regBarsPath.fill()
+ 
+        prnBarsPath.stroke()
+        colorScheme.medBarGreen.setFill()
+        prnBarsPath.fill()
+}
 
 }

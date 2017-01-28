@@ -15,7 +15,6 @@ class ClipView: UIView {
         
     override func draw(_ rect: CGRect) {
         
-        print("ClipView frame \(frame), bounds \(bounds)")
             let xStart: CGFloat = bounds.origin.x
             let xEnd: CGFloat = bounds.maxX
         
@@ -33,7 +32,6 @@ class ClipView: UIView {
             
             linePath.move(to: CGPoint(x: xStart, y:lowerLineY))
             linePath.addLine(to: CGPoint(x: xEnd, y: lowerLineY))
-            print("ClipView lower line @ \(lowerLineY)")
             
             colorScheme.lightGray.withAlphaComponent(0.5).setStroke()
             linePath.lineWidth = 2.0

@@ -155,11 +155,17 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         if pickerView.isEqual(eventSelectionPicker) {
             options = diaryEventTypeTitles
-            options.append(contentsOf: MedicationController.sharedInstance().asRequiredMedNames)
+            for (name, _) in MedicationController.sharedInstance().asRequiredMedNames {
+                options.append(name)
+            }
+            // options.append(contentsOf: MedicationController.sharedInstance().asRequiredMedNames)
         } else  if pickerView.isEqual(eventTimePicker) {
             options = eventTimePickerOptions
         } else {
-            options = MedicationController.sharedInstance().asRequiredMedNames
+            for (name, _) in MedicationController.sharedInstance().asRequiredMedNames {
+                options.append(name)
+            }
+            //options = MedicationController.sharedInstance().asRequiredMedNames
         }
         
         let fontAttribute = UIFont(name: "AvenirNext-Medium", size: 32)! // fronName must be valid or crash
@@ -187,7 +193,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
                 controller.requestDiaryEntryWindow(frame: touchWheel.frame.insetBy(dx: -20, dy: -20))
             } else {
                 resolvePicker(picker: pickerView)
-                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: MedicationController.sharedInstance().asRequiredMedNames[row - 2], withDate: Date(), vas: -1, note: nil, duration: nil) // consider setting duration to the duration of med effect; this requires MedicationController function extracting the correct drug and returning the duration
+                let (name, duration) = MedicationController.sharedInstance().asRequiredMedNames[row - 2]
+                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: nil, duration: duration) // consider setting duration to the duration of med effect; this requires MedicationController function extracting the correct drug and returning the duration
                 
             }
         } else if pickerView.isEqual(eventTimePicker) {

@@ -6,10 +6,18 @@
 //  Copyright © 2016 AppToolFactory. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 
 public class Event: NSManagedObject {
+    
+    func graphicDuration(scale: TimeInterval) -> CGFloat? {
+        
+        if (duration ?? 0) > 0 {
+            return CGFloat(duration / scale)
+        }
+        return nil
+    }
 
 }
