@@ -66,12 +66,6 @@ class GraphView: UIView {
         self.graphPoints = [CGPoint]()
         self.eventsDataController.graphView = self
         
-        self.medsView = MedsView(graphView: self) // or add to GraphContainerView or ClipView
-        // need to later add/remove as subView when user selects
-        
-        // DEBUG, later change on user request
-        self.addSubview(medsView)
-        
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
         if helper.selectedScoreEventsTimeSpan < (24 * 3600) {
@@ -91,12 +85,26 @@ class GraphView: UIView {
             helper.printSelectedScoreEventDates()
         }
         // ***
+        
+        self.medsView = MedsView(graphView: self) // or add to GraphContainerView or ClipView
+        // need to later add/remove as subView when user selects
+        
+        // DEBUG, later change on user request
+        self.addSubview(medsView)
+        
+
         print("init GraphView end")
 
     }
     
     override func draw(_ rect: CGRect) {
-
+        
+        /*
+        print("")
+        print("draw GraphView...")
+        print("medView.frame = \(medsView.frame), graphView.frame = \(frame)")
+        */
+        
         drawTimeLine()
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
@@ -110,7 +118,7 @@ class GraphView: UIView {
         } else {
             drawBarGraph()
         }
-        
+        medsView.frame = bounds
         medsView.setNeedsDisplay()
         
         

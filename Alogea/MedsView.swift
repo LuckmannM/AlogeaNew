@@ -44,29 +44,15 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        self.frame = graphView.frame
-        
-        print("______________________________________________________")
-        print("MedView draw with frame \(frame), bounds \(bounds)..")
-        /*
-        print("MedView width = \(frame.width)")
-        print("GraphView width = \(graphView.frame.width)")
-        print("GraphView minDates = \(graphView.minDisplayDate), maxDate = \(graphView.maxDisplayDate)")
-        print("GraphView timePerPixel = \(graphView.displayedTimeSpan / TimeInterval(graphView.frame.width))")
-        */
-        
         let medRects = medController.medViewRegularMedRects(minDate: graphView.minDisplayDate, maxDate: graphView.maxDisplayDate, displayWidth: frame.width)
         let cornerRadius: CGFloat = 8.0 / 2
         let barsPath = UIBezierPath()
         
         let verticalOffset = bounds.maxY - helper.timeLineSpace()
-                    //print("vertOffset is \(verticalOffset), timeLineSpace = \(helper.timeLineSpace())")
-                    //print("medView frame is \(frame)")
         for rect in medRects {
             let shiftedRect = rect.offsetBy(dx: 0, dy: verticalOffset)
             let medRectPath = UIBezierPath(roundedRect: shiftedRect, cornerRadius: cornerRadius)
             barsPath.append(medRectPath)
-            print("medRect is \(shiftedRect)")
         }
         
         barsPath.lineWidth = 1.0
@@ -74,9 +60,6 @@ class MedsView: UIView {
         barsPath.stroke()
         colorScheme.medBarGreen.setFill()
         barsPath.fill()
-        
-        // print("...end MedView draw")
-
     }
 
 }
