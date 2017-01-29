@@ -58,28 +58,55 @@ class MedicationController: NSObject {
         return frc
     }()
     
+    var regMedsFRC: NSFetchedResultsController<DrugEpisode> {
+        
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let regPredicate = NSPredicate(format: "regularly == true")
+        
+        request.predicate = regPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("prnMedsFRC fetching error \(error)")
+        }
+        frc.delegate = self
+        
+        /* DEBUG
+         for object in frc.fetchedObjects! {
+         print("prn drug isCurrent is \(object.isCurrent)")
+         print("prn drug endDate is \(object.endDate)")
+         }
+         */
+        
+        return frc
+    }
+
+    
     lazy var allMedsFRC: NSFetchedResultsController<DrugEpisode> = {
     
-    let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
-    
-    request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
-    let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-    
-    do {
-    try frc.performFetch()
-    } catch let error as NSError{
-    print("prnMedsFRC fetching error")
-    }
-    frc.delegate = self
-    
-    /* DEBUG
-     for object in frc.fetchedObjects! {
-     print("prn drug isCurrent is \(object.isCurrent)")
-     print("prn drug endDate is \(object.endDate)")
-     }
-     */
-    
-    return frc
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+        try frc.performFetch()
+        } catch let error as NSError{
+        print("prnMedsFRC fetching error")
+        }
+        frc.delegate = self
+        
+        /* DEBUG
+         for object in frc.fetchedObjects! {
+         print("prn drug isCurrent is \(object.isCurrent)")
+         print("prn drug endDate is \(object.endDate)")
+         }
+         */
+        
+        return frc
     }()
 
     
@@ -106,61 +133,61 @@ class MedicationController: NSObject {
     // - Methods:
     
     
-    private func medsTakenBetween(startDate: Date, endDate: Date) -> NSFetchedResultsController<DrugEpisode> {
-        
-        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
-
-        // let startedBeforeEndDate = NSPredicate(format: "startDate < %@",[endDate])
-        // let notEndedBeforeStartDate = NSPredicate(format: "endDate > %@",startDate as CVarArg)
-        let regularly = NSPredicate(format: "regularly == true")
-        
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [regularly])
-        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("prnMedsFRC fetching error: \(error)")
-        }
-        frc.delegate = self
-        
-        /* DEBUG
-         for object in frc.fetchedObjects! {
-         print("prn drug isCurrent is \(object.isCurrent)")
-         print("prn drug endDate is \(object.endDate)")
-         }
-         */
-        
-        return frc
-    }
-    
-    func medViewRegularMedRects(minDate: Date, maxDate: Date, displayWidth: CGFloat) -> [CGRect]{
-        
-        let displayedTimeSpan = maxDate.timeIntervalSince(minDate)
-        let timePerPixel = displayedTimeSpan / TimeInterval(displayWidth)
-        let medsToDisplay = medsTakenBetween(startDate: minDate, endDate: maxDate)
-        var medRects = [CGRect]()
-        
-        let rectHeight: CGFloat = 10
-        let rectGap: CGFloat = 2
-        
-        var count: CGFloat = 0
-        for med in medsToDisplay.fetchedObjects! {
-            let rectLength = med.graphicalDuration(scale: timePerPixel)
-            let rectStartX = CGFloat(med.startDate!.timeIntervalSince(minDate) / timePerPixel)
-            let rect = CGRect(
-                x: rectStartX,
-                y: 0 - rectHeight, //-count * rectGap - count * rectHeight - rectHeight,
-                width: rectLength,
-                height: rectHeight
-            )
-            medRects.append(rect)
-            count += 1
-        }
-        return medRects
-    
-    }
+//    private func medsTakenBetween(startDate: Date, endDate: Date) -> NSFetchedResultsController<DrugEpisode> {
+//        
+//        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+//
+//        // let startedBeforeEndDate = NSPredicate(format: "startDate < %@",[endDate])
+//        // let notEndedBeforeStartDate = NSPredicate(format: "endDate > %@",startDate as CVarArg)
+//        let regularly = NSPredicate(format: "regularly == true")
+//        
+//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [regularly])
+//        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("prnMedsFRC fetching error: \(error)")
+//        }
+//        frc.delegate = self
+//        
+//        /* DEBUG
+//         for object in frc.fetchedObjects! {
+//         print("prn drug isCurrent is \(object.isCurrent)")
+//         print("prn drug endDate is \(object.endDate)")
+//         }
+//         */
+//        
+//        return frc
+//    }
+//    
+//    func medViewRegularMedRects(minDate: Date, maxDate: Date, displayWidth: CGFloat) -> [CGRect]{
+//        
+//        let displayedTimeSpan = maxDate.timeIntervalSince(minDate)
+//        let timePerPixel = displayedTimeSpan / TimeInterval(displayWidth)
+//        let medsToDisplay = medsTakenBetween(startDate: minDate, endDate: maxDate)
+//        var medRects = [CGRect]()
+//        
+//        let rectHeight: CGFloat = 10
+//        let rectGap: CGFloat = 2
+//        
+//        var count: CGFloat = 0
+//        for med in medsToDisplay.fetchedObjects! {
+//            let rectLength = med.graphicalDuration(scale: timePerPixel)
+//            let rectStartX = CGFloat(med.startDate!.timeIntervalSince(minDate) / timePerPixel)
+//            let rect = CGRect(
+//                x: rectStartX,
+//                y: 0 - rectHeight, //-count * rectGap - count * rectHeight - rectHeight,
+//                width: rectLength,
+//                height: rectHeight
+//            )
+//            medRects.append(rect)
+//            count += 1
+//        }
+//        return medRects
+//    
+//    }
 
 }
 

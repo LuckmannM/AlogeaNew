@@ -834,6 +834,17 @@ public class DrugEpisode: NSManagedObject {
        
         return CGFloat(timeDuration / scale)
     }
+    
+    func medRect(scale: TimeInterval) -> CGRect {
+        
+        let endingDate = endDate ?? NSDate() // endDateVar is nil after fetching
+        let timeDuration = endingDate.timeIntervalSince(startDate as! Date)
+        
+        let rect = CGRect(x: 0, y: -15, width: CGFloat(timeDuration / scale), height: medBarHeight)
+        
+        return rect
+    }
+
 
 
 }

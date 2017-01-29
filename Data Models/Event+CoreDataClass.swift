@@ -19,5 +19,17 @@ public class Event: NSManagedObject {
         }
         return nil
     }
+    
+    func eventRect(scale: TimeInterval) -> CGRect {
+        
+        var rect: CGRect!
+        
+        if (duration ?? 0) > 0 {
+            rect = CGRect(x: 0, y: -15, width: CGFloat(duration / scale), height: medBarHeight)
+        } else {
+            rect = CGRect(x: 0, y: -15, width: medBarHeight, height: medBarHeight)
+        }
+        return rect
+    }
 
 }
