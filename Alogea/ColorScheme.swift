@@ -31,8 +31,12 @@ class ColorScheme {
     let lightYellow = UIColor(colorLiteralRed: 249/255, green: 246/255, blue: 195/255, alpha: 1.0)
     let white = UIColor.white
     
-    let medBarGreen = UIColor(colorLiteralRed: 117/255, green: 171/255, blue: 144/255, alpha: 0.35)
+    static let medBarGreen = UIColor(colorLiteralRed: 117/255, green: 171/255, blue: 144/255, alpha: 0.35)
+    static let medBarRed = UIColor(colorLiteralRed: 172/255, green: 82/255, blue: 71/255, alpha: 0.5)
+    static let medBarYellow = UIColor(colorLiteralRed: 246/255, green: 243/255, blue: 134/255, alpha: 0.5)
 
+    let barColors:[UIColor] = [medBarGreen, medBarRed, medBarYellow,medBarGreen, medBarRed, medBarYellow]
+    
     class func sharedInstance() -> ColorScheme {
         return colorScheme
     }

@@ -151,7 +151,7 @@ class MedicationController: NSObject {
             let rectStartX = CGFloat(med.startDate!.timeIntervalSince(minDate) / timePerPixel)
             let rect = CGRect(
                 x: rectStartX,
-                y: -count * rectGap - count * rectHeight - rectHeight,
+                y: 0 - rectHeight, //-count * rectGap - count * rectHeight - rectHeight,
                 width: rectLength,
                 height: rectHeight
             )

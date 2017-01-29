@@ -23,9 +23,9 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         label.text = "0.0"
         label.numberOfLines = 0
         if UIDevice().userInterfaceIdiom == .pad {
-            label.font = UIFont.boldSystemFont(ofSize: 58)
-        } else {
             label.font = UIFont.boldSystemFont(ofSize: 40)
+        } else {
+            label.font = UIFont.boldSystemFont(ofSize: 28)
         }
         label.textColor = ColorScheme.sharedInstance().darkBlue
         label.textAlignment = .center
@@ -113,7 +113,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         scoreLabel.sizeToFit()
         scoreLabel.frame = CGRect(
             x: frame.width / 2 - scoreLabel.frame.width / 2,
-            y: frame.height * 0.28, //frame.height / 2 - scoreLabel.frame.height / 2
+            y: frame.height / 2 - scoreLabel.frame.height / 3, //frame.height * 0.35,
             width: scoreLabel.frame.width,
             height: scoreLabel.frame.height
         )
