@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-let medBarHeight: CGFloat = 10.0
+let medBarHeight: CGFloat = 12.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
 
 class MedsView: UIView {
     
@@ -55,6 +55,7 @@ class MedsView: UIView {
         
         let scale = graphView.maxDisplayDate.timeIntervalSince(graphView.minDisplayDate) / TimeInterval(graphView.frame.width)
         let cornerRadius: CGFloat = 8.0 / 2
+        let fontSize: CGFloat = 11 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
         
         let verticalOffset = bounds.maxY - helper.timeLineSpace()
         var topOfRegMedRects = verticalOffset // to find vertical lowest position for prnMedRect
@@ -70,20 +71,21 @@ class MedsView: UIView {
             
             for i in 0..<count {
                 if medRect.intersects(rectArray[i]) {
-                    medRect = medRect.offsetBy(dx: 0, dy: -12)
+                    medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
                     if medRect.minY < topOfRegMedRects {
                         // ensure prnMedRect are positoned higher than regMedRects
-                        topOfRegMedRects = medRect.minY - 12
+                        topOfRegMedRects = medRect.minY - medBarHeight - 2
                     }
                 }
             }
 
             let medRectPath = UIBezierPath(roundedRect: medRect, cornerRadius: cornerRadius)
-            // regBarsPath.append(medRectPath)
             medRectPath.lineWidth = 1.0
             ColorScheme.sharedInstance().barColors[count].setFill()
             medRectPath.fill()
             medRectPath.stroke()
+            let medName = medicine.name as NSString?
+            medName?.draw(in: medRect.offsetBy(dx: 5, dy: -1), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
             count += 1
         }
         
@@ -96,7 +98,7 @@ class MedsView: UIView {
             rectArray.append(medRect)
             for i in 0..<count {
                 if medRect.intersects(rectArray[i]) {
-                    medRect = medRect.offsetBy(dx: 0, dy: -12)
+                    medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
                 }
             }
             
@@ -105,6 +107,8 @@ class MedsView: UIView {
             ColorScheme.sharedInstance().barColors[count].setFill()
             medRectPath.fill()
             medRectPath.stroke()
+            let medName = medEvent.name as NSString?
+            medName?.draw(in: medRect.offsetBy(dx: 3, dy: -1), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
             count += 1
         }
         

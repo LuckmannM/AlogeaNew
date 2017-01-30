@@ -25,9 +25,9 @@ public class Event: NSManagedObject {
         var rect: CGRect!
         
         if (duration ?? 0) > 0 {
-            rect = CGRect(x: 0, y: -15, width: CGFloat(duration / scale), height: medBarHeight)
+            rect = CGRect(x: 0, y: -medBarHeight - 2, width: CGFloat(duration / scale), height: medBarHeight)
         } else {
-            rect = CGRect(x: 0, y: -15, width: medBarHeight, height: medBarHeight)
+            rect = CGRect(x: 0, y: -medBarHeight - 2, width: medBarHeight, height: medBarHeight)
         }
         return rect
     }
