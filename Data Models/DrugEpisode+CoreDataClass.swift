@@ -840,7 +840,10 @@ public class DrugEpisode: NSManagedObject {
         let endingDate = endDate ?? NSDate() // endDateVar is nil after fetching
         let timeDuration = endingDate.timeIntervalSince(startDate as! Date)
         
-        let rect = CGRect(x: 0, y: -medBarHeight - 3, width: CGFloat(timeDuration / scale), height: medBarHeight)
+        var width = CGFloat(timeDuration / scale)
+        if width < medBarHeight { width = medBarHeight }
+        
+        let rect = CGRect(x: 0, y: -medBarHeight - 3, width: width, height: medBarHeight)
         
         return rect
     }

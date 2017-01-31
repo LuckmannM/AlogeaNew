@@ -20,16 +20,27 @@ public class Event: NSManagedObject {
         return nil
     }
     
-    func eventRect(scale: TimeInterval) -> CGRect {
+    func medEventRect(scale: TimeInterval) -> CGRect {
         
         var rect: CGRect!
         
         if (duration ?? 0) > 0 {
-            rect = CGRect(x: 0, y: -medBarHeight - 2, width: CGFloat(duration / scale), height: medBarHeight)
+            var width = CGFloat(duration / scale)
+            if width < medBarHeight {
+                width = medBarHeight
+            }
+            rect = CGRect(x: 0, y: -medBarHeight - 2, width: width, height: medBarHeight)
         } else {
             rect = CGRect(x: 0, y: -medBarHeight - 2, width: medBarHeight, height: medBarHeight)
         }
         return rect
     }
+    
+    func nonScoreEventRect(scale: TimeInterval) -> CGRect {
+        
+        return CGRect(x: 0, y: -eventDiamondSize - 2, width: eventDiamondSize, height: eventDiamondSize)
+
+    }
+
 
 }

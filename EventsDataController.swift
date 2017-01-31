@@ -89,6 +89,23 @@ class EventsDataController: NSObject {
         frc.delegate = self
         return frc
     }()
+    
+    lazy var nonScoreEventsFRC: NSFetchedResultsController<Event> = {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("nonScoreEventsByDateFRC fetching error: \(error)")
+        }
+        frc.delegate = self
+        return frc
+    }()
+
 
     
     lazy var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
@@ -113,7 +130,7 @@ class EventsDataController: NSObject {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
@@ -131,7 +148,7 @@ class EventsDataController: NSObject {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
         request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
