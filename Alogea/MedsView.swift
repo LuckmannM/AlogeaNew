@@ -169,7 +169,7 @@ class MedsView: UIView {
             diamondPath.stroke()
             
             let eventName = (event.name as NSString?)?.substring(to: 1)
-            eventName?.draw(in: eventRect.offsetBy(dx: 3, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+            eventName?.draw(in: eventRect.offsetBy(dx: 4, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
             
             count += 1
             colorArrayCount += 1
