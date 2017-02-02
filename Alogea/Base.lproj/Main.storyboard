@@ -56,10 +56,12 @@
                                                     <outlet property="graphContainerView" destination="lGD-MW-hsj" id="idf-Sr-HgU"/>
                                                     <outlet property="leftFrameConstraint" destination="ybk-X5-WP3" id="WWP-Qo-dk2"/>
                                                     <outlet property="mainViewController" destination="BYZ-38-t0r" id="LNT-g6-DMa"/>
+                                                    <outlet property="medViewTapGesture" destination="pNE-Nj-PYA" id="wSC-Nn-6ZA"/>
                                                     <outlet property="rightFrameConstraint" destination="oap-xz-Q6y" id="QWn-dQ-fuP"/>
                                                     <outlet property="zoomRecognizer" destination="i6q-mz-KP5" id="Xp2-Ng-ux0"/>
                                                     <outletCollection property="gestureRecognizers" destination="erJ-PE-F4m" appends="YES" id="5nj-C1-0cA"/>
                                                     <outletCollection property="gestureRecognizers" destination="i6q-mz-KP5" appends="YES" id="dHT-6j-TSR"/>
+                                                    <outletCollection property="gestureRecognizers" destination="pNE-Nj-PYA" appends="YES" id="kkH-py-LVZ"/>
                                                 </connections>
                                             </view>
                                         </subviews>
@@ -209,6 +211,11 @@
                         <action selector="zoomWithRecognizer:" destination="Dj1-06-7rI" id="zFZ-I8-AB1"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <tapGestureRecognizer id="pNE-Nj-PYA">
+                    <connections>
+                        <action selector="tapGestureWithSender:" destination="Dj1-06-7rI" id="0iu-em-1k9"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3002.4000000000001" y="130.88455772113943"/>
         </scene>

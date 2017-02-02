@@ -22,8 +22,6 @@ class MedsView: UIView {
         return moc
     }()
 
-    var tapRecognizer: UITapGestureRecognizer!
-    
     var graphView: GraphView!
     var helper: GraphViewHelper!
     var medController: MedicationController!
@@ -111,7 +109,7 @@ class MedsView: UIView {
         
         self.medController = MedicationController.sharedInstance()
         
-        self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(sender:)))
+//        self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(sender:)))
         
         print("...init MedsView end")
 
@@ -142,7 +140,7 @@ class MedsView: UIView {
     
     private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) {
         
-        var rectArray = [CGRect]()
+        var allRectsArray = [CGRect]()
         var topOfRect = verticalOffset
         count = 0
         colorArrayCount = 0
@@ -150,7 +148,7 @@ class MedsView: UIView {
             var medRect = medicine.medRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medicine.startDate as! Date, scale: scale), dy: verticalOffset)
             
             for i in 0..<count {
-                if medRect.intersects(rectArray[i]) {
+                if medRect.intersects(allRectsArray[i]) {
                     medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
                     if medRect.minY < topOfRect {
                         // ensure prnMedRect are positoned higher than regMedRects
@@ -158,7 +156,7 @@ class MedsView: UIView {
                     }
                 }
             }
-            rectArray.append(medRect)
+            allRectsArray.append(medRect)
             
             let medRectPath = UIBezierPath(roundedRect: medRect, cornerRadius: cornerRadius)
             medRectPath.lineWidth = 1.0
@@ -173,13 +171,14 @@ class MedsView: UIView {
                 colorArrayCount = 0
             }
         }
-        symbolArrays.append(rectArray)
+        symbolArrays.append(allRectsArray)
     }
     
     private func drawPrnMeds(scale: TimeInterval, verticalOffset: CGFloat) {
         
         var topOfRect = verticalOffset
-        var rectArray = symbolArrays[0]
+        var allRectsArray = symbolArrays[0]
+        var rectArray = [CGRect]()
         
         count = 0
         colorArrayCount = 0
@@ -191,8 +190,8 @@ class MedsView: UIView {
                 let medEvent = prnMedsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var medRect = medEvent.medEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medEvent.date as! Date, scale: scale), dy: verticalOffset)
                 
-                for i in 0..<rectArray.count {
-                    if medRect.intersects(rectArray[i]) {
+                for i in 0..<allRectsArray.count {
+                    if medRect.intersects(allRectsArray[i]) {
                         medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
                         if medRect.minY < topOfRect {
                             // ensure prnMedRect are positoned higher than regMedRects
@@ -200,6 +199,7 @@ class MedsView: UIView {
                         }
                     }
                 }
+                allRectsArray.append(medRect)
                 rectArray.append(medRect)
                 
                 let medRectPath = UIBezierPath(roundedRect: medRect, cornerRadius: cornerRadius)
@@ -230,7 +230,8 @@ class MedsView: UIView {
     private func drawNonScoreEvents(scale: TimeInterval, verticalOffset: CGFloat)  {
         
         count = 0
-        var rectArray: [CGRect] = Array(symbolArrays.joined())
+        var allRectsArray: [CGRect] = Array(symbolArrays.joined())
+        var rectArray = [CGRect]()
         
         var sectionCount = 0
         var eventCount = 0
@@ -240,11 +241,12 @@ class MedsView: UIView {
             for index in 0..<section.numberOfObjects {
                 let event = diaryEventsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var eventRect = event.nonScoreEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: event.date as! Date, scale: scale), dy: verticalOffset)
-                for i in 0..<rectArray.count {
-                    if eventRect.intersects(rectArray[i]) {
+                for i in 0..<allRectsArray.count {
+                    if eventRect.intersects(allRectsArray[i]) {
                         eventRect = eventRect.offsetBy(dx: 0, dy: -eventDiamondSize - 2)
                     }
                 }
+                allRectsArray.append(eventRect)
                 rectArray.append(eventRect)
                 
                 let diamondPath = UIBezierPath()
@@ -278,10 +280,22 @@ class MedsView: UIView {
         return CGFloat(startDate.timeIntervalSince(graphView.minDisplayDate) / scale)
     }
     
-    func tap(sender: UITapGestureRecognizer) {
-        print("tap in MedsView")
+    func tap(inLocation: CGPoint) {
         
-        // check whewther tap is in event/medRects then display info in bigger font
+        var section = 0
+        var item = 0
+        for eventCategory in symbolArrays {
+            for rect in eventCategory {
+                if rect.contains(inLocation) {
+                    print("tap on target, event index \(section):\(item)")
+                }
+            item += 1
+            }
+            section += 1
+            item = 0
+        }
+        
+        // tapGesture recogniser is property of GraphView
     }
 
 }

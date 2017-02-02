@@ -18,6 +18,8 @@ class GraphView: UIView {
     @IBOutlet var rightFrameConstraint: NSLayoutConstraint!
     @IBOutlet var dragRecognizer: UIPanGestureRecognizer!
     @IBOutlet var zoomRecognizer: UIPinchGestureRecognizer!
+    @IBOutlet var medViewTapGesture: UITapGestureRecognizer!
+
     
     let eventsDataController = EventsDataController.sharedInstance()
     let colorScheme = ColorScheme.sharedInstance()
@@ -65,6 +67,7 @@ class GraphView: UIView {
         self.helper = GraphViewHelper(graphView: self)
         self.graphPoints = [CGPoint]()
         self.eventsDataController.graphView = self
+
         
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
@@ -88,10 +91,11 @@ class GraphView: UIView {
         
         self.medsView = MedsView(graphView: self) // or add to GraphContainerView or ClipView
         // need to later add/remove as subView when user selects
+        // self.medViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGesture(sender:)))
+        // self.medViewTapGesture.addTarget(medsView, action: #selector(MedsView.tap(sender:)))
         
         // DEBUG, later change on user request
         self.addSubview(medsView)
-        
 
         print("init GraphView end")
 
@@ -264,6 +268,11 @@ class GraphView: UIView {
         }
         refreshPointsFlag = false
         setNeedsDisplay()
+    }
+    
+    @IBAction func tapGesture(sender: UITapGestureRecognizer) {
+        
+        medsView.tap(inLocation: sender.location(in: medsView))
     }
     
     @IBAction func drag(recogniser: UIPanGestureRecognizer) {
