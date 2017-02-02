@@ -90,21 +90,21 @@ class EventsDataController: NSObject {
         return frc
     }()
     
-    lazy var nonScoreEventsFRC: NSFetchedResultsController<Event> = {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
-        request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("nonScoreEventsByDateFRC fetching error: \(error)")
-        }
-        frc.delegate = self
-        return frc
-    }()
+//    lazy var nonScoreEventsFRC: NSFetchedResultsController<Event> = {
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
+//        request.predicate = predicate
+//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("nonScoreEventsByDateFRC fetching error: \(error)")
+//        }
+//        frc.delegate = self
+//        return frc
+//    }()
 
 
     
@@ -143,23 +143,23 @@ class EventsDataController: NSObject {
         return frc
     }()
     
-    lazy var medicineEventsFRC: NSFetchedResultsController<Event> = {
-        
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
-        request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("nonScoreEventTypesFRC fetching error \(error)")
-        }
-        frc.delegate = self
-        
-        return frc
-    }()
+//    lazy var medicineEventsFRC: NSFetchedResultsController<Event> = {
+//        
+//        let request = NSFetchRequest<Event>(entityName: "Event")
+//        let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
+//        request.predicate = predicate
+//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch let error as NSError{
+//            print("nonScoreEventTypesFRC fetching error \(error)")
+//        }
+//        frc.delegate = self
+//        
+//        return frc
+//    }()
 
 
     
@@ -352,30 +352,30 @@ class EventsDataController: NSObject {
         return uniqueName
     }
 
-    func medViewPRNMedRects(minDate: Date, maxDate: Date, displayWidth: CGFloat) -> [CGRect] {
-        
-        let displayedTimeSpan = maxDate.timeIntervalSince(minDate)
-        let timePerPixel = displayedTimeSpan / TimeInterval(displayWidth)
-        var medRects = [CGRect]()
-        
-        let rectHeight: CGFloat = 10
-        //let rectGap: CGFloat = 2
-        
-        var count: CGFloat = 0
-        for med in medicineEventsFRC.fetchedObjects! {
-            let rectLength = med.graphicDuration(scale: timePerPixel) ?? 10 // standardWidthe of eventSymbol
-            let rectStartX = CGFloat(med.date!.timeIntervalSince(minDate) / timePerPixel)
-            let rect = CGRect(
-                x: rectStartX,
-                y: 0, // -count * rectGap - count * rectHeight - rectHeight,
-                width: rectLength,
-                height: rectHeight
-            )
-            medRects.append(rect)
-            count += 1
-        }
-        return medRects
-    }
+//    func medViewPRNMedRects(minDate: Date, maxDate: Date, displayWidth: CGFloat) -> [CGRect] {
+//        
+//        let displayedTimeSpan = maxDate.timeIntervalSince(minDate)
+//        let timePerPixel = displayedTimeSpan / TimeInterval(displayWidth)
+//        var medRects = [CGRect]()
+//        
+//        let rectHeight: CGFloat = 10
+//        //let rectGap: CGFloat = 2
+//        
+//        var count: CGFloat = 0
+//        for med in medicineEventsFRC.fetchedObjects! {
+//            let rectLength = med.graphicDuration(scale: timePerPixel) ?? 10 // standardWidthe of eventSymbol
+//            let rectStartX = CGFloat(med.date!.timeIntervalSince(minDate) / timePerPixel)
+//            let rect = CGRect(
+//                x: rectStartX,
+//                y: 0, // -count * rectGap - count * rectHeight - rectHeight,
+//                width: rectLength,
+//                height: rectHeight
+//            )
+//            medRects.append(rect)
+//            count += 1
+//        }
+//        return medRects
+//    }
 }
 
 let eventsDataController = EventsDataController()

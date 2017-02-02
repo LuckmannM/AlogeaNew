@@ -17,21 +17,73 @@ class MedsView: UIView {
     let cornerRadius: CGFloat = 8.0 / 2
     let fontSize: CGFloat = 11 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
 
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        return moc
+    }()
+
     
     var graphView: GraphView!
     var helper: GraphViewHelper!
     var medController: MedicationController!
     
     var regMedsFRC: NSFetchedResultsController<DrugEpisode> {
-        return MedicationController.sharedInstance().regMedsFRC
+        
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let regPredicate = NSPredicate(format: "regularly == true")
+        
+        request.predicate = regPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("prnMedsFRC fetching error \(error)")
+        }
+        frc.delegate = self
+        
+        /* DEBUG
+         for object in frc.fetchedObjects! {
+         print("prn drug isCurrent is \(object.isCurrent)")
+         print("prn drug endDate is \(object.endDate)")
+         }
+         */
+        
+        return frc
     }
     
     var prnMedsFRC: NSFetchedResultsController<Event> {
-        return EventsDataController.sharedInstance().medicineEventsFRC
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("nonScoreEventTypesFRC fetching error \(error)")
+        }
+        frc.delegate = self
+        
+        return frc
     }
     
     var diaryEventsFRC: NSFetchedResultsController<Event> {
-        return EventsDataController.sharedInstance().nonScoreEventsFRC
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("nonScoreEventsByDateFRC fetching error: \(error)")
+        }
+        frc.delegate = self
+        return frc
     }
     
     var symbolArrays = [[CGRect]]()
@@ -224,4 +276,12 @@ class MedsView: UIView {
         return CGFloat(startDate.timeIntervalSince(graphView.minDisplayDate) / scale)
     }
 
+}
+
+extension MedsView: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.setNeedsDisplay()
+    }
+    
 }
