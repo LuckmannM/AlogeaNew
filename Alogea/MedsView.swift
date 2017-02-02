@@ -22,6 +22,7 @@ class MedsView: UIView {
         return moc
     }()
 
+    var tapRecognizer: UITapGestureRecognizer!
     
     var graphView: GraphView!
     var helper: GraphViewHelper!
@@ -110,6 +111,8 @@ class MedsView: UIView {
         
         self.medController = MedicationController.sharedInstance()
         
+        self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(sender:)))
+        
         print("...init MedsView end")
 
     }
@@ -127,17 +130,17 @@ class MedsView: UIView {
 
         let scale = graphView.maxDisplayDate.timeIntervalSince(graphView.minDisplayDate) / TimeInterval(graphView.frame.width)
         
-        let topOfRegMedRects = drawRegularMeds(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
+        drawRegularMeds(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
         
-        let topOfPrnMedRects = drawPrnMeds(scale: scale, verticalOffset: topOfRegMedRects)
+        drawPrnMeds(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
         
-        drawNonScoreEvents(scale: scale, verticalOffset: topOfPrnMedRects)
+        drawNonScoreEvents(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
         
         // symbol Arrays contains all med and eventRects for use in touch events
         
     }
     
-    private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) -> CGFloat {
+    private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) {
         
         var rectArray = [CGRect]()
         var topOfRect = verticalOffset
@@ -171,13 +174,12 @@ class MedsView: UIView {
             }
         }
         symbolArrays.append(rectArray)
-        return topOfRect
     }
     
-    private func drawPrnMeds(scale: TimeInterval, verticalOffset: CGFloat) -> CGFloat {
+    private func drawPrnMeds(scale: TimeInterval, verticalOffset: CGFloat) {
         
         var topOfRect = verticalOffset
-        var rectArray = [CGRect]()
+        var rectArray = symbolArrays[0]
         
         count = 0
         colorArrayCount = 0
@@ -188,7 +190,8 @@ class MedsView: UIView {
             for index in 0..<section.numberOfObjects {
                 let medEvent = prnMedsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var medRect = medEvent.medEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medEvent.date as! Date, scale: scale), dy: verticalOffset)
-                for i in 0..<eventCount {
+                
+                for i in 0..<rectArray.count {
                     if medRect.intersects(rectArray[i]) {
                         medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
                         if medRect.minY < topOfRect {
@@ -222,13 +225,12 @@ class MedsView: UIView {
             sectionCount += 1
         }
         symbolArrays.append(rectArray)
-        return topOfRect
     }
     
     private func drawNonScoreEvents(scale: TimeInterval, verticalOffset: CGFloat)  {
         
         count = 0
-        var rectArray = [CGRect]()
+        var rectArray: [CGRect] = Array(symbolArrays.joined())
         
         var sectionCount = 0
         var eventCount = 0
@@ -238,7 +240,7 @@ class MedsView: UIView {
             for index in 0..<section.numberOfObjects {
                 let event = diaryEventsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var eventRect = event.nonScoreEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: event.date as! Date, scale: scale), dy: verticalOffset)
-                for i in 0..<eventCount {
+                for i in 0..<rectArray.count {
                     if eventRect.intersects(rectArray[i]) {
                         eventRect = eventRect.offsetBy(dx: 0, dy: -eventDiamondSize - 2)
                     }
@@ -274,6 +276,12 @@ class MedsView: UIView {
     private func leftXPosition(startDate: Date, scale: TimeInterval) -> CGFloat {
         
         return CGFloat(startDate.timeIntervalSince(graphView.minDisplayDate) / scale)
+    }
+    
+    func tap(sender: UITapGestureRecognizer) {
+        print("tap in MedsView")
+        
+        // check whewther tap is in event/medRects then display info in bigger font
     }
 
 }

@@ -28,21 +28,8 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     var delegate: PublicDrugDataBaseDelegate?
     
     var bestMatchingDrugIndex: Int?
-//    var inAppStore: InAppStore!
-    
-//    var termsDictionary = Dictionary<String, Int>() // this contains specific terms with indexes related to drug in cloudDrugArray, used for the NewDrug name row dropDown menu for selection
-//    var drugSelectionTerms = [String]() // contains strings only of the above specific terms to be displayed in NewDrug name namePicker
-//    var indexedNameDictionary = [String:[Int]]() // this contains all brandNames and substanceNames connected to the index in cloudDrugArray for return to NewDrug row name textField; it does contain a specfic name only once and the cloudDrugIndexes of drugs containing this term
-//    var matchingCloudDictionaryIndexes = [Int]()
     
     var namePickerArray = [String]() // containing the cloudDrugArray indexes of drugNames passed to NewDrug.namePicker
-    
-//    lazy var selectedNamePickerIndex: Int? = {
-//        
-//        return self.namePickerIndexReferences.index(where: {
-//            $0 == self.selectedDrugIndex
-//        })
-//    }()
     
     init () {
         iCloudContainer = CKContainer.default()
@@ -102,101 +89,14 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         
     }
     
-//    func drugFormularyDisplayNamesArray() -> [String] {
-//        
-//        var nameArray = [String]()
-//        
-//        for drug in cloudDrugArray {
-//            nameArray.append(drug.displayName.lowercased())
-//        }
-//        
-//        return nameArray
-//
-//    }
-//    
-//    func drugFormularyClassesArray() -> [[String]] {
-//        
-//        var classesArray = [[String]]()
-//        
-//        for drug in cloudDrugArray {
-//            classesArray.append(drug.classes)
-//        }
-//        
-//        return classesArray
-//    }
-    
     func errorUpdating(error: NSError) {
         
         print("error loading DrugDictionary: \(error)")
         // *** consider displaying an alert prompting user to log into iCloud
-        
     }
     
     func modelUpdated() {
         
-//        var drugIndex = 0
-//        
-//        termsDictionary.removeAll()
-//        indexedNameDictionary.removeAll()
-//        
-//        for drug in cloudDrugArray {
-//            
-//            // build termDictionary: for NewDrug.name dropDown menu, all terms containing a string
-//            for term in drug.dictionaryTerms {
-//                termsDictionary[term] = drugIndex
-//            }
-//            
-//            // build indexedNameDictionary: for NewDrug.name textField, only one matching term for display
-//            for brandTerm in drug.brandNames {
-//                
-//                var brand = String()
-//                if brandTerm == "" {
-//                    brand = drug.displayName
-//                } else {
-//                    brand = brandTerm + "®"
-//                }
-//                
-//                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
-//                    key == brandTerm })
-//                {
-//                    indexedNameDictionary[brand] = [drugIndex]
-//                } else {
-//                    if !indexedNameDictionary[brandTerm]!.contains(drugIndex)
-//                    {
-//                        (indexedNameDictionary[brand])?.append(drugIndex)
-//                    }
-//                }
-//                
-//            }
-//            
-//            for substance in drug.substances {
-//                if  !indexedNameDictionary.keys.contains(where: { (key) -> Bool in
-//                    key == substance })
-//                {
-//                    indexedNameDictionary[substance] = [drugIndex]
-//                } else {
-//                    if !indexedNameDictionary[substance]!.contains(drugIndex)
-//                    {
-//                        (indexedNameDictionary[substance])?.append(drugIndex)
-//                    }
-//                }
-//                
-//            }
-//            
-//            drugIndex += 1
-//        }
-        
-        //
-        //        print("cloud drug termsDictionary updated")
-        //        print("termsDictionary:")
-        //        for term in termsDictionary {
-        //            print(term)
-        //        }
-        //        print("")
-        //        print("indexedNameDictionary :")
-        //        for term in indexedNameDictionary {
-        //            print(term)
-        //        }
     }
     
     // MARK: - NewDrug selection functions
@@ -270,13 +170,7 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
 
         return (namePickerArray, drugsWithMatchesArray,selectedDrugIndexInNamePickerArray)
     }
-    
-//    func drugFromNamePickerList(withIndex: String) -> CloudDrug {
-//        
-//        let name = namePickerArray[withIndex]
-//    }
-    
- 
+     
 }
 
 let drugFormularyGlobal = DrugDictionary()

@@ -31,14 +31,14 @@ public class Event: NSManagedObject {
             }
             rect = CGRect(x: 0, y: -medBarHeight - 2, width: width, height: medBarHeight)
         } else {
-            rect = CGRect(x: 0, y: -medBarHeight - 2, width: medBarHeight, height: medBarHeight)
+            rect = CGRect(x: -medBarHeight/2, y: -medBarHeight - 2, width: medBarHeight, height: medBarHeight)
         }
         return rect
     }
     
     func nonScoreEventRect(scale: TimeInterval) -> CGRect {
         
-        return CGRect(x: 0, y: -eventDiamondSize - 2, width: eventDiamondSize, height: eventDiamondSize)
+        return CGRect(x: -medBarHeight/2, y: -eventDiamondSize - 2, width: eventDiamondSize, height: eventDiamondSize)
 
     }
 
