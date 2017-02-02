@@ -30,8 +30,8 @@ class GraphView: UIView {
         return Date()
     }
     var minGraphDate: Date {
-        if helper.selectedScoreEventMinMaxDates != nil {
-            return (helper.selectedScoreEventMinMaxDates![0])
+        if helper.allEventsMinMaxDates != nil {
+            return (helper.allEventsMinMaxDates![0])
         } else {
             mainViewController.displayTimeSegmentedController.selectedSegmentIndex = 0
             return maxGraphDate.addingTimeInterval(-24 * 3600)
@@ -68,7 +68,7 @@ class GraphView: UIView {
         
         maxDisplayDate = Date()
         minDisplayDate = maxDisplayDate.addingTimeInterval(-24 * 3600)
-        if helper.selectedScoreEventsTimeSpan < (24 * 3600) {
+        if helper.allGraphEventsTimeSpan < (24 * 3600) {
             displayedTimeSpan = 24 * 3600
         } else {
             displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now

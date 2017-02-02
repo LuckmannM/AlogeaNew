@@ -61,50 +61,61 @@ class GraphViewHelper: NSObject {
         return frc
     }
     
-    var selectedScoreEventMinMaxDates: [Date]? {
+    var allEventsMinMaxDates: [Date]? {
         
-        guard graphEventsFRC.fetchedObjects != nil && (graphEventsFRC.fetchedObjects?.count)! > 0 else {
+        let allEventsFRC = EventsDataController.sharedInstance().allEventsFRC
+        let allRegDrugsFRC = MedicationController.sharedInstance().regMedsSortedByStartDateFRC
+        
+        guard (allEventsFRC.fetchedObjects?.count ?? 0) > 0 ||  (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 else {
             return nil
         }
-        guard (graphEventsFRC.fetchedObjects![0] as Event?) != nil else {
-            return nil
-        }
         
-        var selectedEventDates = [Date]()
+        var minAndMaxDates = [Date]()
         
-        if graphEventsFRC.fetchedObjects!.count < 2 {
+        if allEventsFRC.fetchedObjects!.count < 2 {
             let firstObjectPath = IndexPath(item: 0, section: 0)
             let firstDate = (graphEventsFRC.object(at: firstObjectPath) as Event).date as! Date
-            selectedEventDates.append(firstDate) // minDate from one and only event
-            selectedEventDates.append(Date()) // maxDate is now
-        } else {
-            let firstObjectPath = IndexPath(item: 0, section: 0)
+            minAndMaxDates.append(firstDate) // minDate from one and only event
+            minAndMaxDates.append(Date()) // maxDate is now
+        }
+        else {
             let lastObjectPath = IndexPath(item: graphEventsFRC.fetchedObjects!.count - 1, section: 0)
-            let firstDate = (graphEventsFRC.object(at: firstObjectPath) as Event).date as! Date
-            selectedEventDates.append(firstDate) // minDate from one and only event
-            let lastDate = (graphEventsFRC.object(at: lastObjectPath) as Event).date as! Date
-            selectedEventDates.append(lastDate) // maxDate is now
+            let firstDate = (graphEventsFRC.object(at: IndexPath(item: 0, section: 0)) as Event).date as! Date
+            minAndMaxDates.append(firstDate) // minDate from one and only event
+            let lastDate = (allEventsFRC.object(at: lastObjectPath) as Event).date as! Date
+            minAndMaxDates.append(lastDate) // maxDate is now
         }
-        
-        return selectedEventDates
+
+        if (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 {
+            let firstDate = (allRegDrugsFRC.object(at: IndexPath(item: 0, section: 0)) as DrugEpisode).startDate as! Date
+            if minAndMaxDates.count == 0 {
+                minAndMaxDates.append(firstDate) // minDate from one and only regular drug startDate
+                minAndMaxDates.append(Date())
+            } else {
+                if firstDate.compare(minAndMaxDates[0]) == .orderedAscending {
+                    minAndMaxDates[0] = firstDate
+                }
+            }
+        }
+        return minAndMaxDates
     }
     
-    var selectedScoreEventsTimeSpan: TimeInterval {
+    var allGraphEventsTimeSpan: TimeInterval {
         
-        guard selectedScoreEventMinMaxDates != nil
+        guard allEventsMinMaxDates != nil
             else {
                 return (24 * 3600)
         }
-        return selectedScoreEventMinMaxDates![1].timeIntervalSince(selectedScoreEventMinMaxDates![0])
+        return allEventsMinMaxDates![1].timeIntervalSince(allEventsMinMaxDates![0])
     }
     
     var selectedScoreMinDateToNow: TimeInterval {
         
-        guard selectedScoreEventMinMaxDates != nil
+        guard allEventsMinMaxDates != nil
             else {
                 return (24 * 3600)
         }
-        return Date().timeIntervalSince(selectedScoreEventMinMaxDates![0])
+        return Date().timeIntervalSince(allEventsMinMaxDates![0])
     }
     
     lazy var nonScoreEventsFRC: NSFetchedResultsController<Event>  = {
@@ -275,9 +286,9 @@ extension GraphViewHelper {
             }
         }
         
-        if selectedScoreEventMinMaxDates?.count != nil {
-            print("earliest Selected event Date \(selectedScoreEventMinMaxDates![0])")
-            print("latest Selected event Date \(selectedScoreEventMinMaxDates![1])")
+        if allEventsMinMaxDates?.count != nil {
+            print("earliest Selected event Date \(allEventsMinMaxDates![0])")
+            print("latest Selected event Date \(allEventsMinMaxDates![1])")
         }
     }
 

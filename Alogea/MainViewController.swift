@@ -49,7 +49,7 @@ class MainViewController: UIViewController {
         // the graph may have changed so need re-draw/refresh
         
         // transferred to here from GraphView.init()
-        if graphContainerView.graphView.helper.selectedScoreEventsTimeSpan < (24 * 3600) {
+        if graphContainerView.graphView.helper.allGraphEventsTimeSpan < (24 * 3600) {
             displayTimeSegmentedController.selectedSegmentIndex = 0
             graphContainerView.graphView.displayedTimeSpan = 24 * 3600
         } else {

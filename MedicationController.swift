@@ -58,31 +58,58 @@ class MedicationController: NSObject {
         return frc
     }()
     
-//    var regMedsFRC: NSFetchedResultsController<DrugEpisode> {
-//        
-//        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
-//        let regPredicate = NSPredicate(format: "regularly == true")
-//        
-//        request.predicate = regPredicate
-//        request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
-//        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch let error as NSError{
-//            print("prnMedsFRC fetching error \(error)")
-//        }
-//        frc.delegate = self
-//        
-//        /* DEBUG
-//         for object in frc.fetchedObjects! {
-//         print("prn drug isCurrent is \(object.isCurrent)")
-//         print("prn drug endDate is \(object.endDate)")
-//         }
-//         */
-//        
-//        return frc
-//    }
+    var regMedsFRC: NSFetchedResultsController<DrugEpisode> {
+        
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let regPredicate = NSPredicate(format: "regularly == true")
+        
+        request.predicate = regPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("prnMedsFRC fetching error \(error)")
+        }
+        frc.delegate = self
+        
+        /* DEBUG
+         for object in frc.fetchedObjects! {
+         print("prn drug isCurrent is \(object.isCurrent)")
+         print("prn drug endDate is \(object.endDate)")
+         }
+         */
+        
+        return frc
+    }
+    
+    var regMedsSortedByStartDateFRC: NSFetchedResultsController<DrugEpisode> {
+        
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let regPredicate = NSPredicate(format: "regularly == true")
+        
+        request.predicate = regPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            print("prnMedsFRC fetching error \(error)")
+        }
+        frc.delegate = self
+        
+        /* DEBUG
+         for object in frc.fetchedObjects! {
+         print("prn drug isCurrent is \(object.isCurrent)")
+         print("prn drug endDate is \(object.endDate)")
+         }
+         */
+        
+        return frc
+    }
+
 
     
     lazy var allMedsFRC: NSFetchedResultsController<DrugEpisode> = {
