@@ -273,6 +273,7 @@ extension MainViewController: UITextViewDelegate {
         textEntryController = touchWheel.mainButtonController
         
         if eventPickerSelection > 1 { // not Cancel or New event
+// changed from sharedInstance here
             EventsDataController.sharedInstance().newEvent(ofType: "Diary Entry", withName: eventPickerTitles()[eventPickerSelection], note: text)
 
 //            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles()[eventPickerSelection])
@@ -509,6 +510,7 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         let popUpView = storyBoard.instantiateViewController(withIdentifier: "EventRectPopUp") as! EventPopUp
         
         let dateFormatter = DateFormatter()
+        dateFormatter.locale = .current
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
 

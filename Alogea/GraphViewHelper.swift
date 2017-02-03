@@ -63,7 +63,7 @@ class GraphViewHelper: NSObject {
     
     var allEventsMinMaxDates: [Date]? {
         
-        let allEventsFRC = EventsDataController.sharedInstance().allEventsFRC
+        let allEventsFRC = EventsDataController.sharedInstance().allEventsByDateFRC
         let allRegDrugsFRC = MedicationController.sharedInstance().regMedsSortedByStartDateFRC
         
         guard (allEventsFRC.fetchedObjects?.count ?? 0) > 0 ||  (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 else {

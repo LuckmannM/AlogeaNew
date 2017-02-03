@@ -272,14 +272,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     }
     
     func save() {
-        // save to mOC only; changes to mOC will be spotted by (persistentStoreCoordinatorChangesObserver)?
-        // by the NSFetchedResultsController (fetchedSettings). This observes the mOC/stack and reports changes to the
-        // NSFetchedResultsController DElegate methods at the bottom (pSCDidChangeStores)
-        // this triggers pSCDidChangeStores func which carries out re-fetch and re-load
         
         do {
             try  managedObjectContext.save()
-            // print("saving drugList moc")
         }
         catch let error as NSError {
             print("Error saving \(error)", terminator: "")
@@ -837,17 +832,6 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
 
-//        var sectionInfo: AnyObject?
-//        var newSectionInfo: AnyObject?
-//        
-//        if indexPath != nil {
-//            sectionInfo = drugList.sections?[(indexPath?.section)!]
-//        }
-//        
-//        if newIndexPath != nil {
-//            newSectionInfo = drugList.sections?[(newIndexPath?.section)!]
-//        }
-        
         switch type {
         case .update:
             tableView.reloadRows(at: [indexPath!], with: .automatic)
@@ -873,8 +857,6 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
         
-        // print("drugList FRC changed section: ...")
-
         let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
         switch type {
         case .insert:

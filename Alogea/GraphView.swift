@@ -83,7 +83,7 @@ class GraphView: UIView {
         
         
         // *** Debug
-        if eventsDataController.allEventsFRC.fetchedObjects?.count == 0 {
+        if eventsDataController.allEventsByDateFRC.fetchedObjects?.count == 0 {
             eventsDataController.createExampleEvents()
             helper.printSelectedScoreEventDates()
         }

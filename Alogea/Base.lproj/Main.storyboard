@@ -659,52 +659,52 @@
                         <viewControllerLayoutGuide type="bottom" id="DCu-Vn-i4r"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Hc1-cJ-XAa">
-                        <rect key="frame" x="0.0" y="0.0" width="200" height="150"/>
+                        <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="etN-as-W4v">
-                                <rect key="frame" x="0.0" y="0.0" width="200" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-KE-SIV">
-                                <rect key="frame" x="0.0" y="20" width="200" height="21"/>
+                                <rect key="frame" x="0.0" y="20" width="150" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="uED-8B-bbd"/>
+                                    <constraint firstAttribute="height" constant="21" id="4av-s4-xXh"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qEV-UP-kiL">
-                                <rect key="frame" x="0.0" y="41" width="200" height="109"/>
+                                <rect key="frame" x="0.0" y="41" width="150" height="59"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="etN-as-W4v">
+                                <rect key="frame" x="0.0" y="2" width="150" height="22"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="qEV-UP-kiL" firstAttribute="bottom" secondItem="DCu-Vn-i4r" secondAttribute="top" id="11W-jB-k1L"/>
-                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="etN-as-W4v" secondAttribute="leading" id="2hL-Ph-9SD"/>
-                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="trailing" secondItem="etN-as-W4v" secondAttribute="trailing" id="Ibz-cg-JSL"/>
-                            <constraint firstItem="qEV-UP-kiL" firstAttribute="top" secondItem="Lcw-KE-SIV" secondAttribute="bottom" id="M65-FY-hxP"/>
-                            <constraint firstItem="etN-as-W4v" firstAttribute="centerX" secondItem="Hc1-cJ-XAa" secondAttribute="centerX" id="QBK-1b-YVV"/>
-                            <constraint firstItem="qEV-UP-kiL" firstAttribute="trailing" secondItem="Lcw-KE-SIV" secondAttribute="trailing" id="aF3-5n-J52"/>
-                            <constraint firstItem="etN-as-W4v" firstAttribute="top" secondItem="06W-QU-v9P" secondAttribute="bottom" id="aWt-te-cj5"/>
-                            <constraint firstItem="etN-as-W4v" firstAttribute="leading" secondItem="Hc1-cJ-XAa" secondAttribute="leadingMargin" constant="-16" id="ha3-wr-fqX"/>
-                            <constraint firstItem="qEV-UP-kiL" firstAttribute="leading" secondItem="Lcw-KE-SIV" secondAttribute="leading" id="jpA-2Q-PU3"/>
-                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="top" secondItem="Hc1-cJ-XAa" secondAttribute="top" constant="20" symbolic="YES" id="wK3-ek-S2V"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="trailing" secondItem="etN-as-W4v" secondAttribute="trailing" id="1PT-VB-7ET"/>
+                            <constraint firstItem="etN-as-W4v" firstAttribute="top" secondItem="06W-QU-v9P" secondAttribute="bottom" constant="2" id="2JI-UL-Ncy"/>
+                            <constraint firstAttribute="trailing" secondItem="etN-as-W4v" secondAttribute="trailing" id="9CQ-bq-yxw"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="etN-as-W4v" secondAttribute="leading" id="J6P-0f-DKl"/>
+                            <constraint firstItem="qEV-UP-kiL" firstAttribute="top" secondItem="Lcw-KE-SIV" secondAttribute="bottom" id="PhY-Gd-mLL"/>
+                            <constraint firstItem="etN-as-W4v" firstAttribute="leading" secondItem="Hc1-cJ-XAa" secondAttribute="leading" id="Qyx-db-z59"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="top" secondItem="Hc1-cJ-XAa" secondAttribute="top" constant="20" symbolic="YES" id="Zth-6Z-pWq"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="qEV-UP-kiL" secondAttribute="leading" id="gW7-4m-Ysr"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="trailing" secondItem="qEV-UP-kiL" secondAttribute="trailing" id="iAX-zM-9iU"/>
                         </constraints>
                     </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="200" height="150"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="150" height="100"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="200" height="150"/>
+                    <size key="freeformSize" width="150" height="100"/>
                     <connections>
                         <outlet property="dateLabel" destination="Lcw-KE-SIV" id="Vpf-AZ-0s7"/>
                         <outlet property="textView" destination="qEV-UP-kiL" id="YLR-hN-nVs"/>

@@ -24,20 +24,22 @@ class EventsDataController: NSObject {
     }()
     
     //  ** DEVELOPMENT only: used in GV Helper init() function only: if no events created ExampleEvents
-    lazy var allEventsFRC: NSFetchedResultsController<Event> = {
+    // when this a lazy var errors are logged when creating new diary events: api misuse attempt to serialise store access by non-owning psc; making this a computed variable stops this error
+    var allEventsByDateFRC: NSFetchedResultsController<Event> {
         let request = NSFetchRequest<Event>(entityName: "Event")
-        request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        // request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("allEventsFRC fetching error")
+            print("allEventsByDateFRC fetching error")
         }
         frc.delegate = self
         
         return frc
-    }()
+    }
 
     lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -72,7 +74,6 @@ class EventsDataController: NSObject {
         return frc
     }()
     
-    
     lazy var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: [scoreEvent])
@@ -101,7 +102,7 @@ class EventsDataController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("nonScoreEventTypesFRC fetching error \(error)")
+            print("medicineEventTypesFRC fetching error \(error)")
         }
         frc.delegate = self
         
@@ -192,7 +193,14 @@ class EventsDataController: NSObject {
     }
     
     func save() {
-        (UIApplication.shared.delegate as! AppDelegate).stack.save()
+        
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch let error as NSError {
+                print("Error saving \(error)")
+            }
+        }
     }
     
     func fetchSpecificEvents(name: String, type: String) -> NSFetchedResultsController<Event> {
@@ -276,13 +284,42 @@ let eventsDataController = EventsDataController()
 
 extension EventsDataController: NSFetchedResultsControllerDelegate {
     
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("EventsDataController delegate: change of events detected")
         
+        /* this creates an ' api misuse - attempt to serialise b y non-owning PSC' error
         if controller != nonScoreEventsByDateFRC {
+            print("nonScoreEventsByDateFRC has changed content")
             graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
         }
-        
+        */
         reconcileRecordTypesAndEventNames()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        switch controller {
+        case nonScoreEventTypesFRC:
+            print("changes to nonScoreEventTypesFRC")
+        case scoreEventTypesFRC:
+            print("changes to scoreEventTypesFRC")
+        case nonScoreEventsByDateFRC:
+            print("changes to nonScoreEventsByDateFRC")
+        case medicineEventTypesFRC:
+            print("changes to medicineEventTypesFRC")
+        case allEventsByDateFRC:
+            print("changes to allEventsByDateFRC")
+        default:
+            print("changes to other EventsDataController FRC")
+
+        }
+        graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
+        
+//        if controller != nonScoreEventsByDateFRC {
+//            print("nonScoreEventsByDateFRC has changed content")
+//            graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
+//        }
     }
     
 }
