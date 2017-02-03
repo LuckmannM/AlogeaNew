@@ -503,12 +503,39 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         present(choserView, animated: true, completion: nil)
     }
     
+    func eventTapPopUpView(title: String, date: Date, text: String, sourceRect: CGRect) {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let popUpView = storyBoard.instantiateViewController(withIdentifier: "EventRectPopUp") as! EventPopUp
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+
+        
+        popUpView.modalPresentationStyle = .popover
+        //choserView.preferredContentSize = CGSize(width: 175, height: height)
+        
+        let popUpController = popUpView.popoverPresentationController
+        popUpController!.permittedArrowDirections = .any
+        popUpController!.sourceView = graphContainerView.graphView.medsView
+        popUpController?.sourceRect = sourceRect
+        popUpController!.delegate = self
+        
+        // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
+        present(popUpView, animated: true, completion: {
+            popUpView.labelTexts(title: title, date: "\(dateFormatter.string(from: date))", text: text)
+        })
+        
+    }
+    
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.none
     }
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
+        // this doesn't need to happen when returning from popUpView!
         graphContainerView.reloadAllViews()
     }
 }

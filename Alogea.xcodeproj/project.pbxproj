@@ -43,6 +43,7 @@
 		269B9BFB1DDE52DE00C3BDA9 /* StoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */; };
 		269B9BFD1DDE5A5300C3BDA9 /* StoreViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFC1DDE5A5300C3BDA9 /* StoreViewCell.swift */; };
 		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
+		26BDBD341E44B511007F6917 /* EventRect PopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BDBD331E44B511007F6917 /* EventRect PopUp.swift */; };
 		26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */; };
 		26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CA1DA177D000D157BB /* AppDelegate.swift */; };
 		26E3B8CD1DA177D000D157BB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E3B8CC1DA177D000D157BB /* MainViewController.swift */; };
@@ -120,6 +121,7 @@
 		269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreView.swift; sourceTree = "<group>"; };
 		269B9BFC1DDE5A5300C3BDA9 /* StoreViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreViewCell.swift; sourceTree = "<group>"; };
 		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		26BDBD331E44B511007F6917 /* EventRect PopUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventRect PopUp.swift"; sourceTree = "<group>"; };
 		26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingMenuView.swift; sourceTree = "<group>"; };
 		26E3B8C71DA177D000D157BB /* Alogea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alogea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E3B8CA1DA177D000D157BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 			children = (
 				26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
+				26BDBD331E44B511007F6917 /* EventRect PopUp.swift */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
@@ -570,6 +573,7 @@
 				2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */,
 				2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
+				26BDBD341E44B511007F6917 /* EventRect PopUp.swift in Sources */,
 				260898791E36603200CBB6B6 /* Backups.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
 				265387051E38A1F800DE095E /* MedicationController.swift in Sources */,
