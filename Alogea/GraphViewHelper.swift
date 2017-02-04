@@ -56,6 +56,7 @@ class GraphViewHelper: NSObject {
     }()
 
     var graphEventsFRC: NSFetchedResultsController<Event> {
+        
         let frc = EventsDataController.sharedInstance().fetchSpecificEvents(name: self.selectedScore, type: scoreEvent)
         frc.delegate = self
         return frc
@@ -63,29 +64,27 @@ class GraphViewHelper: NSObject {
     
     var allEventsMinMaxDates: [Date]? {
         
-        let allEventsFRC = EventsDataController.sharedInstance().allEventsByDateFRC
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        let fetchRequest = NSFetchRequest<Event>(entityName: "Event")
+        
+        var allEvents:[Event]?
+        
+        do  {
+            allEvents = try moc.fetch(fetchRequest)
+        }  catch let error as NSError {
+            print("Error fetching drugList \(error)")
+        }
+        
         let allRegDrugsFRC = MedicationController.sharedInstance().regMedsSortedByStartDateFRC
         
-        guard (allEventsFRC.fetchedObjects?.count ?? 0) > 0 ||  (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 else {
+        guard (allEvents?.count ?? 0) > 0 ||  (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 else {
             return nil
         }
         
-        var minAndMaxDates = [Date]()
+        let firstDate = (allEvents?.first)?.date as! Date
+        var minAndMaxDates = [firstDate] // minDate from one and only event
+        minAndMaxDates.append(Date())
         
-        if allEventsFRC.fetchedObjects!.count < 2 {
-            let firstObjectPath = IndexPath(item: 0, section: 0)
-            let firstDate = (graphEventsFRC.object(at: firstObjectPath) as Event).date as! Date
-            minAndMaxDates.append(firstDate) // minDate from one and only event
-            minAndMaxDates.append(Date()) // maxDate is now
-        }
-        else {
-            let lastObjectPath = IndexPath(item: graphEventsFRC.fetchedObjects!.count - 1, section: 0)
-            let firstDate = (graphEventsFRC.object(at: IndexPath(item: 0, section: 0)) as Event).date as! Date
-            minAndMaxDates.append(firstDate) // minDate from one and only event
-            let lastDate = (allEventsFRC.object(at: lastObjectPath) as Event).date as! Date
-            minAndMaxDates.append(lastDate) // maxDate is now
-        }
-
         if (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 {
             let firstDate = (allRegDrugsFRC.object(at: IndexPath(item: 0, section: 0)) as DrugEpisode).startDate as! Date
             if minAndMaxDates.count == 0 {

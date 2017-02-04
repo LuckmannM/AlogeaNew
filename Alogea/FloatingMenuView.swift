@@ -50,7 +50,7 @@ class FloatingMenuView: UIView {
     @IBAction func slideOut(tap: UITapGestureRecognizer) {
         
         let targetHeight = 5/6 * graphContainerView.frame.height
-        let targetY = graphContainerView.frame.midY - targetHeight/2
+        let targetY = graphContainerView.bounds.midY - targetHeight/2
         
         ibViewFrame = frame
 

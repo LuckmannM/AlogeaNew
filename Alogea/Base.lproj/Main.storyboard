@@ -73,13 +73,59 @@
                                             <constraint firstItem="Dj1-06-7rI" firstAttribute="leading" secondItem="3MZ-MM-gjS" secondAttribute="leading" id="ybk-X5-WP3"/>
                                         </constraints>
                                     </view>
+                                    <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
+                                        <rect key="frame" x="-84" y="18" width="100" height="110.33333333333331"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUS-LB-Fd3">
+                                                <rect key="frame" x="25" y="5" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="GraphButtonBar"/>
+                                                <connections>
+                                                    <action selector="graphButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="B7f-IV-olS"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kX6-eK-UBg" userLabel="printButton">
+                                                <rect key="frame" x="28" y="62" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="ExpoButton"/>
+                                                <connections>
+                                                    <action selector="exportDialogWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="m3R-B0-Kol"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nSl-70-MxM" userLabel="scoreTypeButton">
+                                                <rect key="frame" x="25" y="125" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="ListButton"/>
+                                                <connections>
+                                                    <action selector="listButtonActionWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A4W-Il-Of6"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="aMg-RL-DS0"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="graphContainerView" destination="lGD-MW-hsj" id="YtA-5S-kx7"/>
+                                            <outlet property="graphTypeButton" destination="ZUS-LB-Fd3" id="L0B-s5-jO5"/>
+                                            <outlet property="graphView" destination="Dj1-06-7rI" id="a0m-Gx-mFc"/>
+                                            <outlet property="listButton" destination="nSl-70-MxM" id="U5W-Ie-64w"/>
+                                            <outlet property="printButton" destination="kX6-eK-UBg" id="v65-kU-CWJ"/>
+                                            <outlet property="tapGesture" destination="TQ9-A5-Hvg" id="aCi-tk-tQm"/>
+                                            <outletCollection property="gestureRecognizers" destination="TQ9-A5-Hvg" appends="YES" id="6xV-Jg-eeb"/>
+                                        </connections>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.3294117647" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="3MZ-MM-gjS" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="top" constant="30" id="3yG-R4-BI7"/>
                                     <constraint firstItem="3MZ-MM-gjS" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="20" id="Qll-ux-Prm"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="centerY" secondItem="lGD-MW-hsj" secondAttribute="centerY" constant="-85" id="fQW-kN-bJq"/>
                                     <constraint firstAttribute="trailing" secondItem="3MZ-MM-gjS" secondAttribute="trailing" constant="25" id="fpR-Jj-wim"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="height" secondItem="lGD-MW-hsj" secondAttribute="height" multiplier="0.15" constant="62.883333333333319" id="nyh-gv-tdZ"/>
                                     <constraint firstAttribute="bottom" secondItem="3MZ-MM-gjS" secondAttribute="bottom" constant="15" id="pbf-Di-hcC"/>
+                                    <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="lGD-MW-hsj" secondAttribute="leading" constant="-84" id="uJb-d9-6cC"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="clipView" destination="3MZ-MM-gjS" id="srL-nN-PQM"/>
@@ -112,60 +158,15 @@
                                     <outlet property="zeroHeightConstraint" destination="fE1-J0-5hL" id="9yl-zM-Rgi"/>
                                 </connections>
                             </view>
-                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
-                                <rect key="frame" x="-85" y="152" width="100" height="110.33333333333331"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUS-LB-Fd3">
-                                        <rect key="frame" x="25" y="5" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="GraphButtonBar"/>
-                                        <connections>
-                                            <action selector="graphButtonActionWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="B7f-IV-olS"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kX6-eK-UBg" userLabel="printButton">
-                                        <rect key="frame" x="28" y="62" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="ExpoButton"/>
-                                        <connections>
-                                            <action selector="exportDialogWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="m3R-B0-Kol"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nSl-70-MxM" userLabel="scoreTypeButton">
-                                        <rect key="frame" x="25" y="125" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="ListButton"/>
-                                        <connections>
-                                            <action selector="listButtonActionWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A4W-Il-Of6"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="aMg-RL-DS0"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="graphContainerView" destination="lGD-MW-hsj" id="YtA-5S-kx7"/>
-                                    <outlet property="graphTypeButton" destination="ZUS-LB-Fd3" id="L0B-s5-jO5"/>
-                                    <outlet property="graphView" destination="Dj1-06-7rI" id="a0m-Gx-mFc"/>
-                                    <outlet property="listButton" destination="nSl-70-MxM" id="U5W-Ie-64w"/>
-                                    <outlet property="printButton" destination="kX6-eK-UBg" id="v65-kU-CWJ"/>
-                                    <outlet property="tapGesture" destination="TQ9-A5-Hvg" id="aCi-tk-tQm"/>
-                                    <outletCollection property="gestureRecognizers" destination="TQ9-A5-Hvg" appends="YES" id="6xV-Jg-eeb"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="KFJ-pZ-cje" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.15" id="3aN-hm-tCb"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-18" id="5HX-bf-Nth"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="top" secondItem="lGD-MW-hsj" secondAttribute="bottom" id="DIR-CT-t4h"/>
                             <constraint firstItem="iIW-Nc-pNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUg-qH-Qns"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="top" secondItem="2f0-CN-u9e" secondAttribute="bottom" constant="1" id="HwF-k0-zvC"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="KlQ-F5-ZuU"/>
-                            <constraint firstItem="KFJ-pZ-cje" firstAttribute="centerY" secondItem="lGD-MW-hsj" secondAttribute="centerY" id="Seg-Ab-5XT"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.43" priority="750" id="TUa-od-DY8">
                                 <variation key="heightClass=compact-widthClass=compact" constant="164.75"/>
                                 <variation key="heightClass=compact-widthClass=regular" constant="186.97999999999999"/>
@@ -174,7 +175,6 @@
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="Zep-kQ-hxe"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="iIW-Nc-pNj" secondAttribute="bottom" id="cUK-R7-fYd"/>
                             <constraint firstItem="lGD-MW-hsj" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="kva-oA-FoM"/>
-                            <constraint firstItem="KFJ-pZ-cje" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="-85" id="mv1-bW-ftq"/>
                             <constraint firstItem="2f0-CN-u9e" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q69-ok-NdQ"/>
                         </constraints>
                         <connections>

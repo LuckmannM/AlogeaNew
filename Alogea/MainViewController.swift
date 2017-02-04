@@ -273,10 +273,10 @@ extension MainViewController: UITextViewDelegate {
         textEntryController = touchWheel.mainButtonController
         
         if eventPickerSelection > 1 { // not Cancel or New event
-// changed from sharedInstance here
+            
+            // start time selector as in : buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
             EventsDataController.sharedInstance().newEvent(ofType: "Diary Entry", withName: eventPickerTitles()[eventPickerSelection], note: text)
 
-//            textEntryController.receiveDiaryText(text: text, eventType: eventPickerTitles()[eventPickerSelection])
         } else if eventPickerSelection == 1 {
             newEventTypeDialog(sourceViewForPad: textView)
             return

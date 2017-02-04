@@ -23,24 +23,6 @@ class EventsDataController: NSObject {
         return moc
     }()
     
-    //  ** DEVELOPMENT only: used in GV Helper init() function only: if no events created ExampleEvents
-    // when this a lazy var errors are logged when creating new diary events: api misuse attempt to serialise store access by non-owning psc; making this a computed variable stops this error
-    var allEventsByDateFRC: NSFetchedResultsController<Event> {
-        let request = NSFetchRequest<Event>(entityName: "Event")
-        // request.sortDescriptors = [NSSortDescriptor(key: "type", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        do {
-            try frc.performFetch()
-        } catch let error as NSError{
-            print("allEventsByDateFRC fetching error")
-        }
-        frc.delegate = self
-        
-        return frc
-    }
-
     lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
@@ -257,7 +239,6 @@ class EventsDataController: NSObject {
         var uniqueName = name
         let decimals = NSCharacterSet.decimalDigits
         
-        //        print("checking \(name) as unique RecordType; existing are \(recordTypeNames)")
         var lowerEventTypeNames = [String]()
         for type in nonScoreEventTypes {
             lowerEventTypeNames.append(type.lowercased())
@@ -274,7 +255,6 @@ class EventsDataController: NSObject {
                 uniqueName = name + " 2"
             }
         }
-        //        print("...returning unique variant \(uniqueName)")
         
         return uniqueName
     }
@@ -286,40 +266,10 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("EventsDataController delegate: change of events detected")
-        
-        /* this creates an ' api misuse - attempt to serialise b y non-owning PSC' error
-        if controller != nonScoreEventsByDateFRC {
-            print("nonScoreEventsByDateFRC has changed content")
-            graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
-        }
-        */
-        reconcileRecordTypesAndEventNames()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        switch controller {
-        case nonScoreEventTypesFRC:
-            print("changes to nonScoreEventTypesFRC")
-        case scoreEventTypesFRC:
-            print("changes to scoreEventTypesFRC")
-        case nonScoreEventsByDateFRC:
-            print("changes to nonScoreEventsByDateFRC")
-        case medicineEventTypesFRC:
-            print("changes to medicineEventTypesFRC")
-        case allEventsByDateFRC:
-            print("changes to allEventsByDateFRC")
-        default:
-            print("changes to other EventsDataController FRC")
 
-        }
-        graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
-        
-//        if controller != nonScoreEventsByDateFRC {
-//            print("nonScoreEventsByDateFRC has changed content")
-//            graphView.setNeedsDisplay() // however, this doesn't need to happen if only non-Score events are changed!
-//        }
+        graphView.setNeedsDisplay()
+
+        reconcileRecordTypesAndEventNames()
     }
     
 }

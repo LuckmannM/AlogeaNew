@@ -83,10 +83,10 @@ class GraphView: UIView {
         
         
         // *** Debug
-        if eventsDataController.allEventsByDateFRC.fetchedObjects?.count == 0 {
-            eventsDataController.createExampleEvents()
-            helper.printSelectedScoreEventDates()
-        }
+//        if eventsDataController.allEventsByDateFRC.fetchedObjects?.count == 0 {
+//            eventsDataController.createExampleEvents()
+//            helper.printSelectedScoreEventDates()
+//        }
         // ***
         
         self.medsView = MedsView(graphView: self) // or add to GraphContainerView or ClipView
