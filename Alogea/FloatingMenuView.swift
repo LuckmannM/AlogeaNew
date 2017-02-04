@@ -16,6 +16,7 @@ class FloatingMenuView: UIView {
     @IBOutlet var graphTypeButton: UIButton!
     @IBOutlet var printButton: UIButton!
     @IBOutlet var listButton: UIButton!
+    @IBOutlet var toggleEventView: UIButton!
     @IBOutlet weak var graphView:GraphView!
     
     let arrowInset: CGFloat = 10
@@ -85,7 +86,33 @@ class FloatingMenuView: UIView {
         }
         graphView.setNeedsDisplay()
     }
+    
+    @IBAction func toggleEventsView(sender: UIButton) {
         
+        let medsView = graphView.medsView
+        
+        if (medsView?.enabled)! {
+            medsView?.enabled = false
+            
+            UIView.animate(withDuration: 0.7, animations: {
+                medsView?.alpha = 0.0
+            }, completion:  { (value: Bool) in
+                self.slideIn()
+            })
+            
+        } else {
+            medsView?.enabled = true
+            medsView?.setNeedsDisplay()
+            
+            UIView.animate(withDuration: 0.7, animations: {
+                medsView?.alpha = 1.0
+            }, completion:  { (value: Bool) in
+                self.slideIn()
+            })
+        }
+    }
+
+    
     func slideIn() {
         
         // let targetHeight = 2/5 * graphContainerView.frame.height

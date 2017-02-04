@@ -74,7 +74,7 @@
                                         </constraints>
                                     </view>
                                     <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFJ-pZ-cje" customClass="FloatingMenuView" customModule="Alogea" customModuleProvider="target">
-                                        <rect key="frame" x="-84" y="101" width="100" height="110.33333333333334"/>
+                                        <rect key="frame" x="-84" y="101" width="100" height="110.33333333333331"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUS-LB-Fd3">
                                                 <rect key="frame" x="25" y="5" width="50" height="50"/>
@@ -100,6 +100,14 @@
                                                     <action selector="listButtonActionWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A4W-Il-Of6"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-4J-Fgg" userLabel="eventViewToggle">
+                                                <rect key="frame" x="25" y="180" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button" image="ListButton"/>
+                                                <connections>
+                                                    <action selector="toggleEventsViewWithSender:" destination="KFJ-pZ-cje" eventType="touchUpInside" id="aJH-oD-wto"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
@@ -113,6 +121,7 @@
                                             <outlet property="listButton" destination="nSl-70-MxM" id="U5W-Ie-64w"/>
                                             <outlet property="printButton" destination="kX6-eK-UBg" id="v65-kU-CWJ"/>
                                             <outlet property="tapGesture" destination="TQ9-A5-Hvg" id="aCi-tk-tQm"/>
+                                            <outlet property="toggleEventView" destination="Ej0-4J-Fgg" id="uGK-at-AqQ"/>
                                             <outletCollection property="gestureRecognizers" destination="TQ9-A5-Hvg" appends="YES" id="6xV-Jg-eeb"/>
                                         </connections>
                                     </view>
