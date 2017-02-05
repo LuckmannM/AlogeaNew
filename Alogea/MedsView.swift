@@ -9,13 +9,13 @@
 import UIKit
 import CoreData
 
-let medBarHeight: CGFloat = 12.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
-let eventDiamondSize: CGFloat = 15.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+let medBarHeight: CGFloat = 14.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+let eventDiamondSize: CGFloat = 17.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
 
 class MedsView: UIView {
     
-    let cornerRadius: CGFloat = 8.0 / 2
-    let fontSize: CGFloat = 11 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+    let cornerRadius: CGFloat = (8.0 / 1) * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+    let fontSize: CGFloat = 12 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
 
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context

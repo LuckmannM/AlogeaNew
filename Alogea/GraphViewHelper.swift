@@ -32,7 +32,7 @@ class GraphViewHelper: NSObject {
     let horizontalLineWidth: CGFloat = 1.0
     
     // MARK: - LineGraph format
-    let lineGraphCircleRadius: CGFloat = 4.0
+    let lineGraphCircleRadius: CGFloat = 3.0
     let lineGraphCircleLineWidth: CGFloat = 3.0
     let lineGraphLineWidth: CGFloat = 2.0
     let lineCircleFillColor = ColorScheme.sharedInstance().darkBlue

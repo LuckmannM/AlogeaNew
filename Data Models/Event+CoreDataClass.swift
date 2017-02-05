@@ -29,9 +29,9 @@ public class Event: NSManagedObject {
             if width < medBarHeight {
                 width = medBarHeight
             }
-            rect = CGRect(x: 0, y: -medBarHeight - 2, width: width, height: medBarHeight)
+            rect = CGRect(x: 0, y: -medBarHeight - 3, width: width, height: medBarHeight)
         } else {
-            rect = CGRect(x: -medBarHeight/2, y: -medBarHeight - 2, width: medBarHeight, height: medBarHeight)
+            rect = CGRect(x: -medBarHeight/2, y: -medBarHeight - 3, width: medBarHeight, height: medBarHeight)
         }
         return rect
     }
