@@ -23,9 +23,9 @@ class TouchWheelView: UIView {
     let π: CGFloat = CGFloat(M_PI)
     let margin: CGFloat = 5.0
     let themeColors = ColorScheme.sharedInstance()
-    let gradientBar = UIImage(named: "GradientBar")
-    let gradientBarHeight = UIImage(named: "GradientBar")!.size.height
-    let circleSegment: CGFloat = 2 * CGFloat(M_PI) / 256
+    let gradientBar = UIImage(named: "GradientBar2")
+    let gradientBarHeight = UIImage(named: "GradientBar2")!.size.height - 1
+    let circleSegment: CGFloat = 2 * CGFloat(M_PI) / 1280 // 256
     
     var delegate: TouchWheelDelegate!
     var mainButtonController: MVButtonController!
@@ -108,18 +108,21 @@ class TouchWheelView: UIView {
         while endAngle >= 0 {
             
             drawArcSegment(startAngle: startAngle, endAngle: endAngle)
-            startAngle = endAngle + circleSegment / 5
-            endAngle = endAngle - circleSegment * 4/5
+            startAngle = endAngle + circleSegment // / 5
+            endAngle = endAngle - circleSegment // * 4/5
         }
         
         drawArcSegment(startAngle: startAngle, endAngle: 2 * π)
         
         context!.restoreGState()
         
-        arrowTriangle.move(to: CGPoint(x: bounds.midX, y: margin))
+        arrowTriangle.move(to: CGPoint(x: bounds.midX - 1, y: margin))
+        arrowTriangle.addLine(to: CGPoint(x: bounds.midX, y: margin))
+        arrowTriangle.addLine(to: CGPoint(x: bounds.midX, y: margin))
         arrowTriangle.addLine(to: CGPoint(x: bounds.midX, y: margin + lineWidth))
+        arrowTriangle.addLine(to: CGPoint(x: bounds.midX - 2, y: margin + lineWidth))
         arrowTriangle.addLine(to: CGPoint(x: bounds.midX - 1/3 * lineWidth, y: margin + lineWidth/2))
-        gradientBar?.getPixelColor(pos: CGPoint(x: 5, y: 0.97 * gradientBarHeight)).setFill()
+        gradientBar?.getPixelColor(pos: CGPoint(x: 5, y: 0.99 * gradientBarHeight)).setFill()
         arrowTriangle.fill()
         
         mainButtonController.sizeViews(rect: innerRect)

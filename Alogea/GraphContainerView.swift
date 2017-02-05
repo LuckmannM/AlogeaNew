@@ -87,6 +87,7 @@ class GraphContainerView: UIView {
         
         print("starting GraphContainer init...")
 
+        backgroundColor = ColorScheme.sharedInstance().duskBlue
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
         addSubview(lowerLimitLabel)

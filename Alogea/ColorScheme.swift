@@ -38,6 +38,8 @@ class ColorScheme {
 
     let barColors:[UIColor] = [medBarGreen, medBarRed, medBarYellow,medBarOrange]
     
+    let duskBlue = UIColor(colorLiteralRed: 0/255, green: 44/255, blue: 81/255, alpha: 1.0)
+    
     class func sharedInstance() -> ColorScheme {
         return colorScheme
     }
