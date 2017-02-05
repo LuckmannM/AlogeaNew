@@ -71,7 +71,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
 
         self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
-        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().darkBlue
+        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().duskBlue
         self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
