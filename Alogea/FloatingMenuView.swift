@@ -91,8 +91,8 @@ class FloatingMenuView: UIView {
         
         let medsView = graphView.medsView
         
-        if (medsView?.enabled)! {
-            medsView?.enabled = false
+        if (UserDefaults.standard.bool(forKey: "MedsViewEnabled")) {
+            UserDefaults.standard.set(false, forKey: "MedsViewEnabled")
             
             UIView.animate(withDuration: 0.7, animations: {
                 medsView?.alpha = 0.0
@@ -101,7 +101,7 @@ class FloatingMenuView: UIView {
             })
             
         } else {
-            medsView?.enabled = true
+            UserDefaults.standard.set(true, forKey: "MedsViewEnabled")
             medsView?.setNeedsDisplay()
             
             UIView.animate(withDuration: 0.7, animations: {

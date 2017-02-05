@@ -92,8 +92,9 @@ class MedsView: UIView {
     var count = 0
     var colorArrayCount = 0
     let numberOfColors = ColorScheme.sharedInstance().barColors.count
-    var enabled = false
-
+//    var enabled: Bool {
+//        return UserDefaults.standard.bool(forKey: "MedsViewEnabled")
+//    }
 
     
     // MARK: - Init
@@ -111,6 +112,7 @@ class MedsView: UIView {
         self.frame = graphView.bounds
         self.backgroundColor = UIColor.clear
         self.alpha = 0
+
         
         self.medController = MedicationController.sharedInstance()
         
@@ -128,10 +130,13 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        if !enabled {
+        if UserDefaults.standard.bool(forKey: "MedsViewEnabled") == false {
             return
+        } else {
+            alpha = 1.0
         }
         
+
         UIColor.white.setStroke()
         
         symbolArrays.removeAll()
