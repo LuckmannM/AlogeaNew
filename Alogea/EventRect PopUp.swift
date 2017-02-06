@@ -27,6 +27,8 @@ class EventPopUp: UIViewController {
     var theDate: String!
     var theNote: String!
     
+    var graphContainer: GraphContainerView!
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -98,7 +100,11 @@ class EventPopUp: UIViewController {
         }
         
         
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: { (void) in
+            
+            self.graphContainer.graphView.medsView.setNeedsDisplay()
+            
+        })
         
     }
     /*

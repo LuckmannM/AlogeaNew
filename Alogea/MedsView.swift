@@ -130,6 +130,7 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
+        print("MedsView draw")
         if UserDefaults.standard.bool(forKey: "MedsViewEnabled") == false {
             return
         } else {

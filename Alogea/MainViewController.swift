@@ -526,7 +526,9 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
         present(popUpView, animated: true, completion: {
             //popUpView.labelTexts(title: title, date: "\(dateFormatter.string(from: date))", text: text)
+            print("return from MainVC PopUp")
             popUpView.labelTexts(eventObject: eventObject)
+            popUpView.graphContainer = self.graphContainerView
         })
         
     }
