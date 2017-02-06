@@ -671,8 +671,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-KE-SIV">
-                                <rect key="frame" x="0.0" y="20" width="150" height="21"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcw-KE-SIV">
+                                <rect key="frame" x="10" y="20" width="108" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="4av-s4-xXh"/>
                                 </constraints>
@@ -680,32 +680,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qEV-UP-kiL">
+                            <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qEV-UP-kiL">
                                 <rect key="frame" x="0.0" y="41" width="150" height="59"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="etN-as-W4v">
-                                <rect key="frame" x="0.0" y="2" width="150" height="22"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="etN-as-W4v">
+                                <rect key="frame" x="5" y="2" width="113" height="22"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ax8-5t-h46" userLabel="DeleteButton">
+                                <rect key="frame" x="120" y="0.0" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="Delete Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="qEV-UP-kiL" firstAttribute="bottom" secondItem="DCu-Vn-i4r" secondAttribute="top" id="11W-jB-k1L"/>
                             <constraint firstItem="Lcw-KE-SIV" firstAttribute="trailing" secondItem="etN-as-W4v" secondAttribute="trailing" id="1PT-VB-7ET"/>
                             <constraint firstItem="etN-as-W4v" firstAttribute="top" secondItem="06W-QU-v9P" secondAttribute="bottom" constant="2" id="2JI-UL-Ncy"/>
-                            <constraint firstAttribute="trailing" secondItem="etN-as-W4v" secondAttribute="trailing" id="9CQ-bq-yxw"/>
-                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="etN-as-W4v" secondAttribute="leading" id="J6P-0f-DKl"/>
+                            <constraint firstAttribute="trailing" secondItem="etN-as-W4v" secondAttribute="trailing" constant="32" id="9CQ-bq-yxw"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="etN-as-W4v" secondAttribute="leading" constant="5" id="J6P-0f-DKl"/>
                             <constraint firstItem="qEV-UP-kiL" firstAttribute="top" secondItem="Lcw-KE-SIV" secondAttribute="bottom" id="PhY-Gd-mLL"/>
-                            <constraint firstItem="etN-as-W4v" firstAttribute="leading" secondItem="Hc1-cJ-XAa" secondAttribute="leading" id="Qyx-db-z59"/>
+                            <constraint firstItem="etN-as-W4v" firstAttribute="leading" secondItem="Hc1-cJ-XAa" secondAttribute="leading" constant="5" id="Qyx-db-z59"/>
                             <constraint firstItem="Lcw-KE-SIV" firstAttribute="top" secondItem="Hc1-cJ-XAa" secondAttribute="top" constant="20" symbolic="YES" id="Zth-6Z-pWq"/>
-                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="qEV-UP-kiL" secondAttribute="leading" id="gW7-4m-Ysr"/>
-                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="trailing" secondItem="qEV-UP-kiL" secondAttribute="trailing" id="iAX-zM-9iU"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="leading" secondItem="qEV-UP-kiL" secondAttribute="leading" constant="10" id="gW7-4m-Ysr"/>
+                            <constraint firstItem="Lcw-KE-SIV" firstAttribute="trailing" secondItem="qEV-UP-kiL" secondAttribute="trailing" constant="-32" id="iAX-zM-9iU"/>
                         </constraints>
                     </view>
                     <value key="contentSizeForViewInPopover" type="size" width="150" height="100"/>
@@ -1383,6 +1388,7 @@
         <image name="2Yellow" width="71" height="25"/>
         <image name="3CircleX" width="71" height="25"/>
         <image name="3Yellow" width="71" height="25"/>
+        <image name="Delete Button" width="32" height="32"/>
         <image name="ExpoButton" width="45" height="53"/>
         <image name="GraphButtonBar" width="52" height="52"/>
         <image name="GraphTitle Blue+" width="43" height="44"/>

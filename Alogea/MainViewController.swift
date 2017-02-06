@@ -516,7 +516,6 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
 
         
         popUpView.modalPresentationStyle = .popover
-        //choserView.preferredContentSize = CGSize(width: 175, height: height)
         
         let popUpController = popUpView.popoverPresentationController
         popUpController!.permittedArrowDirections = .any

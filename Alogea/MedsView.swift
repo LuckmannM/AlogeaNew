@@ -349,7 +349,7 @@ class MedsView: UIView {
             }
         }
     }
-
+    
 }
 
 extension MedsView: NSFetchedResultsControllerDelegate {
