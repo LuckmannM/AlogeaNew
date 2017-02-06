@@ -88,23 +88,74 @@ class EventPopUp: UIViewController {
     @IBAction func deleteEvent(_ sender: UIButton) {
         
         if let event = eventObject as? Event {
-            self.managedObjectContext.delete(event)
+//            self.managedObjectContext.delete(event)
+//            
+//            do {
+//                try  managedObjectContext.save()
+//                print ("event deleted")
+//            }
+//            catch let error as NSError {
+//                print("Error saving in EventRect popover delate function \(error)", terminator: "")
+//            }
+            deleteAlert(object: event)
+        }
+        
+        
+//        self.dismiss(animated: true, completion: { (void) in
+//            
+//            self.graphContainer.graphView.medsView.setNeedsDisplay()
+//            
+//        })
+        
+    }
+    
+    func deleteAlert(object: Event) {
+        
+        let deleteAlert = UIAlertController(title: "Delete event?", message: nil, preferredStyle: .actionSheet)
+        
+        let proceedAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: { (deleteAlert)
+            -> Void in
             
+            self.managedObjectContext.delete(object)
             do {
-                try  managedObjectContext.save()
+                try  self.managedObjectContext.save()
                 print ("event deleted")
             }
             catch let error as NSError {
                 print("Error saving in EventRect popover delate function \(error)", terminator: "")
             }
+
+            self.dismiss(animated: true, completion: { (void) in
+                
+                self.graphContainer.graphView.medsView.setNeedsDisplay()
+                
+            })
+
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (deleteAlert)
+            -> Void in
+            
+            self.dismiss(animated: true, completion: { (void) in
+                
+                self.graphContainer.graphView.medsView.setNeedsDisplay()
+                
+            })
+        })
+        
+        deleteAlert.addAction(proceedAction)
+        deleteAlert.addAction(cancelAction)
+        
+        // iPads have different requirements for AlertControllers!
+        if UIDevice().userInterfaceIdiom == .pad {
+
+            let popUpController = deleteAlert.popoverPresentationController
+            popUpController!.permittedArrowDirections = .any
+            popUpController!.sourceView = self.deleteButton
+            popUpController!.sourceRect = self.deleteButton.bounds
         }
         
-        
-        self.dismiss(animated: true, completion: { (void) in
-            
-            self.graphContainer.graphView.medsView.setNeedsDisplay()
-            
-        })
+        self.present(deleteAlert, animated: true, completion: nil)
         
     }
     /*
