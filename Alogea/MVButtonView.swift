@@ -22,12 +22,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         let label = UILabel()
         label.text = "0.0"
         label.numberOfLines = 0
-        if UIDevice().userInterfaceIdiom == .pad {
-            label.font = UIFont.boldSystemFont(ofSize: 40)
-        } else {
-            label.font = UIFont.boldSystemFont(ofSize: 28)
-        }
-        label.textColor = ColorScheme.sharedInstance().darkBlue
+        label.font = UIFont(name: "AvenirNext-Medium", size: 24 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width)!
+        label.textColor = ColorScheme.sharedInstance().pearlWhite
         label.textAlignment = .center
         label.isHidden = true
         return label
@@ -69,16 +65,12 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        print("starting MV Button View init...")
-
-        print("...ending MV Button View init")
-        
     }
 
     override func draw(_ rect: CGRect) {
 
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
-        colorScheme.seaGreen.setFill()
+        colorScheme.duskBlue.setFill()
         buttonCircle.fill()
         
         colorScheme.darkBlue.setStroke()
@@ -113,7 +105,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         scoreLabel.sizeToFit()
         scoreLabel.frame = CGRect(
             x: frame.width / 2 - scoreLabel.frame.width / 2,
-            y: frame.height / 2 - scoreLabel.frame.height / 3, //frame.height * 0.35,
+            y: frame.height / 2 - scoreLabel.frame.height / 2,
             width: scoreLabel.frame.width,
             height: scoreLabel.frame.height
         )
@@ -158,17 +150,15 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             for (name, _) in MedicationController.sharedInstance().asRequiredMedNames {
                 options.append(name)
             }
-            // options.append(contentsOf: MedicationController.sharedInstance().asRequiredMedNames)
         } else  if pickerView.isEqual(eventTimePicker) {
             options = eventTimePickerOptions
         } else {
             for (name, _) in MedicationController.sharedInstance().asRequiredMedNames {
                 options.append(name)
             }
-            //options = MedicationController.sharedInstance().asRequiredMedNames
         }
         
-        let fontAttribute = UIFont(name: "AvenirNext-Medium", size: 32)! // fronName must be valid or crash
+        let fontAttribute = UIFont(name: "AvenirNext-Medium", size: 24 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width)!
         title.attributedText = NSAttributedString(
             string: options[row],
             attributes: [
@@ -194,8 +184,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             } else {
                 resolvePicker(picker: pickerView)
                 let (name, duration) = MedicationController.sharedInstance().asRequiredMedNames[row - 2]
-                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: nil, duration: duration) // consider setting duration to the duration of med effect; this requires MedicationController function extracting the correct drug and returning the duration
-                
+                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: nil, duration: duration)
             }
         } else if pickerView.isEqual(eventTimePicker) {
             
@@ -238,19 +227,6 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             eventTimePicker.selectRow(1, inComponent: 0, animated: false)
           
             eventTimeTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(eventTimeSelected), userInfo: nil, repeats: false)
-        /*
-        case .medEventPickerType:
-            if (MedicationController.sharedInstance().asRequiredMedsFRC.fetchedObjects?.count ?? 0) > 0 {
-                medicineEventPicker = {
-                    let pV = UIPickerView()
-                    pV.frame = bounds.insetBy(dx: 15, dy: 15)
-                    pV.delegate  = self
-                    pV.dataSource = self
-                    return pV
-                }()
-                addSubview(medicineEventPicker)
-            }
-         */
         }
     
     }
