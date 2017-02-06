@@ -308,19 +308,19 @@ class MedsView: UIView {
     func tap(inLocation: CGPoint) {
         // tapGesture recogniser is property of GraphView
         
-        var title = String()
-        var date = Date()
-        var text = String()
+//        var title = String()
+//        var date = Date()
+//        var text = String()
         var eventRect = CGRect()
         
         for (path,rect) in eventsDictionary {
             if rect.contains(inLocation) {
                 let event = diaryEventsFRC.object(at: path)
-                title = event.name!
-                date = event.date as! Date
-                text = event.note!
+//                title = event.name!
+//                date = event.date as! Date
+//                text = event.note!
                 eventRect = rect
-                graphView.mainViewController.eventTapPopUpView(title: title, date: date, text: text, sourceRect: eventRect)
+                graphView.mainViewController.eventTapPopUpView(eventObject: event, sourceRect: eventRect)
                 return
             }
         }
@@ -328,11 +328,11 @@ class MedsView: UIView {
         for (path,rect) in prnMedsDictionary {
             if rect.contains(inLocation) {
                 let event = prnMedsFRC.object(at: path)
-                title = event.name!
-                date = event.date as! Date
+//                title = event.name!
+//                date = event.date as! Date
                 // text = event.name
                 eventRect = rect
-                graphView.mainViewController.eventTapPopUpView(title: title, date: date, text: text, sourceRect: eventRect)
+                graphView.mainViewController.eventTapPopUpView(eventObject: event, sourceRect: eventRect)
                 return
             }
         }
@@ -340,11 +340,11 @@ class MedsView: UIView {
         for (path,rect) in regMedsDictionary {
             if rect.contains(inLocation) {
                 let event = regMedsFRC.object(at: path)
-                title = event.name!
-                date = event.startDate as! Date
-                text = event.dosesString()
+//                title = event.name!
+//                date = event.startDate as! Date
+//                text = event.dosesString()
                 eventRect = rect
-                graphView.mainViewController.eventTapPopUpView(title: title, date: date, text: text, sourceRect: eventRect)
+                graphView.mainViewController.eventTapPopUpView(eventObject: event, sourceRect: eventRect)
                 return
             }
         }

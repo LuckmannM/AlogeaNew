@@ -196,6 +196,7 @@
 			children = (
 				26E3B8CC1DA177D000D157BB /* MainViewController.swift */,
 				26CD8DFE1DBBED000040E4D4 /* FloatingMenuView.swift */,
+				26BDBD331E44B511007F6917 /* EventRect PopUp.swift */,
 				2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */,
 				2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */,
 				267F78D21DC54214008CC23E /* GraphViews Group */,
@@ -302,7 +303,6 @@
 			children = (
 				26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
-				26BDBD331E44B511007F6917 /* EventRect PopUp.swift */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,

@@ -504,7 +504,7 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         present(choserView, animated: true, completion: nil)
     }
     
-    func eventTapPopUpView(title: String, date: Date, text: String, sourceRect: CGRect) {
+    func eventTapPopUpView(eventObject: AnyObject, sourceRect: CGRect) {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let popUpView = storyBoard.instantiateViewController(withIdentifier: "EventRectPopUp") as! EventPopUp
@@ -525,7 +525,8 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
         present(popUpView, animated: true, completion: {
-            popUpView.labelTexts(title: title, date: "\(dateFormatter.string(from: date))", text: text)
+            //popUpView.labelTexts(title: title, date: "\(dateFormatter.string(from: date))", text: text)
+            popUpView.labelTexts(eventObject: eventObject)
         })
         
     }
