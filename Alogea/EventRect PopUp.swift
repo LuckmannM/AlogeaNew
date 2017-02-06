@@ -15,6 +15,7 @@ class EventPopUp: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var deleteButton: UIButton!
     
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
@@ -51,6 +52,9 @@ class EventPopUp: UIViewController {
         theNote = "" // if prnMedEvent event.note maybe nil
         
         if let event = eventObject as? Event {
+            deleteButton.isHidden = false
+            deleteButton.isEnabled = true
+            
             theTitle = event.name!
             theDate = dateFormatter.string(from: event.date as! Date)
             if event.note != nil {
@@ -58,6 +62,8 @@ class EventPopUp: UIViewController {
             }
             
         } else {
+            // regular meds should be deleted on DrugLists VC only
+            
             let medEvent = eventObject as! DrugEpisode
             theTitle = medEvent.name!
             theDate = dateFormatter.string(from: medEvent.startDate as! Date)
@@ -81,18 +87,16 @@ class EventPopUp: UIViewController {
         
         if let event = eventObject as? Event {
             self.managedObjectContext.delete(event)
-        } else {
-            let medEvent = eventObject as! DrugEpisode
-            self.managedObjectContext.delete(medEvent)
+            
+            do {
+                try  managedObjectContext.save()
+                print ("event deleted")
+            }
+            catch let error as NSError {
+                print("Error saving in EventRect popover delate function \(error)", terminator: "")
+            }
         }
         
-        do {
-            try  managedObjectContext.save()
-            print ("event deleted")
-        }
-        catch let error as NSError {
-            print("Error saving in EventRect popover delate function \(error)", terminator: "")
-        }
         
         self.dismiss(animated: true, completion: nil)
         
