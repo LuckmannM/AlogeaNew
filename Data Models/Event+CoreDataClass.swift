@@ -38,7 +38,7 @@ public class Event: NSManagedObject {
     
     func nonScoreEventRect(scale: TimeInterval) -> CGRect {
         
-        return CGRect(x: -medBarHeight/2, y: -eventDiamondSize - 2, width: eventDiamondSize, height: eventDiamondSize)
+        return CGRect(x: -medBarHeight/2, y: -eventDiamondSize - 2, width: eventDiamondSize * 4/5, height: eventDiamondSize)
 
     }
 
