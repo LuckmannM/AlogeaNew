@@ -24,7 +24,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     weak var touchWheel: TouchWheelView!
     weak var mainViewController: MainViewController!
     
-    var temporaryVAScore: Double?
+//    var temporaryVAScore: Double?
     
     init(viewRect: CGRect, touchWheel: TouchWheelView, mainViewController: MainViewController) {
         
@@ -50,20 +50,20 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         buttonView.displayScore(score: score)
         
         if ended {
-            temporaryVAScore = score
-            buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
-            
+//            temporaryVAScore = score
+//            buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
             buttonView.hideScore()
+            eventsDataController.newEvent(ofType: "Score Event", withName: GraphViewHelper.sharedInstance().selectedScore ,withDate: Date(), vas: score, buttonView: buttonView)
         }
     }
     
-    func finaliseScoreEvent(amendTime: TimeInterval) {
-        
-        let eventDate = Date().addingTimeInterval(-amendTime)
-        eventsDataController.newEvent(ofType: "Score Event", withName: GraphViewHelper.sharedInstance().selectedScore ,withDate: eventDate, vas: temporaryVAScore)
-        temporaryVAScore = nil
-        
-    }
+//    func finaliseScoreEvent(amendTime: TimeInterval) {
+//        
+//        let eventDate = Date().addingTimeInterval(-amendTime)
+//        eventsDataController.newEvent(ofType: "Score Event", withName: GraphViewHelper.sharedInstance().selectedScore ,withDate: eventDate, vas: temporaryVAScore)
+//        temporaryVAScore = nil
+//        
+//    }
     
     func mvButtonTapped(sender: MVButton) {
         buttonView.showPicker(pickerType: ButtonViewPickers.eventSelectionPickerType)

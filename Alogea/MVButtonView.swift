@@ -184,7 +184,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             } else {
                 resolvePicker(picker: pickerView)
                 let (name, duration) = MedicationController.sharedInstance().asRequiredMedNames[row - 2]
-                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: nil, duration: duration)
+                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: nil, duration: duration, buttonView: self)
             }
         } else if pickerView.isEqual(eventTimePicker) {
             
@@ -246,7 +246,9 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         let time = eventTimeIntervals[eventTimePicker.selectedRow(inComponent: 0)]
         resolvePicker(picker: self.eventTimePicker)
         if eventTimePicker.selectedRow(inComponent: 0) != 0 {
-            controller.finaliseScoreEvent(amendTime: time )
+            eventsDataController.save(withTimeAmendment: -time)
+        } else {
+            eventsDataController.deleteCurrentEvent()
         }
         
     }
