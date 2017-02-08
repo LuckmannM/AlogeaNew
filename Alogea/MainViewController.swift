@@ -272,12 +272,7 @@ extension MainViewController: UITextViewDelegate {
         let text = textView.text ?? ""
         textEntryController = touchWheel.mainButtonController
         
-        if eventPickerSelection > 1 { // not Cancel or New event
-            
-            // start time selector as in : buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
-            EventsDataController.sharedInstance().newEvent(ofType: "Diary Entry", withName: eventPickerTitles()[eventPickerSelection], note: text)
-
-        } else if eventPickerSelection == 1 {
+        if eventPickerSelection == 1 {
             newEventTypeDialog(sourceViewForPad: textView)
             return
         }
@@ -294,6 +289,12 @@ extension MainViewController: UITextViewDelegate {
                         self.eventPicker.removeFromSuperview()
                         self.textView.removeFromSuperview()
                         self.textEntryWindow.removeFromSuperview()
+                        if self.eventPickerSelection > 1 { // not Cancel or New event
+                            
+                            // start time selector as in : buttonView.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
+                            self.eventsDataController.newEvent(ofType: "Diary Entry", withName: self.eventPickerTitles()[self.eventPickerSelection], note: text, buttonView: self.textEntryController.buttonView)
+                            
+                        }
                 })
         })
         

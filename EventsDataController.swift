@@ -23,71 +23,64 @@ class EventsDataController: NSObject {
         return moc
     }()
     
-    lazy var nonScoreEventTypesFRC: NSFetchedResultsController<Event> = {
+    var nonScoreEventTypesFRC: NSFetchedResultsController<Event>  = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("nonScoreEventTypesFRC fetching error \(error)")
         }
-        frc.delegate = self
-        
         return frc
     }()
     
-    lazy var nonScoreEventsByDateFRC: NSFetchedResultsController<Event> = {
+    var nonScoreEventsByDateFRC: NSFetchedResultsController<Event>  = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false), NSSortDescriptor(key: "name", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "date", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "date", cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("nonScoreEventsByDateFRC fetching error: \(error)")
         }
-        frc.delegate = self
         return frc
     }()
     
-    lazy var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
+     var scoreEventTypesFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: [scoreEvent])
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
         request.predicate = anyScorePredicate
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("eventTypesFRC fetching error \(error)")
         }
-        frc.delegate = self
-        
         return frc
     }()
     
-    lazy var medicineEventTypesFRC: NSFetchedResultsController<Event> = {
+    var medicineEventTypesFRC: NSFetchedResultsController<Event> = {
         
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("medicineEventTypesFRC fetching error \(error)")
         }
-        frc.delegate = self
-        
         return frc
     }()
     
@@ -109,6 +102,8 @@ class EventsDataController: NSObject {
     }
     
     weak var graphView: GraphView!
+    weak var mvButtonController: MVButtonController!
+    var currentlyProcessedEvent: Event?
     
     // MARK: - methods
     
@@ -118,6 +113,12 @@ class EventsDataController: NSObject {
     
     override init() {
         super.init()
+        
+        nonScoreEventsByDateFRC.delegate = self
+        nonScoreEventTypesFRC.delegate = self
+        scoreEventTypesFRC.delegate = self
+        medicineEventTypesFRC.delegate = self
+        
         
         reconcileRecordTypesAndEventNames()
         
@@ -149,40 +150,62 @@ class EventsDataController: NSObject {
     }
     
     
-    func newEvent(ofType: String, withName: String? = nil, withDate: Date = Date(), vas: Double? = nil, note: String? = nil, duration: Double? = nil) {
+    func newEvent(ofType: String, withName: String? = nil, withDate: Date = Date(), vas: Double? = nil, note: String? = nil, duration: Double? = nil, buttonView: MVButtonView? = nil) {
         
-        let newEvent = NSEntityDescription.insertNewObject(forEntityName: "Event", into: managedObjectContext) as! Event
+        currentlyProcessedEvent = NSEntityDescription.insertNewObject(forEntityName: "Event", into: managedObjectContext) as? Event
+        guard currentlyProcessedEvent != nil else {
+                print ("error in EventsDatController newEvent function")
+                return
+        }
         
-        newEvent.type = ofType
-        newEvent.date = withDate as NSDate?
+        currentlyProcessedEvent!.type = ofType
+        currentlyProcessedEvent!.date = withDate as NSDate?
         if withName != nil {
-            newEvent.name = withName
+            currentlyProcessedEvent!.name = withName
         }
         if vas != nil {
-            newEvent.vas = vas!
+            currentlyProcessedEvent!.vas = vas!
         } else {
-            newEvent.vas = -1
+            currentlyProcessedEvent!.vas = -1
         }
         if note != nil {
-            newEvent.note = note
+            currentlyProcessedEvent!.note = note
         }
         if duration != nil {
-            newEvent.duration = duration!
+            currentlyProcessedEvent!.duration = duration!
         }
         
-        save()
-        print("saved a new event \(newEvent)")
+        // predating option before saving
+        if buttonView != nil {
+            buttonView!.showPicker(pickerType: ButtonViewPickers.eventTimePickerType)
+        }
     }
     
-    func save() {
+    func save(withTimeAmendment: TimeInterval? = nil) {
+        
+        if withTimeAmendment != nil {
+            currentlyProcessedEvent?.date = currentlyProcessedEvent?.date?.addingTimeInterval(withTimeAmendment!)
+        }
         
         if managedObjectContext.hasChanges {
             do {
+                currentlyProcessedEvent = nil
                 try managedObjectContext.save()
             } catch let error as NSError {
                 print("Error saving \(error)")
             }
         }
+        
+    }
+    
+    func deleteCurrentEvent() {
+        guard currentlyProcessedEvent != nil else {
+            print("no currentlyProcessEvent to delelte in EvenbtsDataController")
+            return
+        }
+        
+        managedObjectContext.delete(currentlyProcessedEvent!)
+        save()
     }
     
     func fetchSpecificEvents(name: String, type: String) -> NSFetchedResultsController<Event> {
@@ -266,10 +289,27 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("an eventsDataController changed content...")
+        
+        switch controller {
+        case nonScoreEventsByDateFRC:
+            print("...nonScoreEventsByDateFRC")
+        case scoreEventTypesFRC:
+            print("...scoreEventTypesFRC")
+        case nonScoreEventTypesFRC:
+            print("...nonScoreEventTypesFRC")
+        case medicineEventTypesFRC:
+            print("...medicineEventTypesFRC")
+        default:
+            print("...other FRC")
+        }
+        
+        if currentlyProcessedEvent == nil {
+            // do not draw pending events prior to saving. This would happen during pickerView showing predating options in mvButton
+            graphView.setNeedsDisplay()
+            reconcileRecordTypesAndEventNames()
+        }
 
-        graphView.setNeedsDisplay()
-
-        reconcileRecordTypesAndEventNames()
     }
     
 }
