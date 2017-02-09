@@ -10,7 +10,7 @@ import UIKit
 
 let labelFontName = "AvenirNext-Regular"
 
-class GraphContainerView: UIView {
+class GraphContainerView: UIView, UIGestureRecognizerDelegate {
 
     
     @IBOutlet weak var graphView: GraphView!
@@ -19,6 +19,8 @@ class GraphContainerView: UIView {
     var eventsController = EventsDataController.sharedInstance()
     var recordTypesController = RecordTypesController.sharedInstance()
     let colorScheme = ColorScheme.sharedInstance()
+    var mainViewController: MainViewController!
+    var labelTap: UITapGestureRecognizer!
     
     var upperLabel : UILabel = {
         let label = UILabel()
@@ -27,6 +29,7 @@ class GraphContainerView: UIView {
         label.textColor = ColorScheme.sharedInstance().lightGray
         label.font =  UIFont(name: labelFontName, size: 18)
         label.sizeToFit()
+        label.isUserInteractionEnabled = true
         return label
     }()
 
@@ -97,6 +100,10 @@ class GraphContainerView: UIView {
         
         rotationObserver.addObserver(self, selector: #selector(deviceRotation(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
         
+        labelTap = UITapGestureRecognizer(target: self, action: #selector(graphLabelTap))
+        labelTap.delegate = self
+        upperLabel.addGestureRecognizer(labelTap)
+        
         print("... eding GraphContainer init")
     }
 
@@ -153,6 +160,14 @@ class GraphContainerView: UIView {
     func deviceRotation(notification: Notification) {
         
         reloadAllViews()
+    }
+    
+    func graphLabelTap() {
+//        print("label tapped")
+//        print("label frame = \(upperLabel.frame)")
+//        print("gContView frame = \(self.frame)")
+//        let rect = upperLabel.frame.offsetBy(dx: 0, dy: 2)
+        mainViewController.scoreChangeAction(fromRect: upperLabel.frame, fromView: upperLabel)
     }
     
     func reloadAllViews() {

@@ -9,8 +9,8 @@
 import UIKit
 import CoreData
 
-let medBarHeight: CGFloat = 22.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
-let eventDiamondSize: CGFloat = 25.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+let medBarHeight: CGFloat = 20.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+let eventDiamondSize: CGFloat = 22.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
 
 class MedsView: UIView {
     
@@ -26,64 +26,54 @@ class MedsView: UIView {
     var helper: GraphViewHelper!
     var medController: MedicationController!
     
-    var regMedsFRC: NSFetchedResultsController<DrugEpisode> {
+    var regMedsFRC: NSFetchedResultsController<DrugEpisode> = {
         
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         let regPredicate = NSPredicate(format: "regularly == true")
         
         request.predicate = regPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("prnMedsFRC fetching error \(error)")
         }
-        frc.delegate = self
-        
-        /* DEBUG
-         for object in frc.fetchedObjects! {
-         print("prn drug isCurrent is \(object.isCurrent)")
-         print("prn drug endDate is \(object.endDate)")
-         }
-         */
-        
         return frc
-    }
+    }()
     
-    var prnMedsFRC: NSFetchedResultsController<Event> {
+    var prnMedsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("nonScoreEventTypesFRC fetching error \(error)")
         }
-        frc.delegate = self
         
         return frc
-    }
+    }()
     
-    var diaryEventsFRC: NSFetchedResultsController<Event> {
+    var diaryEventsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [nonScoreEvent])
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "name", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "name", cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             print("nonScoreEventsByDateFRC fetching error: \(error)")
         }
-        frc.delegate = self
+
         return frc
-    }
+    }()
     
     var symbolArrays = [[CGRect]]()
     var regMedsDictionary = [(objectPath: IndexPath, eventRect: CGRect)]()
@@ -92,15 +82,13 @@ class MedsView: UIView {
     var count = 0
     var colorArrayCount = 0
     let numberOfColors = ColorScheme.sharedInstance().barColors.count
-//    var enabled: Bool {
-//        return UserDefaults.standard.bool(forKey: "MedsViewEnabled")
-//    }
-
     
     // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        
     }
     
     convenience init(graphView: GraphView) {
@@ -116,7 +104,9 @@ class MedsView: UIView {
         
         self.medController = MedicationController.sharedInstance()
         
-//        self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(sender:)))
+        regMedsFRC.delegate = self
+        prnMedsFRC.delegate = self
+        diaryEventsFRC.delegate = self
         
         print("...init MedsView end")
 
@@ -130,7 +120,6 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        print("MedsView draw")
         if UserDefaults.standard.bool(forKey: "MedsViewEnabled") == false {
             return
         } else {
@@ -140,6 +129,7 @@ class MedsView: UIView {
 
         UIColor.white.setStroke()
         
+        // symbol Arrays contains all med and eventRects for use in touch events
         symbolArrays.removeAll()
         regMedsDictionary.removeAll()
         prnMedsDictionary.removeAll()
@@ -153,7 +143,6 @@ class MedsView: UIView {
         
         drawNonScoreEvents(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
         
-        // symbol Arrays contains all med and eventRects for use in touch events
         
     }
     
@@ -309,17 +298,11 @@ class MedsView: UIView {
     func tap(inLocation: CGPoint) {
         // tapGesture recogniser is property of GraphView
         
-//        var title = String()
-//        var date = Date()
-//        var text = String()
         var eventRect = CGRect()
         
         for (path,rect) in eventsDictionary {
             if rect.contains(inLocation) {
                 let event = diaryEventsFRC.object(at: path)
-//                title = event.name!
-//                date = event.date as! Date
-//                text = event.note!
                 eventRect = rect
                 graphView.mainViewController.eventTapPopUpView(eventObject: event, sourceRect: eventRect)
                 return
@@ -329,9 +312,6 @@ class MedsView: UIView {
         for (path,rect) in prnMedsDictionary {
             if rect.contains(inLocation) {
                 let event = prnMedsFRC.object(at: path)
-//                title = event.name!
-//                date = event.date as! Date
-                // text = event.name
                 eventRect = rect
                 graphView.mainViewController.eventTapPopUpView(eventObject: event, sourceRect: eventRect)
                 return
@@ -341,9 +321,6 @@ class MedsView: UIView {
         for (path,rect) in regMedsDictionary {
             if rect.contains(inLocation) {
                 let event = regMedsFRC.object(at: path)
-//                title = event.name!
-//                date = event.startDate as! Date
-//                text = event.dosesString()
                 eventRect = rect
                 graphView.mainViewController.eventTapPopUpView(eventObject: event, sourceRect: eventRect)
                 return

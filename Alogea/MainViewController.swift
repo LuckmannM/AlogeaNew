@@ -65,6 +65,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        graphContainerView.mainViewController  = self
         /*
         Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
         it is therefore not possible - like with iPhone - to add a 0 height IB constraint for touchWheel for landScape orientation this (zeroHeightConstraint) needs to be manually toggled with touchWheel aspectRationConstraint depending on orientation if launched in ls orientation (not in portrait), the buttonView is not resized properly when orientation is changed to portrait this requires a manual call to mainButtonController.sizeViews AFTER the rotation is complete doing this in the viewWillTransition function doesn't work as the rotated frame sizes of touchWheel are only available after rotation is complete at which time viewDidLayoutSubviews is called; in this function the manual call to sizeViews is done with the then updated touchWheel innerRect parameters but should only be called once; if calling initially after launch the inits aren't all complete resulting in crash due to nil value
@@ -482,9 +483,32 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
 extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate {
 
-    @IBAction func listButtonAction(sender: UIButton) {
+//    @IBAction func listButtonAction(sender: UIButton) {
+//        
+//        floatingMenuView.slideIn()
+//        
+//        var height: CGFloat = CGFloat((RecordTypesController.sharedInstance().recordTypeNames.count + 1) * 44)
+//        if height > 220 { height = 220 }
+//        
+//        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//        let choserView = storyBoard.instantiateViewController(withIdentifier: "GraphViewChoser") as! GraphScoreChoser
+//        
+//        choserView.modalPresentationStyle = .popover
+//        choserView.preferredContentSize = CGSize(width: 175, height: height)
+//        
+//        let popUpController = choserView.popoverPresentationController
+//        popUpController!.permittedArrowDirections = .any
+//        popUpController!.sourceView = graphContainerView.upperLabel
+//        popUpController?.sourceRect = graphContainerView.upperLabel.frame
+//        popUpController!.delegate = self
+//        
+//        // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
+//        present(choserView, animated: true, completion: nil)
+//    }
+    
+    func scoreChangeAction(fromRect: CGRect, fromView: UILabel) {
         
-        floatingMenuView.slideIn()
+        // floatingMenuView.slideIn()
         
         var height: CGFloat = CGFloat((RecordTypesController.sharedInstance().recordTypeNames.count + 1) * 44)
         if height > 220 { height = 220 }
@@ -494,11 +518,14 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         choserView.modalPresentationStyle = .popover
         choserView.preferredContentSize = CGSize(width: 175, height: height)
-        
+
+        print("showing popUp from rect = \(fromRect)")
+        print("MainVC.graphContV frame = \(graphContainerView.frame)")
+
         let popUpController = choserView.popoverPresentationController
-        popUpController!.permittedArrowDirections = .any
-        popUpController!.sourceView = graphContainerView.upperLabel
-        popUpController?.sourceRect = graphContainerView.upperLabel.frame
+        popUpController!.permittedArrowDirections = .up
+        popUpController!.sourceView = fromView
+        popUpController?.sourceRect = fromRect
         popUpController!.delegate = self
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
