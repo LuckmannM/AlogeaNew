@@ -15,8 +15,8 @@ let eventDiamondSize: CGFloat = 22.0 * (UIApplication.shared.delegate as! AppDel
 class MedsView: UIView {
     
     let cornerRadius: CGFloat = (8.0 / 1) * (medBarHeight / 14.0) * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
-    let fontSize: CGFloat = 12 * (medBarHeight / 14.0) * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
-
+    let fontSize: CGFloat = 12 * (medBarHeight / 14.0)
+    
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
         return moc
@@ -168,6 +168,8 @@ class MedsView: UIView {
             regMedsDictionary.append((indexPath, medRect))
             allRectsArray.append(medRect)
             
+            let rightShift = 5 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+            let downShift = -1 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
             
             let medRectPath = UIBezierPath(roundedRect: medRect, cornerRadius: cornerRadius)
             medRectPath.lineWidth = 1.0
@@ -175,7 +177,7 @@ class MedsView: UIView {
             medRectPath.fill()
             medRectPath.stroke()
             let medName = medicine.name as NSString?
-            medName?.draw(in: medRect.offsetBy(dx: 5, dy: -1), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+            medName?.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
             count += 1
             colorArrayCount += 1
             if colorArrayCount == numberOfColors {
@@ -227,7 +229,10 @@ class MedsView: UIView {
                 } else {
                     medName = medEvent.name! as NSString
                 }
-                medName.draw(in: medRect.offsetBy(dx: 3, dy: -1), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+                let rightShift = 3 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                let downShift = -1 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                
+                medName.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
                 
                 eventCount += 1
             }
@@ -276,8 +281,11 @@ class MedsView: UIView {
                 diamondPath.fill()
                 diamondPath.stroke()
                 
+                let rightShift = 4 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                let downShift = 2 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                
                 let eventName = (event.name as NSString?)?.substring(to: 1)
-                eventName?.draw(in: eventRect.offsetBy(dx: 4, dy: 2), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize - 4)!,NSForegroundColorAttributeName: UIColor.white])
+                eventName?.draw(in: eventRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize - 4)!,NSForegroundColorAttributeName: UIColor.white])
                 
                 eventCount += 1
             }

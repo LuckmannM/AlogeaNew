@@ -15,7 +15,6 @@ class FloatingMenuView: UIView {
     @IBOutlet var tapGesture: UITapGestureRecognizer!
     @IBOutlet var graphTypeButton: UIButton!
     @IBOutlet var printButton: UIButton!
-//    @IBOutlet var listButton: UIButton!
     @IBOutlet var toggleEventView: UIButton!
     @IBOutlet weak var graphView:GraphView!
     
@@ -50,7 +49,7 @@ class FloatingMenuView: UIView {
     
     @IBAction func slideOut(tap: UITapGestureRecognizer) {
         
-        let targetHeight = 5/6 * graphContainerView.frame.height
+        let targetHeight = 3/4 * graphContainerView.frame.height
         let targetY = graphContainerView.bounds.midY - targetHeight/2
         
         ibViewFrame = frame
@@ -76,11 +75,13 @@ class FloatingMenuView: UIView {
     @IBAction func graphButtonAction(sender: UIButton) {
         
         if graphTypeButton.tag == 0 {
-            graphView.graphIsLineType = false
+            //graphView.graphIsLineType = false
+            UserDefaults.standard.set(true, forKey: "GraphIsLine")
             graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
             graphTypeButton.tag = 1
         } else {
-            graphView.graphIsLineType = true
+            //graphView.graphIsLineType = true
+            UserDefaults.standard.set(false, forKey: "GraphIsLine")
             graphTypeButton.tag = 0
             graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
         }
@@ -115,16 +116,12 @@ class FloatingMenuView: UIView {
     
     func slideIn() {
         
-        // let targetHeight = 2/5 * graphContainerView.frame.height
-        // let targetY = graphContainerView.bounds.midY - targetHeight/2
-        
         UIView.animate(withDuration: 0.5, animations: {
             self.frame = self.frame.offsetBy(dx: -self.stickOutWidth, dy: 0)
             self.alpha = 0.5
             
             }, completion: { (value: Bool) in
                 UIView.animate(withDuration: 0.2, animations: {
-                    // self.frame = CGRect(x: self.stickOutWidth - self.frame.width, y: targetY, width: self.frame.width, height: targetHeight)
                     self.frame = self.ibViewFrame
                     self.graphTypeButton.isEnabled = false
 
@@ -134,7 +131,6 @@ class FloatingMenuView: UIView {
                 self.tapGesture.addTarget(self, action: #selector(self.slideOut))
                 self.printButton.isEnabled = false
                 self.graphTypeButton.isEnabled = false
-//                self.listButton.isEnabled = false
         })
         
     }

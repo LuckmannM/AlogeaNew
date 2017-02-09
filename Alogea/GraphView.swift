@@ -48,7 +48,9 @@ class GraphView: UIView {
     var maxDisplayDate: Date!
     var refreshPointsFlag: Bool = true
     
-    var graphIsLineType: Bool = true
+    var graphIsLineType: Bool {
+        return UserDefaults.standard.bool(forKey: "GraphIsLine")
+    }
     
     var timeLinePoints: [CGPoint]!
     var timeLineLabels = [UILabel]() // number is calculated and adapted upwards (only) in drawTimeLine() function
@@ -206,28 +208,39 @@ class GraphView: UIView {
     
     func drawBarGraph() {
         
-        let barWidth: CGFloat = 5.0
-        let cornerRadius: CGFloat = 8.0 / 6
-        
         guard graphPoints.count > 0  else { return }
         
         let barsPath = UIBezierPath()
+        let barWidth: CGFloat = 5.0
+        let cornerRadius: CGFloat = 8.0 / 6
+        var highestGraphPoint = frame.maxY
         
+        let context = UIGraphicsGetCurrentContext()
         for point in graphPoints {
             let columnRect = CGRect(x: point.x - barWidth / 2,
                                     y: point.y,
                                     width: barWidth ,
                                     height:bounds.maxY - helper.timeLineSpace() - point.y
             )
+            if columnRect.origin.y < highestGraphPoint {
+                highestGraphPoint = columnRect.origin.y
+            }
             let columnPath = UIBezierPath(roundedRect: columnRect, cornerRadius: cornerRadius)
             barsPath.append(columnPath)
         }
         
+        context!.saveGState()
+        (barsPath.copy() as AnyObject).addClip()
+        let gradientStartPoint = CGPoint(x: 0, y: highestGraphPoint)
+        let gradientEndPoint = CGPoint(x: 0, y: bounds.maxY - helper.timeLineSpace())
+        context!.drawLinearGradient(helper.barGraphGradient(), start: gradientStartPoint, end: gradientEndPoint, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+        context!.restoreGState()
+
         barsPath.lineWidth = 1.0
         UIColor.white.setStroke()
         barsPath.stroke()
-        colorScheme.lightGray.setFill()
-        barsPath.fill()
+//        colorScheme.lightGray.setFill()
+//        barsPath.fill()
         
     }
     

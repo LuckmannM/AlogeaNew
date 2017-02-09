@@ -346,7 +346,6 @@ extension MainViewController: UITextViewDelegate {
     
     @IBAction func exportDialog(sender: UIButton) {
         
-        //floatingMenuView.isHidden = true // hide floatingView so it's not visible in the 'screenShot' pdf image
         floatingMenuView.slideIn()
         // in iOS 10 on actual device (but not on simulator) the output from pdfRendering of this view is faulty
         // let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView.clipView, name: "ScoreGraph")
@@ -483,29 +482,6 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
 extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate {
 
-//    @IBAction func listButtonAction(sender: UIButton) {
-//        
-//        floatingMenuView.slideIn()
-//        
-//        var height: CGFloat = CGFloat((RecordTypesController.sharedInstance().recordTypeNames.count + 1) * 44)
-//        if height > 220 { height = 220 }
-//        
-//        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//        let choserView = storyBoard.instantiateViewController(withIdentifier: "GraphViewChoser") as! GraphScoreChoser
-//        
-//        choserView.modalPresentationStyle = .popover
-//        choserView.preferredContentSize = CGSize(width: 175, height: height)
-//        
-//        let popUpController = choserView.popoverPresentationController
-//        popUpController!.permittedArrowDirections = .any
-//        popUpController!.sourceView = graphContainerView.upperLabel
-//        popUpController?.sourceRect = graphContainerView.upperLabel.frame
-//        popUpController!.delegate = self
-//        
-//        // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
-//        present(choserView, animated: true, completion: nil)
-//    }
-    
     func scoreChangeAction(fromRect: CGRect, fromView: UILabel) {
         
         // floatingMenuView.slideIn()
@@ -518,9 +494,6 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         choserView.modalPresentationStyle = .popover
         choserView.preferredContentSize = CGSize(width: 175, height: height)
-
-        print("showing popUp from rect = \(fromRect)")
-        print("MainVC.graphContV frame = \(graphContainerView.frame)")
 
         let popUpController = choserView.popoverPresentationController
         popUpController!.permittedArrowDirections = .up
@@ -553,8 +526,6 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
         present(popUpView, animated: true, completion: {
-            //popUpView.labelTexts(title: title, date: "\(dateFormatter.string(from: date))", text: text)
-            print("return from MainVC PopUp")
             popUpView.labelTexts(eventObject: eventObject)
             popUpView.graphContainer = self.graphContainerView
         })

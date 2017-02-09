@@ -153,21 +153,28 @@ class GraphViewHelper: NSObject {
     func lineGraphGradient() -> CGGradient {
         
         let colourSpace = CGColorSpaceCreateDeviceRGB()
-        let gradientStartColour = colorScheme.lightGray.withAlphaComponent(0.8)
+        let gradientStartColour = colorScheme.pearlWhite.withAlphaComponent(1.0)
         let gradientEndColour = colorScheme.lightGray.withAlphaComponent(0.0)
         let graphGradientColours = [gradientStartColour.cgColor, gradientEndColour.cgColor]
         let graphColourLocations:[CGFloat] = [0.0, 1.0]
         
         return CGGradient(colorsSpace: colourSpace, colors: graphGradientColours as CFArray, locations: graphColourLocations)!
-        
     }
     
     func barGraphGradient() -> CGGradient {
         
+//        let colourSpace = CGColorSpaceCreateDeviceRGB()
+//        let colourLocationsForColumns: [CGFloat] = [0.2,0.5,0.8,1.0]
+//        let coloursForColumns = [colorScheme.gradientRed.cgColor, colorScheme.gradientRed.cgColor, colorScheme.gradientYellow.cgColor,colorScheme.pearlWhite.cgColor]
+//        return CGGradient(colorsSpace: colourSpace, colors: coloursForColumns as CFArray, locations: colourLocationsForColumns)!
+        
         let colourSpace = CGColorSpaceCreateDeviceRGB()
-        let colourLocationsForColumns: [CGFloat] = [0.2,0.5,0.8,1.0]
-        let coloursForColumns = [UIColor.red.cgColor, UIColor.orange.cgColor, UIColor.yellow.cgColor,UIColor.green.cgColor]
-        return CGGradient(colorsSpace: colourSpace, colors: coloursForColumns as CFArray, locations: colourLocationsForColumns)!
+        let gradientStartColour = colorScheme.pearlWhite.withAlphaComponent(1.0)
+        let gradientEndColour = colorScheme.lightGray.withAlphaComponent(0.3)
+        let graphGradientColours = [gradientStartColour.cgColor, gradientEndColour.cgColor]
+        let graphColourLocations:[CGFloat] = [0.0, 1.0]
+        
+        return CGGradient(colorsSpace: colourSpace, colors: graphGradientColours as CFArray, locations: graphColourLocations)!
     }
     
     func timeLineSpace() -> CGFloat {
