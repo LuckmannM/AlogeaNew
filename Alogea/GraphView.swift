@@ -48,8 +48,8 @@ class GraphView: UIView {
     var maxDisplayDate: Date!
     var refreshPointsFlag: Bool = true
     
-    var graphIsLineType: Bool {
-        return UserDefaults.standard.bool(forKey: "GraphIsLine")
+    var graphIsBarType: Bool {
+        return UserDefaults.standard.bool(forKey: "GraphIsBar")
     }
     
     var timeLinePoints: [CGPoint]!
@@ -119,10 +119,10 @@ class GraphView: UIView {
             return
         }
         
-        if  graphIsLineType {
-            drawLineGraph()
-        } else {
+        if  graphIsBarType {
             drawBarGraph()
+        } else {
+            drawLineGraph()
         }
         medsView.frame = bounds
         medsView.setNeedsDisplay()
