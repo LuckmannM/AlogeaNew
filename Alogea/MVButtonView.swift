@@ -42,6 +42,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var eventTimePickerOptions = ["Cancel", "Now", "30 minutes ago","1 hour ago", "2 hours ago", "4 hours ago"]
     var eventTimeIntervals: [TimeInterval] = [0,0,30*60,60*60,120*60,240*60]
     
+    var buttonColor: UIColor! // also used in TouchWheel to exclude touch inside roundButton
+    
     // MARK: - Core class functions
 
     convenience init(frame: CGRect, controller: MVButtonController) {
@@ -54,6 +56,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         roundButton = MVButton(frame: CGRect.zero, controller: controller)
         addSubview(roundButton)
+        
+        buttonColor = colorScheme.duskBlue
     }
     
     override init(frame: CGRect) {
@@ -70,7 +74,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     override func draw(_ rect: CGRect) {
 
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
-        colorScheme.duskBlue.setFill()
+        buttonColor.setFill()
         buttonCircle.fill()
         
         colorScheme.darkBlue.setStroke()

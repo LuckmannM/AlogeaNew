@@ -153,21 +153,26 @@ class TouchWheelView: UIView {
     
     // MARK: - gestureFunctions
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        // to get initial touch location before pan starts
-        // this initial touchLocation is not available from the PanGestureRecogniser
-        for touch: AnyObject in touches {
-            touchPoint = touch.location(in: self)
-        }
-
-    }
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        
+//        // to get initial touch location before pan starts
+//        // this initial touchLocation is not available from the PanGestureRecogniser
+//        self.backgroundColor = UIColor.red
+//        for touch: AnyObject in touches {
+//            touchPoint = touch.location(in: self)
+//            print("touchwheel touches began in \(touchPoint)")
+//        }
+//
+//    }
     
     @IBAction func touchGesture(recogniser: UIPanGestureRecognizer) {
         
         let π: Float = Float(M_PI)
         var angle: Float = 0.0
         
+        if recogniser.state == .began {
+            touchPoint = recogniser.location(in: self)
+        }
         let translate = recogniser.translation(in: self)
         
         touchPoint.x += translate.x
@@ -187,7 +192,7 @@ class TouchWheelView: UIView {
             angle += 2 * π
         }
         
-        if self.layer.pixelIsOpaque(point: touchPoint) {
+        if self.layer.pixelIsOpaque(point: touchPoint) && self.getPixelColor(fromPoint: touchPoint) != mainButtonController.buttonView.buttonColor {
             touchWheelValue = Double(10 * angle / (2 * π))
             if recogniser.state == .ended {
                 delegate.passOnTouchWheelScore(score: touchWheelValue, ended: true)
