@@ -128,7 +128,7 @@ class TouchWheelView: UIView {
         mainButtonController.sizeViews(rect: innerRect)
     }
     
-    func drawArcSegment(startAngle: CGFloat, endAngle: CGFloat) {
+    private func drawArcSegment(startAngle: CGFloat, endAngle: CGFloat) {
         
         if (gradientBar != nil) {
             colorPosition = CGPoint(x: 5, y: gradientBarHeight * ((2 * π - startAngle) / (2 * π)))
