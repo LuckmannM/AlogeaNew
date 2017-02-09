@@ -498,7 +498,7 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         let popUpController = choserView.popoverPresentationController
         popUpController!.permittedArrowDirections = .any
         popUpController!.sourceView = graphContainerView.upperLabel
-        popUpController?.sourceRect = graphContainerView.upperLabel.bounds
+        popUpController?.sourceRect = graphContainerView.upperLabel.frame
         popUpController!.delegate = self
         
         // do this AFTER setting up the PopoverPresentationController or it won't work as popUP on iPhone!
