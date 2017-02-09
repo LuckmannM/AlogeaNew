@@ -289,21 +289,21 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("an eventsDataController changed content...")
-        
-        switch controller {
-        case nonScoreEventsByDateFRC:
-            print("...nonScoreEventsByDateFRC")
-        case scoreEventTypesFRC:
-            print("...scoreEventTypesFRC")
-        case nonScoreEventTypesFRC:
-            print("...nonScoreEventTypesFRC")
-        case medicineEventTypesFRC:
-            print("...medicineEventTypesFRC")
-        default:
-            print("...other FRC")
-        }
-        
+//        print("an eventsDataController changed content...")
+//        
+//        switch controller {
+//        case nonScoreEventsByDateFRC:
+//            print("...nonScoreEventsByDateFRC")
+//        case scoreEventTypesFRC:
+//            print("...scoreEventTypesFRC")
+//        case nonScoreEventTypesFRC:
+//            print("...nonScoreEventTypesFRC")
+//        case medicineEventTypesFRC:
+//            print("...medicineEventTypesFRC")
+//        default:
+//            print("...other FRC")
+//        }
+//        
         if currentlyProcessedEvent == nil {
             // do not draw pending events prior to saving. This would happen during pickerView showing predating options in mvButton
             graphView.setNeedsDisplay()
