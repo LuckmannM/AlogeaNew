@@ -258,7 +258,7 @@ public class DrugEpisode: NSManagedObject {
         var freqString = String()
         
         if regularlyVar == false {
-            freqString = "as required, "
+            freqString = "Up to "
         }
         
         for aTerm in frequencyTerms {
@@ -293,6 +293,22 @@ public class DrugEpisode: NSManagedObject {
             return nameVar
         } else if nameVar == "" { return nameVar }
         else { return nameVar }
+    }
+    
+    func substancesForDrugList() -> String {
+        
+        if ingredientsVar?.count == 0 {
+            return ""
+        } else if ingredientsVar?[0] == "ingredients" || ingredientsVar?[0] == "substances" {
+            return ""
+        }
+        
+        var ingredient$ = "("
+        for aString in ingredientsVar! {
+            ingredient$ += aString + ", "
+        }
+        return (ingredient$ as NSString).substring(to: (ingredient$ as NSString).length - 2) + ")"
+
     }
 
     func returnTimeOnDrug () -> String {
@@ -332,6 +348,30 @@ public class DrugEpisode: NSManagedObject {
             return "in evaluation"
         }
     }
+    
+    func regularityShort$() -> String {
+        
+        return frequencyString()
+    }
+    
+    func regularityLong$() -> String {
+        
+        var freqString = String()
+        
+        if regularlyVar == false {
+            freqString = "When needed, up to "
+        }
+        
+        for aTerm in frequencyTerms {
+            let (term, duration) = aTerm
+            if frequencyVar == duration {
+                freqString += term
+            }
+        }
+        
+        return freqString
+    }
+
 
     func returnSideEffect() -> String {
         

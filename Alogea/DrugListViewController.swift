@@ -226,12 +226,23 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         case "Current Medicines": // CURRENT DRUGS
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
-            cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-            cell.doseLabel.text = aDrug.dosesShortString()
-           if aDrug.endDate != nil {
-                cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
+            
+            if UIDevice().userInterfaceIdiom == .pad {
+                cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
+                cell.doseLabel.text = aDrug.dosesShortString() + ".  " + aDrug.regularityLong$()
+                if aDrug.endDate != nil {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
+                } else {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
+                }
             } else {
-                cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
+                cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
+                cell.doseLabel.text = aDrug.dosesShortString()
+                if aDrug.endDate != nil {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
+                } else {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.regularityShort$())"
+                }
             }
             //                print("effectiveness of selected drug is \((drugList.objectAtIndexPath(indexPath) as! DrugEpisode).effectivenessStore)")
             cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
