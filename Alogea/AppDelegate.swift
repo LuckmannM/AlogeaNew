@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     lazy var stack : CoreDataStack = {
-        let options  = [NSPersistentStoreUbiquitousContentNameKey: "Alogea", NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true] as [String : Any]
+        let options  = [NSPersistentStoreUbiquitousContentNameKey: "Alogea", NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true, NSPersistentStoreFileProtectionKey: FileProtectionType.completeUnlessOpen] as [String : Any]
         
         return CoreDataStack(modelName: "Alogea", storeName: "Alogea", options: options as NSDictionary?)
         
