@@ -238,7 +238,7 @@
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="drugListCell" rowHeight="60" id="ZS0-64-eKm" customClass="DrugListCell" customModule="Alogea" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="414" height="60"/>
+                                        <rect key="frame" x="0.0" y="56" width="414" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZS0-64-eKm" id="D4L-2N-U2Q">
                                             <rect key="frame" x="0.0" y="0.0" width="381" height="60"/>
@@ -269,15 +269,24 @@
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IAJ-ew-y4G">
+                                                    <rect key="frame" x="288" y="15" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="IAJ-ew-y4G" secondAttribute="height" multiplier="1:1" id="nCB-Nc-4cH"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="leadingMargin" secondItem="MOx-iY-WCs" secondAttribute="leading" id="2Et-18-ICn"/>
                                                 <constraint firstItem="CJw-vT-DSr" firstAttribute="centerY" secondItem="D4L-2N-U2Q" secondAttribute="centerY" id="41B-9B-hlF"/>
+                                                <constraint firstItem="IAJ-ew-y4G" firstAttribute="bottom" secondItem="D4L-2N-U2Q" secondAttribute="bottomMargin" constant="-7" id="8ff-Qp-a7m"/>
                                                 <constraint firstItem="0QI-WV-3eE" firstAttribute="leading" secondItem="MOx-iY-WCs" secondAttribute="trailing" constant="8" id="KGx-I4-Peu"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="SXE-VM-IQt" secondAttribute="bottom" constant="-4" id="LZN-Wd-Duf"/>
+                                                <constraint firstItem="CJw-vT-DSr" firstAttribute="leading" secondItem="IAJ-ew-y4G" secondAttribute="trailing" constant="18" id="P9Q-i5-i8n"/>
                                                 <constraint firstItem="MOx-iY-WCs" firstAttribute="baseline" secondItem="0QI-WV-3eE" secondAttribute="baseline" id="Zjx-pe-AlG"/>
                                                 <constraint firstAttribute="topMargin" secondItem="MOx-iY-WCs" secondAttribute="top" id="i1B-zx-VI3"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="CJw-vT-DSr" secondAttribute="trailing" constant="7" id="koS-AO-6l3"/>
+                                                <constraint firstItem="IAJ-ew-y4G" firstAttribute="centerY" secondItem="D4L-2N-U2Q" secondAttribute="centerY" id="pQ0-w0-sFR"/>
                                                 <constraint firstItem="SXE-VM-IQt" firstAttribute="leading" secondItem="MOx-iY-WCs" secondAttribute="leading" id="qXU-ZM-HQA"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -287,6 +296,7 @@
                                             <outlet property="nameLabel" destination="MOx-iY-WCs" id="KJN-UM-9Hw"/>
                                             <outlet property="otherInfoLabel" destination="SXE-VM-IQt" id="GBg-Q9-XEO"/>
                                             <outlet property="ratingButton" destination="CJw-vT-DSr" id="c25-Cc-iQk"/>
+                                            <outlet property="reminderImage" destination="IAJ-ew-y4G" id="c5Z-Wm-8q1"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -325,7 +335,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3ea-i9-7Ve" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3941.5999999999999" y="846.9265367316342"/>
+            <point key="canvasLocation" x="3940.579710144928" y="846.19565217391312"/>
         </scene>
         <!--New Drug-->
         <scene sceneID="cCi-Ix-iMs">

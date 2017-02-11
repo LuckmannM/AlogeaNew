@@ -234,37 +234,45 @@ class BackupController {
     
     class func BackupAllUserData() {
         
-        let eventsDictionary = createEventsDictionary() as NSArray
-        let drugsDictionary = createDrugsDictionary() as NSArray
-        let recordTypesDictionary = createRecordTypesDictionary() as NSArray
+        let eventsData = createEventsDictionary()
+        let drugsData = createDrugsDictionary()
+        let recordTypesData = createRecordTypesDictionary()
         
-        if let backupDirectoryPath = checkCreateBackupDirectory() {
-            
+        guard let backupDirectoryPath = checkCreateBackupDirectory()  else {
+            print("error - no backup directory - dictionaries not saved to file")
+            return
+        }
+    
+// eventsBackup
             var fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName)))
-            if !eventsDictionary.write(to: fileURL as URL, atomically: true) {
-                print("error writing the eventsDictionary to file \(fileURL)")
-                print("events dictionary is \(eventsDictionary)")
-            } else {
-                print("saved eventsDict @ \(fileURL)")
+            do {
+                try eventsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+            } catch let error {
+                print("error trying to encrypt file \(fileURL): \(error)")
             }
+        
+// drugsBackup
             
             fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(drugsFileName)))
-            if !drugsDictionary.write(to: fileURL as URL, atomically: true) {
-                print("error writing the drugsDictionary to file \(fileURL)")
+            do {
+                try drugsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+            } catch let error {
+                print("error trying to encrypt file \(fileURL): \(error)")
             }
-            
+        
+// recordTypesBackup
             fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(recordTypesFileName)))
-            if !recordTypesDictionary.write(to: fileURL as URL, atomically: true) {
-                print("error writing the recordTypesDictionary to file \(fileURL)")
+            do {
+                try recordTypesData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+            } catch let error {
+                print("error trying to encrypt file \(fileURL): \(error)")
             }
-            
+        
+// moveBackups to iCloud
+        
             if UserDefaults.standard.bool(forKey: iCloudBackUpsOn) {
                 copyBackupsToCloud(directoryToCopyPath: backupDirectoryPath)
             }
-            
-        } else {
-            print("error - no backup directory - dictionaries not saved to file")
-        }
     }
     
     static func importFromBackup(folderName: String, fromLocalBackup: Bool) {
@@ -499,12 +507,21 @@ class BackupController {
         if FileManager.default.fileExists(atPath: eventDictionaryPath) {
             let eventDictionaryURL = NSURL(fileURLWithPath: eventDictionaryPath)
             
+            // OLD
             print("trying to load file contents \(eventDictionaryPath) into dictionary")
-            if let eventsDictionaryArray = NSArray.init(contentsOf: eventDictionaryURL as URL) {
-                return eventsDictionaryArray as? [Dictionary]
-            }
-            else {
-                print("NSDictionary contentsWithURL Error loading Backup eventDictionary in DataIO @ \(eventDictionaryPath)")
+//            if let eventsDictionaryArray = NSArray.init(contentsOf: eventDictionaryURL as URL) {
+//                return eventsDictionaryArray as? [Dictionary]
+//            }
+//            else {
+//                print("NSDictionary contentsWithURL Error loading Backup eventDictionary in DataIO @ \(eventDictionaryPath)")
+//                return nil
+//            }
+            
+            //NEW
+            if let eventsData = NSData.init(contentsOf: eventDictionaryURL as URL) {
+                return NSArray.init(object: eventsData) as? [Dictionary<String,Data>]
+            } else {
+                print("Error loading eventsDat as NSData from file @ \(eventDictionaryPath) could not be read")
                 return nil
             }
             
@@ -536,13 +553,22 @@ class BackupController {
             let drugsDictionaryURL = NSURL(fileURLWithPath: drugDictionaryPath)
             
             print("trying to load file contents \(drugDictionaryPath) into dictionary")
-            if let drugsDictionaryArray = NSArray.init(contentsOf: drugsDictionaryURL as URL) {
-                return drugsDictionaryArray as? [Dictionary]
-            }
-            else {
-                print("NSDictionary contentsWithURL Error loading Backup drugsDictionary in DataIO @ \(drugDictionaryPath)")
+            
+            //NEW
+            if let drugsData = NSData.init(contentsOf: drugsDictionaryURL as URL) {
+                return NSArray.init(object: drugsData) as? [Dictionary<String,Data>]
+            } else {
+                print("Error loading drugsData as NSData from file @ \(drugDictionaryPath) could not be read")
                 return nil
             }
+            // OLD
+//            if let drugsDictionaryArray = NSArray.init(contentsOf: drugsDictionaryURL as URL) {
+//                return drugsDictionaryArray as? [Dictionary]
+//            }
+//            else {
+//                print("Error loading drugsDictionary Backup @ \(drugDictionaryPath)")
+//                return nil
+//            }
             
         }
         else {
@@ -558,13 +584,22 @@ class BackupController {
             let recordTypesDictionaryURL = NSURL(fileURLWithPath: recordTypesDictionaryPath)
             
             print("trying to load file contents \(recordTypesDictionaryPath) into dictionary")
-            if let recordTypesDictionaryArray = NSArray.init(contentsOf: recordTypesDictionaryURL as URL) {
-                return recordTypesDictionaryArray as? [Dictionary]
-            }
-            else {
-                print("NSDictionary contentsWithURL Error loading Backup recordType Dictionary in DataIO @ \(recordTypesDictionaryPath)")
+            //NEW
+            if let recordTypeData = NSData.init(contentsOf: recordTypesDictionaryURL as URL) {
+                return NSArray.init(object: recordTypeData) as? [Dictionary<String,Data>]
+            } else {
+                print("Error loading recordTypesData as NSData from file @ \(recordTypesDictionaryPath) could not be read")
                 return nil
             }
+
+            //OLD
+//            if let recordTypesDictionaryArray = NSArray.init(contentsOf: recordTypesDictionaryURL as URL) {
+//                return recordTypesDictionaryArray as? [Dictionary]
+//            }
+//            else {
+//                print("Error loading  recordType Dictionary Backup @ \(recordTypesDictionaryPath)")
+//                return nil
+//            }
             
         }
         else {
@@ -631,7 +666,7 @@ class BackupController {
     // MARK: - create backup dictionaries
     
     
-    static func createEventsDictionary() -> [NSDictionary] {
+    static func createEventsDictionary() -> Data {
         
         var eventsDictionaryArray = [NSDictionary]()
         
@@ -664,11 +699,10 @@ class BackupController {
             eventsDictionaryArray.append(singleEventDictionary as NSDictionary)
         }
         print("backup eventsDictionary created with \(events.count) events")
-        return eventsDictionaryArray
-        
+        return NSKeyedArchiver.archivedData(withRootObject: eventsDictionaryArray)
     }
     
-    static func createDrugsDictionary() -> [NSDictionary] {
+    static func createDrugsDictionary() -> Data {
         
         var drugsDictionaryArray = [NSDictionary]()
         
@@ -718,10 +752,11 @@ class BackupController {
             drugsDictionaryArray.append(singleDrugDictionary as NSDictionary)
         }
         print("backup drugsDictionary created with \(drugs.count) drugs")
-        return drugsDictionaryArray
+        return NSKeyedArchiver.archivedData(withRootObject: drugsDictionaryArray)
+
     }
     
-    static func createRecordTypesDictionary() -> [NSDictionary] {
+    static func createRecordTypesDictionary() -> Data {
         
         var recordTypesDictionaryArray = [NSDictionary]()
         
@@ -743,7 +778,7 @@ class BackupController {
             print("export recordType \(type.name) to backupDictionary")
         }
         print("backup recordTypesDictionary created with \(recordTypes.count) recordTypes")
-        return recordTypesDictionaryArray
+        return NSKeyedArchiver.archivedData(withRootObject: recordTypesDictionaryArray)
     }
     
     

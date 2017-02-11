@@ -14,6 +14,7 @@ class DrugListCell: UITableViewCell {
     @IBOutlet weak var otherInfoLabel: UILabel!
     @IBOutlet weak var ratingButton: UIButton!
     @IBOutlet weak var doseLabel: UILabel!
+    @IBOutlet weak var reminderImage: UIImageView!
     
     var notRatedImage: UIImage!
     var goodRatingImages: [UIImage]!
