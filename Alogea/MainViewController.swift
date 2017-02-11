@@ -8,8 +8,9 @@
 
 import UIKit
 import MessageUI
+import UserNotifications
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
 
     @IBOutlet weak var touchWheel: TouchWheelView!
     @IBOutlet weak var graphContainerView: GraphContainerView!
@@ -158,6 +159,23 @@ class MainViewController: UIViewController {
             graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 365 * 24 * 3600)
         }
         
+    }
+    
+    // handle med reminder as UNNotificationCenter delegate when in foregroud; so far untested
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        let title = "Medicine reminder"
+        
+        let alertController = UIAlertController(title: title, message: notification.request.content.body, preferredStyle: .alert)
+        
+        // Configure Alert Controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) -> Void in
+            
+        }))
+        
+        // Present Alert Controller
+        self.present(alertController, animated: true, completion: nil)
+
     }
 
 }

@@ -373,7 +373,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let sectionTitles = ["Name, ingredients and class","Dates, Frequency & Times","Doses", "Notes"]
+        let sectionTitles = ["Name, ingredients and class","Doses", "Dates, Frequency & Times", "Notes"]
         return sectionTitles[section]
 
     }
@@ -425,6 +425,24 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             cell.contentView.addSubview(drugNamePicker)
             
         // SECTION 1
+        case "dosesCell":
+            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Doses"
+            doseDetailLabel = (cell.contentView.viewWithTag(detailTag) as! UILabel) // property to check wether touch is inside
+            doseDetailLabel.text = theNewDrug!.dosesString()
+            
+            if (theNewDrug!.regularlyVar == true) { cell.accessoryType = .disclosureIndicator}
+            else { cell.accessoryType = .none }
+            
+        case "doseUnitCell":
+            if doseUnitSelection == nil {
+                doseUnitSelection = cell.contentView.viewWithTag(controlTag) as! UISegmentedControl
+                doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
+                doseUnitSelection.addTarget(self, action: #selector(doseUnitSelection(sender:)), for: UIControlEvents.valueChanged)
+            } else {
+                doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
+            }
+
+        // SECTION 2
         case "startDateCell":
             pickerXPosition = viewWidth - datePicker.frame.width
             if pickerXPosition < 0 {
@@ -492,23 +510,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             timesPicker.setDate(theNewDrug!.startDateVar, animated: false)
             cell.contentView.addSubview(timesPicker)
             
-        // SECTION 2
-        case "dosesCell":
-            (cell.contentView.viewWithTag(titleTag) as! UILabel).text = "Doses"
-            doseDetailLabel = (cell.contentView.viewWithTag(detailTag) as! UILabel) // property to check wether touch is inside
-            doseDetailLabel.text = theNewDrug!.dosesString()
-            
-            if (theNewDrug!.regularlyVar == true) { cell.accessoryType = .disclosureIndicator}
-            else { cell.accessoryType = .none }
-            
-        case "doseUnitCell":
-            if doseUnitSelection == nil {
-                doseUnitSelection = cell.contentView.viewWithTag(controlTag) as! UISegmentedControl
-                doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
-                doseUnitSelection.addTarget(self, action: #selector(doseUnitSelection(sender:)), for: UIControlEvents.valueChanged)
-            } else {
-                doseUnitSelection.selectedSegmentIndex = theNewDrug!.doseUnitIndex()
-            }
             
         // SECTION 3
         case "notesCell":

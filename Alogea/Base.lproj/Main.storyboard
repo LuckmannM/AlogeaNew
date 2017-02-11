@@ -361,8 +361,8 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" tag="50" contentMode="scaleAspectFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2F-lO-ry3">
-                                            <rect key="frame" x="332" y="7" width="32" height="32"/>
-                                            <state key="normal" image="NewDrugButtonImageLarge">
+                                            <rect key="frame" x="342" y="12" width="22" height="22"/>
+                                            <state key="normal" image="ArrowDownIcon">
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -1413,13 +1413,13 @@
         <image name="2Yellow" width="71" height="25"/>
         <image name="3CircleX" width="71" height="25"/>
         <image name="3Yellow" width="71" height="25"/>
+        <image name="ArrowDownIcon" width="22" height="22"/>
         <image name="Delete Button" width="32" height="32"/>
         <image name="EventsButton" width="63" height="63"/>
         <image name="ExpoButton" width="74" height="92"/>
         <image name="GraphButtonBar" width="52" height="52"/>
         <image name="GraphTitle Blue+" width="43" height="44"/>
         <image name="MedsIcon" width="30" height="30"/>
-        <image name="NewDrugButtonImageLarge" width="32" height="32"/>
         <image name="NoLimitsBG" width="375" height="167"/>
         <image name="PainBucket_Orange" width="45" height="38"/>
         <image name="PainBucket_Red" width="45" height="39"/>

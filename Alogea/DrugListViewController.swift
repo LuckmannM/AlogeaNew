@@ -28,13 +28,11 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
         return moc
     }()
-    lazy var drugList: NSFetchedResultsController<DrugEpisode> = {
+    var drugList: NSFetchedResultsController<DrugEpisode> = {
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
-        request.sortDescriptors = [NSSortDescriptor(key: "isCurrent", ascending: true), NSSortDescriptor(key: "startDate", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "isCurrent", ascending: true), NSSortDescriptor(key: "regularly", ascending: false),NSSortDescriptor(key: "startDate", ascending: false),]
         
-        let dL = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "isCurrent", cacheName: nil)
-        dL.delegate = self
-        
+        let dL = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "isCurrent", cacheName: nil)
         return dL
         
     }()
@@ -94,6 +92,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
         drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
+        
+        drugList.delegate = self
 
     }
     
@@ -211,15 +211,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         formatter.dateFormat = "dd.MM.yy"
         
         if indexPath.row % 2 == 0 {
-            cell.backgroundColor = ColorScheme.sharedInstance().lightGray
+            cell.backgroundColor = ColorScheme.sharedInstance().pearlWhite
         } else {
             cell.backgroundColor = UIColor.white
-        }
-        
-       //  switch indexPath.section {
-        // DEBUG***
-        if aDrug.isCurrent == nil {
-            aDrug.isCurrent = "isCurrent error"
         }
         
         switch aDrug.isCurrent! {
@@ -244,7 +238,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.regularityShort$())"
                 }
             }
-            //                print("effectiveness of selected drug is \((drugList.objectAtIndexPath(indexPath) as! DrugEpisode).effectivenessStore)")
             cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
             cell.ratingButton.sizeToFit()
             cell.ratingButton.addTarget(self, action: #selector(popUpRatingView(sender:)), for: .touchUpInside)
@@ -276,8 +269,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         default:
             print("error in DrugListVC - section number wrong: \(indexPath.section)")
             
-            // DEBUG
-            managedObjectContext.delete(drugList.object(at: indexPath))
         }
         
     }

@@ -166,6 +166,10 @@ class NewDrugHelper: NSObject {
         let namePickerCell = ["namePickerCell", emptyCell]
         
         // SECTION 1
+        let dosesCell = ["dosesCell", titleAndDetailCell]
+        let doseUnitCell = ["doseUnitCell", segmentControlCell]
+        
+        // SECTION 2
         let startDateCell = ["startDateCell", titleAndDetailCell]
         let startDatePickerCell = ["startDatePickerCell", emptyCell]
         let endDateCell = ["endDateCell", titleAndDetailCell]
@@ -173,79 +177,73 @@ class NewDrugHelper: NSObject {
         let frequencyCell = ["frequencyCell", titleAndDetailCell]
         let frequencyPickerCell = ["frequencyPickerCell", emptyCell]
         let regularityCell = ["regularityCell", titleAndSwitchCell]
-        
-        // SECTION 2
         let timesCell = ["timesCell", titleAndDetailCell]
         let timesPickerCell = ["timesPickerCell",emptyCell]
-        let dosesCell = ["dosesCell", titleAndDetailCell]
-        let doseUnitCell = ["doseUnitCell", segmentControlCell]
         
         // SECTION 3
         let notesCell = ["notesCell", textViewCell]
         
-        allCellArray = [[
-            nameCell,
-            namePickerCell
+        allCellArray = [
+            [
+                nameCell,
+                namePickerCell
             ],
-                        
-                        [
-                            startDateCell,
-                            startDatePickerCell,
-                            endDateCell,
-                            endDatePickerCell,
-                            frequencyCell,
-                            frequencyPickerCell,
-                            regularityCell,
-                            timesCell,
-                            timesPickerCell
+            [
+                dosesCell,
+                doseUnitCell
+                
             ],
-                        [
-                            dosesCell,
-                            doseUnitCell
+            [
+                startDateCell,
+                startDatePickerCell,
+                endDateCell,
+                endDatePickerCell,
+                frequencyCell,
+                frequencyPickerCell,
+                regularityCell,
+                timesCell,
+                timesPickerCell
             ],
-                        [
-                            notesCell
+            [
+                notesCell
             ]
         ]
         
         if regularly {
             visibleCellArray = [[
-                nameCell
+                    nameCell
                 ],
-                                
-                                [
-                                    startDateCell,
-                                    endDateCell,
-                                    frequencyCell,
-                                    regularityCell,
-                                    timesCell
+                [
+                    dosesCell,
+                    doseUnitCell
                 ],
-                                [
-                                    dosesCell,
-                                    doseUnitCell
+                [
+                    startDateCell,
+                    endDateCell,
+                    frequencyCell,
+                    regularityCell,
+                    timesCell
                 ],
-                                [
-                                    notesCell
+                [
+                    notesCell
                 ]
             ]
         } else {
             visibleCellArray = [[
-                nameCell
+                    nameCell
                 ],
-                                
-                                [
-                                    startDateCell,
-                                    endDateCell,
-                                    frequencyCell,
-                                    regularityCell
-                                    
+                [
+                    dosesCell,
+                    doseUnitCell
                 ],
-                                [
-                                    dosesCell,
-                                    doseUnitCell
+                [
+                    startDateCell,
+                    endDateCell,
+                    frequencyCell,
+                    regularityCell
                 ],
-                                [
-                                    notesCell
+                [
+                    notesCell
                 ]
             ]
         }

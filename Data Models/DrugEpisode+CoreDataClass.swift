@@ -351,18 +351,34 @@ public class DrugEpisode: NSManagedObject {
     
     func regularityShort$() -> String {
         
-        return frequencyString()
+        var freqString = String()
+        
+        let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("every twelve hours",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
+        
+        if regularlyVar == false {
+            freqString = "Up to "
+        }
+        
+        for aTerm in altFrequencyTerms {
+            let (term, duration) = aTerm
+            if frequencyVar == duration {
+                freqString += term
+            }
+        }
+        
+        return freqString
     }
     
     func regularityLong$() -> String {
         
         var freqString = String()
+        let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("every twelve hours",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
         
         if regularlyVar == false {
             freqString = "When needed, up to "
         }
         
-        for aTerm in frequencyTerms {
+        for aTerm in altFrequencyTerms {
             let (term, duration) = aTerm
             if frequencyVar == duration {
                 freqString += term
