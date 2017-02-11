@@ -28,12 +28,11 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         return (UIApplication.shared.delegate as! AppDelegate).stack
     }()
     
-    lazy var recordTypesFRC : NSFetchedResultsController<RecordType> = {
+    var recordTypesFRC : NSFetchedResultsController<RecordType> = {
         let request = NSFetchRequest<RecordType>(entityName: "RecordType")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
         
-        let fetch = NSFetchedResultsController<RecordType>(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetch.delegate = self
+        let fetch = NSFetchedResultsController<RecordType>(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: nil, cacheName: nil)
         return fetch
     }()
     
@@ -49,7 +48,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().white
         self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!, NSForegroundColorAttributeName: ColorScheme.sharedInstance().darkBlue]
         //self.navigationController?.navigationBar.tintColor = ColorScheme.sharedInstance().darkBlue
-        
+        recordTypesFRC.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,7 +56,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         self.tabBarController!.tabBar.isHidden = false
         
         cloudSwitch.isOn = UserDefaults.standard.bool(forKey: iCloudBackUpsOn)
-        print("MedReminders are set to \(UserDefaults.standard.bool(forKey: notification_MedRemindersOn))")
         drugReminderSwitch.isOn = UserDefaults.standard.bool(forKey: notification_MedRemindersOn)
         
     }
@@ -211,8 +209,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         
         UserDefaults.standard.set(sender.isOn, forKey: notification_MedRemindersOn)
         
-        print("MedReminders are set to \(UserDefaults.standard.bool(forKey: notification_MedRemindersOn))")
-
         // Switch off  - cancel all pending notifications for drugs
         if !sender.isOn {
             (UIApplication.shared.delegate as! AppDelegate).removeCategoryNotifications(withCategory: notification_MedReminderCategory)
@@ -232,7 +228,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             for drug in drugsList {
                 // for some reason the iteration doesn't trigger awakeFromFetch for the drug object
                 // the non-initiated local DrugEpisode variables can trigger crashes
-                print("request notificationCheck for drug \(drug.nameVar)...")
+                // print("request notificationCheck for drug \(drug.nameVar)...")
                 drug.convertFromStorage()
                 drug.scheduleReminderNotifications(cancelExisting: false)
             }
@@ -240,13 +236,13 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         }
         
         // DEBUG
-        let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests(completionHandler: {
-            (requests: [UNNotificationRequest]) in
-            for request in requests {
-                print("pending Notification: \(request)")
-            }
-        })
+//        let center = UNUserNotificationCenter.current()
+//        center.getPendingNotificationRequests(completionHandler: {
+//            (requests: [UNNotificationRequest]) in
+//            for request in requests {
+//                print("pending Notification: \(request)")
+//            }
+//        })
         
         // DEBUG
         
