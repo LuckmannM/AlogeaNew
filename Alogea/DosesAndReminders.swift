@@ -103,6 +103,13 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
             return
         }
         
+        guard UserDefaults.standard.bool(forKey: notification_MedReminderCategory) else {
+            showNotificationPermissionsAlert(message: "Medicine reminders are currently switched off. Please switch on in Alogea Settings > Medicine Reminders. A reminder has NOT been scheduled, please try again after switching on.")
+            sender.isOn = false
+            return
+        }
+        
+        
         guard allowedNotifications?.alertStyle ==  UNAlertStyle.banner || allowedNotifications?.alertStyle ==  UNAlertStyle.alert else {
             showNotificationPermissionsAlert(message: "To see medicaton reminders please permit Alogea notifications to include sounds and alerts, or at least banners. You can do this in Settings > Notifications > Alogea. No reminder has been scheduled.")
             sender.isOn = false

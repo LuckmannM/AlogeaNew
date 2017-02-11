@@ -152,6 +152,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         center.setNotificationCategories([drugReminderCategory])
     }
     
+    func receiveNotificationWhileRunning() {
+        // show alert to take medicine
+    }
+    
     // possible option of checking notifications that have been displayed while App in background
     func reviewNotificationsDeliveredInBackground() {
         let center = UNUserNotificationCenter.current()

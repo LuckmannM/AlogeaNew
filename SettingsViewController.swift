@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Foundation
+import UserNotifications
 
 class SettingsViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
@@ -56,6 +57,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         self.tabBarController!.tabBar.isHidden = false
         
         cloudSwitch.isOn = UserDefaults.standard.bool(forKey: iCloudBackUpsOn)
+        print("MedReminders are set to \(UserDefaults.standard.bool(forKey: notification_MedRemindersOn))")
         drugReminderSwitch.isOn = UserDefaults.standard.bool(forKey: notification_MedRemindersOn)
         
     }
@@ -209,7 +211,8 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         
         UserDefaults.standard.set(sender.isOn, forKey: notification_MedRemindersOn)
         
-        
+        print("MedReminders are set to \(UserDefaults.standard.bool(forKey: notification_MedRemindersOn))")
+
         // Switch off  - cancel all pending notifications for drugs
         if !sender.isOn {
             (UIApplication.shared.delegate as! AppDelegate).removeCategoryNotifications(withCategory: notification_MedReminderCategory)
@@ -235,6 +238,17 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             }
 
         }
+        
+        // DEBUG
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests(completionHandler: {
+            (requests: [UNNotificationRequest]) in
+            for request in requests {
+                print("pending Notification: \(request)")
+            }
+        })
+        
+        // DEBUG
         
         
     }
