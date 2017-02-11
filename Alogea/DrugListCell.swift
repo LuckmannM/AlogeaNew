@@ -14,7 +14,6 @@ class DrugListCell: UITableViewCell {
     @IBOutlet weak var otherInfoLabel: UILabel!
     @IBOutlet weak var ratingButton: UIButton!
     @IBOutlet weak var doseLabel: UILabel!
-    @IBOutlet weak var reminderImage: UIImageView!
     
     var notRatedImage: UIImage!
     var goodRatingImages: [UIImage]!
@@ -88,5 +87,14 @@ class DrugListCell: UITableViewCell {
         ratingButton.sizeToFit()
         
         }
+    
+//    func bellImage(visible: Bool) {
+//        
+//        if visible {
+//            reminderImage.image = UIImage(named: "Bell")
+//        } else {
+//            reminderImage.image = nil
+//        }
+//    }
 
 }

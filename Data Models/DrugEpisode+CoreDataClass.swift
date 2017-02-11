@@ -451,6 +451,19 @@ public class DrugEpisode: NSManagedObject {
         }
 
     }
+    
+    func reminderActive() -> String {
+        for rem in remindersVar {
+            if rem {
+                if UserDefaults.standard.bool(forKey: notification_MedRemindersOn) {
+                    return "   🔔"
+                } else {
+                    return "   🔕"
+                }
+            }
+        }
+        return ""
+    }
 
     // MARK: - Notifications
     

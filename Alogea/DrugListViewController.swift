@@ -62,6 +62,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             actionButton.isEnabled = false
         }
         
+        tableView.reloadData()
+        
     }
     
     override func viewDidLoad() {
@@ -223,7 +225,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             
             if UIDevice().userInterfaceIdiom == .pad {
                 cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.doseLabel.text = aDrug.dosesShortString() + ".  " + aDrug.regularityLong$()
+                cell.doseLabel.text = aDrug.dosesShortString() + ".  " + aDrug.regularityLong$() + aDrug.reminderActive()
                 if aDrug.endDate != nil {
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
                 } else {
@@ -231,7 +233,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 }
             } else {
                 cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.doseLabel.text = aDrug.dosesShortString()
+                cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
                 if aDrug.endDate != nil {
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
                 } else {
