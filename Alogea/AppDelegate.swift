@@ -69,7 +69,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerNotificationCategories()
         UNUserNotificationCenter.current().delegate = tabBarViews[0] as! MainViewController
         
-        
         return true
     }
 

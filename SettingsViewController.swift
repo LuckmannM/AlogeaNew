@@ -71,7 +71,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -84,6 +84,8 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         case 2 :
             return 2
         case 3 :
+            return 1
+        case 4 :
             return 1
         default:
             return 0
@@ -101,6 +103,8 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             return "Backup and Restore options"
         case 3 :
             return "Medicine reminders"
+        case 4 :
+            return "Terms Of Use"
         default:
             return ""
         }
@@ -264,6 +268,13 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
                 print("error createNew segue: destinationViewcontrolle not defined")
             }
             
+        } else if segue.identifier == "toEULASegue" {
+            if let nextViewController = segue.destination as? EULAViewController {
+                nextViewController.rootViewController = self
+                
+            } else {
+                print("error segue: destinationViewcontrolle not defined")
+            }
         }
     }
     

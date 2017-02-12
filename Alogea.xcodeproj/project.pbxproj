@@ -40,6 +40,7 @@
 		26770D5B1E30032400DCCBA6 /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26770D5A1E30032400DCCBA6 /* TextInputCell.swift */; };
 		267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */; };
 		267F78D11DC5264F008CC23E /* ClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267F78D01DC5264F008CC23E /* ClipView.swift */; };
+		2688DA8B1E50EF1100003E12 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2688DA8A1E50EF1100003E12 /* EULAViewController.swift */; };
 		269B9BFB1DDE52DE00C3BDA9 /* StoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */; };
 		269B9BFD1DDE5A5300C3BDA9 /* StoreViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269B9BFC1DDE5A5300C3BDA9 /* StoreViewCell.swift */; };
 		26A013961DA2DCB20031DF79 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A013951DA2DCB20031DF79 /* CoreDataStack.swift */; };
@@ -118,6 +119,7 @@
 		26770D5A1E30032400DCCBA6 /* TextInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextInputCell.swift; path = Alogea/TextInputCell.swift; sourceTree = "<group>"; };
 		267F78CE1DC4FCF8008CC23E /* GraphViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewHelper.swift; sourceTree = "<group>"; };
 		267F78D01DC5264F008CC23E /* ClipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipView.swift; sourceTree = "<group>"; };
+		2688DA8A1E50EF1100003E12 /* EULAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EULAViewController.swift; path = Alogea/EULAViewController.swift; sourceTree = "<group>"; };
 		269B9BFA1DDE52DE00C3BDA9 /* StoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreView.swift; sourceTree = "<group>"; };
 		269B9BFC1DDE5A5300C3BDA9 /* StoreViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreViewCell.swift; sourceTree = "<group>"; };
 		26A013951DA2DCB20031DF79 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */,
 				26770D5A1E30032400DCCBA6 /* TextInputCell.swift */,
 				260898781E36603200CBB6B6 /* Backups.swift */,
+				2688DA8A1E50EF1100003E12 /* EULAViewController.swift */,
 			);
 			name = "Settings Group";
 			path = ..;
@@ -573,6 +576,7 @@
 				2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */,
 				2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,
+				2688DA8B1E50EF1100003E12 /* EULAViewController.swift in Sources */,
 				26BDBD341E44B511007F6917 /* EventRect PopUp.swift in Sources */,
 				260898791E36603200CBB6B6 /* Backups.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,

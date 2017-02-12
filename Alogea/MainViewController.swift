@@ -78,6 +78,12 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
         
         self.view.backgroundColor = ColorScheme.sharedInstance().lightGray
+        
+        //checkLicenseAcceptance()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        checkLicenseAcceptance()
     }
 
     override func didReceiveMemoryWarning() {
@@ -113,6 +119,21 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         if iPadRotationFromLSStart {
             iPadRotationFromLSStart = false
             touchWheel.mainButtonController.sizeViews(rect: touchWheel.innerRect)
+        }
+    }
+    
+    func checkLicenseAcceptance() {
+        
+        if UserDefaults.standard.value(forKey: "TOUAccepted") == nil || UserDefaults.standard.bool(forKey: "TOUAccepted") == false {
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let eulaView = storyBoard.instantiateViewController(withIdentifier: "EULAViewController") as! EULAViewController
+            eulaView.rootViewController = self
+            
+            // eulaView.modalPresentationStyle = .popover
+            self.present(eulaView, animated: true, completion: nil)
+            //let popUpController = eulaView.popoverPresentationController
+            //popUpController?.delegate = self
+
         }
     }
     
