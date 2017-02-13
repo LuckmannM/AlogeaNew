@@ -1007,7 +1007,7 @@
         <!--End User License Agreements (EULA)-->
         <scene sceneID="g25-FD-OMc">
             <objects>
-                <viewController storyboardIdentifier="EULAViewController" title="End User License Agreements (EULA)" id="H3s-On-2Sh" customClass="EULAViewController" customModule="Alogea" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EULAViewController" title="End User License Agreements (EULA)" automaticallyAdjustsScrollViewInsets="NO" id="H3s-On-2Sh" customClass="EULAViewController" customModule="Alogea" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HAH-U4-R3H"/>
                         <viewControllerLayoutGuide type="bottom" id="8ck-U2-zDm"/>
@@ -1028,11 +1028,11 @@
                                     <action selector="acceptAction:" destination="H3s-On-2Sh" eventType="touchUpInside" id="Ovi-SY-7Rm"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="i2O-jK-3Qy">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i2O-jK-3Qy">
                                 <rect key="frame" x="20" y="99" width="374" height="577"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lincense confirmation" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wl1-kB-qf7">
@@ -1232,7 +1232,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" tag="40" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kn2-HA-FLb">
-                                                    <rect key="frame" x="348" y="7" width="51" height="31"/>
+                                                    <rect key="frame" x="348" y="6" width="51" height="31"/>
                                                     <color key="onTintColor" red="0.38355055449999997" green="0.48390701409999998" blue="0.61577177049999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <connections>
                                                         <action selector="cloudSwitchActionWithSender:" destination="xFZ-pi-nl2" eventType="valueChanged" id="aMr-Ac-hcn"/>

@@ -258,7 +258,7 @@ public class DrugEpisode: NSManagedObject {
         var freqString = String()
         
         if regularlyVar == false {
-            freqString = "Up to "
+            freqString = "Max. "
         }
         
         for aTerm in frequencyTerms {
