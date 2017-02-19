@@ -515,7 +515,8 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         case "notesCell":
             notesTextView = cell.contentView.viewWithTag(textViewTag) as! UITextView
             notesTextView.text = theNewDrug!.notesVar
-            
+            addDoneButtonForTextView(sender: notesTextView)
+            notesTextView.delegate = self
         default:
             print("ERROR; cell does not exist: for indexPath \(indexPath)")
             print("cellType = \(cellType), cellPrototype = \(cellPrototype)")
@@ -766,14 +767,8 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 performSegue(withIdentifier: "doseDetailSegue", sender: nil)
             }
             
-        case "doseUnitCell":
-            print("needs development")
-            
-        // SECTION 3
-        case "notesCell":
-            print("needs development")
-            
         default:
+            // doseUnitCell and notesCell don't need selection to work, so this may end up here
             print("cell can't be seleted") // all pickerViews!
             
         }
@@ -1035,7 +1030,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     func addDoneButtonToKeyboard (sender: UITextField) {
         
-        let doneButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(NewDrug.doneButton))
+        let doneButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonFunction))
         let space:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let toolbar = UIToolbar()
         toolbar.frame.size.height = 44
@@ -1052,10 +1047,29 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         sender.inputAccessoryView = toolbar
     }
     
-    func doneButton() {
+    func addDoneButtonForTextView (sender: UITextView) {
+        
+        let doneButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(textViewDidEndEditing(_:)))
+        let space:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let toolbar = UIToolbar()
+        toolbar.frame.size.height = 44
+        doneButton.width = self.view.frame.width * 1/3
+        //        toolbar.barTintColor = UIColor.grayColor()
+        //        doneButton.customView = UIView() ->>> to imrpove doneButton appearance later
+        
+        var items = [UIBarButtonItem]()
+        items.append(space)
+        items.append(doneButton)
+        
+        toolbar.items = items
+        
+        sender.inputAccessoryView = toolbar
+    }
+
+    
+    func doneButtonFunction() {
         _ = textFieldShouldReturn(textFieldOpen.textField)
     }
-        
     
     // MARK: - Navigation
     
@@ -1092,6 +1106,16 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
 
     }
     
+    
+}
+
+extension NewDrug: UITextViewDelegate {
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
+        notesTextView.resignFirstResponder()
+        theNewDrug?.notesVar = notesTextView.text
+    }
     
 }
 

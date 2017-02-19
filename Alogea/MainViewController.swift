@@ -227,15 +227,15 @@ extension MainViewController: UITextViewDelegate {
         eventPicker.selectRow(0, inComponent: 0, animated: false)
         eventPickerSelection = 0
         
-        let arrowView = UIImageView(image: UIImage(named: "UpDownArrows"))
-        arrowView.frame = CGRect(x: 15, y: 15, width: 17, height: 40)
-        arrowView.alpha = 0.8
-        let arrowView2 = UIImageView(image: UIImage(named: "UpDownArrows"))
-        arrowView2.frame = arrowView.frame.offsetBy(dx: eventPicker.frame.width - 10 - arrowView2.frame.width, dy: 0)
-        arrowView2.alpha = 0.8
-        
-        textEntryWindow.addSubview(arrowView)
-        textEntryWindow.addSubview(arrowView2)
+//        let arrowView = UIImageView(image: UIImage(named: "UpDownArrows"))
+//        arrowView.frame = CGRect(x: 15, y: 15, width: 17, height: 40)
+//        arrowView.alpha = 0.8
+//        let arrowView2 = UIImageView(image: UIImage(named: "UpDownArrows"))
+//        arrowView2.frame = arrowView.frame.offsetBy(dx: eventPicker.frame.width - 10 - arrowView2.frame.width, dy: 0)
+//        arrowView2.alpha = 0.8
+//        
+//        textEntryWindow.addSubview(arrowView)
+//        textEntryWindow.addSubview(arrowView2)
 
         
         textView = {
