@@ -504,7 +504,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         case "notesCell":
             notesTextView = cell.contentView.viewWithTag(textViewTag) as! UITextView
             notesTextView.text = theNewDrug!.notesVar
-            addDoneButtonForTextView(sender: notesTextView)
+            addDoneButtonToTextView(sender: notesTextView)
             notesTextView.delegate = self
         default:
             ErrorManager.sharedInstance().errorMessage(message: "NewMedVC Error 1", showInVC: self, errorInfo:"ERROR; cell does not exist: for indexPath \(indexPath)")
@@ -737,9 +737,9 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             }
             
         default:
-            // doseUnitCell and notesCell don't need selection to work, so this may end up here
-            print("cell can't be seleted") // all pickerViews!
-            
+            // notesCell and doseUnitCell selections end up here; no cell selection needed for function
+//            ErrorManager.sharedInstance().errorMessage(message: "NewMedVC Error 2", showInVC: self, errorInfo: "cell can't be seleted")
+            return
         }
         
     }
@@ -985,7 +985,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     
     func addDoneButtonToKeyboard (sender: UITextField) {
         
-        let doneButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonFunction))
+        let doneButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(NewDrug.doneButton))
         let space:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let toolbar = UIToolbar()
         toolbar.frame.size.height = 44
@@ -1000,15 +1000,13 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         sender.inputAccessoryView = toolbar
     }
     
-    func addDoneButtonForTextView (sender: UITextView) {
+    func addDoneButtonToTextView (sender: UITextView) {
         
         let doneButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(textViewDidEndEditing(_:)))
         let space:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let toolbar = UIToolbar()
         toolbar.frame.size.height = 44
         doneButton.width = self.view.frame.width * 1/3
-        //        toolbar.barTintColor = UIColor.grayColor()
-        //        doneButton.customView = UIView() ->>> to imrpove doneButton appearance later
         
         var items = [UIBarButtonItem]()
         items.append(space)
@@ -1020,7 +1018,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
 
     
-    func doneButtonFunction() {
+    func doneButton() {
         _ = textFieldShouldReturn(textFieldOpen.textField)
     }
     
