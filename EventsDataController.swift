@@ -34,6 +34,7 @@ class EventsDataController: NSObject {
             try frc.performFetch()
         } catch let error as NSError{
             print("nonScoreEventTypesFRC fetching error \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "EventsDataController Error 1", systemError: error)
         }
         return frc
     }()
@@ -303,7 +304,8 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 //        default:
 //            print("...other FRC")
 //        }
-//        
+        
+//
         if currentlyProcessedEvent == nil {
             // do not draw pending events prior to saving. This would happen during pickerView showing predating options in mvButton
             graphView.setNeedsDisplay()

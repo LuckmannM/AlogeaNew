@@ -75,8 +75,6 @@ class FloatingMenuView: UIView {
         
         printButton.isEnabled = true
         graphTypeButton.isEnabled = true
-//        listButton.isEnabled = true
-
     }
     
     @IBAction func graphButtonAction(sender: UIButton) {

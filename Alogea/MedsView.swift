@@ -38,7 +38,7 @@ class MedsView: UIView {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("prnMedsFRC fetching error \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "MedsVC Error 1", systemError: error)
         }
         return frc
     }()
@@ -53,7 +53,7 @@ class MedsView: UIView {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("nonScoreEventTypesFRC fetching error \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "MedsVC Error 2", systemError: error)
         }
         
         return frc
@@ -69,7 +69,7 @@ class MedsView: UIView {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("nonScoreEventsByDateFRC fetching error: \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "MedsVC Error 3", systemError: error)
         }
 
         return frc

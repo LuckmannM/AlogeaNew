@@ -54,7 +54,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     var trialDurationPickerValues:[[String]]!
     var frequencyPickerValues: [String]!
     var drugNamePickerValues: [String]!
-//    var drugNamePickerIndexReferences: [Int]!
     
     var trialDurationChosen: TrialDuration!
     var frequencyChosen: String!
@@ -69,7 +68,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     let detailTag = 20
     let controlTag = 30
     let textViewTag = 40
-    //    let textFieldTag = 50
     
     typealias openTextFieldInfo = (isOpen: Bool, path: IndexPath, text: String, textField: UITextField)
     var textFieldOpen: openTextFieldInfo = (false, IndexPath(),"", UITextField())
@@ -81,6 +79,9 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        
+        drugDictionary = DrugDictionary.sharedInstance()
+
         
         let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
         
@@ -125,7 +126,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //        let bar = self.tabBarController!.tabBar
         self.hidesBottomBarWhenPushed = true
         self.tabBarController!.tabBar.isHidden = true
         
@@ -211,7 +211,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         
         datePicker = {
             let picker = UIDatePicker()
-            picker.minuteInterval = 1 // *** CHANGE THIS BACK TO FIVE
+            picker.minuteInterval = 5 // *** CHANGE THIS BACK TO FIVE
             picker.locale = NSLocale.current
             return picker
         }()
@@ -220,7 +220,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             let picker = UIDatePicker()
             picker.locale = NSLocale.current
             picker.datePickerMode = UIDatePickerMode.time
-            picker.minuteInterval = 1 // *** CHANGE THIS BACK TO FIVE
+            picker.minuteInterval = 5 // *** CHANGE THIS BACK TO FIVE
             return picker
         }()
         
@@ -341,20 +341,10 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 textFieldOpen.textField.textColor = UIColor.red
             }
             
-            
-            // pickerValues and drugIndexSelected should already have been set in textFieldEntryAction
-//            drugNamePickerValues = drugDictionary.namePickerTerms()
-//            drugNamePickerIndexReferences = drugDictionary.namePickerIndexReferences
-//            drugNamePicker.selectRow(drugDictionary.selectedNamePickerIndex ?? 0, inComponent: 0, animated: false)
-            
-            print("")
-            print("inserting drugNamePicker, row chosen if \(drugIndexChosen)")
             cellRowHelper.insertVisibleRow(forIndexPath: nameCellIndexpath)
             
             tableView.insertRows(at: [changeAtPath], with: .top)
             drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
-            //drugNamePicker.reloadComponent(0)
-            
         }
         
     }
@@ -368,7 +358,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return cellRowHelper.numberOfRowsInSection(section: section)
     }
     
@@ -518,8 +507,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             addDoneButtonForTextView(sender: notesTextView)
             notesTextView.delegate = self
         default:
-            print("ERROR; cell does not exist: for indexPath \(indexPath)")
-            print("cellType = \(cellType), cellPrototype = \(cellPrototype)")
+            ErrorManager.sharedInstance().errorMessage(message: "NewMedVC Error 1", showInVC: self, errorInfo:"ERROR; cell does not exist: for indexPath \(indexPath)")
             
         }
         
@@ -660,9 +648,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.red
             }
             
-        case "endDatePicker":
-            print("endDatePicker can't be selected")
-            
         case "frequencyCell":
             let changeAtPath = IndexPath(row: indexPath.row+1, section: indexPath.section)
             if cellRowHelper.pickerViewVisible(name: "frequencyPickerCell") {
@@ -691,11 +676,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.red
             }
             
-        case "frequencyPickerCell":
-            print("frequencyPickerCell can't be selected")
-        case "regularityCell":
-            print("regularityCell can't be selected")
-            
         // SECTION 2
         case "timesCell":
             let changeAtPath = IndexPath(row: indexPath.row+1, section: indexPath.section)
@@ -718,9 +698,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 (cell?.contentView.viewWithTag(detailTag) as! UILabel).textColor = UIColor.red
             }
             
-        case "timesPickerCell":
-            print("timesPickerCell can't be selected")
-            
         case "dosesCell":
             if theNewDrug!.regularlyVar == false { // One dose only, edit directly in cellRow textField
                 
@@ -736,10 +713,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                         height: detailLabel.frame.height
                     )
                     dosesTextFieldSize = textField.frame.size
-//                    textField.sizeToFit()
-//                    
-//                    print("doseLabel frame = \(detailLabel.frame)")
-//                    print("doseTextField frame = \(textField.frame)")
                     
                     textField.textAlignment = .right
                     textField.delegate = self
@@ -749,17 +722,13 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     textField.returnKeyType = UIReturnKeyType.done
                     textField.addTarget(self, action: #selector(textFieldChangedContent(textField:)), for: UIControlEvents.editingChanged)
                     cell?.contentView.addSubview(textField)
-                    //textField.addTarget(self, action: #selector(UITextFieldDelegate.textFieldShouldReturn(_:)), for: UIControlEvents.editingDidEnd)
                 }
                 textField.isEnabled = true
-                //                    textField.clearButtonMode = .Always
-                
                 textFieldOpen.isOpen = true
                 textFieldOpen.path = indexPath
                 textFieldOpen.text = cellRowHelper.returnVisibleCellTypeAtPath(indexPath: indexPath)
                 textFieldOpen.textField = textField
                 
-                //textField.placeholder = numberFormatter.string(from: NSNumber(value: theNewDrug!.dosesVar[0]))
                 detailLabel.text = ""
                 textField.becomeFirstResponder()
                 addDoneButtonToKeyboard(sender: textField)
@@ -849,10 +818,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         } else if pickerView.isEqual(drugNamePicker) {
             // pick drug from array
             drugIndexChosen = row
-//            print("")
-//            print("namePickerSelection is \(drugIndexChosen), (\(drugDictionary.cloudDrugArray[drugIndexChosen].displayName))")
-//            print("")
-           
         }
         
         
@@ -878,9 +843,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
     func textFieldChangedContent(textField: UITextField) {
         
         if textField.text == "" { return } // if no text was yet entered, ie. at the beginning
-        
-        print("")
-        print("textFieldEntryAction()")
         
         var titleLabel: UILabel!
         
@@ -944,12 +906,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         if let cell = self.tableView.cellForRow(at: textFieldOpen.path) {
             titleLabel = cell.contentView.viewWithTag(titleTag) as! UILabel
         } else {
-            print("error in NewDrug - textFieldShouldReturn function")
-            print("tried to find cell, but cell is nil")
-            print("textFieldOpen[0] is \(textFieldOpen.isOpen)")
-            print("textFieldOpen[1] is \(textFieldOpen.path)")
-            print("textFieldOpen[2] is \(textFieldOpen.text)")
-            print("textFieldOpen[3] is \(textFieldOpen.textField)")
+            ErrorManager.sharedInstance().errorMessage(message: "NewMedVC Error 3", showInVC: self, errorInfo: "error in NewDrug - textFieldShouldReturn function")
             return false
         }
         
@@ -996,7 +953,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 }
             }
         default:
-            print("textField not associated with a cellType - content not transferred to theNewDrug object")
+            ErrorManager.sharedInstance().errorMessage(message: "NewMedVC Error 4", showInVC: self, errorInfo: "textField not associated with a cellType - content not transferred to theNewDrug object")
         }
         
         textField.isEnabled = false
@@ -1016,8 +973,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         drugNamePickerValues = possibleNames
         drugIndexChosen = possibleIndex ?? 0
         
-        print("drugNamePicker changed, drugIndexChosen = \(drugIndexChosen), nameArray = \(drugNamePickerValues)")
-        
         drugNamePicker.reloadComponent(0)
         drugNamePicker.selectRow(drugIndexChosen, inComponent: 0, animated: false)
         
@@ -1035,8 +990,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         let toolbar = UIToolbar()
         toolbar.frame.size.height = 44
         doneButton.width = self.view.frame.width * 1/3
-        //        toolbar.barTintColor = UIColor.grayColor()
-        //        doneButton.customView = UIView() ->>> to imrpove doneButton appearance later
         
         var items = [UIBarButtonItem]()
         items.append(space)
@@ -1086,7 +1039,6 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                     theNewDrug!.notes = notesTextView.text
                 }
                 if textFieldOpen.isOpen {
-                    print("need to save open textField")
                     _ = textFieldShouldReturn(textFieldOpen.textField )
                 }
                 
@@ -1101,7 +1053,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             }
         }
         else {
-            print("destinationVC from NewDrug could not be cast to DosesDetailTVC")
+            ErrorManager.sharedInstance().errorMessage(message: "NewMedVC Error 5", showInVC: self, errorInfo: "destinationVC from NewDrug could not be cast to DosesDetailTVC")
         }
 
     }

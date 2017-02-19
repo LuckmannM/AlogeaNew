@@ -45,8 +45,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             }
         })
 
-//        inAppStore = InAppStore.sharedInstance()
-        
         self.delegate = self
         
         fetchPublicRecords()
@@ -76,12 +74,10 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
                 for record in results! {
                     let medDataSet = CloudDrug(record: record , database:self.publicDB)
                     self.cloudDrugArray.append(medDataSet)
-                    // print("found \(self.cloudDrugArray.count) sets in public iCloud Med Database")
                 }
                 self.modelUpdated()
                 DispatchQueue.main.async() {
                     self.delegate?.modelUpdated()
-                    print("")
                 }
             }
         }
@@ -91,8 +87,7 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
     
     func errorUpdating(error: NSError) {
         
-        print("error loading DrugDictionary: \(error)")
-        // *** consider displaying an alert prompting user to log into iCloud
+
     }
     
     func modelUpdated() {
@@ -112,7 +107,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             $0.hasPrefix(forSearchTerm.lowercased())
          }).first {
         
-            print("drugsWithMatchesArray is \(drugsWithMatchesArray)")
             // now find best match among drugsWithMatches and this will be the selected drug
             for matchingDrugIndex in drugsWithMatchesArray  { // remember nil return!
                 if let currentPriority = cloudDrugArray[matchingDrugIndex].matchPriorityOf(selectedName: selectedDrugName) {
@@ -121,10 +115,8 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
                         priority = currentPriority
                         bestMatchingDrugIndex = matchingDrugIndex
                     }
-                    print("cloudDrug with index \(matchingDrugIndex) returns priority \(priority)")
                 } else {
-                    print("cloudDrug with index \(matchingDrugIndex) returns  nil priority indicating no match, however there should be one!")
-                    
+                    ErrorManager.sharedInstance().errorMessage(message: "MedDictionary Error 2", errorInfo: "cloudDrug with index \(matchingDrugIndex) returns  nil priority indicating no match, however there should be one!")
                 }
             }
             return (selectedDrugName,cloudDrugArray[bestMatchingDrugIndex!])
@@ -158,7 +150,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
         }
         
         let namePickerArray = ((matchingTermsArray.joined()).map {$0.lowercased() }).sorted()
-            print("namePickerNames for term '\(forTerm)' are \(namePickerArray)")
         
         if let selectedDrugName = namePickerArray.filter( {
             $0.hasPrefix(forTerm.lowercased())
@@ -166,8 +157,6 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             selectedDrugIndexInNamePickerArray = namePickerArray.index(of: selectedDrugName)
         }
         
-        print("position of selectedDrug in namePickerArray = \(selectedDrugIndexInNamePickerArray)")
-
         return (namePickerArray, drugsWithMatchesArray,selectedDrugIndexInNamePickerArray)
     }
      

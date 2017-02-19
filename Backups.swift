@@ -35,7 +35,6 @@ class Backups: UITableViewController {
                 let files = try FileManager.default.contentsOfDirectory(atPath: localBackupsDirectoryPath!)
                 if files.count == 0 { return fileNames }
                 else if files.count > 10 {
-                    print("more than 10 backup directories, delete oldest")
                     self.deleteOldDirectories()
                 }
                 for file in files {
@@ -44,7 +43,7 @@ class Backups: UITableViewController {
                     }
                 }
             } catch let error as NSError {
-                print("can't read local backup sub directories in main backup directory, error:  \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 1", showInVC: self, systemError: error, errorInfo: "can't read local backup sub directories in main backup directory")
             }
         }
         return fileNames
@@ -64,7 +63,6 @@ class Backups: UITableViewController {
                     FileManager.default.contentsOfDirectory(at: cloudBackupsDirectoryURL! as URL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
                 if fileURLs.count == 0 { return fileNames }
                 else if fileURLs.count > 10 {
-                    print("more than 10 backup directories, delete oldest")
                     self.deleteOldDirectories()
                 }
                 for url in fileURLs {
@@ -72,7 +70,7 @@ class Backups: UITableViewController {
                     fileNames.append(fileName)
                 }
             } catch let error as NSError {
-                print("can't read cloud backup sub directories in main backup directory, error:  \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 2", showInVC: self, systemError: error, errorInfo: "can't read cloud backup sub directories in main backup directory")
             }
         }
         return fileNames
@@ -176,42 +174,6 @@ class Backups: UITableViewController {
             }
         }
     }
-    
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-     if editingStyle == .Delete {
-     // Delete the row from the data source
-     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-     } else if editingStyle == .Insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
     // MARK: - Button functions
     
     func startBackupFromLocal(sender: UIButton) {
@@ -278,8 +240,6 @@ class Backups: UITableViewController {
     func deleteOldDirectories() {
         
         var folderURLs = [NSURL]()
-        print("deleting backup folders, as there are more than ten")
-        
         // check local backups folder
         repeat {
             // read backupFolders and count their number
@@ -287,7 +247,7 @@ class Backups: UITableViewController {
                 do {
                     folderURLs = try  FileManager.default.contentsOfDirectory(at: NSURL(fileURLWithPath: localBackupsDirectoryPath!) as URL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles) as [NSURL]
                 } catch let error as NSError {
-                    print("DataIO - deleteOldDirectories: can't read backup sub directories in main backup directory, error:  \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 3", showInVC: self, systemError: error, errorInfo:"deleteOldDirectories: can't read backup sub directories in main backup directory")
                 }
             }
             
@@ -306,7 +266,7 @@ class Backups: UITableViewController {
                         }
                         
                     } catch let error as NSError {
-                        print("BackupController - deleteOldDirectories: can't read backup attributes/ creationDate, error:  \(error)")
+                        ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 4", showInVC: self, systemError: error, errorInfo:"deleteOldDirectories: can't read backup attributes/ creationDate")
                     }
                 }
             }
@@ -314,7 +274,7 @@ class Backups: UITableViewController {
             do {
                 try FileManager.default.removeItem(atPath: fileToDeletePath)
             } catch let error as NSError {
-                print("BackupController - deleteOldDirectories: can't delete oldest backup, error:  \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 5", showInVC: self, systemError: error)
             }
             
         } while folderURLs.count > 10
@@ -334,7 +294,7 @@ class Backups: UITableViewController {
                     folderURLs = try FileManager.default.contentsOfDirectory(at: cloudBackupsDirectoryURL! as URL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles) as [NSURL]
                     if folderURLs.count <= 10 { return }
                 } catch let error as NSError {
-                    print("DataIO - deleteOldDirectories: can't read backup sub directories in main backup directory, error:  \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 6", showInVC: self, systemError: error, errorInfo: "deleteOldDirectories: can't read backup sub directories in main backup directory")
                 }
             }
             
@@ -353,7 +313,7 @@ class Backups: UITableViewController {
                         }
                         
                     } catch let error as NSError {
-                        print("DataIO - deleteOldDirectories: can't read backup attributes/ creationDate, error:  \(error)")
+                        ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 7", showInVC: self, systemError: error, errorInfo: "deleteOldDirectories: can't read backup attributes/ creationDate")
                     }
                 }
             }
@@ -361,7 +321,7 @@ class Backups: UITableViewController {
             do {
                 try FileManager.default.removeItem(atPath: fileToDeletePath)
             } catch let error as NSError {
-                print("DataIO - deleteOldDirectories: can't delete oldest backup, error:  \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 8", showInVC: self, systemError: error, errorInfo:"deleteOldDirectories: can't delete oldest backup")
             }
             
         } while folderURLs.count > 10

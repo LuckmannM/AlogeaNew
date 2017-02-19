@@ -11,6 +11,7 @@
 		2604F8391E34D03A00742FE6 /* GraphScoreChoserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */; };
 		260898791E36603200CBB6B6 /* Backups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260898781E36603200CBB6B6 /* Backups.swift */; };
 		2608987B1E36614800CBB6B6 /* BackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608987A1E36614800CBB6B6 /* BackupController.swift */; };
+		26202FAA1E53542400966532 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26202FA91E53542400966532 /* ErrorManager.swift */; };
 		262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262F2AF91E2534EA00E8779E /* DigitsFromString.swift */; };
 		263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0101DD4660300CD7963 /* DrugListCell.swift */; };
 		263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */; };
@@ -90,6 +91,7 @@
 		2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphScoreChoserCell.swift; sourceTree = "<group>"; };
 		260898781E36603200CBB6B6 /* Backups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Backups.swift; sourceTree = "<group>"; };
 		2608987A1E36614800CBB6B6 /* BackupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupController.swift; sourceTree = "<group>"; };
+		26202FA91E53542400966532 /* ErrorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		262F2AF91E2534EA00E8779E /* DigitsFromString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigitsFromString.swift; sourceTree = "<group>"; };
 		263DA0101DD4660300CD7963 /* DrugListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListCell.swift; sourceTree = "<group>"; };
 		263DA0121DD4D41D00CD7963 /* DrugListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListViewController.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
 				2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */,
+				26202FA91E53542400966532 /* ErrorManager.swift */,
 				263DA00F1DD464E500CD7963 /* MainView Group */,
 				263DA0141DD4D42600CD7963 /* DrugList Group */,
 				26770D541E2C25C800DCCBA6 /* Settings Group */,
@@ -542,6 +545,7 @@
 			files = (
 				26E3B90B1DA1816E00D157BB /* Event+CoreDataProperties.swift in Sources */,
 				267F78D11DC5264F008CC23E /* ClipView.swift in Sources */,
+				26202FAA1E53542400966532 /* ErrorManager.swift in Sources */,
 				26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */,
 				269B9BFD1DDE5A5300C3BDA9 /* StoreViewCell.swift in Sources */,
 				263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */,

@@ -38,13 +38,6 @@ class StoreView: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = UIBarButtonSystemItem.done
-
     
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchaseComplete(notification:)), name: NSNotification.Name(rawValue: InAppStorePurchaseNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(productRequestComplete(notification:)), name: NSNotification.Name(rawValue: InAppStoreProductRequestCompleted), object: nil)
@@ -54,15 +47,17 @@ class StoreView: UITableViewController {
         }
         
         tableView.allowsSelection = false
+        inAppStore.callingViewController = self
 }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        inAppStore.callingViewController = nil
     }
     
     func noNetworkAlert() {
         
-        let alert = UIAlertController(title: "No internet connection", message: "There is currently no network access. Please return to in-app purchase option when a network connection is available", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "No internet connection", message: "There is currently no network access\nPlease return to in-app purchase option when a network connection is available", preferredStyle: UIAlertControllerStyle.alert)
         
         let goBackAction = UIAlertAction(title: "Back", style: .default, handler: {
             (alert) -> Void in
@@ -220,42 +215,6 @@ class StoreView: UITableViewController {
         
         header.textLabel?.textColor = ColorScheme.sharedInstance().lightGray
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
 
     // MARK: - Navigation
 

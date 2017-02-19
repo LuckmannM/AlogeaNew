@@ -20,7 +20,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     lazy var stack : CoreDataStack = {
         return (UIApplication.shared.delegate as! AppDelegate).stack
     }()
-    var drugDictionary: DrugDictionary!
+//    var drugDictionary: DrugDictionary!
     var inAppStore: InAppStore!
     var searchController: UISearchController!
     
@@ -51,7 +51,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         super.viewWillAppear(animated)
         
-        // stack.updateContextWithUbiquitousChangesObserver = true
         self.tabBarController?.tabBar.isHidden = false
         drugCurrentStatusUpdate()
         fetchDrugList()
@@ -75,13 +74,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
-        /*
-         if section == 0 {
-         textSize = 20 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
-         header.textLabel?.font = UIFont(name: "AvenirNext-Bold", size: textSize)
-         } else {
-        */
-        
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
@@ -91,11 +83,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         // the next hides the search bar until it is dragged down by user
         tableView.contentOffset = CGPoint(x: 0.0, y: self.tableView.tableHeaderView!.frame.size.height)
         
-
-        drugDictionary = DrugDictionary.sharedInstance()
+//        drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
-        
         drugList.delegate = self
+
 
     }
     
@@ -117,15 +108,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         do {
             try drugList.performFetch()
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 1", showInVC: self, systemError: error)
         }
-        
-//        print("re-fetched drugList:...")
-//        
-//        for object in drugList.fetchedObjects! {
-//            print("name = \((object as DrugEpisode).name), status = \((object as DrugEpisode).isCurrent), endDate = \((object as DrugEpisode).endDate)")
-//        }
-        
     }
     
     func drugCurrentStatusUpdate() {
@@ -139,7 +123,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         do {
             currentDrugArray = try managedObjectContext.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 2", showInVC: self, systemError: error)
         }
         
         // check if isCurrentStore has changed since last fetch
@@ -148,13 +132,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             if aDrug.needsUpdate {
                 // OPTION 2
                 aDrug.isCurrentUpdate()
-                //                aDrug.setValue(aDrug.isCurrentUpdate(), forKey: "isCurrentStore")
-                // print("\(aDrug.name) status updated to \(aDrug.isCurrent)")
                 do {
                     try aDrug.managedObjectContext!.save()
-                    // print("\(aDrug.name) individually saved to moc")
                 } catch let error as NSError {
-                    print("error when saving single drug object, \(error), \(error.userInfo)")
+                    ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 3", showInVC: self, systemError: error, errorInfo:"error when saving single drug object")
                 }
                 
             }
@@ -167,7 +148,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         do {
             try drugList.performFetch()
         } catch let error as NSError {
-            print("Error fetching notes: \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 4", showInVC: self, systemError: error)
         }
         
     }
@@ -192,18 +173,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         do {
             try drugList.performFetch()
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 5", showInVC: self, systemError: error)
         }
         
-        
         tableView.reloadData() // important for life search view updates!
-        
-        //        let checkObjects = drugList.fetchedObjects as! [DrugEpisode]
-        //        for aDrug in checkObjects {
-        //            print("fetched drug: name is '\(aDrug.name)', nameStore is '\(aDrug.nameStore)'")
-        //        }
-        
-        
     }
     
     func configureCell(cell: DrugListCell, indexPath: IndexPath) {
@@ -269,8 +242,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             }
 
         default:
-            print("error in DrugListVC - section number wrong: \(indexPath.section)")
-            
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 6", showInVC: self, errorInfo:"error in DrugListVC - section number wrong: \(indexPath.section)")
         }
         
     }
@@ -281,7 +253,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             try  managedObjectContext.save()
         }
         catch let error as NSError {
-            print("Error saving \(error)", terminator: "")
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 7", showInVC: self, systemError: error)
         }
         
     }
@@ -333,9 +305,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             } else {
                 PrintPageRenderer.printDialog(file: pdfFile, inView: nil)
             }
-            
-            // print("returning to graphViewContainer from presenting print dialog")
-            
         })
         
         exportDialog.addAction(printAction)
@@ -524,15 +493,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             selectedDrug.saveEffectAndSideEffects()
             
             cell.ratingImageForButton(effect: presentedController.effectSelected, sideEffects: presentedController.sideEffectSelected)
-            // tableView.reloadRows(at: [indexPath], with: .automatic)
-            
             save()
-        } else {
-            // return from deleteAlertController on iPad only
-            
         }
-
-        
     }
     
     // MARK: - Navigation
@@ -550,11 +512,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     currentDrugs = try managedObjectContext.fetch(request)
                 }
                 catch let error as NSError {
-                    print("error fetching earliest selected event date in EventsDataController: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 8", showInVC: self, systemError: error, errorInfo: "error fetching earliest selected event date in EventsDataController: \(error)")
                 }
-                
-//                print("fetched current drugs")
-//                print("there are \(currentDrugs?.count) drugs")
                 if currentDrugs == nil { return true }
                 
                 if currentDrugs!.count > 0 {
@@ -609,7 +568,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
         if let nextViewController = segue.destination as? NewDrug {
             nextViewController.rootViewController = self
-            nextViewController.drugDictionary = drugDictionary
+//            nextViewController.drugDictionary = drugDictionary
             
             if segue.identifier == "editDrug" {
                 if let indexPath = sender {
@@ -618,7 +577,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 }
             }
         } else {
-            print("error createNew segue: destinationViewcontrolle not defined")
+            ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 9", showInVC: self, errorInfo: "error createNew segue: destinationViewcontrolle not defined")
         }
 
     }
@@ -626,25 +585,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     @IBAction
     func returnFromNewDrugTVC(segue:UIStoryboardSegue) {
         
-        // print("DrugList - returning from NewDrug")
-        
         save()
         tableView.reloadData()
-        
-        /*
-         print("returning from 'New Drug' and saving")
-         print("drugList now has \(drugList.fetchedObjects?.count) drugs")
-         for object in drugList.fetchedObjects! {
-         if let drug = object as DrugEpisode? {
-         print("name: \(drug.name)")
-         print("startDate: \(drug.startDate)")
-         print("isCurrent: \(drug.isCurrent)")
-         print("----------")
-         }
-         }
-         */
-
-        
     }
     
     
@@ -659,7 +601,6 @@ extension DrugListViewController: UITableViewDataSource {
         guard let sections = drugList.sections else {
             return 0
         }
-        // print("drugList numberOfSections = \(sections.count)")
         return sections.count
 
     }
@@ -667,18 +608,12 @@ extension DrugListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if let sectionInfo = drugList.sections?[section] {
-            // print("drugList numberOfObjects in section \(section) = \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects
         }
         else {
             return 0
         }
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 60
-//    }
-    
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
@@ -691,20 +626,7 @@ extension DrugListViewController: UITableViewDataSource {
         
         return cell
     }
-    
-    /*
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60 )
-        let header =
-        
-        let titleLabel = UILabel(frame: CGRect(x: 15, y: 20, width: 0, height:0))
-        
-        
-        
-    }
-    */
-    
+
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
         let header = view as! UITableViewHeaderFooterView
@@ -759,7 +681,7 @@ extension DrugListViewController: UITableViewDelegate {
                 */
                 
                 guard (self.drugList.sections?[indexPath.section]) != nil  else {
-                    print("error in DrugList.editRowActions.endAction - section \(indexPath.section) doesn't exist")
+                    ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 10", showInVC: self, errorInfo: "error in DrugList.editRowActions.endAction - section \(indexPath.section) doesn't exist")
                     return
                 }
                 
@@ -824,14 +746,12 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
     
    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("drugList FRC will change content")
         tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 
         tableView.endUpdates()
-        print("drugList FRC finished changing content")
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -864,13 +784,10 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
         let indexSet = NSIndexSet(index: sectionIndex) as IndexSet
         switch type {
         case .insert:
-            // print("inserting section \(sectionInfo.name)")
             tableView.insertSections(indexSet, with: .automatic)
         case .delete:
-            // print("deleting section \(sectionInfo.name)")
            tableView.deleteSections(indexSet, with: .automatic)
         case .update:
-            // print("updating section \(sectionInfo.name)")
             tableView.reloadSections([sectionIndex], with: .automatic)
         case .move:
             print("move section \(sectionInfo.name) at index \(sectionIndex)")
@@ -883,18 +800,6 @@ extension DrugListViewController: NSFetchedResultsControllerDelegate {
 extension DrugListViewController: MFMailComposeViewControllerDelegate {
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        
-        //        switch result {
-        //        case MFMailComposeResultCancelled:
-        //            print("email cancelled")
-        //        case MFMailComposeResultSent:
-        //            print("email sent")
-        //        case MFMailComposeResultSaved:
-        //            print("email saved")
-        //        default:
-        //            print("email result default")
-        //        }
-        
         self.dismiss(animated: true, completion: nil)
         
     }

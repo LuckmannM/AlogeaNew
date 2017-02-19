@@ -57,14 +57,8 @@ class GraphView: UIView {
 
     // MARK: - methods
     
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//    }
-        
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        print("init GraphView")
         
         self.helper = GraphViewHelper(graphView: self)
         self.graphPoints = [CGPoint]()
@@ -83,33 +77,12 @@ class GraphView: UIView {
         graphPoints = [CGPoint]()
         timeLinePoints = [CGPoint]()
         
-        
-        // *** Debug
-//        if eventsDataController.allEventsByDateFRC.fetchedObjects?.count == 0 {
-//            eventsDataController.createExampleEvents()
-//            helper.printSelectedScoreEventDates()
-//        }
-        // ***
-        
-        self.medsView = MedsView(graphView: self) // or add to GraphContainerView or ClipView
-        // need to later add/remove as subView when user selects
-        // self.medViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGesture(sender:)))
-        // self.medViewTapGesture.addTarget(medsView, action: #selector(MedsView.tap(sender:)))
-        
-        // DEBUG, later change on user request
+        self.medsView = MedsView(graphView: self)
         self.addSubview(medsView)
-
-        print("init GraphView end")
 
     }
     
     override func draw(_ rect: CGRect) {
-        
-        /*
-        print("")
-        print("draw GraphView...")
-        print("medView.frame = \(medsView.frame), graphView.frame = \(frame)")
-        */
         
         drawTimeLine()
         if refreshPointsFlag {
@@ -239,9 +212,6 @@ class GraphView: UIView {
         barsPath.lineWidth = 1.0
         UIColor.white.setStroke()
         barsPath.stroke()
-//        colorScheme.lightGray.setFill()
-//        barsPath.fill()
-        
     }
     
     func addTimeLineLabel() {

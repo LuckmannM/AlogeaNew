@@ -36,11 +36,7 @@ class TimeLineHelper {
     // Mark: - init and class functions
     
     init(helper: GraphViewHelper) {
-        print("starting GraphView TimeLine init...")
-
         self.graphViewHelper = helper
-        
-        print("...ending GraphView TimeLine init")
     }
     
     class func standardTimeIntervals() -> [TimeInterval] {

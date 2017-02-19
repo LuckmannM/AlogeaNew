@@ -444,10 +444,9 @@ public class DrugEpisode: NSManagedObject {
         
         do {
             try  self.managedObjectContext?.save()
-            print("saving drug \(name) in DrugEpisode")
         }
         catch let error as NSError {
-            print("Error saving \(error)", terminator: "")
+            ErrorManager.sharedInstance().errorMessage(message: "MedEpisode Error 1", systemError: error)
         }
 
     }
@@ -544,11 +543,8 @@ public class DrugEpisode: NSManagedObject {
                 center.add(request, withCompletionHandler: {
                     (error: Error?) in
                     if let theError = error {
-                        print("error in scheduling \(request.identifier) is \(theError.localizedDescription)")
+                        ErrorManager.sharedInstance().errorMessage(message: "MedEpisode Error 2", systemError: theError as NSError?, errorInfo: "error in scheduling \(request.identifier) is \(theError.localizedDescription)")
                     }
-                    print("scheduled notification \(request.identifier) with date \(reminderDate)")
-                    print("content body is \(content.body)")
-
                 })
             }
             i = i+1

@@ -27,10 +27,7 @@ class DrugRating: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneButtonAction))
-        
-        //        setCheckMarks()
-        //        tableView.reloadData()
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneButtonAction))
     }
     
     override func didReceiveMemoryWarning() {
@@ -38,10 +35,10 @@ class DrugRating: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func doneButtonAction() {
-        //        theDrug.saveEffectAndSideEffects()
-        
-    }
+//    func doneButtonAction() {
+//        //        theDrug.saveEffectAndSideEffects()
+//        
+//    }
     
     func setCheckMarks() {
         
@@ -149,9 +146,6 @@ class DrugRating: UITableViewController {
                 sideEffectSelected = "in evaluation"
             }
         }
-        
-        //
-        //        setCheckMarks()
         
     }
     

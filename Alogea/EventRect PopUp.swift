@@ -88,24 +88,9 @@ class EventPopUp: UIViewController {
     @IBAction func deleteEvent(_ sender: UIButton) {
         
         if let event = eventObject as? Event {
-//            self.managedObjectContext.delete(event)
-//            
-//            do {
-//                try  managedObjectContext.save()
-//                print ("event deleted")
-//            }
-//            catch let error as NSError {
-//                print("Error saving in EventRect popover delate function \(error)", terminator: "")
-//            }
             deleteAlert(object: event)
         }
         
-        
-//        self.dismiss(animated: true, completion: { (void) in
-//            
-//            self.graphContainer.graphView.medsView.setNeedsDisplay()
-//            
-//        })
         
     }
     
@@ -119,10 +104,9 @@ class EventPopUp: UIViewController {
             self.managedObjectContext.delete(object)
             do {
                 try  self.managedObjectContext.save()
-                print ("event deleted")
             }
             catch let error as NSError {
-                print("Error saving in EventRect popover delate function \(error)", terminator: "")
+                ErrorManager.sharedInstance().errorMessage(message: "EventRectPopUpVC Error 1", systemError: error, errorInfo:"Error saving in EventRect popover delate function")
             }
 
             self.dismiss(animated: true, completion: { (void) in
@@ -158,14 +142,5 @@ class EventPopUp: UIViewController {
         self.present(deleteAlert, animated: true, completion: nil)
         
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -251,23 +251,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Error handling
     
-    func errorMessage(message: String, showInVC: UIViewController) {
-        let title = "We're really sorry, an error occurred!"
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        // Configure Alert Controller
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) -> Void in
-            
-        }))
-        
-        // Present Alert Controller
-        showInVC.present(alertController, animated: true, completion: nil)
-        
-        //*** consider sending an email to support with description
-        
+
+}
+
+public extension UIWindow {
+    // used for ErrorManager related function calls to find currently visible VC if class where error occurred is not a VC
+    public var visibleViewController: UIViewController? {
+        return UIWindow.getVisibleViewControllerFrom(vc: self.rootViewController)
     }
-
-
+    
+    public static func getVisibleViewControllerFrom(vc: UIViewController?) -> UIViewController? {
+        if let nc = vc as? UINavigationController {
+            return UIWindow.getVisibleViewControllerFrom(vc: nc.visibleViewController)
+        } else if let tc = vc as? UITabBarController {
+            return UIWindow.getVisibleViewControllerFrom(vc: tc.selectedViewController)
+        } else {
+            if let pvc = vc?.presentedViewController {
+                return UIWindow.getVisibleViewControllerFrom(vc: pvc)
+            } else {
+                return vc
+            }
+        }
+    }
 }
 

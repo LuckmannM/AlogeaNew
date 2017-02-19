@@ -66,12 +66,6 @@ extension GraphScoreChoserCell: UITextFieldDelegate {
         return false
     }
     
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        
-//        textField.sizeToFit()
-//        return true
-//    }
-    
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         print("end text editing")
         if textField.text?.characters.last == " " {

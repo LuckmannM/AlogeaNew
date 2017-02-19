@@ -88,8 +88,6 @@ class GraphContainerView: UIView, UIGestureRecognizerDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        print("starting GraphContainer init...")
-
         backgroundColor = ColorScheme.sharedInstance().duskBlue
         addSubview(upperLabel)
         addSubview(upperLimitLabel)
@@ -103,8 +101,6 @@ class GraphContainerView: UIView, UIGestureRecognizerDelegate {
         labelTap = UITapGestureRecognizer(target: self, action: #selector(graphLabelTap))
         labelTap.delegate = self
         upperLabel.addGestureRecognizer(labelTap)
-        
-        print("... eding GraphContainer init")
     }
 
     deinit {
@@ -163,10 +159,6 @@ class GraphContainerView: UIView, UIGestureRecognizerDelegate {
     }
     
     func graphLabelTap() {
-//        print("label tapped")
-//        print("label frame = \(upperLabel.frame)")
-//        print("gContView frame = \(self.frame)")
-//        let rect = upperLabel.frame.offsetBy(dx: 0, dy: 2)
         mainViewController.scoreChangeAction(fromRect: upperLabel.frame, fromView: upperLabel)
     }
     
