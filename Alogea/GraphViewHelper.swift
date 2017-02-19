@@ -72,7 +72,7 @@ class GraphViewHelper: NSObject {
         do  {
             allEvents = try moc.fetch(fetchRequest)
         }  catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "GVHelper Error 1", systemError: error)
         }
         
         let allRegDrugsFRC = MedicationController.sharedInstance().regMedsSortedByStartDateFRC
@@ -136,14 +136,9 @@ class GraphViewHelper: NSObject {
 
     convenience init(graphView: GraphView) {
         
-        print("starting GraphView Helper init...")
-
         self.init()
         self.graphView = graphView
         self.timeLineHelper = TimeLineHelper(helper: self)
-
-        print("...ending GraphView Helper init")
-
     }
     
     class func sharedInstance() -> GraphViewHelper {
@@ -162,11 +157,6 @@ class GraphViewHelper: NSObject {
     }
     
     func barGraphGradient() -> CGGradient {
-        
-//        let colourSpace = CGColorSpaceCreateDeviceRGB()
-//        let colourLocationsForColumns: [CGFloat] = [0.2,0.5,0.8,1.0]
-//        let coloursForColumns = [colorScheme.gradientRed.cgColor, colorScheme.gradientRed.cgColor, colorScheme.gradientYellow.cgColor,colorScheme.pearlWhite.cgColor]
-//        return CGGradient(colorsSpace: colourSpace, colors: coloursForColumns as CFArray, locations: colourLocationsForColumns)!
         
         let colourSpace = CGColorSpaceCreateDeviceRGB()
         let gradientStartColour = colorScheme.pearlWhite.withAlphaComponent(1.0)
@@ -198,10 +188,6 @@ class GraphViewHelper: NSObject {
         guard (graphEventsFRC.fetchedObjects?.count ?? 0)! > 0 else {
             return nil
         }
-        
-        // *** debug only
-        // print("there are \(graphEventsFRC.fetchedObjects!.count) selected scoreEvents named '\(selectedScore)'")
-        // *** debug only
         
         var dataArray = [scoreEventGraphData]()
         for object in graphEventsFRC.fetchedObjects! {
@@ -237,7 +223,6 @@ class GraphViewHelper: NSObject {
             points.append(newPoint)
         }
         
-//        print("GV Helper returning \(points.count) graph points to GraphView for drawing")
         return points
     }
     

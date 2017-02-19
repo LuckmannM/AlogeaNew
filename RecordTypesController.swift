@@ -31,7 +31,7 @@ class RecordTypesController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("allRecordTypesFRC fetching error")
+            ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 1", systemError: error)
         }
         
         frc.delegate = self
@@ -43,7 +43,6 @@ class RecordTypesController: NSObject {
         var nameArray = [String]()
         
         guard allTypes.fetchedObjects != nil else {
-            print("no recordTypes exist")
             return nameArray
         }
         
@@ -64,13 +63,9 @@ class RecordTypesController: NSObject {
     override init() {
         super.init()
         
-        print("starting RecordTypes Controller init...")
-
-        
-        print("recordTypes has \(allTypes.fetchedObjects?.count ?? 0) objects")
-        for object in allTypes.fetchedObjects! {
-            print("recordType name is \(object.name) ")
-        }
+//        for object in allTypes.fetchedObjects! {
+//            print("recordType name is \(object.name) ")
+//        }
         
         // check all scoreEventTypes from EventsDataController to see whether a RecordType for each different scoreEvent exists
 //        for section in EventsDataController.sharedInstance().scoreEventTypesFRC.sections! {
@@ -79,7 +74,6 @@ class RecordTypesController: NSObject {
 //            }
 //        }
 
-        print("...ending RecordTypes Controller init")
     }
     
     class func sharedInstance() -> RecordTypesController {
@@ -122,7 +116,7 @@ class RecordTypesController: NSObject {
         do {
             record = try managedObjectContext.fetch(request)
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 2", systemError: error)
         }
         for object in record {
             object.name = newName
@@ -167,7 +161,7 @@ class RecordTypesController: NSObject {
             // print("saving drugList moc")
         }
         catch let error as NSError {
-            print("Error saving \(error)", terminator: "")
+            ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 3", systemError: error)
         }
     }
 
@@ -182,10 +176,10 @@ extension RecordTypesController: NSFetchedResultsControllerDelegate {
         // if a recordType is renamed or deleted the EventsDataController must be informed
         // so that all events with that name are renamed or deleted as well
         
-        print("recordTypes have been changed, now have \(allTypes.fetchedObjects?.count ?? 0) objects")
-        for object in allTypes.fetchedObjects! {
-            print("recordType name is \(object.name) ")
-        }
+//        print("recordTypes have been changed, now have \(allTypes.fetchedObjects?.count ?? 0) objects")
+//        for object in allTypes.fetchedObjects! {
+//            print("recordType name is \(object.name) ")
+//        }
         
     }
 }

@@ -35,7 +35,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
     var eventsDataController = EventsDataController.sharedInstance()
     var eventPicker: UIPickerView!
     var addedEventType: String?
-//    var eventPickerTitles = [String]
     let placeHolderText = "Dictate or type your diary entry here"
     var eventPickerSelection: Int!
     
@@ -79,7 +78,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         
         self.view.backgroundColor = ColorScheme.sharedInstance().lightGray
         
-        //checkLicenseAcceptance()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -128,12 +126,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let eulaView = storyBoard.instantiateViewController(withIdentifier: "EULAViewController") as! EULAViewController
             eulaView.rootViewController = self
-            
-            // eulaView.modalPresentationStyle = .popover
             self.present(eulaView, animated: true, completion: nil)
-            //let popUpController = eulaView.popoverPresentationController
-            //popUpController?.delegate = self
-
         }
     }
     
@@ -227,15 +220,15 @@ extension MainViewController: UITextViewDelegate {
         eventPicker.selectRow(0, inComponent: 0, animated: false)
         eventPickerSelection = 0
         
-        let arrowView = UIImageView(image: UIImage(named: "UpDownArrows"))
-        arrowView.frame = CGRect(x: 15, y: 15, width: 17, height: 40)
-        arrowView.alpha = 0.8
-        let arrowView2 = UIImageView(image: UIImage(named: "UpDownArrows"))
-        arrowView2.frame = arrowView.frame.offsetBy(dx: eventPicker.frame.width - 10 - arrowView2.frame.width, dy: 0)
-        arrowView2.alpha = 0.8
-        
-        textEntryWindow.addSubview(arrowView)
-        textEntryWindow.addSubview(arrowView2)
+//        let arrowView = UIImageView(image: UIImage(named: "UpDownArrows"))
+//        arrowView.frame = CGRect(x: 15, y: 15, width: 17, height: 40)
+//        arrowView.alpha = 0.8
+//        let arrowView2 = UIImageView(image: UIImage(named: "UpDownArrows"))
+//        arrowView2.frame = arrowView.frame.offsetBy(dx: eventPicker.frame.width - 10 - arrowView2.frame.width, dy: 0)
+//        arrowView2.alpha = 0.8
+//        
+//        textEntryWindow.addSubview(arrowView)
+//        textEntryWindow.addSubview(arrowView2)
 
         
         textView = {
@@ -390,7 +383,7 @@ extension MainViewController: UITextViewDelegate {
         // let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView.clipView, name: "ScoreGraph")
         
         guard let printImage = PrintPageRenderer.renderAsImage(view: graphContainerView) else {
-            print("error rendering graphContainerView for print")
+            ErrorManager.sharedInstance().errorMessage(message: "MainVC Error 1", showInVC: self, errorInfo:"error rendering graphContainerView for print")
             return
         }
         
@@ -406,58 +399,6 @@ extension MainViewController: UITextViewDelegate {
         self.present(expoController, animated: true, completion: nil)
         
     }
-
-    /*
-    func export(sender: UIButton) {
-        
-        floatingMenuView.isHidden = true // hide flaotingView so it's not visible in the 'screenShot' pdf image
-        let pdfFile = PrintPageRenderer.pdfFromView(fromView: graphContainerView, name: "ScoreGraph")
-        floatingMenuView.isHidden = false
-        
-        let exportDialog = UIAlertController(title: "Export options", message: nil, preferredStyle: .actionSheet)
-        
-        let printAction = UIAlertAction(title: "Print", style: UIAlertActionStyle.default, handler: { (exportDialog)
-            -> Void in
-            
-            PrintPageRenderer.printDialog(file: pdfFile, inView: self.view)
-            
-        })
-        
-        exportDialog.addAction(printAction)
-        
-        if MFMailComposeViewController.canSendMail() {
-            
-            let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (exportDialog)
-                -> Void in
-                
-                self.exportToEmailAction(file: pdfFile)
-                
-            })
-            
-            exportDialog.addAction(emailAction)
-            
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (exportDialog)
-            -> Void in
-            
-            return
-            
-        })
-        
-        exportDialog.addAction(cancelAction)
-        
-        if UIDevice().userInterfaceIdiom == .pad {
-            let popUpController = exportDialog.popoverPresentationController
-            popUpController!.permittedArrowDirections = .up
-            popUpController?.sourceView = sender
-            popUpController?.sourceRect = sender.bounds
-        }
-        
-        self.present(exportDialog, animated: true, completion: nil)
-        
-    }
-     */
    
     func exportToEmailAction(file: NSURL) {
         
@@ -522,8 +463,6 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate {
 
     func scoreChangeAction(fromRect: CGRect, fromView: UILabel) {
-        
-        // floatingMenuView.slideIn()
         
         var height: CGFloat = CGFloat((RecordTypesController.sharedInstance().recordTypeNames.count + 1) * 44)
         if height > 220 { height = 220 }
@@ -602,14 +541,14 @@ extension MainViewController: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension MainViewController: UIPrintInteractionControllerDelegate {
-    
-    //    func printInteractionControllerParentViewController(printInteractionController: UIPrintInteractionController) -> UIViewController {
-    //        print("printINteractionController parentController = \()")
-    //    }
-    
-    
-}
+//extension MainViewController: UIPrintInteractionControllerDelegate {
+//    
+//    //    func printInteractionControllerParentViewController(printInteractionController: UIPrintInteractionController) -> UIViewController {
+//    //        print("printINteractionController parentController = \()")
+//    //    }
+//    
+//    
+//}
 
 extension MainViewController {
     

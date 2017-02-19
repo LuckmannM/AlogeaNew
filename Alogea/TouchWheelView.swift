@@ -58,16 +58,11 @@ class TouchWheelView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        print("starting TouchWheel init...")
         mainViewController = (UIApplication.shared.delegate as! AppDelegate).tabBarViews[0] as! MainViewController
         mainButtonController = MVButtonController(viewRect: CGRect.zero, touchWheel: self, mainViewController: self.mainViewController)
         logoView = UIImageView(image: UIImage(named: "CircularLogo"))
         logoView.alpha = 0.7
         insertSubview(logoView, belowSubview: mainButtonController.buttonView)
-        //addSubview(logoView)
-        
-        print("...ending TouchWheel init")
     }
     
     func switchConstraints(forLandScape:Bool) {
@@ -152,18 +147,6 @@ class TouchWheelView: UIView {
     }
     
     // MARK: - gestureFunctions
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        
-//        // to get initial touch location before pan starts
-//        // this initial touchLocation is not available from the PanGestureRecogniser
-//        self.backgroundColor = UIColor.red
-//        for touch: AnyObject in touches {
-//            touchPoint = touch.location(in: self)
-//            print("touchwheel touches began in \(touchPoint)")
-//        }
-//
-//    }
     
     @IBAction func touchGesture(recogniser: UIPanGestureRecognizer) {
         

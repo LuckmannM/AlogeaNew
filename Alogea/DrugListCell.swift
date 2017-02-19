@@ -26,13 +26,6 @@ class DrugListCell: UITableViewCell {
         
     }
     
-    //
-    //    override func setSelected(selected: Bool, animated: Bool) {
-    //        super.setSelected(selected, animated: animated)
-    //
-    //        // Configure the view for the selected state
-    //    }
-    
     override func prepareForReuse() {
         nameLabel.text = nil
         doseLabel.text = nil
@@ -81,20 +74,10 @@ class DrugListCell: UITableViewCell {
         default:
             imageToReturn = UIImage(named: "3Gray")
         }
-        // ratingButton.frame = CGRect(x: ratingButton.frame.maxX - imageToReturn.size.width, y: ratingButton.frame.origin.y, width: imageToReturn.size.width, height: imageToReturn.size.height)
         ratingButton.setImage(imageToReturn, for: .normal)
         ratingButton.setBackgroundImage(imageToReturn, for: .normal)
         ratingButton.sizeToFit()
         
         }
     
-//    func bellImage(visible: Bool) {
-//        
-//        if visible {
-//            reminderImage.image = UIImage(named: "Bell")
-//        } else {
-//            reminderImage.image = nil
-//        }
-//    }
-
 }

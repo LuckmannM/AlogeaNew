@@ -17,13 +17,12 @@ class PrintPageRenderer: UIPrintPageRenderer {
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
         let documentDirectory = path.object(at: 0)
-        return (documentDirectory as AnyObject).appendingPathComponent("DrugListPDF.pdf" as String)
+        return (documentDirectory as AnyObject).appendingPathComponent("MedicinesList.pdf" as String)
         
     }
     
     class func createPDF(fromText: NSMutableAttributedString) -> NSURL {
         
-        //        let textToPrint = CFAttributedStringCreate(nil, fromText, nil)
         let framesetter = CTFramesetterCreateWithAttributedString(fromText)
         let pdfFile = generatePDFFile()
         
@@ -97,21 +96,11 @@ class PrintPageRenderer: UIPrintPageRenderer {
     // only this function is used in Alogea
     class func renderAsImage(view: UIView) -> Data? {
         
-//        let paperSize = CGSize(width: 612, height: 792)
-//        let printablePaperSize = CGSize(width: paperSize.width - 144, height: paperSize.height - 144)
-//        
-//        let scaleWidth = printablePaperSize.width / view.frame.width
-//        let scaleHeight = printablePaperSize.width / view.frame.height
-//        let scale = scaleHeight > scaleWidth ? scaleWidth : scaleHeight
-//        let inset = (printablePaperSize.width - view.frame.width * scale * 0.8) / 2
-        
         UIGraphicsBeginImageContext(view.frame.size)
         guard let imageContext = UIGraphicsGetCurrentContext()  else {
-            print("error in converting graphView to PNG image")
+            ErrorManager.sharedInstance().errorMessage(message: "PrintPageRenderer Error 1", errorInfo:"error in converting graphView to PNG image")
             return nil
         }
-//        imageContext.scaleBy(x: scale * 0.8, y: scale * 0.8)
-//        imageContext.translateBy(x: inset, y: inset)
         view.layer.render(in: imageContext)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
@@ -128,14 +117,6 @@ class PrintPageRenderer: UIPrintPageRenderer {
         // USL used in US and Canada
         
         let standardPDFSize = CGSize(width: 612, height: 792)
-        //        let locale = NSLocale.currentLocale()
-        //        let countryCode = locale.objectForKey(NSLocaleCountryCode) as! String
-        //        let countryName = locale.displayNameForKey(NSLocaleCountryCode, value: countryCode)
-        //        var paperSize = CGSize(width: 594, height: 841.68)
-        
-        //        if countryCode == "US" || countryCode == "CA" {
-        //            paperSize = CGSize(width: 612, height: 792)
-        //        }
         
         return standardPDFSize
     }
@@ -164,7 +145,7 @@ class PrintPageRenderer: UIPrintPageRenderer {
             }
         }
         else {
-            print("can't print file \(file)")
+            ErrorManager.sharedInstance().errorMessage(message: "PrintPageRenderer Error 2", errorInfo:"can't print file")
         }
     }
     
@@ -173,11 +154,8 @@ class PrintPageRenderer: UIPrintPageRenderer {
         
         var currentRange = textRange
         let currentContext = UIGraphicsGetCurrentContext()
-        // currentContext!.textMatrix = CGAffineTransformIdentity
         let frameRect = CGRect(x: 72, y: 72, width: 468, height: 648)
         let framePath = CGMutablePath()
-        // CGPathAddRect(framePath, nil, frameRect)
-        // CGPathAddRect(framePath, <#T##m: UnsafePointer<CGAffineTransform>##UnsafePointer<CGAffineTransform>#>, frameRect)
         framePath.addRect(frameRect)
         let frameRef = CTFramesetterCreateFrame(frameSetter, textRange, framePath, nil)
         currentContext!.translateBy(x: 0, y: 792)

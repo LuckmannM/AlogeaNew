@@ -13,6 +13,9 @@ let colorScheme = ColorScheme()
 
 class ColorScheme {
     
+    // touchWheel function depends in part on backGround colors
+    // before changing colors check TouchWheel function: roundButtonView color is checked against in UIView.getPixelColor extension
+    
     let darkBlue = UIColor(colorLiteralRed: 96/255, green: 129/255, blue: 172/255, alpha: 1.0)
     let lightBlue = UIColor(colorLiteralRed: 78/255, green: 109/255, blue: 156/255, alpha: 1.0)
     let lightGray = UIColor(colorLiteralRed: 232/255, green: 239/255, blue: 231/255, alpha: 1.0)

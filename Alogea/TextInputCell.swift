@@ -60,7 +60,6 @@ extension TextInputCell: UITextFieldDelegate {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        print("end text editing")
         if textField.text?.characters.last == " " {
             textField.text!.remove(at: textField.text!.index(before: textField.text!.endIndex))
         }

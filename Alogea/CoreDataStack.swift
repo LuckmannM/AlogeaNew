@@ -65,7 +65,8 @@ class CoreDataStack: CustomStringConvertible {
         do {
             try fileManager.createDirectory(atPath: storePath as String, withIntermediateDirectories: true, attributes: nil)
         } catch let error as NSError {
-            print("Error creating storePath \(storePath): \(error)")
+            //Error creating storePath
+            ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 1", systemError: error, errorInfo:"Error creating storePath")
         }
         let sqliteFilePath = storePath.appendingPathComponent(storeName + ".sqlite")
         
@@ -79,7 +80,7 @@ class CoreDataStack: CustomStringConvertible {
         container.loadPersistentStores {
             (storeDescription, error) in
             if let error = error as NSError? {
-                print("unresolved Persistent Store Container error")
+                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 2", systemError: error,errorInfo:"unresolved Persistent Store Container")
             }
         }
         return container
@@ -112,7 +113,7 @@ class CoreDataStack: CustomStringConvertible {
             userInfo[NSUnderlyingErrorKey] = storeError!
             let wrappedError = NSError(domain: "co.uk.PainApp", code: 1001, userInfo: userInfo)
             
-            print("\(storeError) \(storeError!.userInfo)")
+            ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 3", systemError: wrappedError, errorInfo: "\(storeError!.userInfo)")
             
             let userDefaults = UserDefaults.standard
             userDefaults.set(true, forKey: "didDetectIncompatibleStore")
@@ -124,16 +125,16 @@ class CoreDataStack: CustomStringConvertible {
                 
                 do {
                     try fileManager.moveItem(at: URLPersistentStore!, to: URLCorruptPersistentStore!)
-                } catch  {
-                    print("\(error) in NSPersistentStoreCoordinator fileManager function")
+                } catch let error as NSError {
+                    ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 4", systemError: error, errorInfo:"error in NSPersistentStoreCoordinator fileManager function")
                 }
             }
             
             do {
                 let options = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: URLPersistentStore, options: options)
-            } catch  {
-                print("\(error) in in NSPersistentStoreCoordinator storeMigration function")
+            } catch  let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 5", systemError: error, errorInfo:"error in NSPersistentStoreCoordinator storeMigration function")
             }
         }
         
@@ -155,7 +156,6 @@ class CoreDataStack: CustomStringConvertible {
     
     var updateContextWithUbiquitousChangesObserver: Bool = false {
         willSet {
-            print("invoking updateContextWithUbiquitousChangesObserver")
             ubiquitousChangesObserver = newValue ? NotificationCenter.default : nil
         }
     }
@@ -163,7 +163,6 @@ class CoreDataStack: CustomStringConvertible {
     private var ubiquitousChangesObserver : NotificationCenter? {
         
         didSet {
-            print("invoked Stack.ubiquitousChangesObserver")
             oldValue?.removeObserver(self,name: NSNotification.Name.NSPersistentStoreDidImportUbiquitousContentChanges, object: coordinator)
             
             ubiquitousChangesObserver?.addObserver(self, selector: #selector(persistentStoreDidImportUbiquitousContentChanges(notification:)), name: .NSPersistentStoreDidImportUbiquitousContentChanges, object: coordinator)
@@ -176,7 +175,6 @@ class CoreDataStack: CustomStringConvertible {
     
     @objc func persistentStoreDidImportUbiquitousContentChanges (notification: NSNotification) {
         context.perform {
-            print("invoking Stack.persistentStoreDidImportUbiquitousContentChanges")
             self.context.mergeChanges(fromContextDidSave: notification as Notification)
         }
     }
@@ -184,11 +182,10 @@ class CoreDataStack: CustomStringConvertible {
     @objc func persistentStoreCoordinatorWillChangeStores (notification: NSNotification) {
         
         if context.hasChanges {
-            print("invoking Stack.persistentStoreCoordinatorWillChangeStores")
             do {
                 try context.save()
             } catch let error as NSError {
-                print("Error saving \(error)", terminator: "")
+                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 6", systemError: error)
             }
         }
         context.reset()
@@ -199,7 +196,7 @@ class CoreDataStack: CustomStringConvertible {
             do {
                 try context.save()
             } catch let error as NSError {
-                print("Error saving \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 7", systemError: error)
             }
         }
     }
@@ -216,7 +213,7 @@ class CoreDataStack: CustomStringConvertible {
                 try fileManager.createDirectory(at: URL, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 let createError = error as NSError
-                print("\(createError), \(createError.userInfo)")
+                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 8", systemError: createError)
             }
         }
         
@@ -236,7 +233,7 @@ class CoreDataStack: CustomStringConvertible {
                 try fileManager.createDirectory(at: URL, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 let createError = error as NSError
-                print("\(createError), \(createError.userInfo)")
+                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 9", systemError: createError)
             }
         }
         

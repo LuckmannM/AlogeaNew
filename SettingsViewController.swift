@@ -47,7 +47,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         self.navigationController?.navigationBar.barStyle = UIBarStyle.default
         self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().white
         self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!, NSForegroundColorAttributeName: ColorScheme.sharedInstance().darkBlue]
-        //self.navigationController?.navigationBar.tintColor = ColorScheme.sharedInstance().darkBlue
         recordTypesFRC.delegate = self
     }
     
@@ -64,9 +63,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    // MARK: - Custom functions
-    
     
     // MARK: - Table view data source
     
@@ -134,7 +130,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         do {
             try recordTypesFRC.performFetch()
         } catch let error as NSError {
-            print("Error fetching notes: \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "SettingsVC Error 1", showInVC: self, systemError: error)
         }
         
     }
@@ -226,7 +222,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             do {
                 drugsList = try managedObjectContext.fetch(fetchRequest)
             } catch let error as NSError {
-                print("SettingsVC_DrugReminderSwitchAction - error fetching drugList for reminderSWitch\(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "SettingsVC Error 2", showInVC: self, systemError: error, errorInfo: "SettingsVC_DrugReminderSwitchAction - error fetching drugList for reminderSWitch")
             }
             
             for drug in drugsList {
@@ -238,18 +234,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             }
 
         }
-        
-        // DEBUG
-//        let center = UNUserNotificationCenter.current()
-//        center.getPendingNotificationRequests(completionHandler: {
-//            (requests: [UNNotificationRequest]) in
-//            for request in requests {
-//                print("pending Notification: \(request)")
-//            }
-//        })
-        
-        // DEBUG
-        
         
     }
     
@@ -265,7 +249,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
                 nextViewController.rootViewController = self
 
             } else {
-                print("error createNew segue: destinationViewcontrolle not defined")
+                ErrorManager.sharedInstance().errorMessage(message: "SettingsVC Error 3.1", showInVC: self, errorInfo: "error createNew segue: destinationViewcontrolle not defined")
             }
             
         } else if segue.identifier == "toEULASegue" {
@@ -273,7 +257,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
                 nextViewController.rootViewController = self
                 
             } else {
-                print("error segue: destinationViewcontrolle not defined")
+                ErrorManager.sharedInstance().errorMessage(message: "SettingsVC Error 3.2", showInVC: self, errorInfo: "error segue: destinationViewcontrolle not defined")
             }
         }
     }

@@ -44,7 +44,7 @@ class MedicationController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("prnMedsFRC fetching error")
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 1", systemError: error)
         }
         frc.delegate = self
         
@@ -70,7 +70,7 @@ class MedicationController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("prnMedsFRC fetching error \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 2", systemError: error)
         }
         frc.delegate = self
         
@@ -96,7 +96,7 @@ class MedicationController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            print("prnMedsFRC fetching error \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 3", systemError: error)
         }
         frc.delegate = self
         
@@ -122,7 +122,7 @@ class MedicationController: NSObject {
         do {
         try frc.performFetch()
         } catch let error as NSError{
-        print("prnMedsFRC fetching error")
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 4", systemError: error)
         }
         frc.delegate = self
         
@@ -142,7 +142,6 @@ class MedicationController: NSObject {
         var nameArray = [(name: String, duration: Double)]()
         
         guard asRequiredMedsFRC.fetchedObjects != nil else {
-            print("no pernMedicines exist")
             return nameArray
         }
         

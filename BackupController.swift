@@ -39,7 +39,7 @@ class BackupController {
         do {
             array = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching recordTyped in DataIO : \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 1", systemError: error)
         }
         return array
     }
@@ -52,7 +52,7 @@ class BackupController {
         do {
             array = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching events in DataIO : \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 2", systemError: error)
         }
         return array
     }
@@ -65,7 +65,7 @@ class BackupController {
         do {
             array = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching DrugEpisodes in DataIO : \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 3", systemError: error)
         }
         return array
     }
@@ -82,7 +82,7 @@ class BackupController {
                 return nil
             }
         } else {
-            print("error: did not establish backup path to documentDirectory")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 4", errorInfo:"did not establish backup path to documentDirectory")
             return nil
         }
     }
@@ -98,7 +98,7 @@ class BackupController {
                 do {
                     try FileManager.default.createDirectory(atPath: tempDirectoryPath, withIntermediateDirectories: true, attributes: nil)
                 } catch let error as NSError {
-                    print("Error creating BackupDirectory in DataIO: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 5", systemError: error, errorInfo:"Error creating BackupDirectory")
                 }
             }
             return tempDirectoryPath
@@ -120,15 +120,14 @@ class BackupController {
             if !FileManager.default.fileExists(atPath: cloudDocumentBackupsURL.path) {
                 do {
                     try FileManager.default.createDirectory(atPath:cloudDocumentBackupsURL.path, withIntermediateDirectories: true, attributes: nil)
-                    print("Had to create Cloud/Documents/Backups folder, \(cloudDocumentBackupsURL)")
                 } catch let error as NSError {
-                    print("can't create /Cloud/Documents/Backups directory: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 6", systemError: error, errorInfo:"can't create /Cloud/Documents/Backups directory")
                 }
                 
             }
             return cloudDocumentBackupsURL as NSURL?
         } else {
-            print("can't find URL of iCloud Container folder")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7", errorInfo:"can't find URL of iCloud Container folder")
             return nil
         }
     }
@@ -144,12 +143,9 @@ class BackupController {
         
         
         if FileManager.default.ubiquityIdentityToken == nil {
-            print("iCloud drive access not available")
+//            print("iCloud drive access not available")
             return
         }
-        
-        print("trying to move the directory \(directoryToCopyPath) to iCloud...")
-        
         
         let backupDirectoryURL = NSURL(fileURLWithPath: directoryToCopyPath)
         
@@ -160,12 +156,12 @@ class BackupController {
             do {
                 try FileManager.default.removeItem(atPath: tempBackupDirectoryPath!)
             } catch let error as NSError {
-                print("can't remove /Temp directory: \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", systemError: error)
             }
             do {
                 try FileManager.default.createDirectory(atPath: tempBackupDirectoryPath!, withIntermediateDirectories: true, attributes: nil)
             } catch let error as NSError {
-                print("can't re-create /Temp directory: \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 9", systemError: error)
             }
             
             
@@ -190,11 +186,11 @@ class BackupController {
             do {
                 try FileManager.default.copyItem(at: (backupDirectoryURL as URL), to: NSURL(fileURLWithPath: tempLocalDirectoryPath) as URL)
             } catch let error as NSError {
-                print("can't duplicate backupFolder from /Backups or /Temp directory: \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 10", systemError: error, errorInfo:"can't duplicate backupFolder from /Backups or /Temp directory")
             }
             
         } else {
-            print("can't find temp directory for backup")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 11", errorInfo:"can't find temp directory for backup")
             return
         }
         
@@ -203,20 +199,18 @@ class BackupController {
             let newCloudBackupFolder = (iCloudURL.path)?.appending(backupFolderName)
             if FileManager.default.fileExists(atPath: newCloudBackupFolder!) {
                 // delete existing backup to create new
-                print("Deleting existing Cloud \(newCloudBackupFolder) folder to overwrite with new one")
                 do {
                     try FileManager.default.removeItem(atPath: newCloudBackupFolder!)
                 } catch let error as NSError {
-                    print("Error deleting existing Cloud 'Backups' folder in DataIO: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 12", systemError: error, errorInfo:"Error deleting existing Cloud 'Backups' folder")
                 }
             }
 
             do {
                 try  FileManager.default.setUbiquitous(true, itemAt: tempBackupURL as URL, destinationURL: NSURL(fileURLWithPath:  newCloudBackupFolder!) as URL)
-                print("moved the backups directory to iCloud!")
                 
             } catch let error as NSError {
-                print("error writing Backups directory to iCloud documents @ \(newCloudBackupFolder!): \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 13", systemError: error, errorInfo:"error writing Backups directory to iCloud documents")
             }
         } else {
             print("error in DataIO moveBackupsToICloud  - can't get iCloudURL for default directory. Try to create ")
@@ -224,10 +218,10 @@ class BackupController {
                 do {
                     try FileManager.default.createDirectory(at: cloudDocumentsURL, withIntermediateDirectories: true, attributes: nil)
                 } catch let error as NSError {
-                    print("Error creating  Cloud Backups Directory in DataIO: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 13", systemError: error, errorInfo:"Error creating  Cloud Backups Directory")
                 }
             }
-            print("error in DataIO moveBackupsToICloud  - can't get default iCloudURL")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 14", errorInfo:"error in DataIO moveBackupsToICloud  - can't get default iCloudURL")
             
         }
     }
@@ -239,7 +233,7 @@ class BackupController {
         let recordTypesData = createRecordTypesDictionary()
         
         guard let backupDirectoryPath = checkCreateBackupDirectory()  else {
-            print("error - no backup directory - dictionaries not saved to file")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save Backup", errorInfo:"error - no backup directory")
             return
         }
     
@@ -247,8 +241,8 @@ class BackupController {
             var fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName)))
             do {
                 try eventsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-            } catch let error {
-                print("error trying to encrypt file \(fileURL): \(error)")
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
             }
         
 // drugsBackup
@@ -256,16 +250,16 @@ class BackupController {
             fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(drugsFileName)))
             do {
                 try drugsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-            } catch let error {
-                print("error trying to encrypt file \(fileURL): \(error)")
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 17", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
             }
         
 // recordTypesBackup
             fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(recordTypesFileName)))
             do {
                 try recordTypesData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-            } catch let error {
-                print("error trying to encrypt file \(fileURL): \(error)")
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
             }
         
 // moveBackups to iCloud
@@ -324,16 +318,16 @@ class BackupController {
                             case "locationImage":
                                 newEvent!.locationImage = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["locationImage"]as! Data)) as? NSObject
                             default:
-                                print("backup event dictionary unrecognised key \(key)")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 19", errorInfo:"backup event dictionary unrecognised key \(key)")
                             }
                             
-                            print("imported new event: \(newEvent!)")
                         }
                         
                         // data QC
                         // ensure essential data is present, otherwise delete/don't import
                         if newEvent?.name == nil || newEvent?.name == "" {
                             print("deleted event import object due to lack of .name \(newEvent)")
+// error log without display
                             moc.delete(newEvent!)
                         } else if newEvent?.type == nil || newEvent?.type == "" {
                             print("deleted event import object due to lack of .type \(newEvent)")
@@ -344,7 +338,6 @@ class BackupController {
                         }
                     }
                 }
-                print("restored \(eventsDictionaryArray.count) events from backup \(folderName))")
             }
             
             // 2. Drugs
@@ -402,6 +395,7 @@ class BackupController {
                                 newDrugEpsiode!.attribute3 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute3"] as! Data)) as? NSData
                             default:
                                 print("backup drug dictionary unrecognised key \(key)")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20")
                             }
                             
                         }
@@ -433,9 +427,6 @@ class BackupController {
                     }
                 }
                 
-                print("restored \(drugsDictionaryArray.count) drugs from backup \(folderName))")
-                
-                
             }
             
             // 3. RecordTypes
@@ -464,7 +455,7 @@ class BackupController {
                             case "minScore":
                                 newRecordType!.minScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["minScore"] as! Data)) as! Double
                             default:
-                                print("backup recordTypes dictionary unrecognised key \(key)")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", errorInfo:"backup recordTypes dictionary unrecognised key \(key)")
                             }
                             
                         }
@@ -480,15 +471,13 @@ class BackupController {
                     
                     
                 }
-                print("restored \(recordTypesDictionaryArray.count) recordTypes from backup \(folderName))")
-                
             }
             
             do {
                 try  moc.save()
             }
             catch let error as NSError {
-                print("Error saving moc after loading events from backup in DataIO: \(error)", terminator: "")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
             }
             
             // this restores AppSettings.RecordTypes[0] as stored graphType
@@ -521,7 +510,7 @@ class BackupController {
             if let eventsData = NSData.init(contentsOf: eventDictionaryURL as URL) {
                 return NSArray.init(object: eventsData) as? [Dictionary<String,Data>]
             } else {
-                print("Error loading eventsDat as NSData from file @ \(eventDictionaryPath) could not be read")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 23", errorInfo:"Error loading eventsDat as NSData from file @ \(eventDictionaryPath) could not be read")
                 return nil
             }
             
@@ -552,13 +541,11 @@ class BackupController {
         if FileManager.default.fileExists(atPath: drugDictionaryPath) {
             let drugsDictionaryURL = NSURL(fileURLWithPath: drugDictionaryPath)
             
-            print("trying to load file contents \(drugDictionaryPath) into dictionary")
-            
             //NEW
             if let drugsData = NSData.init(contentsOf: drugsDictionaryURL as URL) {
                 return NSArray.init(object: drugsData) as? [Dictionary<String,Data>]
             } else {
-                print("Error loading drugsData as NSData from file @ \(drugDictionaryPath) could not be read")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 24", errorInfo:"Error loading drugsData as NSData from file @ \(drugDictionaryPath) could not be read")
                 return nil
             }
             // OLD
@@ -572,7 +559,7 @@ class BackupController {
             
         }
         else {
-            print("NSFileManager error in DataIO  importFromBackup - can't find drugDictionary @ \(drugDictionaryPath)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 25", errorInfo: "NSFileManager error in DataIO  importFromBackup - can't find drugDictionary @ \(drugDictionaryPath)")
             return nil
         }
     }
@@ -583,12 +570,12 @@ class BackupController {
         if FileManager.default.fileExists(atPath: recordTypesDictionaryPath) {
             let recordTypesDictionaryURL = NSURL(fileURLWithPath: recordTypesDictionaryPath)
             
-            print("trying to load file contents \(recordTypesDictionaryPath) into dictionary")
             //NEW
             if let recordTypeData = NSData.init(contentsOf: recordTypesDictionaryURL as URL) {
                 return NSArray.init(object: recordTypeData) as? [Dictionary<String,Data>]
             } else {
                 print("Error loading recordTypesData as NSData from file @ \(recordTypesDictionaryPath) could not be read")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 26", errorInfo: "can't load NSData from file at path \(recordTypesDictionaryPath)")
                 return nil
             }
 
@@ -604,6 +591,7 @@ class BackupController {
         }
         else {
             print("NSFileManager error in DataIO  importFromBackup - can't find record Type Dictionary @ \(recordTypesDictionaryPath)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 27", errorInfo: "can't find record Type Dictionary @ \(recordTypesDictionaryPath)")
             return nil
         }
     }
@@ -629,7 +617,7 @@ class BackupController {
                 do {
                     try FileManager.default.createDirectory(atPath: backupDirectoryPath, withIntermediateDirectories: false, attributes: nil)
                 } catch let error as NSError {
-                    print("Error creating BackupDirectory in DataIO: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 28", systemError: error, errorInfo: "Error creating BackupDirectory in DataIO")
                 }
             }
             
@@ -639,7 +627,7 @@ class BackupController {
                 do {
                     try FileManager.default.createDirectory(atPath: backupFolderPath, withIntermediateDirectories: false, attributes: nil)
                 } catch let error as NSError {
-                    print("Error creating BackupDirectory in DataIO: \(error)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 29", systemError: error, errorInfo: "Error creating BackupDirectory in DataIO")
                 }
             }
             
@@ -698,7 +686,6 @@ class BackupController {
             
             eventsDictionaryArray.append(singleEventDictionary as NSDictionary)
         }
-        print("backup eventsDictionary created with \(events.count) events")
         return NSKeyedArchiver.archivedData(withRootObject: eventsDictionaryArray)
     }
     
@@ -751,7 +738,6 @@ class BackupController {
             
             drugsDictionaryArray.append(singleDrugDictionary as NSDictionary)
         }
-        print("backup drugsDictionary created with \(drugs.count) drugs")
         return NSKeyedArchiver.archivedData(withRootObject: drugsDictionaryArray)
 
     }
@@ -775,9 +761,7 @@ class BackupController {
             
             recordTypesDictionaryArray.append(singleTypeDictionary as NSDictionary)
             
-            print("export recordType \(type.name) to backupDictionary")
         }
-        print("backup recordTypesDictionary created with \(recordTypes.count) recordTypes")
         return NSKeyedArchiver.archivedData(withRootObject: recordTypesDictionaryArray)
     }
     
@@ -794,7 +778,7 @@ class BackupController {
         do {
             events = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 30", systemError: error, errorInfo: "Error fetching eventList for deletion")
         }
         
         for event in  events {
@@ -804,7 +788,7 @@ class BackupController {
             try  moc.save()
         }
         catch let error as NSError {
-            print("Error saving moc after deleting events in DataIO: \(error)", terminator: "")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 31", systemError: error, errorInfo: "Error deleting eventList")
         }
         
     }
@@ -818,7 +802,7 @@ class BackupController {
         do {
             drugs = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 32", systemError: error, errorInfo: "Error fetching drugList for deletion")
         }
         
         for drug in  drugs {
@@ -828,7 +812,7 @@ class BackupController {
             try  moc.save()
         }
         catch let error as NSError {
-            print("Error saving moc after deleting drugs in DataIO: \(error)", terminator: "")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 33", systemError: error, errorInfo: "Error deleting drugList")
         }
         
     }
@@ -842,18 +826,17 @@ class BackupController {
         do {
             recordTypes = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            print("Error fetching drugList \(error)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 34", systemError: error, errorInfo: "Error fetching recordTypes for deletion")
         }
         
         for type in  recordTypes {
-            print("deleting recordType \(type.name) ... ")
             moc.delete(type)
         }
         do {
             try  moc.save()
         }
         catch let error as NSError {
-            print("Error saving moc after deleting recordTypes in DataIO: \(error)", terminator: "")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 35", systemError: error, errorInfo: "Error deleting recordTypesList")
         }
         
     }
@@ -865,7 +848,7 @@ class BackupController {
             do {
                 try FileManager.default.removeItem(at: cloudBackupsFolderURL! as URL)
             } catch let error as NSError {
-                print("DataIO - unable to delete cloud backups, error:  \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 36", systemError: error, errorInfo: "DataIO - unable to delete cloud backups")
             }
             
         }

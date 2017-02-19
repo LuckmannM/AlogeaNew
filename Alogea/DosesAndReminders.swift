@@ -13,7 +13,6 @@ import UserNotifications
 class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     
     var drugData: DrugEpisode!
-    //    var stack: CoreDataStack!
     var context: NSManagedObjectContext!
     var callingViewController: NewDrug!
     let numberFormatter: NumberFormatter = {
@@ -24,14 +23,12 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
     
     
     let timesTag = 10
-    //    let doseTag = 20
     let switchTag = 30
     let textFieldTag = 40
     let cellID = "doseDetailCell"
     
     var tempDoses:[Double]!
     var tempReminders:[Bool]!
-    //    var textFieldOpen = [false, NSIndexPath(), UITextField()]
     var doseTextField: [UITextField]!
     var activeDoseTextField = Int()
     
@@ -68,9 +65,6 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
             newTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
             doseTextField.append(UITextField())
         }
-        
-        
-        
     }
     
     
@@ -158,9 +152,6 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         let toolbar = UIToolbar()
         toolbar.frame.size.height = 44
         doneButton.width = self.view.frame.width * 1/3
-        //        toolbar.barTintColor = UIColor.grayColor()
-        //        doneButton.customView = UIView() ->>> to imrpove doneButton appearance later
-        
         var items = [UIBarButtonItem]()
         items.append(space)
         items.append(doneButton)
@@ -215,8 +206,6 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
             regSwitch.isOn = drugData.remindersVar[indexPath.row]
             regSwitch.addTarget(self, action: #selector(switchControlAction(sender:)), for: UIControlEvents.valueChanged)
         }
-        
-        
         return cell
     }
     
@@ -282,7 +271,5 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         
         return false
     }
-    
-    
     
 }
