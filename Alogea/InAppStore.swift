@@ -65,7 +65,7 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         productRequest.start()
         SKPaymentQueue.default().add(self)
         
-        progressIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        progressIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         progressIndicator.isHidden = true
     }
     
@@ -248,8 +248,6 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
     func manageCompletedTransaction(transaction: SKPaymentTransaction) {
         SKPaymentQueue.default().finishTransaction(transaction)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: InAppStorePurchaseNotification), object: transaction.payment.productIdentifier)
-        // ** DEBUG
-        //        checkPurchasePersistence(transaction)
     }
     
     
@@ -284,6 +282,8 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         
     }
     
+    // MARK: - Message Displays
+    
     func deferredMessage() {
         
         
@@ -304,7 +304,7 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         // Present Alert Controller
         visibleVC.present(alertController, animated: true, completion: nil)
     }
-
+    
     
     func errorMessage(message: String, showInVC: UIViewController? = nil, systemError: NSError? = nil, errorInfo: String? = nil) {
         

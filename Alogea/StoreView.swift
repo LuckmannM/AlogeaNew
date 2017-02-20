@@ -40,7 +40,7 @@ class StoreView: UITableViewController {
         super.viewDidLoad()
     
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchaseComplete(notification:)), name: NSNotification.Name(rawValue: InAppStorePurchaseNotification), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(productRequestComplete(notification:)), name: NSNotification.Name(rawValue: InAppStoreProductRequestCompleted), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(productRequestComplete(notification:)), name: NSNotification.Name(rawValue: InAppStoreProductRequestCompleted), object: nil)
         
         if inAppStore.isConnectedToNetwork() == false {
             noNetworkAlert()
@@ -93,7 +93,8 @@ class StoreView: UITableViewController {
     }
     
     func productPurchaseComplete(notification: Notification) {
-        
+        successMessage()
+        tableView.reloadData()
     }
 
 
@@ -215,8 +216,24 @@ class StoreView: UITableViewController {
         
         header.textLabel?.textColor = ColorScheme.sharedInstance().lightGray
     }
-
-    // MARK: - Navigation
+    
+    func successMessage() {
+        
+        
+        let title = "Thank you!"
+        let message = "Purchased completed successfully. This will be valid for all your devices"
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        // Configure Alert Controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) -> Void in
+            
+        }))
+        
+        // Present Alert Controller
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
 
 }
 
