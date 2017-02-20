@@ -236,37 +236,100 @@ class BackupController {
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save Backup", errorInfo:"error - no backup directory")
             return
         }
-    
-// eventsBackup
-            var fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName)))
-            do {
-                try eventsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
-            }
-        
-// drugsBackup
             
-            fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(drugsFileName)))
-            do {
-                try drugsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 17", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
-            }
+        fileIO(fileName: eventFileName, data: eventsData)
+        fileIO(fileName: drugsFileName, data: drugsData)
+        fileIO(fileName: recordTypesFileName, data: recordTypesData)
         
-// recordTypesBackup
-            fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(recordTypesFileName)))
-            do {
-                try recordTypesData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
-            }
+        // eventsBackup
+////            var fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName)))
+////            var tempURL: NSURL?
+////            // check if a similar file exists already
+////            if FileManager.default.fileExists(atPath: eventFileName) {
+////                // if it does rename to temp and delete after successful write or rename is write fails
+////                tempURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName + "Temp")))
+////                do {
+////                    try FileManager.default.copyItem(at: fileURL as URL, to: tempURL as! URL)
+////                    try FileManager.default.removeItem(at: fileURL as URL)
+////                } catch let error as NSError {
+////                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.1", systemError: error, errorInfo:"error copying or removing existing backupfile \(fileURL) to \(tempURL)")
+////                }
+////            }
+////            do {
+////                try eventsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+////            } catch let error as NSError {
+////                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
+////            }
+////            // delete old temp file
+////            if FileManager.default.fileExists(atPath: (eventFileName + "Temp")) {
+////                // if it does rename to temp and delete after successful write or rename is write fails
+////                do {
+////                    try FileManager.default.removeItem(at: tempURL as! URL)
+////                } catch let error as NSError {
+////                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.2", systemError: error, errorInfo:"error removing temp backupfile \(fileURL) to \(tempURL)")
+////                }
+////            }
+//        
+//// drugsBackup
+//        
+//            fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(drugsFileName)))
+//            do {
+//                try drugsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+//            } catch let error as NSError {
+//                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 17", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
+//            }
+//        
+//// recordTypesBackup
+//            fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(recordTypesFileName)))
+//            do {
+//                try recordTypesData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+//            } catch let error as NSError {
+//                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
+//            }
         
 // moveBackups to iCloud
         
             if UserDefaults.standard.bool(forKey: iCloudBackUpsOn) {
                 copyBackupsToCloud(directoryToCopyPath: backupDirectoryPath)
             }
+    }
+    
+    static func fileIO(fileName: String, data: Data) {
+        
+        guard let backupDirectoryPath = checkCreateBackupDirectory()  else {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save Backup", errorInfo:"error - no backup directory")
+            return
+        }
+
+        let fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(fileName)))
+        var tempURL: NSURL?
+        
+        // check if a similar file exists already
+        if FileManager.default.fileExists(atPath: eventFileName) {
+            // if it does rename to temp and delete after successful write or rename is write fails
+            tempURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(fileName + "Temp")))
+            do {
+                try FileManager.default.copyItem(at: fileURL as URL, to: tempURL as! URL)
+                try FileManager.default.removeItem(at: fileURL as URL)
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.1", systemError: error, errorInfo:"error copying or removing existing backupfile \(fileURL) to \(tempURL)")
+            }
+        }
+        do {
+            try data.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
+        }
+        // delete old temp file
+        if FileManager.default.fileExists(atPath: (fileName + "Temp")) {
+            // if it does rename to temp and delete after successful write or rename is write fails
+            do {
+                try FileManager.default.removeItem(at: tempURL as! URL)
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.2", systemError: error, errorInfo:"error removing temp backupfile \(fileURL) to \(tempURL)")
+            }
+        }
+        
     }
     
     static func importFromBackup(folderName: String, fromLocalBackup: Bool) {
@@ -338,6 +401,8 @@ class BackupController {
                         }
                     }
                 }
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 38", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourceBackupPath)")
             }
             
             // 2. Drugs
@@ -427,6 +492,8 @@ class BackupController {
                     }
                 }
                 
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 37", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourceBackupPath)")
             }
             
             // 3. RecordTypes
@@ -471,6 +538,8 @@ class BackupController {
                     
                     
                 }
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 39", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourceBackupPath)")
             }
             
             do {
@@ -508,7 +577,12 @@ class BackupController {
             
             //NEW
             if let eventsData = NSData.init(contentsOf: eventDictionaryURL as URL) {
-                return NSArray.init(object: eventsData) as? [Dictionary<String,Data>]
+                if let array = NSKeyedUnarchiver.unarchiveObject(with: eventsData as Data) as? [Dictionary<String,Data>] {
+                    return array
+                } else {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 41", errorInfo:"can't convert eventsData object into drug array object")
+                    return nil
+                }
             } else {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 23", errorInfo:"Error loading eventsDat as NSData from file @ \(eventDictionaryPath) could not be read")
                 return nil
@@ -543,7 +617,13 @@ class BackupController {
             
             //NEW
             if let drugsData = NSData.init(contentsOf: drugsDictionaryURL as URL) {
-                return NSArray.init(object: drugsData) as? [Dictionary<String,Data>]
+                
+                if let array = NSKeyedUnarchiver.unarchiveObject(with: drugsData as Data) as? [Dictionary<String,Data>] {
+                    return array
+                } else {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 40", errorInfo:"can't convert drugsData object into drug array object")
+                    return nil
+                }
             } else {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 24", errorInfo:"Error loading drugsData as NSData from file @ \(drugDictionaryPath) could not be read")
                 return nil
@@ -572,7 +652,12 @@ class BackupController {
             
             //NEW
             if let recordTypeData = NSData.init(contentsOf: recordTypesDictionaryURL as URL) {
-                return NSArray.init(object: recordTypeData) as? [Dictionary<String,Data>]
+                if let array = NSKeyedUnarchiver.unarchiveObject(with: recordTypeData as Data) as? [Dictionary<String,Data>] {
+                    return array
+                } else {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 42", errorInfo:"can't convert recordTypeData object into drug array object")
+                    return nil
+                }
             } else {
                 print("Error loading recordTypesData as NSData from file @ \(recordTypesDictionaryPath) could not be read")
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 26", errorInfo: "can't load NSData from file at path \(recordTypesDictionaryPath)")

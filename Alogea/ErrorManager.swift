@@ -39,6 +39,17 @@ class ErrorManager: NSObject {
             titleToUse = "We're really sorry\nAn error occurred!"
         }
         
+        if alertViewOpen {
+// *** accumulate incoming messages and gather log
+            print("incoming error while alertView open________")
+            print("message \(message)")
+            print("systemError: \(systemError)")
+            print("errorInfo: \(errorInfo)")
+            print()
+            return
+        } else {
+            self.alertViewOpen = true
+        }
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         // Configure Alert Controller
@@ -47,20 +58,9 @@ class ErrorManager: NSObject {
         }))
         
         // Present Alert Controller
-        if self.alertViewOpen == false {
-            presentingVC!.present(alertController, animated: true, completion: {
-                self.alertViewOpen = true
-            })
-        } else {
-            // gather other incomning error messages while alterview open
-        }
-        
-        //*** consider sending an email to support with description
-        // do somehting with NSError
-        
+            presentingVC!.present(alertController, animated: true, completion: nil)
         
         //temporary for debugging
-        
         print("ERROR________")
         print("systemError: \(systemError)")
         print("errorInfo: \(errorInfo)")

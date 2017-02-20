@@ -10,6 +10,8 @@ import UIKit
 
 class GraphScoreChoser: UITableViewController {
     
+    var rootViewController: MainViewController!
+    
     var selectedScore: String {
         return UserDefaults.standard.value(forKey: "SelectedScore") as! String
     }
@@ -79,8 +81,16 @@ class GraphScoreChoser: UITableViewController {
             UserDefaults.standard.set(recordTypeNames[indexPath.row], forKey: "SelectedScore")
             tableView.reloadSections([indexPath.section], with: .automatic)
         } else {
-            cell.activateTextField()
-            cell.addButton.isHidden = true
+            
+            // check option purchased
+            if InAppStore.sharedInstance().checkMultipleGraphAccess() {
+                cell.activateTextField()
+                cell.addButton.isHidden = true
+            } else {
+                self.dismiss(animated: true, completion: {
+                    self.rootViewController.showPurchaseDialog()
+                })
+            }
         }
 
     }

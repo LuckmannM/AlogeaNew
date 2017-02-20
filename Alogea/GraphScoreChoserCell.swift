@@ -47,7 +47,7 @@ class GraphScoreChoserCell: UITableViewCell {
     
     func activateTextField() {
         
-        textField.placeholder = "Add new symptom..."
+        textField.placeholder = "Add new graph..."
         textField.clearButtonMode = .whileEditing
         textField.isEnabled = true
         textField.becomeFirstResponder()
@@ -67,7 +67,6 @@ extension GraphScoreChoserCell: UITextFieldDelegate {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        print("end text editing")
         if textField.text?.characters.last == " " {
             textField.text!.remove(at: textField.text!.index(before: textField.text!.endIndex))
         }

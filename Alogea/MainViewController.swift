@@ -469,6 +469,7 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let choserView = storyBoard.instantiateViewController(withIdentifier: "GraphViewChoser") as! GraphScoreChoser
+        choserView.rootViewController = self
         
         choserView.modalPresentationStyle = .popover
         choserView.preferredContentSize = CGSize(width: 175, height: height)
@@ -518,6 +519,51 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         // this doesn't need to happen when returning from popUpView!
         graphContainerView.reloadAllViews()
+    }
+    
+    func showPurchaseDialog() {
+        
+        let purchaseAlert = UIAlertController(title: "Free version limit", message: "To add more graphs please purchase the 'No Limits' or 'Unlimited Graphs' expansion.   You can rename the existing graph in Settings > Event Types; Alogea without expansion is limited to one graph", preferredStyle: .actionSheet)
+        
+        let goToStore = UIAlertAction(title: "View expansion options", style: UIAlertActionStyle.default, handler: { (storeAction)
+            -> Void in
+            
+            self.presentStoreView()
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: { (cancelAction)
+            -> Void in
+            
+            //do nothing and dimiss
+        })
+        
+        purchaseAlert.addAction(goToStore)
+        purchaseAlert.addAction(cancelAction)
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            let popUpController = purchaseAlert.popoverPresentationController
+            popUpController!.permittedArrowDirections = .any
+            popUpController?.sourceView = graphContainerView.upperLabel
+        }
+        
+        
+        self.present(purchaseAlert, animated: true, completion: nil)
+
+    }
+    
+    func presentStoreView() {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let storeView = storyBoard.instantiateViewController(withIdentifier: "StoreViewID") as! StoreView
+        storeView.rootView = self
+        
+        storeView.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+        storeView.preferredContentSize = CGSize(width: 280, height: 360)
+        
+        // self.navigationController!.pushViewController(storeView, animated: true)
+        self.present(storeView, animated: true, completion: nil)
+        
+        
     }
 }
 

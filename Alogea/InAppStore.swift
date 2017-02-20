@@ -97,6 +97,18 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         return qualifiesForAccess
     }
     
+    func checkMultipleGraphAccess() -> Bool {
+        
+        var qualifiesForAccess = false
+        
+        for productID in purchasedProductIDs {
+            if productID.contains("FullVersion") || productID.contains("UnlimitedGraphs") {
+                qualifiesForAccess = true
+            }
+        }
+        return qualifiesForAccess
+    }
+    
     
     //MARK: - SKProductRequest Delegate protocol method
     @objc func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
