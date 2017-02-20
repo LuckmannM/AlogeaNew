@@ -21,6 +21,7 @@ class ColorScheme {
     let lightGray = UIColor(colorLiteralRed: 232/255, green: 239/255, blue: 231/255, alpha: 1.0)
     var gradientGreen = UIColor(colorLiteralRed: 22/255, green: 238/255, blue: 133/255, alpha: 1.0)
     var earthGreen = UIColor(colorLiteralRed: 106/255, green: 97/255, blue: 60/255, alpha: 1.0)
+    var greyGreen = UIColor(colorLiteralRed: 101/255, green: 118/255, blue: 108/255, alpha: 1.0)
     var gradientYellow = UIColor(colorLiteralRed: 251/255, green: 247/255, blue: 118/255, alpha: 1.0)
     var gradientOrange = UIColor(colorLiteralRed: 255/255, green: 161/255, blue: 34/255, alpha: 1.0)
     var gradientRed = UIColor(colorLiteralRed: 151/255, green: 60/255, blue: 56/255, alpha: 1.0)

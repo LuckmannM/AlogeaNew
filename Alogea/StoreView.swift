@@ -39,6 +39,28 @@ class StoreView: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        // adapt NavBarColour
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
+        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().greyGreen
+//        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        
+        // CloudAccessIcon
+//        let cloudButton = UIButton(type: .custom)
+//        
+//        if drugDictionary.iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() {
+//            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
+//        } else {
+//            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+//        }
+//        cloudButton.frame = CGRect(x: 0, y: 0, width: (75*20/50), height: 20)
+//        let cloudIcon = UIBarButtonItem(customView: cloudButton)
+//        cloudIcon.isEnabled = false
+//        
+//        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+//        spacer.width = self.view.frame.width / 2 - cloudButton.frame.width / 2 - 50
+
+        
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchaseComplete(notification:)), name: NSNotification.Name(rawValue: InAppStorePurchaseNotification), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(productRequestComplete(notification:)), name: NSNotification.Name(rawValue: InAppStoreProductRequestCompleted), object: nil)
         
@@ -147,9 +169,15 @@ class StoreView: UITableViewController {
             cell.descriptionLabel.text = product.localizedDescription
            
             if inAppStore.purchasedProductIDs.contains(product.productIdentifier) {
-                cell.accessoryType = .checkmark
                 cell.buyButton.isEnabled = false
                 cell.buyButton.setTitle("purchased", for: .normal)
+                let font = UIFont(name: "AvenirNext-DemiBold", size: 14)
+                let title = NSAttributedString(
+                    string: "purchased",
+                    attributes: [NSFontAttributeName: font!,
+                                 NSForegroundColorAttributeName: UIColor.white]
+                )
+                cell.buyButton.setAttributedTitle(title, for: .normal)
             }
             else {
                 priceFormatter.locale = product.priceLocale
