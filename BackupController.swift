@@ -236,7 +236,7 @@ class BackupController {
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save Backup", errorInfo:"error - no backup directory")
             return
         }
-            
+        
         fileIO(fileName: eventFileName, data: eventsData)
         fileIO(fileName: drugsFileName, data: drugsData)
         fileIO(fileName: recordTypesFileName, data: recordTypesData)
@@ -465,6 +465,8 @@ class BackupController {
                             
                         }
                         
+                        newDrugEpsiode?.awakeFromFetch()
+                        
                         // data QC
                         // ensure essential data is present, otherwise delete/don't import
                         if newDrugEpsiode?.name == nil || newDrugEpsiode?.name == "" {
@@ -531,7 +533,6 @@ class BackupController {
                     // data QC
                     // ensure essential data is present, otherwise delete/don't import
                     if newRecordType?.name == nil || newRecordType?.name == "" {
-                        print("deleted recordType import object due to lack of .name \(newRecordType)")
                         moc.delete(newRecordType!)
                     }
                     
@@ -549,9 +550,6 @@ class BackupController {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
             }
             
-            // this restores AppSettings.RecordTypes[0] as stored graphType
-            // if none is existing / imported, AppSettings.RecordType creates a default
-            //            AppSettings.sharedInstance().storeDefaultGraphType(nil)
             
         }
         
