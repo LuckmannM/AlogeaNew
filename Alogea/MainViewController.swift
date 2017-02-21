@@ -432,7 +432,7 @@ extension MainViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         title.attributedText = NSAttributedString(
             string: eventPickerTitles()[row],
             attributes: [
-                NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!,
+                NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 28)!,
                 NSForegroundColorAttributeName: UIColor.white,
                 ]
         )
