@@ -88,6 +88,10 @@ class GraphView: UIView {
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
+        
+        medsView.frame = bounds
+        medsView.setNeedsDisplay()
+        
         guard graphPoints.count > 0  else {
             return
         }
@@ -97,9 +101,6 @@ class GraphView: UIView {
         } else {
             drawLineGraph()
         }
-        medsView.frame = bounds
-        medsView.setNeedsDisplay()
-        
         
         refreshPointsFlag = true
     }

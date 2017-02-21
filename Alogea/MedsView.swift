@@ -136,12 +136,13 @@ class MedsView: UIView {
         eventsDictionary.removeAll()
 
         let scale = graphView.maxDisplayDate.timeIntervalSince(graphView.minDisplayDate) / TimeInterval(graphView.frame.width)
+        let vOffset = bounds.maxY - helper.timeLineSpace()
         
-        drawRegularMeds(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
+        drawRegularMeds(scale: scale, verticalOffset: vOffset)
         
-        drawPrnMeds(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
+        drawPrnMeds(scale: scale, verticalOffset: vOffset)
         
-        drawNonScoreEvents(scale: scale, verticalOffset: bounds.maxY - helper.timeLineSpace())
+        drawNonScoreEvents(scale: scale, verticalOffset: vOffset)
         
         
     }
