@@ -188,7 +188,7 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         var regSwitch: UISwitch!
         doseTextField[indexPath.row] = cell.contentView.viewWithTag(textFieldTag) as! UITextField
         
-        if drugData.regularly == true {
+        if drugData.regularlyVar == true {
             (cell.contentView.viewWithTag(timesTag) as! UILabel).text = drugData.times[indexPath.row]
             doseTextField[indexPath.row].delegate = self
             doseTextField[indexPath.row].keyboardType = .decimalPad

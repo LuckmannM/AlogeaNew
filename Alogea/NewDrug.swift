@@ -730,8 +730,8 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 textFieldOpen.textField = textField
                 
                 detailLabel.text = ""
-                textField.becomeFirstResponder()
                 addDoneButtonToKeyboard(sender: textField)
+                textField.becomeFirstResponder()
             } else { // regular drug, edit in separate viewController individually
                 performSegue(withIdentifier: "doseDetailSegue", sender: nil)
             }
