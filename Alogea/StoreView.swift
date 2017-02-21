@@ -40,9 +40,11 @@ class StoreView: UITableViewController {
         super.viewDidLoad()
     
         // adapt NavBarColour
+        if (self.navigationController?.navigationBar.isHidden)! {
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+        }
         self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
         self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().greyGreen
-//        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
         // CloudAccessIcon
@@ -70,8 +72,13 @@ class StoreView: UITableViewController {
         
         tableView.allowsSelection = false
         inAppStore.callingViewController = self
-}
+    }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.tabBarController?.tabBar.isHidden = false
+
+    }
     deinit {
         NotificationCenter.default.removeObserver(self)
         inAppStore.callingViewController = nil
@@ -262,7 +269,6 @@ class StoreView: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-
 }
 
 class DescriptionLabel: UILabel {

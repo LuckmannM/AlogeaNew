@@ -48,6 +48,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         // rretrun from other viewControllers
         // the graph may have changed so need re-draw/refresh
         
+        
         // transferred to here from GraphView.init()
         if graphContainerView.graphView.helper.allGraphEventsTimeSpan < (24 * 3600) {
             displayTimeSegmentedController.selectedSegmentIndex = 0
@@ -60,6 +61,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
 
         
         graphContainerView.reloadAllViews()
+//        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidLoad() {
@@ -560,8 +562,9 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         storeView.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
         storeView.preferredContentSize = CGSize(width: 280, height: 360)
         
-        // self.navigationController!.pushViewController(storeView, animated: true)
-        self.present(storeView, animated: true, completion: nil)
+//        self.present(storeView, animated: true, completion: nil)
+//        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController!.pushViewController(storeView, animated: true)
         
         
     }

@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var tabBarViews: [UIViewController]!
+    var mainView: MainViewController!
     
     var reminderNotificationCategoryRegistered = false
     
@@ -55,19 +56,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
+            
         tabBarViews = {
-            let tBC = (UIApplication.shared.delegate as! AppDelegate).window!.rootViewController as! UITabBarController
-            if let controllers = tBC.viewControllers { return controllers }
+            let tBC = self.window!.rootViewController as! UITabBarController
+            if let navControllers = tBC.viewControllers { return navControllers }
             else { return [] }
         }()
-        
         if notificationsAuthorised != true {
             requestNotificationAuthorisation()
         }
         registerNotificationCategories()
-        UNUserNotificationCenter.current().delegate = tabBarViews[0] as! MainViewController
+
+        // find mainView in hierarchy of StoryBoard ViewControllers
+        for navController in tabBarViews {
+            for view in navController.childViewControllers {
+                if view is MainViewController {
+                    mainView = view as! MainViewController
+                    UNUserNotificationCenter.current().delegate = mainView
+                    break
+                }
+            }
+        }
         
         return true
     }

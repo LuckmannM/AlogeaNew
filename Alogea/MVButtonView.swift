@@ -74,6 +74,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     override func draw(_ rect: CGRect) {
 
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
+        print("drawing MVButtonView in \(bounds)")
         buttonColor.setFill()
         buttonCircle.fill()
         

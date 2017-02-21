@@ -83,7 +83,8 @@ class GraphScoreChoser: UITableViewController {
         } else {
             
             // check option purchased
-            if InAppStore.sharedInstance().checkMultipleGraphAccess() {
+            // *** return to true!
+            if !InAppStore.sharedInstance().checkMultipleGraphAccess() {
                 cell.activateTextField()
                 cell.addButton.isHidden = true
             } else {
