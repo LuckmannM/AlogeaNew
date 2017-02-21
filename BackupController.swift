@@ -673,7 +673,6 @@ class BackupController {
             
         }
         else {
-            print("NSFileManager error in DataIO  importFromBackup - can't find record Type Dictionary @ \(recordTypesDictionaryPath)")
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 27", errorInfo: "can't find record Type Dictionary @ \(recordTypesDictionaryPath)")
             return nil
         }
