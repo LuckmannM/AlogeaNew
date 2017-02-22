@@ -69,7 +69,7 @@ class EventPopUp: UIViewController {
             let medEvent = eventObject as! DrugEpisode
             theTitle = medEvent.name!
             theDate = dateFormatter.string(from: medEvent.startDate as! Date)
-            theNote = medEvent.dosesString()
+            theNote = medEvent.dosesString() + "\n" + (medEvent.notes ?? "")
         }
         
         titleLabel.text = theTitle

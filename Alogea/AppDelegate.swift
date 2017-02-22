@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-            
+        print("Device name \(UIDevice.current.name)")
         tabBarViews = {
             let tBC = self.window!.rootViewController as! UITabBarController
             if let navControllers = tBC.viewControllers { return navControllers }

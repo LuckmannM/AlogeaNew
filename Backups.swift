@@ -204,6 +204,7 @@ class Backups: UITableViewController {
         let proceedAction = UIAlertAction(title: "Proceed", style: UIAlertActionStyle.default, handler: { (backupDialog)
             -> Void in
             
+            print("request to import from backup \(filePath), isLocal? \(fromLocalSource)")
             BackupController.importFromBackup(folderName: filePath, fromLocalBackup: fromLocalSource)
             
         })

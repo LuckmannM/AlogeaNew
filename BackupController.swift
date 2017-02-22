@@ -111,7 +111,7 @@ class BackupController {
     static var cloudBackupsFolderURL: NSURL? {
         
         if FileManager.default.ubiquityIdentityToken == nil {
-            print("iCloud drive access not available")
+            ErrorManager.sharedInstance().errorMessage(title: "iCloud storage currently not accessible", message: "Your backup has not been saved to iCloud")
             return nil
         }
         
@@ -143,7 +143,7 @@ class BackupController {
         
         
         if FileManager.default.ubiquityIdentityToken == nil {
-//            print("iCloud drive access not available")
+            ErrorManager.sharedInstance().errorMessage(title: "iCloud storage currently not accessible", message: "Your backup has not been saved to iCloud")
             return
         }
         
@@ -703,7 +703,7 @@ class BackupController {
                 }
             }
             
-            let backupFolderPath = backupDirectoryPath.appending("/Backup " + dateFormatter.string(from: Date()))
+            let backupFolderPath = backupDirectoryPath.appending("/Backup \(UIDevice.current.name) " + dateFormatter.string(from: Date()))
             if !FileManager.default.fileExists(atPath: backupFolderPath) {
                 
                 do {
