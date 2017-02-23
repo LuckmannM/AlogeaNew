@@ -78,6 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+        print("finished app didFinishLaunching")
+        print("")
         
         return true
     }
@@ -142,7 +144,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             for category in categories {
                 if category.identifier == notification_MedReminderCategory {
-                    print("\(notification_MedReminderCategory) found as already registered")
                     self.reminderNotificationCategoryRegistered = true
                     return
                 }
@@ -218,16 +219,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // handling non-specific/non-action user actions e.g. deleting notification in NotificationCenter
         if response.actionIdentifier == UNNotificationDismissActionIdentifier {
             // The user dismissed the notification without taking action
-            print("user deleted action in NotificatioCenter")
         }
         else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
             // The user launched the app
-            print("user launched app on notification")
         }
         
         // handling category specific notification actions from the user
         if response.notification.request.content.categoryIdentifier == notification_MedReminderCategory {
-            // Handle the actions for the expired timer.
+            // *** Handle the actions for the expired timer.
             if response.actionIdentifier == "dismiss" {
                 // Invalidate the old timer and create a new one. . .
                 print("action dismiss received in notification")

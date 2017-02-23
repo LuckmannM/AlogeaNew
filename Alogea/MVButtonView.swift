@@ -47,6 +47,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     // MARK: - Core class functions
 
     convenience init(frame: CGRect, controller: MVButtonController) {
+        print("init MVButtonView")
         self.init(frame: frame)
         self.controller = controller
         self.touchWheel = controller.touchWheel
@@ -58,6 +59,7 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         addSubview(roundButton)
         
         buttonColor = colorScheme.duskBlue
+        print("finished init MVButtonView")
     }
     
     override init(frame: CGRect) {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class Backups: UITableViewController {
     
@@ -88,12 +89,15 @@ class Backups: UITableViewController {
         self.tabBarController!.tabBar.isHidden = true
         
         cloudButton = UIButton(type: .custom)
+        print("iCLoudStatus \(DrugDictionary.sharedInstance().iCloudStatus)")
+        print("isConnected \(InAppStore.sharedInstance().isConnectedToNetwork())")
         
-        if FileManager.default.ubiquityIdentityToken != nil {
+        if DrugDictionary.sharedInstance().iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() == true {
             cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
         } else {
             cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
         }
+        
         cloudButton.frame = CGRect(x: 0, y: 0, width: (75*20/50), height: 20)
         let cloudIcon = UIBarButtonItem(customView: cloudButton)
         cloudIcon.isEnabled = false
@@ -151,15 +155,27 @@ class Backups: UITableViewController {
         if indexPath.section == 0 {
             // local backup files
             (cell.contentView.viewWithTag(10) as! UILabel).text = localBackupFiles[indexPath.row]
-            (cell.contentView.viewWithTag(40) as! UIButton).addTarget(self, action: #selector(startBackupFromLocal(sender:)), for: .touchUpInside)
+//            (cell.contentView.viewWithTag(40) as! UIButton).addTarget(self, action: #selector(startBackupFromLocal(sender:)), for: .touchUpInside)
         }
         else {
             // cloud backup files
             (cell.contentView.viewWithTag(10) as! UILabel).text = cloudBackupFiles[indexPath.row]
-            (cell.contentView.viewWithTag(40) as! UIButton).addTarget(self, action: #selector(startBackupFromCloud(sender:)), for: .touchUpInside)
+//            (cell.contentView.viewWithTag(40) as! UIButton).addTarget(self, action: #selector(startBackupFromCloud(sender:)), for: .touchUpInside)
             
         }
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.section == 0 {
+            backupFromLocal(path: indexPath)
+        } else {
+            backupFromCloud(path: indexPath)
+            
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -176,28 +192,50 @@ class Backups: UITableViewController {
     }
     // MARK: - Button functions
     
-    func startBackupFromLocal(sender: UIButton) {
+//    func startBackupFromLocal(sender: UIButton) {
+//        
+//        let originatingCell: UITableViewCell = sender.superview?.superview as! UITableViewCell // first superview is contentView
+//        let indexPath = tableView.indexPath(for: originatingCell)
+//        let backupFile = "/" + localBackupFiles[indexPath!.row]
+//        
+//        backupDialog(sender: sender, filePath: backupFile, fromLocalSource: true)
+//        
+//    }
+//    
+//    func startBackupFromCloud(sender: UIButton) {
+//        
+//        let originatingCell: UITableViewCell = sender.superview?.superview as! UITableViewCell // first superview is contentView
+//        let indexPath = tableView.indexPath(for: originatingCell)
+//        let backupFile = cloudBackupFiles[indexPath!.row]
+//        
+//        backupDialog(sender: sender, filePath: backupFile, fromLocalSource: false)
+//        
+//    }
+    
+    // MARK: - CellRowFunctions instead
+    
+    func backupFromLocal(path: IndexPath) {
         
-        let originatingCell: UITableViewCell = sender.superview?.superview as! UITableViewCell // first superview is contentView
-        let indexPath = tableView.indexPath(for: originatingCell)
-        let backupFile = "/" + localBackupFiles[indexPath!.row]
+        let originatingCell = tableView.cellForRow(at: path)
+        let backupFile = "/" + localBackupFiles[path.row]
         
-        backupDialog(sender: sender, filePath: backupFile, fromLocalSource: true)
+        backupDialog(sender: originatingCell!, filePath: backupFile, fromLocalSource: true)
         
     }
     
-    func startBackupFromCloud(sender: UIButton) {
+    func backupFromCloud(path: IndexPath) {
         
-        let originatingCell: UITableViewCell = sender.superview?.superview as! UITableViewCell // first superview is contentView
-        let indexPath = tableView.indexPath(for: originatingCell)
-        let backupFile = cloudBackupFiles[indexPath!.row]
+        let originatingCell = tableView.cellForRow(at: path)
+        let backupFile = "/" + cloudBackupFiles[path.row]
         
-        backupDialog(sender: sender, filePath: backupFile, fromLocalSource: false)
+        backupDialog(sender: originatingCell!, filePath: backupFile, fromLocalSource: true)
         
     }
+
+
     
     
-    func backupDialog(sender: UIButton, filePath: String, fromLocalSource: Bool) {
+    func backupDialog(sender: UITableViewCell, filePath: String, fromLocalSource: Bool) {
         
         let backupDialog = UIAlertController(title: "Restore from backup", message: "Caution: this will replace all existing records with records from the saved backup! This cannot be reversed", preferredStyle: .actionSheet)
         

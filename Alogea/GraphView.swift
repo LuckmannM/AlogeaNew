@@ -83,6 +83,7 @@ class GraphView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
+        print("draw GraphView)")
         
         drawTimeLine()
         if refreshPointsFlag {
@@ -103,6 +104,7 @@ class GraphView: UIView {
         }
         
         refreshPointsFlag = true
+        print("finished drawing GraphView)")
     }
     
     func drawLineGraph() {

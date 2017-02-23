@@ -43,6 +43,26 @@ class MedsView: UIView {
         return frc
     }()
     
+    var currentRegMedsOnlyFRC: NSFetchedResultsController<DrugEpisode> = {
+        
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let regPredicate = NSPredicate(format: "regularly == true")
+        let currentPredicate = NSPredicate(format: "isCurrent == %@", "Current Medicines")
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [regPredicate, currentPredicate])
+        
+        request.predicate = compoundPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "MedsVC Error 1", systemError: error)
+        }
+        return frc
+    }()
+
+    
     var prnMedsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
         let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
@@ -58,6 +78,31 @@ class MedsView: UIView {
         
         return frc
     }()
+    
+    var currentPrnMedOnlyFRC: NSFetchedResultsController<Event> = {
+        // this should only apply if no med expansion purvhased so there is only one drug
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let predicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
+        if let singleMedName = MedicationController.sharedInstance().returnSingleCurrentMedName() {
+            let medNamePredicate = NSPredicate(format:"name == %@", singleMedName)
+            let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, medNamePredicate])
+            request.predicate = compoundPredicate
+        } else {
+            request.predicate = predicate
+        }
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: "name", cacheName: nil)
+        
+        do {
+            try frc.performFetch()
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "MedsVC Error 2", systemError: error)
+        }
+        
+        return frc
+    }()
+
     
     var diaryEventsFRC: NSFetchedResultsController<Event> = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -93,7 +138,7 @@ class MedsView: UIView {
     
     convenience init(graphView: GraphView) {
         self.init()
-        print("init MedsView... ")
+        print("init MedsView)")
 
         self.graphView = graphView
         self.helper = graphView.helper
@@ -107,8 +152,7 @@ class MedsView: UIView {
         regMedsFRC.delegate = self
         prnMedsFRC.delegate = self
         diaryEventsFRC.delegate = self
-        
-        print("...init MedsView end")
+        print("finished init MedsView)")
 
     }
     
@@ -120,6 +164,7 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
+        print("draw MedsView)")
         if UserDefaults.standard.bool(forKey: "MedsViewEnabled") == false {
             return
         } else {
@@ -144,7 +189,7 @@ class MedsView: UIView {
         
         drawNonScoreEvents(scale: scale, verticalOffset: vOffset)
         
-        
+        print("finished drawing MedsView)")
     }
     
     private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) {
@@ -153,8 +198,16 @@ class MedsView: UIView {
         var topOfRect = verticalOffset
         count = 0
         colorArrayCount = 0
-        for medicine in regMedsFRC.fetchedObjects! {
-            var medRect = medicine.medRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medicine.startDate as! Date, scale: scale), dy: verticalOffset)
+        var regMeds: NSFetchedResultsController<DrugEpisode>!
+        
+        if InAppStore.sharedInstance().checkDrugFormularyAccess() {
+            regMeds = regMedsFRC
+        } else {
+            regMeds = currentRegMedsOnlyFRC
+        }
+        
+        for medicine in regMeds.fetchedObjects! {
+            var medRect = medicine.medRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medicine.startDateVar as Date, scale: scale), dy: verticalOffset)
             
             for i in 0..<count {
                 if medRect.intersects(allRectsArray[i]) {
@@ -199,7 +252,16 @@ class MedsView: UIView {
         var sectionCount = 0
         var eventCount = 0
         
-        for section in prnMedsFRC.sections! {
+        var prnMeds: NSFetchedResultsController<Event>!
+        
+        if InAppStore.sharedInstance().checkDrugFormularyAccess() {
+            prnMeds = prnMedsFRC
+        } else {
+            prnMeds = currentPrnMedOnlyFRC
+        }
+
+        
+        for section in prnMeds.sections! {
             for index in 0..<section.numberOfObjects {
                 let medEvent = prnMedsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var medRect = medEvent.medEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medEvent.date as! Date, scale: scale), dy: verticalOffset)

@@ -114,6 +114,7 @@ class EventsDataController: NSObject {
     
     override init() {
         super.init()
+        print("init EventsDataController)")
         
         nonScoreEventsByDateFRC.delegate = self
         nonScoreEventTypesFRC.delegate = self
@@ -122,7 +123,7 @@ class EventsDataController: NSObject {
         
         
         reconcileRecordTypesAndEventNames()
-        
+        print("finsihed init EventsDataController)")
     }
     
     func reconcileRecordTypesAndEventNames() {

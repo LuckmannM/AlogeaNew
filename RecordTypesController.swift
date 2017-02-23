@@ -62,6 +62,7 @@ class RecordTypesController: NSObject {
     
     override init() {
         super.init()
+        print("init RecordTypesController)")
         
 //        for object in allTypes.fetchedObjects! {
 //            print("recordType name is \(object.name) ")
@@ -73,6 +74,7 @@ class RecordTypesController: NSObject {
 //                // create new RecordType
 //            }
 //        }
+        print("finished init RecordTypesController)")
 
     }
     

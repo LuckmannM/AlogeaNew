@@ -21,6 +21,7 @@ class MVButton: UIButton {
     var controller: MVButtonController!
     
     convenience init(frame: CGRect, controller: MVButtonController) {
+        print("init MVButton")
         self.init(frame: frame)
         self.init(type: .custom)
         self.delegate = controller
@@ -28,6 +29,7 @@ class MVButton: UIButton {
         self.touchWheel = controller.touchWheel
         colors = ColorScheme.sharedInstance()
         addTarget(self, action: #selector(tapped), for: .touchUpInside)
+        print("finshed init MVButton")
     }
     
     override init(frame: CGRect) {

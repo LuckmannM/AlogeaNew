@@ -58,21 +58,20 @@ class MedicationController: NSObject {
         return frc
     }()
     
-    var regMedsFRC: NSFetchedResultsController<DrugEpisode> {
+    var regMedsFRC: NSFetchedResultsController<DrugEpisode> = {
         
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         let regPredicate = NSPredicate(format: "regularly == true")
         
         request.predicate = regPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "regularly", ascending: false), NSSortDescriptor(key: "startDate", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
             try frc.performFetch()
         } catch let error as NSError{
             ErrorManager.sharedInstance().errorMessage(message: "MedController Error 2", systemError: error)
         }
-        frc.delegate = self
         
         /* DEBUG
          for object in frc.fetchedObjects! {
@@ -82,7 +81,7 @@ class MedicationController: NSObject {
          */
         
         return frc
-    }
+    }()
     
     var regMedsSortedByStartDateFRC: NSFetchedResultsController<DrugEpisode> {
         
@@ -110,22 +109,19 @@ class MedicationController: NSObject {
         return frc
     }
 
-
     
-    lazy var allMedsFRC: NSFetchedResultsController<DrugEpisode> = {
+    var allMedsFRC: NSFetchedResultsController<DrugEpisode> = {
     
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         
         request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
         try frc.performFetch()
         } catch let error as NSError{
             ErrorManager.sharedInstance().errorMessage(message: "MedController Error 4", systemError: error)
         }
-        frc.delegate = self
-        
         /* DEBUG
          for object in frc.fetchedObjects! {
          print("prn drug isCurrent is \(object.isCurrent)")
@@ -154,6 +150,24 @@ class MedicationController: NSObject {
         }
         //print("MedsController found prn drug names: \(nameArray)")
         return nameArray
+    }
+    
+    override init() {
+        super.init()
+        print("init MedicationController)")
+        
+        regMedsFRC.delegate = self
+        allMedsFRC.delegate = self
+        print("finished init MedicationController)")
+    }
+    
+    func returnSingleCurrentMedName() -> String? {
+        
+        if (allMedsFRC.fetchedObjects?.count)! > 0 {
+            return allMedsFRC.fetchedObjects?[0].nameVar
+        } else {
+            return nil
+        }
     }
     
     // - Methods:

@@ -26,6 +26,8 @@ class BackupController {
     static let backupDirectoryName = "/Backups"
     static let tempDirectoryName = "/Tmp"
     
+    static let iCloudSubDirectoryName = "Alogea Backups"
+    
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
         return moc
@@ -72,7 +74,7 @@ class BackupController {
     
     static var localBackupDirectoryPath: String? {
         
-        let documentDirectoryPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentDirectoryPaths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
         if documentDirectoryPaths.count > 0 {
             let directoryName = backupDirectoryName
             let backupDirectoryPath = documentDirectoryPaths[0].appending(directoryName)
@@ -115,8 +117,8 @@ class BackupController {
             return nil
         }
         
-        if let iCloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents") {
-            let cloudDocumentBackupsURL = iCloudURL.appendingPathComponent("Backups")
+        if let iCloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudSubDirectoryName) {
+            let cloudDocumentBackupsURL = iCloudURL.appendingPathComponent("\(UIDevice.current.name) Backups")
             if !FileManager.default.fileExists(atPath: cloudDocumentBackupsURL.path) {
                 do {
                     try FileManager.default.createDirectory(atPath:cloudDocumentBackupsURL.path, withIntermediateDirectories: true, attributes: nil)
@@ -136,23 +138,24 @@ class BackupController {
     
     class func copyBackupsToCloud(directoryToCopyPath: String) {
         
-        var tempBackupURL: NSURL
-        var tempLocalDirectoryPath: String
-        let backupFolderName = "/" + (directoryToCopyPath as NSString).lastPathComponent
+//        var tempBackupURL: NSURL
+//        var tempLocalDirectoryPath: String
+        let cloudBackupFolderName = "/" + (directoryToCopyPath as NSString).lastPathComponent
         
         
         
         if FileManager.default.ubiquityIdentityToken == nil {
-            ErrorManager.sharedInstance().errorMessage(title: "iCloud storage currently not accessible", message: "Your backup has not been saved to iCloud")
+            ErrorManager.sharedInstance().errorMessage(title: "iCloud currently not accessible", message: "iCloud backup can't be saved")
             return
         }
         
         let backupDirectoryURL = NSURL(fileURLWithPath: directoryToCopyPath)
         
         // first copy the files to a temp directory, for later moving to CloudDirectory
-        if tempBackupDirectoryPath != nil {
+        // if tempBackupDirectoryPath != nil {
             
             // remove any remaining local /Tmp directory files from previous operations and re-create local /Tmp folder
+            /*
             do {
                 try FileManager.default.removeItem(atPath: tempBackupDirectoryPath!)
             } catch let error as NSError {
@@ -193,12 +196,14 @@ class BackupController {
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 11", errorInfo:"can't find temp directory for backup")
             return
         }
+             */
         
         if let  iCloudURL = cloudBackupsFolderURL {
             
-            let newCloudBackupFolder = (iCloudURL.path)?.appending(backupFolderName)
+            let newCloudBackupFolder = (iCloudURL.path)?.appending(cloudBackupFolderName)
+            
             if FileManager.default.fileExists(atPath: newCloudBackupFolder!) {
-                // delete existing backup to create new
+                // delete any existing/previous backup folder with same name/date to create new
                 do {
                     try FileManager.default.removeItem(atPath: newCloudBackupFolder!)
                 } catch let error as NSError {
@@ -207,13 +212,15 @@ class BackupController {
             }
 
             do {
-                try  FileManager.default.setUbiquitous(true, itemAt: tempBackupURL as URL, destinationURL: NSURL(fileURLWithPath:  newCloudBackupFolder!) as URL)
+                // this does the actual copying to iCloud
+                try  FileManager.default.setUbiquitous(true, itemAt: backupDirectoryURL as URL, destinationURL: NSURL(fileURLWithPath:  newCloudBackupFolder!) as URL)
                 
             } catch let error as NSError {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 13", systemError: error, errorInfo:"error writing Backups directory to iCloud documents")
             }
-        } else {
-            print("error in DataIO moveBackupsToICloud  - can't get iCloudURL for default directory. Try to create ")
+            
+        }
+        else {
             if let cloudDocumentsURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents/Backups") {
                 do {
                     try FileManager.default.createDirectory(at: cloudDocumentsURL, withIntermediateDirectories: true, attributes: nil)
@@ -222,7 +229,6 @@ class BackupController {
                 }
             }
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 14", errorInfo:"error in DataIO moveBackupsToICloud  - can't get default iCloudURL")
-            
         }
     }
     
@@ -232,78 +238,35 @@ class BackupController {
         let drugsData = createDrugsDictionary()
         let recordTypesData = createRecordTypesDictionary()
         
-        guard let backupDirectoryPath = checkCreateBackupDirectory()  else {
+        guard let backupDirectoryPath = checkCreateLocalBackupDirectory()  else {
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save Backup", errorInfo:"error - no backup directory")
             return
         }
         
-        fileIO(fileName: eventFileName, data: eventsData)
-        fileIO(fileName: drugsFileName, data: drugsData)
-        fileIO(fileName: recordTypesFileName, data: recordTypesData)
+        fileIO(backupDirectoryPath: backupDirectoryPath, fileName: eventFileName, data: eventsData, cloud: false)
+        fileIO(backupDirectoryPath: backupDirectoryPath, fileName: drugsFileName, data: drugsData, cloud: false)
+        fileIO(backupDirectoryPath: backupDirectoryPath, fileName: recordTypesFileName, data: recordTypesData, cloud: false)
         
-        // eventsBackup
-////            var fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName)))
-////            var tempURL: NSURL?
-////            // check if a similar file exists already
-////            if FileManager.default.fileExists(atPath: eventFileName) {
-////                // if it does rename to temp and delete after successful write or rename is write fails
-////                tempURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(eventFileName + "Temp")))
-////                do {
-////                    try FileManager.default.copyItem(at: fileURL as URL, to: tempURL as! URL)
-////                    try FileManager.default.removeItem(at: fileURL as URL)
-////                } catch let error as NSError {
-////                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.1", systemError: error, errorInfo:"error copying or removing existing backupfile \(fileURL) to \(tempURL)")
-////                }
-////            }
-////            do {
-////                try eventsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-////            } catch let error as NSError {
-////                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
-////            }
-////            // delete old temp file
-////            if FileManager.default.fileExists(atPath: (eventFileName + "Temp")) {
-////                // if it does rename to temp and delete after successful write or rename is write fails
-////                do {
-////                    try FileManager.default.removeItem(at: tempURL as! URL)
-////                } catch let error as NSError {
-////                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.2", systemError: error, errorInfo:"error removing temp backupfile \(fileURL) to \(tempURL)")
-////                }
-////            }
-//        
-//// drugsBackup
-//        
-//            fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(drugsFileName)))
-//            do {
-//                try drugsData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-//            } catch let error as NSError {
-//                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 17", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
-//            }
-//        
-//// recordTypesBackup
-//            fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(recordTypesFileName)))
-//            do {
-//                try recordTypesData.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
-//            } catch let error as NSError {
-//                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
-//            }
         
-// moveBackups to iCloud
-        
-            if UserDefaults.standard.bool(forKey: iCloudBackUpsOn) {
-                copyBackupsToCloud(directoryToCopyPath: backupDirectoryPath)
+        if UserDefaults.standard.bool(forKey: iCloudBackUpsOn) {
+            guard let backupDirectoryPath = checkCreateCloudBackupDirectory()  else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save CloudBackup", errorInfo:"error - no cloud backup directory")
+                return
             }
+
+            fileIO(backupDirectoryPath: backupDirectoryPath, fileName: eventFileName, data: eventsData, cloud: true)
+            fileIO(backupDirectoryPath: backupDirectoryPath, fileName: drugsFileName, data: drugsData, cloud: true)
+            fileIO(backupDirectoryPath: backupDirectoryPath, fileName: recordTypesFileName, data: recordTypesData, cloud: true)
+
+            copyBackupsToCloud(directoryToCopyPath: backupDirectoryPath)
+        }
     }
     
-    static func fileIO(fileName: String, data: Data) {
+    static func fileIO(backupDirectoryPath: String, fileName: String, data: Data, cloud: Bool) {
         
-        guard let backupDirectoryPath = checkCreateBackupDirectory()  else {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15; can't save Backup", errorInfo:"error - no backup directory")
-            return
-        }
-
         let fileURL = NSURL(fileURLWithPath: (backupDirectoryPath.appending(fileName)))
         var tempURL: NSURL?
-        
+            
         // check if a similar file exists already
         if FileManager.default.fileExists(atPath: eventFileName) {
             // if it does rename to temp and delete after successful write or rename is write fails
@@ -315,11 +278,18 @@ class BackupController {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.1", systemError: error, errorInfo:"error copying or removing existing backupfile \(fileURL) to \(tempURL)")
             }
         }
+        
+        // write data to file
         do {
-            try data.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic])
+            if cloud {
+                try data.write(to: fileURL as URL, options: [.atomic]) // file not encrypted for iCloud
+            } else {
+                try data.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic]) // file encrypted for local
+            }
         } catch let error as NSError {
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", systemError: error, errorInfo:"error trying to encrypt file \(fileURL)")
         }
+        
         // delete old temp file
         if FileManager.default.fileExists(atPath: (fileName + "Temp")) {
             // if it does rename to temp and delete after successful write or rename is write fails
@@ -329,7 +299,6 @@ class BackupController {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15.2", systemError: error, errorInfo:"error removing temp backupfile \(fileURL) to \(tempURL)")
             }
         }
-        
     }
     
     static func importFromBackup(folderName: String, fromLocalBackup: Bool) {
@@ -564,7 +533,6 @@ class BackupController {
             let eventDictionaryURL = NSURL(fileURLWithPath: eventDictionaryPath)
             
             // OLD
-            print("trying to load file contents \(eventDictionaryPath) into dictionary")
 //            if let eventsDictionaryArray = NSArray.init(contentsOf: eventDictionaryURL as URL) {
 //                return eventsDictionaryArray as? [Dictionary]
 //            }
@@ -588,7 +556,19 @@ class BackupController {
             
         }
         else {
-            print("NSFileManager error in DataIO  importFromBackup - can't find eventDictionary @ \(eventDictionaryPath)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 23", errorInfo:"Error loading eventsData as NSData from file @ \(eventDictionaryPath) could not be read")
+            do {
+                let filesInBckupFolder = try FileManager.default.contentsOfDirectory(atPath: filePath)
+                print("files contained in \(filePath) are ...")
+                for file in filesInBckupFolder {
+                    print("...\(file)")
+                    let readable = FileManager.default.isReadableFile(atPath: eventDictionaryPath)
+                    print("...file readable? \(readable)")
+                }
+            }
+            catch let error as NSError {
+                print("Filemanager reported error when getting contents of folder \(filePath): error is \(error)")
+            }
             
             // DEBUG
             //                let eventDictionaryURL = NSURL(fileURLWithPath: eventDictionaryPath)
@@ -680,7 +660,47 @@ class BackupController {
     
     // MARK: - filePaths
     
-    static func checkCreateBackupDirectory() -> String? {
+    static func checkCreateLocalBackupDirectory() -> String? {
+        
+        let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.locale = NSLocale.current
+            formatter.timeZone = NSTimeZone.local
+            formatter.dateFormat = "d.M.YY"
+            return formatter
+        }()
+        
+        
+        let documentDirectoryPaths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
+        if documentDirectoryPaths.count > 0 {
+            let directoryName = backupDirectoryName
+            let backupDirectoryPath = documentDirectoryPaths[0].appending(directoryName)
+            if !FileManager.default.fileExists(atPath: backupDirectoryPath) {
+                do {
+                    try FileManager.default.createDirectory(atPath: backupDirectoryPath, withIntermediateDirectories: false, attributes: nil)
+                } catch let error as NSError {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 28", systemError: error, errorInfo: "Error creating BackupDirectory in DataIO")
+                }
+            }
+            
+            let backupFolderPath = backupDirectoryPath.appending("/Backup " + dateFormatter.string(from: Date()))
+            if !FileManager.default.fileExists(atPath: backupFolderPath) {
+                
+                do {
+                    try FileManager.default.createDirectory(atPath: backupFolderPath, withIntermediateDirectories: false, attributes: nil)
+                } catch let error as NSError {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 29", systemError: error, errorInfo: "Error creating BackupDirectory in DataIO")
+                }
+            }
+            
+            return backupFolderPath
+            
+        } else {
+            return nil
+        }
+    }
+    
+    static func checkCreateCloudBackupDirectory() -> String? {
         
         let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
@@ -699,17 +719,17 @@ class BackupController {
                 do {
                     try FileManager.default.createDirectory(atPath: backupDirectoryPath, withIntermediateDirectories: false, attributes: nil)
                 } catch let error as NSError {
-                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 28", systemError: error, errorInfo: "Error creating BackupDirectory in DataIO")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 28.1", systemError: error, errorInfo: "Error creating CloudBackupDirectory in DataIO")
                 }
             }
             
-            let backupFolderPath = backupDirectoryPath.appending("/Backup \(UIDevice.current.name) " + dateFormatter.string(from: Date()))
+            let backupFolderPath = backupDirectoryPath.appending("/CloudBackup " + dateFormatter.string(from: Date()))
             if !FileManager.default.fileExists(atPath: backupFolderPath) {
                 
                 do {
                     try FileManager.default.createDirectory(atPath: backupFolderPath, withIntermediateDirectories: false, attributes: nil)
                 } catch let error as NSError {
-                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 29", systemError: error, errorInfo: "Error creating BackupDirectory in DataIO")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 29.1", systemError: error, errorInfo: "Error creating CloudBackupDirectory in DataIO")
                 }
             }
             
@@ -718,8 +738,8 @@ class BackupController {
         } else {
             return nil
         }
-        
     }
+
     
     static func documentDirectoryPath() -> String? {
         

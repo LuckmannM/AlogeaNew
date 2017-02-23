@@ -48,7 +48,8 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         // rretrun from other viewControllers
         // the graph may have changed so need re-draw/refresh
         
-        
+        print("MainVC viewWillAppear")
+
         // transferred to here from GraphView.init()
         if graphContainerView.graphView.helper.allGraphEventsTimeSpan < (24 * 3600) {
             displayTimeSegmentedController.selectedSegmentIndex = 0
@@ -67,6 +68,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("MainVC viewDidLoad start")
         graphContainerView.mainViewController  = self
         /*
         Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
@@ -79,6 +81,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
         
         self.view.backgroundColor = ColorScheme.sharedInstance().lightGray
+        print("MainVC viewDidLoad end")
         
     }
     

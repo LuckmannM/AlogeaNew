@@ -25,6 +25,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
     weak var mainViewController: MainViewController!
     
     init(viewRect: CGRect, touchWheel: TouchWheelView, mainViewController: MainViewController) {
+        print("init MVButtonController")
         
         self.touchWheel = touchWheel
         touchWheel.delegate = self
@@ -33,6 +34,7 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         touchWheel.addSubview(buttonView)
         self.mainViewController = mainViewController
         self.eventsDataController = EventsDataController.sharedInstance()
+        print("finished init MVButtonController")
     }
     
     func sizeViews(rect: CGRect) {

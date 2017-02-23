@@ -894,16 +894,23 @@ public class DrugEpisode: NSManagedObject {
     
     func graphicalDuration(scale: TimeInterval) -> CGFloat {
         
-        let endingDate = endDate ?? NSDate() // endDateVar is nil after fetching
-        let timeDuration = endingDate.timeIntervalSince(startDate as! Date)
+        if startDateVar == nil {
+            self.awakeFromFetch()
+        }
+        
+        let endingDate = endDateVar ?? Date() // endDateVar is nil after fetching
+        let timeDuration = endingDate.timeIntervalSince(startDateVar)
        
         return CGFloat(timeDuration / scale)
     }
     
     func medRect(scale: TimeInterval) -> CGRect {
+        if startDateVar == nil {
+            self.awakeFromFetch()
+        }
         
-        let endingDate = endDate ?? NSDate() // endDateVar is nil after fetching
-        let timeDuration = endingDate.timeIntervalSince(startDate as! Date)
+        let endingDate = endDateVar ?? Date() // endDateVar is nil after fetching
+        let timeDuration = endingDate.timeIntervalSince(startDateVar)
         
         var width = CGFloat(timeDuration / scale)
         if width < medBarHeight { width = medBarHeight }
