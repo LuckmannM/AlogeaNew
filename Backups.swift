@@ -89,8 +89,6 @@ class Backups: UITableViewController {
         self.tabBarController!.tabBar.isHidden = true
         
         cloudButton = UIButton(type: .custom)
-        print("iCLoudStatus \(DrugDictionary.sharedInstance().iCloudStatus)")
-        print("isConnected \(InAppStore.sharedInstance().isConnectedToNetwork())")
         
         if DrugDictionary.sharedInstance().iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() == true {
             cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
@@ -111,7 +109,7 @@ class Backups: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if FileManager.default.ubiquityIdentityToken != nil {
+        if DrugDictionary.sharedInstance().iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() == true {
             cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
         } else {
             cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
