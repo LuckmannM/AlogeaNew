@@ -123,7 +123,7 @@ class BackupController {
                 do {
                     try FileManager.default.createDirectory(atPath:cloudDocumentBackupsURL.path, withIntermediateDirectories: true, attributes: nil)
                 } catch let error as NSError {
-                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 6", systemError: error, errorInfo:"can't create /Cloud/Documents/Backups directory")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 6", systemError: error, errorInfo:"can't create iCloud Backups directory")
                 }
                 
             }
@@ -711,10 +711,10 @@ class BackupController {
         }()
         
         
-        let documentDirectoryPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        if documentDirectoryPaths.count > 0 {
+        let appSupportDirectoryPaths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
+        if appSupportDirectoryPaths.count > 0 {
             let directoryName = backupDirectoryName
-            let backupDirectoryPath = documentDirectoryPaths[0].appending(directoryName)
+            let backupDirectoryPath = appSupportDirectoryPaths[0].appending(directoryName)
             if !FileManager.default.fileExists(atPath: backupDirectoryPath) {
                 do {
                     try FileManager.default.createDirectory(atPath: backupDirectoryPath, withIntermediateDirectories: false, attributes: nil)

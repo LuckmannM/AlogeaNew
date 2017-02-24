@@ -8,17 +8,19 @@
 
 import UIKit
 import CloudKit
+import UserNotifications
 
-class Backups: UITableViewController {
+
+class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
     
     var localBackupsDirectoryPath : String? {
         
-        return BackupController.localBackupDirectoryPath
+        return BackingUpController.localBackupsFolderPath
     }
     
-    var cloudBackupsDirectoryURL: NSURL? {
+    var cloudBackupsDirectoryURL: URL? {
         
-        return BackupController.cloudBackupsFolderURL
+        return BackingUpController.cloudBackupsFolderURL
         
     }
     
@@ -104,7 +106,9 @@ class Backups: UITableViewController {
         spacer.width = self.view.frame.width / 2 - cloudButton.frame.width / 2 - 100 // latter = estd. width of backupActionButton
         
         self.navigationItem.setRightBarButtonItems([backupActionButton, spacer, cloudIcon], animated: true)
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(cloudBackupsUpdated), name: NSNotification.Name(rawValue: "CloudBackupFinished"), object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -120,6 +124,15 @@ class Backups: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    
+    func cloudBackupsUpdated() {
+        self.tableView.reloadSections([1], with: .automatic)
     }
     
     // MARK: - Table view data source
@@ -269,7 +282,8 @@ class Backups: UITableViewController {
     }
     
     func backupNow() {
-        BackupController.BackupAllUserData()
+        BackingUpController.BackupAllData()
+        //BackupController.BackupAllUserData()
         self.tableView.reloadData()
         
     }

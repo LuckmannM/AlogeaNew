@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var tabBarViews: [UIViewController]!
     var mainView: MainViewController!
+    var backups: Backups!
     
     var reminderNotificationCategoryRegistered = false
     
@@ -74,7 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if view is MainViewController {
                     mainView = view as! MainViewController
                     UNUserNotificationCenter.current().delegate = mainView
-                    break
+                } else if view is Backups {
+                    backups = view as! Backups
                 }
             }
         }

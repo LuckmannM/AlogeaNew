@@ -11,6 +11,7 @@
 		2604F8391E34D03A00742FE6 /* GraphScoreChoserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */; };
 		260898791E36603200CBB6B6 /* Backups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260898781E36603200CBB6B6 /* Backups.swift */; };
 		2608987B1E36614800CBB6B6 /* BackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608987A1E36614800CBB6B6 /* BackupController.swift */; };
+		261730C11E5F48C00030B017 /* BackingupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261730C01E5F48C00030B017 /* BackingupController.swift */; };
 		26202FAA1E53542400966532 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26202FA91E53542400966532 /* ErrorManager.swift */; };
 		262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262F2AF91E2534EA00E8779E /* DigitsFromString.swift */; };
 		263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DA0101DD4660300CD7963 /* DrugListCell.swift */; };
@@ -91,6 +92,7 @@
 		2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphScoreChoserCell.swift; sourceTree = "<group>"; };
 		260898781E36603200CBB6B6 /* Backups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Backups.swift; sourceTree = "<group>"; };
 		2608987A1E36614800CBB6B6 /* BackupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupController.swift; sourceTree = "<group>"; };
+		261730C01E5F48C00030B017 /* BackingupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackingupController.swift; sourceTree = "<group>"; };
 		26202FA91E53542400966532 /* ErrorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		262F2AF91E2534EA00E8779E /* DigitsFromString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigitsFromString.swift; sourceTree = "<group>"; };
 		263DA0101DD4660300CD7963 /* DrugListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugListCell.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				26770D561E2C29F500DCCBA6 /* EventTypeSettings.swift */,
 				26770D5A1E30032400DCCBA6 /* TextInputCell.swift */,
 				260898781E36603200CBB6B6 /* Backups.swift */,
+				261730C01E5F48C00030B017 /* BackingupController.swift */,
 				2688DA8A1E50EF1100003E12 /* EULAViewController.swift */,
 			);
 			name = "Settings Group";
@@ -591,6 +594,7 @@
 				26443F401E3B9536000A827C /* MedsView.swift in Sources */,
 				2644B8AD1DAE355300FF0484 /* ColorScheme.swift in Sources */,
 				26E3B90D1DA1816E00D157BB /* RecordType+CoreDataProperties.swift in Sources */,
+				261730C11E5F48C00030B017 /* BackingupController.swift in Sources */,
 				2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */,
 				26E3B8CB1DA177D000D157BB /* AppDelegate.swift in Sources */,
 				26E3B90F1DA1816E00D157BB /* Exercise+CoreDataProperties.swift in Sources */,
