@@ -23,10 +23,10 @@ class RecordTypesController: NSObject {
         return moc
     }()
     
-    lazy var allTypes: NSFetchedResultsController<RecordType> = {
+    var allTypes: NSFetchedResultsController<RecordType> = {
         let request = NSFetchRequest<RecordType>(entityName: "RecordType")
         request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (UIApplication.shared.delegate as! AppDelegate).stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
         do {
             try frc.performFetch()
@@ -34,7 +34,6 @@ class RecordTypesController: NSObject {
             ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 1", systemError: error)
         }
         
-        frc.delegate = self
         return frc
     }()
     
@@ -75,6 +74,8 @@ class RecordTypesController: NSObject {
 //            }
 //        }
         print("finished init RecordTypesController)")
+        
+        allTypes.delegate = self
 
     }
     
@@ -89,8 +90,8 @@ class RecordTypesController: NSObject {
         
         newType.name = withName
         newType.dateCreated = Date() as NSDate?
-        newType.minScore = minValue!
-        newType.maxScore = maxValue!
+        newType.minScore = minValue! as NSNumber?
+        newType.maxScore = maxValue! as NSNumber?
         
         save()
         
@@ -101,7 +102,7 @@ class RecordTypesController: NSObject {
         for object in allTypes.fetchedObjects! {
             if let recordType = object as RecordType? {
                 if recordType.name == forType {
-                    return recordType.maxScore
+                    return recordType.maxScore?.doubleValue
                 }
             }
         }
@@ -150,8 +151,6 @@ class RecordTypesController: NSObject {
                 uniqueName = name + " 2"
             }
         }
-//        print("...returning unique variant \(uniqueName)")
-        
         return uniqueName
     }
     
@@ -160,7 +159,6 @@ class RecordTypesController: NSObject {
         
         do {
             try  managedObjectContext.save()
-            // print("saving drugList moc")
         }
         catch let error as NSError {
             ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 3", systemError: error)

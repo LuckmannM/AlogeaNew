@@ -80,8 +80,8 @@ class GraphViewHelper: NSObject {
         guard (allEvents?.count ?? 0) > 0 ||  (allRegDrugsFRC.fetchedObjects?.count ?? 0) > 0 else {
             return nil
         }
-        
-        let firstDate = (allEvents?.first)?.date as! Date
+        let oneDayAgo = Date().addingTimeInterval(-24 * 3600)
+        let firstDate = (allEvents?.first)?.date as? Date ?? oneDayAgo
         var minAndMaxDates = [firstDate] // minDate from one and only event
         minAndMaxDates.append(Date())
         
@@ -180,7 +180,7 @@ class GraphViewHelper: NSObject {
         var score: Double = 10.0
         for object in EventsDataController.sharedInstance().recordTypesController.allTypes.fetchedObjects! {
             if let type = object as RecordType? {
-                if type.name == selectedScore { score = type.maxScore }
+                if type.name == selectedScore { score = (type.maxScore?.doubleValue ?? 10.0) }
             }
         }
         return score
@@ -195,7 +195,7 @@ class GraphViewHelper: NSObject {
         var dataArray = [scoreEventGraphData]()
         for object in graphEventsFRC.fetchedObjects! {
             if let event = object as Event? {
-                let data = (event.date! as Date, CGFloat(event.vas))
+                let data = (event.date! as Date, CGFloat(event.vas!.doubleValue))
                 dataArray.append(data)
             }
         }

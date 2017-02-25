@@ -80,6 +80,11 @@ class BackingUpController {
     
     static var cloudBackupsFolderURL: URL? = {
         // the URL for toplevel iCloud Backups folder based on the above general iClouod storage url
+        
+        guard cloudStorageURL != nil  else {
+            return nil
+        }
+        
         var cloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(cloudBackupsFolderName)
         if cloudURL == nil {
             do {
@@ -284,9 +289,11 @@ class BackingUpController {
                 singleEventDictionary["type"] = NSKeyedArchiver.archivedData(withRootObject: event.type!) as NSData
             }
             if event.duration != nil {
-                singleEventDictionary["duration"] = NSKeyedArchiver.archivedData(withRootObject: event.duration) as NSData
+                singleEventDictionary["duration"] = NSKeyedArchiver.archivedData(withRootObject: event.duration!) as NSData
             }
-            singleEventDictionary["vas"] = NSKeyedArchiver.archivedData(withRootObject: event.vas) as NSData
+            if event.vas != nil {
+                singleEventDictionary["vas"] = NSKeyedArchiver.archivedData(withRootObject: event.vas!) as NSData
+            }
             if event.outcome != nil {
                 singleEventDictionary["outcome"] = NSKeyedArchiver.archivedData(withRootObject: event.outcome!) as NSData
             }
@@ -369,10 +376,10 @@ class BackingUpController {
             if type.name != nil { singleTypeDictionary["name"] = NSKeyedArchiver.archivedData(withRootObject: type.name!) as NSData }
             if type.dateCreated != nil { singleTypeDictionary["date"] = NSKeyedArchiver.archivedData(withRootObject: type.dateCreated!) as NSData }
             if type.maxScore != nil {
-                singleTypeDictionary["maxScore"] = NSKeyedArchiver.archivedData(withRootObject: type.maxScore) as NSData
+                singleTypeDictionary["maxScore"] = NSKeyedArchiver.archivedData(withRootObject: type.maxScore!) as NSData
             }
             if type.minScore != nil {
-                singleTypeDictionary["minScore"] = NSKeyedArchiver.archivedData(withRootObject: type.minScore) as NSData
+                singleTypeDictionary["minScore"] = NSKeyedArchiver.archivedData(withRootObject: type.minScore!) as NSData
             }
             
             recordTypesDictionaryArray.append(singleTypeDictionary as NSDictionary)
@@ -437,9 +444,9 @@ class BackingUpController {
                             case "date":
                                 newEvent!.date = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["date"] as! Data)) as! NSDate)
                             case "vas":
-                                newEvent!.vas = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["vas"] as! Data)) as? Double)!
+                                newEvent!.vas = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["vas"] as! Data)) as? NSNumber)
                             case "duration":
-                                newEvent!.duration = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["duration"] as! Data)) as? Double)!
+                                newEvent!.duration = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["duration"] as! Data)) as? NSNumber)
                             case "location":
                                 newEvent!.bodyLocation = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["location"] as! Data)) as? String
                             case "note":
@@ -588,9 +595,9 @@ class BackingUpController {
                             case  "date":
                                 newRecordType!.dateCreated = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["date"] as! Data)) as? NSDate
                             case "maxScore":
-                                newRecordType!.maxScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["maxScore"] as! Data)) as! Double
+                                newRecordType!.maxScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["maxScore"] as? Data)!) as? NSNumber
                             case "minScore":
-                                newRecordType!.minScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["minScore"] as! Data)) as! Double
+                                newRecordType!.minScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["minScore"] as? Data)!)  as? NSNumber
                             default:
                                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", errorInfo:"backup recordTypes dictionary unrecognised key \(key)")
                             }

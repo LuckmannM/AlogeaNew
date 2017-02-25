@@ -166,7 +166,7 @@ class EventsDataController: NSObject {
             currentlyProcessedEvent!.name = withName
         }
         if vas != nil {
-            currentlyProcessedEvent!.vas = vas!
+            currentlyProcessedEvent!.vas = vas! as NSNumber?
         } else {
             currentlyProcessedEvent!.vas = -1
         }
@@ -174,7 +174,7 @@ class EventsDataController: NSObject {
             currentlyProcessedEvent!.note = note
         }
         if duration != nil {
-            currentlyProcessedEvent!.duration = duration!
+            currentlyProcessedEvent!.duration = duration! as NSNumber?
         } else {
             currentlyProcessedEvent!.duration = 0.0
         }
@@ -336,7 +336,7 @@ extension EventsDataController {
             }()
             newEvent!.name = withName
             newEvent!.type = "Score Event"
-            newEvent?.vas = drand48() * 10
+            newEvent?.vas = (drand48() * 10) as NSNumber?
             newEvent!.date = NSDate().addingTimeInterval(drand48() * -45 * 24 * 3600)
         }
         

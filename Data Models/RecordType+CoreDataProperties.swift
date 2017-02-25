@@ -18,7 +18,7 @@ extension RecordType {
 
     @NSManaged public var dateCreated: NSDate?
     @NSManaged public var name: String?
-    @NSManaged public var minScore: Double
-    @NSManaged public var maxScore: Double
+    @NSManaged public var minScore: NSNumber?
+    @NSManaged public var maxScore: NSNumber?
 
 }

@@ -155,7 +155,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     
     func showMissingfCloudAccessAlert(message:String?) {
         
-        let alertMessage = message ?? "There currently is no iCloud access. If you have not logged in, please do so at Settings > iCloud"
+        let alertMessage = message ?? "There currently is no iCloud access\nIf you have not logged in, please do so at Settings > iCloud"
         
         let alertController = UIAlertController(title: title, message: alertMessage, preferredStyle: .alert)
         

@@ -14,8 +14,8 @@ public class Event: NSManagedObject {
     
     func graphicDuration(scale: TimeInterval) -> CGFloat? {
         
-        if (duration ?? 0) > 0 {
-            return CGFloat(duration / scale)
+        if (duration?.doubleValue ?? 0) > 0 {
+            return CGFloat(duration!.doubleValue / scale)
         }
         return nil
     }
@@ -24,8 +24,8 @@ public class Event: NSManagedObject {
         
         var rect: CGRect!
         
-        if (duration ?? 0) > 0 {
-            var width = CGFloat(duration / scale)
+        if (duration?.doubleValue ?? 0) > 0 {
+            var width = CGFloat(duration!.doubleValue / scale)
             if width < medBarHeight {
                 width = medBarHeight
             }
