@@ -93,7 +93,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         
         cloudButton = UIButton(type: .custom)
         
-        if FileManager.default.ubiquityIdentityToken == nil && InAppStore.sharedInstance().isConnectedToNetwork() == true {
+        if FileManager.default.ubiquityIdentityToken == nil  {
             cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
         } else {
             cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)

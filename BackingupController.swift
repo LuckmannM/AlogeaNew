@@ -79,7 +79,7 @@ class BackingUpController {
     }()
     
     static var cloudBackupsFolderURL: URL? = {
-        // the URL for specific iCloud Backups folder based on the above general iLCouod storage url
+        // the URL for toplevel iCloud Backups folder based on the above general iClouod storage url
         var cloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(cloudBackupsFolderName)
         if cloudURL == nil {
             do {
@@ -794,6 +794,20 @@ class BackingUpController {
         }
         
     }
+    
+    static func deleteCloudBackups() {
+        
+        if cloudBackupsFolderURL != nil {
+            
+            do {
+                try FileManager.default.removeItem(at: cloudBackupsFolderURL! as URL)
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 36", systemError: error, errorInfo: "DataIO - unable to delete cloud backups")
+            }
+            
+        }
+    }
+
 
 
 }

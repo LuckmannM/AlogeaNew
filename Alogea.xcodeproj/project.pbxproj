@@ -10,7 +10,6 @@
 		2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */; };
 		2604F8391E34D03A00742FE6 /* GraphScoreChoserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */; };
 		260898791E36603200CBB6B6 /* Backups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260898781E36603200CBB6B6 /* Backups.swift */; };
-		2608987B1E36614800CBB6B6 /* BackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2608987A1E36614800CBB6B6 /* BackupController.swift */; };
 		261730C11E5F48C00030B017 /* BackingupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261730C01E5F48C00030B017 /* BackingupController.swift */; };
 		26202FAA1E53542400966532 /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26202FA91E53542400966532 /* ErrorManager.swift */; };
 		262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262F2AF91E2534EA00E8779E /* DigitsFromString.swift */; };
@@ -91,7 +90,6 @@
 		2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphScoreChoser.swift; path = ../GraphScoreChoser.swift; sourceTree = "<group>"; };
 		2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphScoreChoserCell.swift; sourceTree = "<group>"; };
 		260898781E36603200CBB6B6 /* Backups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Backups.swift; sourceTree = "<group>"; };
-		2608987A1E36614800CBB6B6 /* BackupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackupController.swift; sourceTree = "<group>"; };
 		261730C01E5F48C00030B017 /* BackingupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackingupController.swift; sourceTree = "<group>"; };
 		26202FA91E53542400966532 /* ErrorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		262F2AF91E2534EA00E8779E /* DigitsFromString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigitsFromString.swift; sourceTree = "<group>"; };
@@ -191,7 +189,6 @@
 				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
 				265387041E38A1F800DE095E /* MedicationController.swift */,
 				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
-				2608987A1E36614800CBB6B6 /* BackupController.swift */,
 			);
 			name = Controllers;
 			path = ..;
@@ -579,7 +576,6 @@
 				2644B8B41DAE479600FF0484 /* GetGradientColor Extension.swift in Sources */,
 				2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */,
 				263DA0161DD764E500CD7963 /* NewDrug.swift in Sources */,
-				2608987B1E36614800CBB6B6 /* BackupController.swift in Sources */,
 				2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */,
 				2657FA661DD88DF80063CCB4 /* DrugDictionary.swift in Sources */,
 				2644B8AF1DAE39B500FF0484 /* TouchWheelView.swift in Sources */,

@@ -175,6 +175,8 @@ class EventsDataController: NSObject {
         }
         if duration != nil {
             currentlyProcessedEvent!.duration = duration!
+        } else {
+            currentlyProcessedEvent!.duration = 0.0
         }
         
         // predating option before saving

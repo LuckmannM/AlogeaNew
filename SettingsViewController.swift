@@ -186,7 +186,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         let deleteAction = UIAlertAction(title: "Delete all iCloud backups", style: .default, handler: { (exportDialog)
             -> Void in
             
-            BackupController.deleteCloudBackups()
+            BackingUpController.deleteCloudBackups()
         })
         
         optionsDialog.addAction(deleteAction)
