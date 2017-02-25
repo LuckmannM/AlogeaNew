@@ -21,7 +21,7 @@ class BackingUpController {
     
     var delegate:BackingUpControllerDelegate!
     
-    static let evenstFileName = "/EventsDictionary"
+    static let eventsFileName = "/EventsDictionary"
     static let drugsFileName = "/DrugsDictionary"
     static let recordTypesFileName = "/RecordTypesDictionary"
 
@@ -32,6 +32,10 @@ class BackingUpController {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
         return moc
     }()
+    
+//    init() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(resumeRestoreFromCloudBackup), name: NSNotification.Name(rawValue: "CloudBackupDownloadFinished"), object: nil)
+//    }
     
     // MARK: - top folder paths
     
@@ -89,6 +93,7 @@ class BackingUpController {
     }()
     
     // MARK: - FetchRequests for ManagedObjects
+    
     static var recordTypes:[RecordType] {
         var array: [RecordType]! // RecordType events are events that are drawn in graphView
         let fetchRequest = NSFetchRequest<RecordType>(entityName: "RecordType")
@@ -127,6 +132,9 @@ class BackingUpController {
         }
         return array
     }
+    
+    
+    // MARK: - Creating and writing backups
     
     class func BackupAllData() {
         
@@ -169,9 +177,9 @@ class BackingUpController {
             return
         }
         
-        fileIO(backupFolderPath: newFolderPath, fileName: evenstFileName, data: eventsData, cloud: false)
-        fileIO(backupFolderPath: newFolderPath, fileName: drugsFileName, data: drugsData, cloud: false)
-        fileIO(backupFolderPath: newFolderPath, fileName: recordTypesFileName, data: recordTypesData, cloud: false)
+        fileIO(backupFolderPath: newFolderPath, fileName: eventsFileName, data: eventsData, encrypted: true)
+        fileIO(backupFolderPath: newFolderPath, fileName: drugsFileName, data: drugsData, encrypted: true)
+        fileIO(backupFolderPath: newFolderPath, fileName: recordTypesFileName, data: recordTypesData, encrypted: true)
         
         
         if UserDefaults.standard.bool(forKey: iCloudBackUpsOn) {
@@ -206,7 +214,7 @@ class BackingUpController {
             }
         }
 
-        // 1. create a copy folder 'Temp' odf the current local backups folder
+        // 1. create a copy folder 'Temp' of the current local backups folder
         do {
             try FileManager.default.copyItem(atPath: fromBackupFolderPath, toPath: tempFolderPath!)
         } catch let error as NSError {
@@ -214,30 +222,10 @@ class BackingUpController {
             return
         }
         
-        // *** DEBUG
-        do {
-            let filesInBckupFolder = try FileManager.default.contentsOfDirectory(atPath: localBackupsFolderPath!)
-            print("files contained in \(localBackupsFolderPath!) are ...")
-            for file in filesInBckupFolder {
-                print("...\(file)")
-            }
-        }
-        catch let error as NSError {
-            print("Filemanager reported error when getting contents of folder \(localBackupsFolderPath): error is \(error)")
-        }
-        print("tempFile exists? \(FileManager.default.fileExists(atPath: tempFolderPath!))")
-        // *** DEBUG
-        
         // 2.  create new folder in toplevel iCloud Backups folder
         let newCloudFolder = cloudBackupsFolderURL?.appendingPathComponent("CloudBackup " + dateFormatter.string(from: Date()), isDirectory: true)
-//        do {
-//            try FileManager.default.createDirectory(at: newCloudFolder!, withIntermediateDirectories: true, attributes: nil)
-//        } catch let error as NSError {
-//            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7.1", systemError: error, errorInfo: "Can't create new empty Backup Folder in iCloud at path \(newCloudFolder)")
-//            return
-//        }
         if FileManager.default.fileExists(atPath: newCloudFolder!.path) {
-            // 0. remove any folder 'Temp' otherwise step 1 fails
+            // check if alredy exists and remove any folder 'Temp' otherwise step 3 fails
             do {
                 try FileManager.default.removeItem(atPath: newCloudFolder!.path)
             } catch let error as NSError {
@@ -246,12 +234,8 @@ class BackingUpController {
             }
         }
 
-        
-        
         // 3.  move files in this folder to iCloud storage
         let localTempFolderURL = URL(fileURLWithPath: tempFolderPath!)
-        
-        // *** Look at completion handler for async qeue as in DrugDictionary to refresh Backups.tableView and delete Temp folder
         DispatchQueue.main.async {
             do {
                 // this does the actual copying to iCloud
@@ -259,20 +243,19 @@ class BackingUpController {
             } catch let error as NSError {
                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", systemError: error, errorInfo:"error writing Backups directory to iCloud documents")
             }
-            // refresh Backups.tableview data here
-            // send as notification
+            // refresh Backups.tableview data when ready
             NotificationCenter.default.post(name: Notification.Name(rawValue:"CloudBackupFinished"), object: nil)
         }
         
     }
     
-    static func fileIO(backupFolderPath: String, fileName: String, data: Data, cloud: Bool) {
+    static func fileIO(backupFolderPath: String, fileName: String, data: Data, encrypted: Bool) {
         
         let fileURL = NSURL(fileURLWithPath: (backupFolderPath.appending(fileName)))
         
         // write data to file
         do {
-            if cloud {
+            if !encrypted {
                 try data.write(to: fileURL as URL, options: [.atomic]) // file not encrypted for iCloud
             } else {
                 try data.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic]) // file encrypted for local
@@ -396,6 +379,420 @@ class BackingUpController {
             
         }
         return NSKeyedArchiver.archivedData(withRootObject: recordTypesDictionaryArray)
+    }
+    
+    // MARK: - restoring from Backups
+    
+    static func startRestoreFromLocalBackup(fromFolder: String) {
+        importFromBackup(sourcePath: (localBackupsFolderPath?.appending(fromFolder)))
+    }
+    
+    static func startRestoreFromCloudBackup(fromFolder: String) {
+        //downLoadCloudBackup(atPath: fromFolder)
+        let cloudFolderPath = cloudBackupsFolderURL?.path.appending(fromFolder)
+        importFromBackup(sourcePath: cloudFolderPath)
+    }
+    
+    /*
+    static func resumeRestoreFromCloudBackup(cloudFolderURL: URL) {
+        // cslled after download from CloudBasckup tp local temp folder completed
+        // this will have removed the CloudBackup folder so it needs to be re-uploaded
+        let tempFolderPath = localBackupsFolderPath?.appending("/Temp")
+        
+        if FileManager.default.fileExists(atPath: tempFolderPath!) {
+            importFromBackup(sourcePath: tempFolderPath)
+        }
+        
+        reUploadCloudBackup(intoFolderURL: cloudFolderURL)
+    }
+    */
+    
+    static func importFromBackup(sourcePath: String?) {
+        
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        
+        if sourcePath != nil {
+            
+// 1. Events
+            if let dict = dataFilesToDictionaries(filePath: sourcePath!, dictionaryType:eventsFileName) {
+                let eventsDictionaryArray = dict as [NSDictionary]
+                deleteAllEvents()
+                
+                for eventDictionary in eventsDictionaryArray {
+                    
+                    let newEvent:Event? = {
+                        NSEntityDescription.insertNewObject(forEntityName: "Event", into: moc) as? Event
+                    }()
+                    
+                    if newEvent != nil {
+                        
+                        for keyObject in eventDictionary.allKeys {
+                            let key = keyObject as! String
+                            
+                            switch key {
+                            case  "name":
+                                newEvent!.name = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["name"] as! Data)) as! String)
+                            case  "type":
+                                newEvent!.type = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["type"] as! Data)) as? String
+                            case "date":
+                                newEvent!.date = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["date"] as! Data)) as! NSDate)
+                            case "vas":
+                                newEvent!.vas = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["vas"] as! Data)) as? Double)!
+                            case "duration":
+                                newEvent!.duration = (NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["duration"] as! Data)) as? Double)!
+                            case "location":
+                                newEvent!.bodyLocation = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["location"] as! Data)) as? String
+                            case "note":
+                                newEvent!.note = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["note"] as! Data)) as? String
+                            case "outcome":
+                                newEvent!.outcome = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["outcome"] as! Data)) as? String
+                            case "locationImage":
+                                newEvent!.locationImage = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["locationImage"]as! Data)) as? NSObject
+                            default:
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 19", errorInfo:"backup event dictionary unrecognised key \(key)")
+                            }
+                            
+                        }
+                        
+                        // data QC
+                        // ensure essential data is present, otherwise delete/don't import
+                        if newEvent?.name == nil || newEvent?.name == "" {
+                            print("deleted event import object due to lack of .name \(newEvent)")
+                            // error log without display
+                            moc.delete(newEvent!)
+                        } else if newEvent?.type == nil || newEvent?.type == "" {
+                            print("deleted event import object due to lack of .type \(newEvent)")
+                            moc.delete(newEvent!)
+                        } else if newEvent?.date == nil {
+                            print("deleted event import object due to lack of .date \(newEvent)")
+                            moc.delete(newEvent!)
+                        }
+                    }
+                }
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 38", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+            }
+            
+// 2. Drugs
+            if let dict = dataFilesToDictionaries(filePath: sourcePath!, dictionaryType: drugsFileName) {
+                let drugsDictionaryArray = dict as [NSDictionary]
+                deleteAllDrugs()
+                
+                for drugDictionary in drugsDictionaryArray {
+                    
+                    let newDrugEpsiode:DrugEpisode? = {
+                        NSEntityDescription.insertNewObject(forEntityName: "DrugEpisode", into: moc) as? DrugEpisode
+                    }()
+                    
+                    if newDrugEpsiode != nil {
+                        
+                        for keyObject in drugDictionary.allKeys {
+                            let key = keyObject as! String
+                            
+                            switch key {
+                            case  "name":
+                                newDrugEpsiode!.name = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["name"] as! Data)) as! String)
+                            case  "drugID":
+                                newDrugEpsiode!.drugID = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["drugID"] as! Data)) as! String)
+                            case  "isCurrent":
+                                newDrugEpsiode!.isCurrent = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["isCurrent"] as! Data)) as! String)
+                            case  "startDate":
+                                newDrugEpsiode!.startDate = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["startDate"] as! Data)) as! NSDate)
+                            case "doses":
+                                newDrugEpsiode!.doses = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["doses"] as! Data)) as! NSData)
+                            case "doseUnit":
+                                newDrugEpsiode!.doseUnit = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["doseUnit"] as! Data)) as! String)
+                            case "frequency":
+                                newDrugEpsiode!.frequency = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["frequency"] as! Data)) as! Double
+                            case "regularly":
+                                newDrugEpsiode!.regularly = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["regularly"] as! Data)) as! Bool
+                            case "endDate":
+                                newDrugEpsiode!.endDate = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["endDate"] as! Data)) as? NSDate
+                            case "classes":
+                                newDrugEpsiode!.classes = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["classes"] as! Data)) as? NSData
+                            case "ingredients":
+                                newDrugEpsiode!.ingredients = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["ingredients"] as! Data)) as? NSData
+                            case "effectiveness":
+                                newDrugEpsiode!.effectiveness = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["effectiveness"] as! Data)) as? String
+                            case "sideEffects":
+                                newDrugEpsiode!.sideEffects = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["sideEffects"] as! Data)) as? NSData
+                            case "notes":
+                                newDrugEpsiode!.notes = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["notes"] as! Data)) as? String
+                            case "reminders":
+                                newDrugEpsiode!.reminders = (NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["reminders"] as! Data)) as! NSData)
+                            case "attribute1":
+                                newDrugEpsiode!.attribute1 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute1"] as! Data)) as? NSData
+                            case "attribute2":
+                                newDrugEpsiode!.attribute2 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute2"] as! Data)) as? NSData
+                            case "attribute3":
+                                newDrugEpsiode!.attribute3 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute3"] as! Data)) as? NSData
+                            default:
+                                print("backup drug dictionary unrecognised key \(key)")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20")
+                            }
+                            
+                        }
+                        
+                        newDrugEpsiode?.awakeFromFetch()
+                        
+                        // data QC
+                        // ensure essential data is present, otherwise delete/don't import
+                        if newDrugEpsiode?.name == nil || newDrugEpsiode?.name == "" {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        else if newDrugEpsiode?.drugID == nil || newDrugEpsiode?.drugID == "" {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        else if newDrugEpsiode?.startDate == nil {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        else if newDrugEpsiode?.doses == nil {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        else if newDrugEpsiode?.doseUnit == nil {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        else if newDrugEpsiode?.frequency == nil || newDrugEpsiode?.frequency == 0 {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        else if newDrugEpsiode?.regularly == nil {
+                            moc.delete(newDrugEpsiode!)
+                        }
+                        
+                    }
+                }
+                
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 37", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+            }
+            
+// 3. RecordTypes
+            if let dict = dataFilesToDictionaries(filePath: sourcePath!, dictionaryType: recordTypesFileName) {
+                let recordTypesDictionaryArray = dict  as [NSDictionary]
+                deleteAllRecordTypes()
+                
+                for recordTypeDictionary in recordTypesDictionaryArray {
+                    
+                    let newRecordType: RecordType? = {
+                        NSEntityDescription.insertNewObject(forEntityName: "RecordType", into: moc) as? RecordType
+                    }()
+                    
+                    if newRecordType != nil {
+                        
+                        for keyObject in recordTypeDictionary.allKeys {
+                            let key = keyObject as! String
+                            
+                            switch key {
+                            case  "name":
+                                newRecordType!.name = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["name"] as! Data)) as? String
+                            case  "date":
+                                newRecordType!.dateCreated = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["date"] as! Data)) as? NSDate
+                            case "maxScore":
+                                newRecordType!.maxScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["maxScore"] as! Data)) as! Double
+                            case "minScore":
+                                newRecordType!.minScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["minScore"] as! Data)) as! Double
+                            default:
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", errorInfo:"backup recordTypes dictionary unrecognised key \(key)")
+                            }
+                            
+                        }
+                    }
+                    
+                    // data QC
+                    // ensure essential data is present, otherwise delete/don't import
+                    if newRecordType?.name == nil || newRecordType?.name == "" {
+                        moc.delete(newRecordType!)
+                    }
+                    
+                    
+                    
+                }
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 39", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+            }
+            
+            do {
+                try  moc.save()
+            }
+            catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
+            }
+        }
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "Backup Complete"), object: nil, userInfo: ["text":"finished"])
+        
+    }
+    
+    
+    static func dataFilesToDictionaries(filePath: String, dictionaryType: String) -> [Dictionary<String,Data>]? {
+        // reads file into NSData objects and uses UnArchiver to cast NSData object into Dictionary
+
+        let dictionaryPath = filePath.appending(dictionaryType)
+
+            if FileManager.default.fileExists(atPath: dictionaryPath) {
+                let dictionaryURL = NSURL(fileURLWithPath: dictionaryPath)
+                
+                if let data = NSData.init(contentsOf: dictionaryURL as URL) {
+                    
+                    if let array = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as? [Dictionary<String,Data>] {
+                        return array
+                    } else {
+                        ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", errorInfo:"can't convert \(dictionaryType) object into drug array object")
+                        return nil
+                    }
+                } else {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 9", errorInfo:"Error loading \(dictionaryType) Data as NSData from file @ \(dictionaryPath)")
+                    return nil
+                }
+            }
+            else {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 10", errorInfo: "NSFileManager error in  importFromBackup - can't find \(dictionaryType) file @ \(dictionaryPath)")
+                return nil
+            }
+    }
+    
+    /*
+    static func downLoadCloudBackup(atPath:String) {
+        
+        if FileManager.default.ubiquityIdentityToken == nil {
+            ErrorManager.sharedInstance().errorMessage(title: "iCloud currently not accessible", message: "try again later")
+            return
+        }
+        
+        let tempFolderPath = localBackupsFolderPath?.appending("/Temp")
+        
+        if FileManager.default.fileExists(atPath: tempFolderPath!) {
+            // 0. remove any folder 'Temp' otherwise step 1 fails
+            do {
+                try FileManager.default.removeItem(atPath: tempFolderPath!)
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 6.1", systemError: error, errorInfo: "Can't remove current temp Backup Folder at path \(tempFolderPath)")
+                return
+            }
+        }
+        
+        // 1.  create new folder in toplevel local Backups folder
+            // check if alredy exists and remove any folder 'Temp' otherwise step 3 fails
+        let tempFolderURL = URL(fileURLWithPath: tempFolderPath!, isDirectory: true)
+        do {
+            try FileManager.default.createDirectory(at: tempFolderURL, withIntermediateDirectories: true, attributes: nil)
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7.1", systemError: error, errorInfo: "Can't create local Temp Folder at path \(tempFolderURL)")
+            return
+        }
+        
+        // 2.  move files from iCloud to this folder
+        let iCloudFolderURL = URL(fileURLWithPath: atPath, isDirectory: true)
+        DispatchQueue.main.async {
+
+            // continue when ready
+            resumeRestoreFromCloudBackup(cloudFolderURL: iCloudFolderURL)
+        }
+    }
+    */
+    
+    /*
+    static func reUploadCloudBackup(intoFolderURL: URL) {
+        
+        // called after ClouodBackup download to local temp folder and files read into dictionaries
+        
+        if FileManager.default.fileExists(atPath: intoFolderURL.path) {
+            // check if alredy exists and remove any folder 'Temp' otherwise step 3 fails
+            do {
+                try FileManager.default.removeItem(atPath: intoFolderURL.path)
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7.1", systemError: error, errorInfo: "Can't remove current CloudBackup Folder at path \(intoFolderURL)")
+                return
+            }
+        }
+        
+        // move files in this folder to iCloud storage
+        let localTempFolderURL = URL(fileURLWithPath: (localBackupsFolderPath?.appending("/Temp"))!)
+        DispatchQueue.main.async {
+            do {
+                // this does the actual copying to iCloud
+                try  FileManager.default.setUbiquitous(true, itemAt: localTempFolderURL, destinationURL: intoFolderURL)
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", systemError: error, errorInfo:"error transferrring temp Backup folder to iCloud storage")
+            }
+            // refresh Backups.tableview data when ready
+            NotificationCenter.default.post(name: Notification.Name(rawValue:"CloudBackupFinished"), object: nil)
+        }
+        
+    }
+    */
+    
+    //MARK: - deleting all current user data
+    
+    static func deleteAllEvents() {
+        
+        var events: [Event]!
+        let fetchRequest = NSFetchRequest<Event>(entityName: "Event")
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        
+        do {
+            events = try moc.fetch(fetchRequest)
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 30", systemError: error, errorInfo: "Error fetching eventList for deletion")
+        }
+        
+        for event in  events {
+            moc.delete(event)
+        }
+        do {
+            try  moc.save()
+        }
+        catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 31", systemError: error, errorInfo: "Error deleting eventList")
+        }
+        
+    }
+    
+    static func deleteAllDrugs() {
+        
+        var drugs: [DrugEpisode]!
+        let fetchRequest = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        
+        do {
+            drugs = try moc.fetch(fetchRequest)
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 32", systemError: error, errorInfo: "Error fetching drugList for deletion")
+        }
+        
+        for drug in  drugs {
+            moc.delete(drug)
+        }
+        do {
+            try  moc.save()
+        }
+        catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 33", systemError: error, errorInfo: "Error deleting drugList")
+        }
+        
+    }
+    
+    static func deleteAllRecordTypes() {
+        
+        var recordTypes: [RecordType]!
+        let fetchRequest = NSFetchRequest<RecordType>(entityName: "RecordType")
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        
+        do {
+            recordTypes = try moc.fetch(fetchRequest)
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 34", systemError: error, errorInfo: "Error fetching recordTypes for deletion")
+        }
+        
+        for type in  recordTypes {
+            moc.delete(type)
+        }
+        do {
+            try  moc.save()
+        }
+        catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 35", systemError: error, errorInfo: "Error deleting recordTypesList")
+        }
+        
     }
 
 

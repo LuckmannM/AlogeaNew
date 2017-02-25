@@ -81,6 +81,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
     }
     
     var cloudButton: UIButton!
+    var backupController: BackingUpController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +93,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         
         cloudButton = UIButton(type: .custom)
         
-        if DrugDictionary.sharedInstance().iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() == true {
+        if FileManager.default.ubiquityIdentityToken == nil && InAppStore.sharedInstance().isConnectedToNetwork() == true {
             cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
         } else {
             cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
@@ -108,6 +109,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         self.navigationItem.setRightBarButtonItems([backupActionButton, spacer, cloudIcon], animated: true)
         
         NotificationCenter.default.addObserver(self, selector: #selector(cloudBackupsUpdated), name: NSNotification.Name(rawValue: "CloudBackupFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: NSNotification.Name(rawValue: "Backup Complete"), object: nil)
         
     }
     
@@ -239,7 +241,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         let originatingCell = tableView.cellForRow(at: path)
         let backupFile = "/" + cloudBackupFiles[path.row]
         
-        backupDialog(sender: originatingCell!, filePath: backupFile, fromLocalSource: true)
+        backupDialog(sender: originatingCell!, filePath: backupFile, fromLocalSource: false)
         
     }
 
@@ -253,8 +255,11 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         let proceedAction = UIAlertAction(title: "Proceed", style: UIAlertActionStyle.default, handler: { (backupDialog)
             -> Void in
             
-            print("request to import from backup \(filePath), isLocal? \(fromLocalSource)")
-            BackupController.importFromBackup(folderName: filePath, fromLocalBackup: fromLocalSource)
+            if fromLocalSource {
+                BackingUpController.startRestoreFromLocalBackup(fromFolder: filePath)
+            } else {
+                BackingUpController.startRestoreFromCloudBackup(fromFolder: filePath)
+            }
             
         })
         
@@ -283,7 +288,6 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
     
     func backupNow() {
         BackingUpController.BackupAllData()
-        //BackupController.BackupAllUserData()
         self.tableView.reloadData()
         
     }
@@ -377,4 +381,26 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
             
         } while folderURLs.count > 10
     }
+    
+    // MARK: - MEssage dailog
+    
+    func showMessage(notification: Notification) {
+        
+        let presentingVC = self
+        let titleToUse = notification.name
+        let messageToUse = (notification.userInfo?["text"])! as! String
+        
+        let alertController = UIAlertController(title: titleToUse.rawValue, message: messageToUse, preferredStyle: .alert)
+        
+        // Configure Alert Controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) -> Void in
+            
+        }))
+        
+        // Present Alert Controller
+        presentingVC.present(alertController, animated: true, completion: nil)
+        
+    }
+  
+    
 }
