@@ -26,7 +26,7 @@ class BackingUpController {
     static let recordTypesFileName = "/RecordTypesDictionary"
 
     static let localBackupsFolderName = "/Backups" // this is the top folder containg all dated local backup folders
-    static let cloudBackupsFolderName = "/\(UIDevice.current.name) CloudBackups" // this is the basic name component for each dated cloudBackup folder
+    static let cloudBackupsFolderName = "\(UIDevice.current.name) CloudBackups" // this is the basic name component for each dated cloudBackup folder
     
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
@@ -34,7 +34,7 @@ class BackingUpController {
     }()
     
 //    init() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(resumeRestoreFromCloudBackup), name: NSNotification.Name(rawValue: "CloudBackupDownloadFinished"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateCloudAccess), name: NSNotification.Name(rawValue: "UpdateCloudAccess"), object: nil)
 //    }
     
     // MARK: - top folder paths
@@ -61,7 +61,7 @@ class BackingUpController {
         return appSupportDirectoryPath.appending(localBackupsFolderName)
     }()
     
-    static var cloudStorageURL: URL? = {
+    static var cloudStorageURL: URL?  = {
         // the URL to the general iCloud storage. url(forUbiquityContainerIdentifier:) should be called once before accessing folders
         
         if FileManager.default.ubiquityIdentityToken == nil {
@@ -71,31 +71,73 @@ class BackingUpController {
         var iCloudStorageURL: URL?
         
         DispatchQueue.main.async() {
+            print("Obtainig CloudStorageUrl...")
             iCloudStorageURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)
+            updateCloudAccess(cloudURL: iCloudStorageURL)
         }
         
         return iCloudStorageURL
-        
     }()
     
+    static func updateCloudAccess(cloudURL: URL?) {
+        
+        print("...got CloudStorageUrl: \(cloudURL?.path)")
+        guard cloudURL != nil  else {
+            return
+        }
+        
+        cloudStorageURL = cloudURL
+        cloudBackupsFolderURL = updateCloudBackupsFolderURL()
+        // the next updates the Backups VC Cloud Backup section
+        NotificationCenter.default.post(name: Notification.Name(rawValue:"CloudBackupFinished"), object: nil)
+    }
+    
+
     static var cloudBackupsFolderURL: URL? = {
         // the URL for toplevel iCloud Backups folder based on the above general iClouod storage url
+        // on first init this often is nil as the underlying cloudStorageURL takes some time to be made available (async queue)
+        // as soon as cloudStorageURL is ready the 'updateCloudAccess' function is called which updates cloudStorageURL
+        // tnhis in turn calls 'updateCloudBackupsFolderURL' which updates cloudBackupsFolderURL
         
         guard cloudStorageURL != nil  else {
             return nil
         }
         
-        var cloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(cloudBackupsFolderName)
-        if cloudURL == nil {
-            do {
-                try FileManager.default.createDirectory(at: (cloudStorageURL?.appendingPathComponent(cloudBackupsFolderName))!, withIntermediateDirectories: true, attributes: nil)
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 0", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
+        if let cloudFolderURL = cloudStorageURL?.appendingPathComponent(cloudBackupsFolderName) {
+            if !FileManager.default.fileExists(atPath: cloudFolderURL.path) {
+                do {
+                    try FileManager.default.createDirectory(at: cloudFolderURL, withIntermediateDirectories: false, attributes: nil)
+                    print("Folder path containing Cloud Backups: \(cloudFolderURL.path)")
+                    return cloudFolderURL
+                } catch let error as NSError {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 0.1", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
+                }
             }
         }
-        
-        return cloudURL
+        return nil
     }()
+    
+    static func updateCloudBackupsFolderURL() -> URL? {
+        
+        guard cloudStorageURL != nil  else {
+            return nil
+        }
+        
+        if let cloudFolderURL = cloudStorageURL?.appendingPathComponent(cloudBackupsFolderName) {
+            if !FileManager.default.fileExists(atPath: cloudFolderURL.path) {
+                do {
+                    try FileManager.default.createDirectory(at: cloudFolderURL, withIntermediateDirectories: false, attributes: nil)
+                    print("Folder path containing Cloud Backups: \(cloudFolderURL.path)")
+                    return cloudFolderURL
+                } catch let error as NSError {
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 0.2", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
+                }
+            } else {
+                return cloudFolderURL
+            }
+        }
+        return nil
+    }
     
     // MARK: - FetchRequests for ManagedObjects
     
@@ -207,46 +249,55 @@ class BackingUpController {
             return formatter
         }()
 
-        let tempFolderPath = localBackupsFolderPath?.appending("/Temp")
+        guard let tempFolderPath = localBackupsFolderPath?.appending("/Temp") else {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7", errorInfo: "Can't create new Temp Folder in local directory \(localBackupsFolderPath)")
+            return
+        }
 
-        if FileManager.default.fileExists(atPath: tempFolderPath!) {
+        if FileManager.default.fileExists(atPath: tempFolderPath) {
             // 0. remove any folder 'Temp' otherwise step 1 fails
             do {
-                try FileManager.default.removeItem(atPath: tempFolderPath!)
+                try FileManager.default.removeItem(atPath: tempFolderPath)
             } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 6.1", systemError: error, errorInfo: "Can't remove current temp Backup Folder at path \(tempFolderPath) before copying current backup to temp")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", systemError: error, errorInfo: "Can't remove current temp Backup Folder at path \(tempFolderPath) before copying current backup to temp")
                 return
             }
         }
 
         // 1. create a copy folder 'Temp' of the current local backups folder
         do {
-            try FileManager.default.copyItem(atPath: fromBackupFolderPath, toPath: tempFolderPath!)
+            try FileManager.default.copyItem(atPath: fromBackupFolderPath, toPath: tempFolderPath)
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7", systemError: error, errorInfo: "Can't copy current Backup Folder at path \(fromBackupFolderPath) to temp backfolder for iCloud backup")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 9", systemError: error, errorInfo: "Can't copy current Backup Folder at path \(fromBackupFolderPath) to temp backfolder for iCloud backup")
             return
         }
         
         // 2.  create new folder in toplevel iCloud Backups folder
-        let newCloudFolder = cloudBackupsFolderURL?.appendingPathComponent("CloudBackup " + dateFormatter.string(from: Date()), isDirectory: true)
-        if FileManager.default.fileExists(atPath: newCloudFolder!.path) {
+        print("cloudStorageURL = \(cloudStorageURL)")
+        print("cloudBackupsURL = \(updateCloudBackupsFolderURL())")
+        guard let newCloudFolder = cloudBackupsFolderURL?.appendingPathComponent("CloudBackup " + dateFormatter.string(from: Date()), isDirectory: true) else {
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 10", errorInfo: "Can't create new CloudBackup Folder in directory \(cloudBackupsFolderURL)")
+            return
+        }
+        
+        if FileManager.default.fileExists(atPath: newCloudFolder.path) {
             // check if alredy exists and remove any folder 'Temp' otherwise step 3 fails
             do {
-                try FileManager.default.removeItem(atPath: newCloudFolder!.path)
+                try FileManager.default.removeItem(atPath: newCloudFolder.path)
             } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7.1", systemError: error, errorInfo: "Can't remove current iCLoud Backup Folder at path \(newCloudFolder)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 11", systemError: error, errorInfo: "Can't remove current iCLoud Backup Folder at path \(newCloudFolder)")
                 return
             }
         }
 
         // 3.  move files in this folder to iCloud storage
-        let localTempFolderURL = URL(fileURLWithPath: tempFolderPath!)
+        let localTempFolderURL = URL(fileURLWithPath: tempFolderPath)
         DispatchQueue.main.async {
             do {
                 // this does the actual copying to iCloud
-                try  FileManager.default.setUbiquitous(true, itemAt: localTempFolderURL, destinationURL: newCloudFolder!)
+                try  FileManager.default.setUbiquitous(true, itemAt: localTempFolderURL, destinationURL: newCloudFolder)
             } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", systemError: error, errorInfo:"error writing Backups directory to iCloud documents")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 13", systemError: error, errorInfo:"error moving temp Backup directory at \(localTempFolderURL)to iCloud at \(newCloudFolder)")
             }
             // refresh Backups.tableview data when ready
             NotificationCenter.default.post(name: Notification.Name(rawValue:"CloudBackupFinished"), object: nil)
@@ -266,7 +317,7 @@ class BackingUpController {
                 try data.write(to: fileURL as URL, options: [.completeFileProtectionUnlessOpen, .atomic]) // file encrypted for local
             }
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7", systemError: error, errorInfo:"error trying to write and encrypt file at \(fileURL)")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 14", systemError: error, errorInfo:"error trying to write and encrypt file at \(fileURL)")
         }
     }
     
@@ -456,7 +507,7 @@ class BackingUpController {
                             case "locationImage":
                                 newEvent!.locationImage = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["locationImage"]as! Data)) as? NSObject
                             default:
-                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 19", errorInfo:"backup event dictionary unrecognised key \(key)")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15", errorInfo:"backup event dictionary unrecognised key \(key)")
                             }
                             
                         }
@@ -477,7 +528,7 @@ class BackingUpController {
                     }
                 }
             } else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 38", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
             }
             
 // 2. Drugs
@@ -535,7 +586,7 @@ class BackingUpController {
                                 newDrugEpsiode!.attribute3 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute3"] as! Data)) as? NSData
                             default:
                                 print("backup drug dictionary unrecognised key \(key)")
-                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 17")
                             }
                             
                         }
@@ -570,7 +621,7 @@ class BackingUpController {
                 }
                 
             } else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 37", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
             }
             
 // 3. RecordTypes
@@ -599,7 +650,7 @@ class BackingUpController {
                             case "minScore":
                                 newRecordType!.minScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["minScore"] as? Data)!)  as? NSNumber
                             default:
-                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", errorInfo:"backup recordTypes dictionary unrecognised key \(key)")
+                                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 19", errorInfo:"backup recordTypes dictionary unrecognised key \(key)")
                             }
                             
                         }
@@ -615,17 +666,17 @@ class BackingUpController {
                     
                 }
             } else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 39", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
             }
             
             do {
                 try  moc.save()
             }
             catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
             }
         }
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "Backup Complete"), object: nil, userInfo: ["text":"finished"])
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "Success"), object: nil, userInfo: ["text":"Restore from backup complete"])
         
     }
     
@@ -643,16 +694,16 @@ class BackingUpController {
                     if let array = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as? [Dictionary<String,Data>] {
                         return array
                     } else {
-                        ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", errorInfo:"can't convert \(dictionaryType) object into drug array object")
+                        ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", errorInfo:"can't convert \(dictionaryType) object into drug array object")
                         return nil
                     }
                 } else {
-                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 9", errorInfo:"Error loading \(dictionaryType) Data as NSData from file @ \(dictionaryPath)")
+                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 23", errorInfo:"Error loading \(dictionaryType) Data as NSData from file @ \(dictionaryPath)")
                     return nil
                 }
             }
             else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 10", errorInfo: "NSFileManager error in  importFromBackup - can't find \(dictionaryType) file @ \(dictionaryPath)")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 24", errorInfo: "NSFileManager error in  importFromBackup - can't find \(dictionaryType) file @ \(dictionaryPath)")
                 return nil
             }
     }
@@ -739,7 +790,7 @@ class BackingUpController {
         do {
             events = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 30", systemError: error, errorInfo: "Error fetching eventList for deletion")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 25", systemError: error, errorInfo: "Error fetching eventList for deletion")
         }
         
         for event in  events {
@@ -749,7 +800,7 @@ class BackingUpController {
             try  moc.save()
         }
         catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 31", systemError: error, errorInfo: "Error deleting eventList")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 26", systemError: error, errorInfo: "Error deleting eventList")
         }
         
     }
@@ -763,7 +814,7 @@ class BackingUpController {
         do {
             drugs = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 32", systemError: error, errorInfo: "Error fetching drugList for deletion")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 27", systemError: error, errorInfo: "Error fetching drugList for deletion")
         }
         
         for drug in  drugs {
@@ -773,7 +824,7 @@ class BackingUpController {
             try  moc.save()
         }
         catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 33", systemError: error, errorInfo: "Error deleting drugList")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 28", systemError: error, errorInfo: "Error deleting drugList")
         }
         
     }
@@ -787,7 +838,7 @@ class BackingUpController {
         do {
             recordTypes = try moc.fetch(fetchRequest)
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 34", systemError: error, errorInfo: "Error fetching recordTypes for deletion")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 29", systemError: error, errorInfo: "Error fetching recordTypes for deletion")
         }
         
         for type in  recordTypes {
@@ -797,7 +848,7 @@ class BackingUpController {
             try  moc.save()
         }
         catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 35", systemError: error, errorInfo: "Error deleting recordTypesList")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 30", systemError: error, errorInfo: "Error deleting recordTypesList")
         }
         
     }
@@ -809,9 +860,9 @@ class BackingUpController {
             do {
                 try FileManager.default.removeItem(at: cloudBackupsFolderURL! as URL)
             } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 36", systemError: error, errorInfo: "DataIO - unable to delete cloud backups")
+                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 31", systemError: error, errorInfo: "DataIO - unable to delete cloud backups")
             }
-            
+            NotificationCenter.default.post(name: Notification.Name(rawValue:"CloudBackupFinished"), object: nil)
         }
     }
 

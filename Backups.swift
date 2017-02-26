@@ -13,15 +13,15 @@ import UserNotifications
 
 class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
     
+    
+    let backupsController = BackingUpController()
+    
     var localBackupsDirectoryPath : String? {
-        
         return BackingUpController.localBackupsFolderPath
     }
     
     var cloudBackupsDirectoryURL: URL? {
-        
         return BackingUpController.cloudBackupsFolderURL
-        
     }
     
     var localBackupFiles: [String] {
@@ -52,33 +52,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         return fileNames
     }
     
-    var cloudBackupFiles: [String] {
-        
-        var fileNames = [String]()
-        if cloudBackupsDirectoryURL != nil {
-            do {
-                // if folder empty or doesn't exist
-                if !FileManager.default.fileExists(atPath: (cloudBackupsDirectoryURL?.path)!) {
-                    return fileNames
-                }
-                
-                let fileURLs = try
-                    FileManager.default.contentsOfDirectory(at: cloudBackupsDirectoryURL! as URL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
-                if fileURLs.count == 0 { return fileNames }
-                else if fileURLs.count > 10 {
-                    self.deleteOldDirectories()
-                }
-                for url in fileURLs {
-                    let fileName = (url.path as NSString).lastPathComponent
-                    fileNames.append(fileName)
-                }
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 2", showInVC: self, systemError: error, errorInfo: "can't read cloud backup sub directories in main backup directory")
-            }
-        }
-        return fileNames
-        
-    }
+    var cloudBackupFiles: [String]!
     
     var cloudButton: UIButton!
     var backupController: BackingUpController!
@@ -120,6 +94,8 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         } else {
             cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
         }
+        
+        cloudBackupFiles = updateCloudBackupFileNames()
 
     }
     
@@ -134,7 +110,35 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
 
     
     func cloudBackupsUpdated() {
+        cloudBackupFiles = updateCloudBackupFileNames()
         self.tableView.reloadSections([1], with: .automatic)
+    }
+    
+    func updateCloudBackupFileNames() -> [String] {
+        
+        var fileNames = [String]()
+        if cloudBackupsDirectoryURL != nil {
+            do {
+                // if folder empty or doesn't exist
+                if !FileManager.default.fileExists(atPath: (cloudBackupsDirectoryURL?.path)!) {
+                    return fileNames
+                }
+                
+                let fileURLs = try
+                    FileManager.default.contentsOfDirectory(at: cloudBackupsDirectoryURL! as URL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
+                if fileURLs.count == 0 { return fileNames }
+                else if fileURLs.count > 10 {
+                    self.deleteOldDirectories()
+                }
+                for url in fileURLs {
+                    let fileName = (url.path as NSString).lastPathComponent
+                    fileNames.append(fileName)
+                }
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "BackupVC Error 2", showInVC: self, systemError: error, errorInfo: "can't read cloud backup sub directories in main backup directory")
+            }
+        }
+        return fileNames
     }
     
     // MARK: - Table view data source
