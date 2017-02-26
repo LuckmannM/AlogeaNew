@@ -451,20 +451,6 @@ class BackingUpController {
         importFromBackup(sourcePath: cloudFolderPath)
     }
     
-    /*
-    static func resumeRestoreFromCloudBackup(cloudFolderURL: URL) {
-        // cslled after download from CloudBasckup tp local temp folder completed
-        // this will have removed the CloudBackup folder so it needs to be re-uploaded
-        let tempFolderPath = localBackupsFolderPath?.appending("/Temp")
-        
-        if FileManager.default.fileExists(atPath: tempFolderPath!) {
-            importFromBackup(sourcePath: tempFolderPath)
-        }
-        
-        reUploadCloudBackup(intoFolderURL: cloudFolderURL)
-    }
-    */
-    
     static func importFromBackup(sourcePath: String?) {
         
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
@@ -515,14 +501,13 @@ class BackingUpController {
                         // data QC
                         // ensure essential data is present, otherwise delete/don't import
                         if newEvent?.name == nil || newEvent?.name == "" {
-                            print("deleted event import object due to lack of .name \(newEvent)")
-                            // error log without display
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all events were imported successfully", errorInfo:"some errors in imported event sets: event.name == nil")
                             moc.delete(newEvent!)
                         } else if newEvent?.type == nil || newEvent?.type == "" {
-                            print("deleted event import object due to lack of .type \(newEvent)")
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all events were imported successfully", errorInfo:"some errors in imported event sets: event.type == nil")
                             moc.delete(newEvent!)
                         } else if newEvent?.date == nil {
-                            print("deleted event import object due to lack of .date \(newEvent)")
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all events were imported successfully", errorInfo:"some errors in imported event sets: event.date == nil")
                             moc.delete(newEvent!)
                         }
                     }
@@ -596,24 +581,31 @@ class BackingUpController {
                         // data QC
                         // ensure essential data is present, otherwise delete/don't import
                         if newDrugEpsiode?.name == nil || newDrugEpsiode?.name == "" {
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.name == nil")
                             moc.delete(newDrugEpsiode!)
                         }
                         else if newDrugEpsiode?.drugID == nil || newDrugEpsiode?.drugID == "" {
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.drugID == nil")
                             moc.delete(newDrugEpsiode!)
                         }
                         else if newDrugEpsiode?.startDate == nil {
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.startDate == nil")
                             moc.delete(newDrugEpsiode!)
                         }
                         else if newDrugEpsiode?.doses == nil {
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.doses == nil")
                             moc.delete(newDrugEpsiode!)
                         }
                         else if newDrugEpsiode?.doseUnit == nil {
                             moc.delete(newDrugEpsiode!)
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.doseUnit == nil")
                         }
                         else if newDrugEpsiode?.frequency == nil || newDrugEpsiode?.frequency == 0 {
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.frequency == nil")
                             moc.delete(newDrugEpsiode!)
                         }
                         else if newDrugEpsiode?.regularly == nil {
+                            ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all medicines were imported successfully", errorInfo:"some errors in imported event sets: med.regularly == nil")
                             moc.delete(newDrugEpsiode!)
                         }
                         
@@ -659,6 +651,7 @@ class BackingUpController {
                     // data QC
                     // ensure essential data is present, otherwise delete/don't import
                     if newRecordType?.name == nil || newRecordType?.name == "" {
+                        ErrorManager.sharedInstance().errorMessage(title:"Some import errors occured", message: "Not all graph types were imported successfully", errorInfo:"some errors in imported event sets: recordType.name == nil")
                         moc.delete(newRecordType!)
                     }
                     
@@ -707,78 +700,6 @@ class BackingUpController {
                 return nil
             }
     }
-    
-    /*
-    static func downLoadCloudBackup(atPath:String) {
-        
-        if FileManager.default.ubiquityIdentityToken == nil {
-            ErrorManager.sharedInstance().errorMessage(title: "iCloud currently not accessible", message: "try again later")
-            return
-        }
-        
-        let tempFolderPath = localBackupsFolderPath?.appending("/Temp")
-        
-        if FileManager.default.fileExists(atPath: tempFolderPath!) {
-            // 0. remove any folder 'Temp' otherwise step 1 fails
-            do {
-                try FileManager.default.removeItem(atPath: tempFolderPath!)
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 6.1", systemError: error, errorInfo: "Can't remove current temp Backup Folder at path \(tempFolderPath)")
-                return
-            }
-        }
-        
-        // 1.  create new folder in toplevel local Backups folder
-            // check if alredy exists and remove any folder 'Temp' otherwise step 3 fails
-        let tempFolderURL = URL(fileURLWithPath: tempFolderPath!, isDirectory: true)
-        do {
-            try FileManager.default.createDirectory(at: tempFolderURL, withIntermediateDirectories: true, attributes: nil)
-        } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7.1", systemError: error, errorInfo: "Can't create local Temp Folder at path \(tempFolderURL)")
-            return
-        }
-        
-        // 2.  move files from iCloud to this folder
-        let iCloudFolderURL = URL(fileURLWithPath: atPath, isDirectory: true)
-        DispatchQueue.main.async {
-
-            // continue when ready
-            resumeRestoreFromCloudBackup(cloudFolderURL: iCloudFolderURL)
-        }
-    }
-    */
-    
-    /*
-    static func reUploadCloudBackup(intoFolderURL: URL) {
-        
-        // called after ClouodBackup download to local temp folder and files read into dictionaries
-        
-        if FileManager.default.fileExists(atPath: intoFolderURL.path) {
-            // check if alredy exists and remove any folder 'Temp' otherwise step 3 fails
-            do {
-                try FileManager.default.removeItem(atPath: intoFolderURL.path)
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 7.1", systemError: error, errorInfo: "Can't remove current CloudBackup Folder at path \(intoFolderURL)")
-                return
-            }
-        }
-        
-        // move files in this folder to iCloud storage
-        let localTempFolderURL = URL(fileURLWithPath: (localBackupsFolderPath?.appending("/Temp"))!)
-        DispatchQueue.main.async {
-            do {
-                // this does the actual copying to iCloud
-                try  FileManager.default.setUbiquitous(true, itemAt: localTempFolderURL, destinationURL: intoFolderURL)
-            } catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 8", systemError: error, errorInfo:"error transferrring temp Backup folder to iCloud storage")
-            }
-            // refresh Backups.tableview data when ready
-            NotificationCenter.default.post(name: Notification.Name(rawValue:"CloudBackupFinished"), object: nil)
-        }
-        
-    }
-    */
-    
     //MARK: - deleting all current user data
     
     static func deleteAllEvents() {

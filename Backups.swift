@@ -14,7 +14,7 @@ import UserNotifications
 class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
     
     
-    let backupsController = BackingUpController()
+    // let backupsController = BackingUpController()
     
     var localBackupsDirectoryPath : String? {
         return BackingUpController.localBackupsFolderPath
@@ -83,7 +83,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         self.navigationItem.setRightBarButtonItems([backupActionButton, spacer, cloudIcon], animated: true)
         
         NotificationCenter.default.addObserver(self, selector: #selector(cloudBackupsUpdated), name: NSNotification.Name(rawValue: "CloudBackupFinished"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: NSNotification.Name(rawValue: "Backup Complete"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: NSNotification.Name(rawValue: "Success"), object: nil)
         
     }
     
