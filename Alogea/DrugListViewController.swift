@@ -51,7 +51,12 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         super.viewWillAppear(animated)
         
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
+        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().duskBlue
+        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         self.tabBarController?.tabBar.isHidden = false
+        
         drugCurrentStatusUpdate()
         fetchDrugList()
         
@@ -69,10 +74,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         super.viewDidLoad()
         
 
-        self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
-        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().duskBlue
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!]
-        self.navigationController?.navigationBar.tintColor = UIColor.white
         
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false

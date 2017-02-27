@@ -50,6 +50,9 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         
         print("MainVC viewWillAppear")
 
+        // hide navigationBar
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
         // transferred to here from GraphView.init()
         if graphContainerView.graphView.helper.allGraphEventsTimeSpan < (24 * 3600) {
             displayTimeSegmentedController.selectedSegmentIndex = 0
@@ -60,12 +63,9 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         }
         // transferred to here from GraphView.init()
         
-        // hide navigationBar
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
 
         
         graphContainerView.reloadAllViews()
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidLoad() {
