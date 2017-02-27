@@ -94,6 +94,7 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
             }
         }
         
+        //return false
         return qualifiesForAccess
     }
     

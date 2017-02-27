@@ -251,6 +251,7 @@ class MedsView: UIView {
         colorArrayCount = 0
         var sectionCount = 0
         var eventCount = 0
+        var intersectDetected = false
         
         var prnMeds: NSFetchedResultsController<Event>!
         
@@ -261,20 +262,25 @@ class MedsView: UIView {
         }
 
         
-        for section in prnMeds.sections! {
-            for index in 0..<section.numberOfObjects {
+            for section in prnMeds.sections! {
+                for index in 0..<section.numberOfObjects {
                 let medEvent = prnMedsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var medRect = medEvent.medEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medEvent.date as! Date, scale: scale), dy: verticalOffset)
                 
-                for i in 0..<allRectsArray.count {
-                    if medRect.intersects(allRectsArray[i]) {
-                        medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
-                        if medRect.minY < topOfRect {
-                            // ensure prnMedRect are positoned higher than regMedRects
-                            topOfRect = medRect.minY - medBarHeight - 2
+                repeat {
+                    intersectDetected = false
+                    for i in 0..<allRectsArray.count {
+                        if medRect.intersects(allRectsArray[i]) {
+                            medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
+                            if medRect.minY < topOfRect {
+                                // ensure prnMedRect are positoned higher than regMedRects
+                                intersectDetected = true
+                                topOfRect = medRect.minY - medBarHeight - 2
+                            }
                         }
                     }
-                }
+                } while intersectDetected
+                
                 let indexPath = IndexPath(item: index, section: sectionCount)
                 prnMedsDictionary.append((indexPath, medRect))
                 allRectsArray.append(medRect)
@@ -316,17 +322,25 @@ class MedsView: UIView {
         
         var sectionCount = 0
         var eventCount = 0
+        var intersectDetected = false
         colorArrayCount = 0
         
         for section in diaryEventsFRC.sections! {
             for index in 0..<section.numberOfObjects {
                 let event = diaryEventsFRC.object(at: IndexPath(item: index, section: sectionCount))
                 var eventRect = event.nonScoreEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: event.date as! Date, scale: scale), dy: verticalOffset)
-                for i in 0..<allRectsArray.count {
-                    if eventRect.intersects(allRectsArray[i]) {
-                        eventRect = eventRect.offsetBy(dx: 0, dy: -eventDiamondSize - 2)
+                
+                repeat {
+                    intersectDetected = false
+                    for i in 0..<allRectsArray.count {
+                        if eventRect.intersects(allRectsArray[i]) {
+                            eventRect = eventRect.offsetBy(dx: 0, dy: -eventDiamondSize - 2)
+                            intersectDetected = true
+                        }
                     }
-                }
+                } while intersectDetected
+                
+                
                 let indexPath = IndexPath(item: index, section: sectionCount)
                 eventsDictionary.append((indexPath, eventRect))
                 allRectsArray.append(eventRect)
