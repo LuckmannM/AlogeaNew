@@ -68,9 +68,9 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         cloudButton = UIButton(type: .custom)
         
         if FileManager.default.ubiquityIdentityToken == nil  {
-            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
-        } else {
             cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+        } else {
+            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
         }
         
         cloudButton.frame = CGRect(x: 0, y: 0, width: (75*20/50), height: 20)
@@ -84,16 +84,17 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         
         NotificationCenter.default.addObserver(self, selector: #selector(cloudBackupsUpdated), name: NSNotification.Name(rawValue: "CloudBackupFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: NSNotification.Name(rawValue: "Success"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: .NSUbiquityIdentityDidChange, object: nil)
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if DrugDictionary.sharedInstance().iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() == true {
-            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
-        } else {
-            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
-        }
+//        if DrugDictionary.sharedInstance().iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() == true {
+//            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
+//        } else {
+//            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+//        }
         
         cloudBackupFiles = updateCloudBackupFileNames()
 
@@ -139,6 +140,14 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
             }
         }
         return fileNames
+    }
+    
+    func updateCloudAccessIcon() {
+        if FileManager.default.ubiquityIdentityToken == nil  {
+            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+        } else {
+            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
+        }
     }
     
     // MARK: - Table view data source
