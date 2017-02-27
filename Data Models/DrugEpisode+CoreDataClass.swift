@@ -521,7 +521,6 @@ public class DrugEpisode: NSManagedObject {
         
         var i = 0
         // each dose has it's own reminder
-//        print("...scheduling for \(nameVar); has \(remindersVar) remindersVar")
         for aReminder in remindersVar {
             if aReminder {
                 // creating a notification via request

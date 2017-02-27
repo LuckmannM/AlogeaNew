@@ -75,7 +75,7 @@ class StoreView: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        //self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.tabBarController?.tabBar.isHidden = false
 
     }
@@ -256,7 +256,7 @@ class StoreView: UITableViewController {
         
         
         let title = "Thank you!"
-        let message = "Purchased completed successfully. This will be valid for all your devices"
+        let message = "Purchase completed successfully. This will be valid for all your devices"
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         

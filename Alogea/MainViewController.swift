@@ -59,6 +59,9 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
             graphContainerView.graphView.minDisplayDate = graphContainerView.graphView.maxDisplayDate.addingTimeInterval(-graphContainerView.graphView.displayedTimeSpan)
         }
         // transferred to here from GraphView.init()
+        
+        // hide navigationBar
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
 
         
         graphContainerView.reloadAllViews()
