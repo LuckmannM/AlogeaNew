@@ -94,8 +94,8 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
             }
         }
         
-        //return false
-        return qualifiesForAccess
+        return false
+        // return qualifiesForAccess
     }
     
     func checkMultipleGraphAccess() -> Bool {

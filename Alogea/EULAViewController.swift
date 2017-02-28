@@ -21,7 +21,7 @@ class EULAViewController: UIViewController {
         super.viewDidLoad()
         
         //textView.isHidden = true
-        textView.text = termsOfUse + eulaText
+        textView.text = touHeader + purposeAlimitations + dataSecurity + privacy + eulaText
 
         updateConfirmationLabel()
         // Do any additional setup after loading the view.
@@ -110,10 +110,13 @@ class EULAViewController: UIViewController {
         termsOfUseDialog.addAction(acknowledgeAction)
         
         self.present(termsOfUseDialog, animated: true, completion: nil)
-        
     }
     
-    let termsOfUse = "TERMS OF USE\n\n I. PURPOSE AND LIMITATIONS OF APP USE\nAlogea® is intended as a support tool to assist you in monitoring and managing your day-to-day pain and pain-related problems.\nYou understand that Alogea® it NOT intended to guide or give advice on medical treatment or diagnosis. You must obtain qualified medical advice before taking, or refraining from taking, medicines or actions on the basis of the content of this App.\n\nYou understand that use of the App must not replace or delay professional clinical advice; you must follow this advice and the instructions of your treating clinician.\nYOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT YOU MUST CONSULT YOUR RESPONSIBLE CLINICIAN / PRESCRIBER BEFORE MAKING CHANGES TO YOUR MEDICATION. YOU MUST NOT DEVIATE FROM THE RECOMMENDED WAY OF TAKING MEDICINES AS A CONSEQUENCE OF USING THIS APP.\n\n II. DATA SECURITY\nFor your data to be encrypted by standard iOS® encryption tools and stored safely you must protect all devices Alogea® is installed on with suitable passcode protection. YOUR DATA IS UNPROTECTED AND CAN BE READ AND USED BY OTHERS IF YOU DO NOT USE DEVICE PASSCODE PROTECTION.\n\nTo reduce the risk of data loss, and the consequences of data corruption, it is STRONGLY RECOMMENDED to make BACKUPS regularly in the ‘Settings’ section. Loss of, or corruption of data, is subject to liability limitations in section e. of the GENERAL END USER LICENSE AGREEMENT.\n\nIII. PRIVACY\n\n"
+    let purposeAlimitations = "I. PURPOSE AND LIMITATIONS OF APP USE\nAlogea® is intended as a personal support tool to assist you in monitoring and managing your day-to-day pain and pain-related problems.\nYou understand that Alogea® it NOT intended to guide or give advice on medical treatment or diagnosis. You must obtain qualified medical advice before taking, or refraining from taking, medicines or actions on the basis of the content of this App.\n\nYou understand that use of the App must not replace or delay professional clinical advice; you must follow this advice and the instructions of your treating clinician.\nYOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT YOU MUST CONSULT YOUR RESPONSIBLE CLINICIAN / PRESCRIBER BEFORE MAKING CHANGES TO YOUR MEDICATION. YOU MUST NOT DEVIATE FROM THE RECOMMENDED WAY OF TAKING MEDICINES AS A CONSEQUENCE OF USING THIS APP WITHOUT PRIOR DISCUSSION WITH YOUR RESPONSIBLE CLINICIAN/ PRESCRIBER.\n\n"
+    let dataSecurity = "II. DATA SECURITY\nFor your data to be encrypted by standard iOS® encryption tools and stored safely you must protect all devices Alogea® is installed on with suitable passcode protection. IF YOU DO NOT USE DEVICE PASSCODE PROTECTION YOUR DATA IS NOT ENCRYPTED AND CAN BE READ BY OTHERS.\n\nTo reduce the risk of data loss, and the consequences of data corruption, it is STRONGLY RECOMMENDED TO MAKE BACKUPS regularly in the ‘Settings’ section. Loss of, or corruption of data, is subject to liability limitations in section e. of the GENERAL END USER LICENSE AGREEMENT.\n\n"
+    let privacy = "III. PRIVACY\n\nWe may collecy and process data about you: informationton you give us when downloading Alogea, purchasing Alogea expansion in the InApp Store, technical infomration about your device and related software, hardware and peripherals, and details of your use of Alogea and related services"
+    
+    let touHeader = "TERMS OF USE\n\n"
     
     let eulaText = "GENERAL END USER LICENSE AGREEMENT"
 

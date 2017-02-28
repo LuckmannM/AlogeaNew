@@ -44,8 +44,8 @@ class StoreView: UITableViewController {
             self.navigationController?.setNavigationBarHidden(false, animated: false)
         }
         self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
-        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().greyGreen
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.barTintColor = ColorScheme.sharedInstance().pearlWhite
+        self.navigationController?.navigationBar.tintColor = ColorScheme.sharedInstance().duskBlue
         
         // CloudAccessIcon
 //        let cloudButton = UIButton(type: .custom)
@@ -161,8 +161,8 @@ class StoreView: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "storeCell", for: indexPath) as! StoreViewCell
-
         if inAppStore.products != nil {
+            var textSize: CGFloat = 28.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
             let product = inAppStore.products![indexPath.row]
             let text = NSAttributedString(
                 string: product.localizedTitle,
@@ -190,7 +190,7 @@ class StoreView: UITableViewController {
                 priceFormatter.locale = product.priceLocale
                 let title = NSAttributedString(
                     string: priceFormatter.string(from: product.price)!,
-                    attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 24)!,
+                    attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 22)!,
                                  NSForegroundColorAttributeName: UIColor.white]
                 )
 
@@ -202,11 +202,11 @@ class StoreView: UITableViewController {
             
             switch indexPath.row {
                 case 0:
-                    cell.backgroundImageView.image = UIImage(named:"NoLimitsBG")
+                    cell.backgroundImageView.image = UIImage(named:"FVBG")
                 case 1:
                     cell.backgroundImageView.image = UIImage(named:"UnlimitedSymptomsBG")
                 case 2:
-                    cell.backgroundImageView.image = UIImage(named:"UnlimitedMedicinesBG")
+                    cell.backgroundImageView.image = UIImage(named:"UMedicinesBG")
                 default:
                 cell.backgroundImageView = nil
             }
@@ -224,7 +224,8 @@ class StoreView: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.view.frame.height / 4
+        return 150 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+        //return self.view.frame.height / 4
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -249,7 +250,7 @@ class StoreView: UITableViewController {
             header.textLabel?.sizeToFit()
         }
         
-        header.textLabel?.textColor = ColorScheme.sharedInstance().lightGray
+        header.textLabel?.textColor = ColorScheme.sharedInstance().duskBlue
     }
     
     func successMessage() {
