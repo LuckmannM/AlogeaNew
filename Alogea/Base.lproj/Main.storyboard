@@ -529,7 +529,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoLimitsBG" translatesAutoresizingMaskIntoConstraints="NO" id="nQl-EM-wvE" userLabel="backgroundImageView">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FVBG" translatesAutoresizingMaskIntoConstraints="NO" id="nQl-EM-wvE" userLabel="backgroundImageView">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="150"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FYD-B8-5Ps" customClass="DescriptionLabel" customModule="Alogea" customModuleProvider="target">
@@ -1549,10 +1549,10 @@
         <image name="Delete Button" width="32" height="32"/>
         <image name="EventsButton" width="63" height="63"/>
         <image name="ExpoButton" width="74" height="92"/>
+        <image name="FVBG" width="750" height="334"/>
         <image name="GraphButtonBar" width="52" height="52"/>
         <image name="GraphTitle Blue+" width="43" height="44"/>
         <image name="MedsIcon" width="30" height="30"/>
-        <image name="NoLimitsBG" width="375" height="167"/>
         <image name="PainBucket_Orange" width="45" height="38"/>
         <image name="PainBucket_Red" width="45" height="39"/>
         <image name="PainBucket_Yellow" width="45" height="38"/>

@@ -212,10 +212,10 @@ class MedsView: UIView {
             for i in 0..<count {
                 if medRect.intersects(allRectsArray[i]) {
                     medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
-                    if medRect.minY < topOfRect {
-                        // ensure prnMedRect are positoned higher than regMedRects
-                        topOfRect = medRect.minY - medBarHeight - 2
-                    }
+//                    if medRect.minY < topOfRect {
+//                        // ensure prnMedRect are positoned higher than regMedRects
+//                        topOfRect = medRect.minY - medBarHeight - 2
+//                    }
                 }
             }
             let indexPath = IndexPath(item: count, section: 0)
@@ -250,7 +250,7 @@ class MedsView: UIView {
         count = 0
         colorArrayCount = 0
         var sectionCount = 0
-        var eventCount = 0
+        // var eventCount = 0
         var intersectDetected = false
         
         var prnMeds: NSFetchedResultsController<Event>!
@@ -264,47 +264,47 @@ class MedsView: UIView {
         
             for section in prnMeds.sections! {
                 for index in 0..<section.numberOfObjects {
-                let medEvent = prnMedsFRC.object(at: IndexPath(item: index, section: sectionCount))
-                var medRect = medEvent.medEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medEvent.date as! Date, scale: scale), dy: verticalOffset)
-                
-                repeat {
-                    intersectDetected = false
-                    for i in 0..<allRectsArray.count {
-                        if medRect.intersects(allRectsArray[i]) {
-                            medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
-                            if medRect.minY < topOfRect {
-                                // ensure prnMedRect are positoned higher than regMedRects
+                    let medEvent = prnMedsFRC.object(at: IndexPath(item: index, section: sectionCount))
+                    var medRect = medEvent.medEventRect(scale: scale).offsetBy(dx: leftXPosition(startDate: medEvent.date as! Date, scale: scale), dy: verticalOffset)
+                    
+                    repeat {
+                        intersectDetected = false
+                        for i in 0..<allRectsArray.count {
+                            if medRect.intersects(allRectsArray[i]) {
+                                medRect = medRect.offsetBy(dx: 0, dy: -medBarHeight - 2)
                                 intersectDetected = true
-                                topOfRect = medRect.minY - medBarHeight - 2
+//                                if medRect.minY < topOfRect {
+//                                    // ensure prnMedRect are positoned higher than regMedRects
+//                                    topOfRect = medRect.minY - medBarHeight - 2
+//                                }
                             }
                         }
+                    } while intersectDetected
+                    
+                    let indexPath = IndexPath(item: index, section: sectionCount)
+                    prnMedsDictionary.append((indexPath, medRect))
+                    allRectsArray.append(medRect)
+                    rectArray.append(medRect)
+                    
+                    let medRectPath = UIBezierPath(roundedRect: medRect, cornerRadius: cornerRadius)
+                    medRectPath.lineWidth = 1.0
+                    ColorScheme.sharedInstance().barColors[colorArrayCount].setFill()
+                    medRectPath.fill()
+                    medRectPath.stroke()
+                    
+                    var medName = NSString()
+                    if medRect.width == medBarHeight {
+                        medName = (medEvent.name! as NSString).substring(to: 1) as NSString
+                    } else {
+                        medName = medEvent.name! as NSString
                     }
-                } while intersectDetected
-                
-                let indexPath = IndexPath(item: index, section: sectionCount)
-                prnMedsDictionary.append((indexPath, medRect))
-                allRectsArray.append(medRect)
-                rectArray.append(medRect)
-                
-                let medRectPath = UIBezierPath(roundedRect: medRect, cornerRadius: cornerRadius)
-                medRectPath.lineWidth = 1.0
-                ColorScheme.sharedInstance().barColors[colorArrayCount].setFill()
-                medRectPath.fill()
-                medRectPath.stroke()
-                
-                var medName = NSString()
-                if medRect.width == medBarHeight {
-                    medName = (medEvent.name! as NSString).substring(to: 1) as NSString
-                } else {
-                    medName = medEvent.name! as NSString
+                    let rightShift = 3 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                    let downShift = -1 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                    
+                    medName.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+                    
+                    // eventCount += 1
                 }
-                let rightShift = 3 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
-                let downShift = -1 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
-                
-                medName.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
-                
-                eventCount += 1
-            }
             colorArrayCount += 1
             if colorArrayCount == numberOfColors {
                 colorArrayCount = 0
@@ -321,7 +321,7 @@ class MedsView: UIView {
         var rectArray = [CGRect]()
         
         var sectionCount = 0
-        var eventCount = 0
+        // var eventCount = 0
         var intersectDetected = false
         colorArrayCount = 0
         
@@ -364,7 +364,7 @@ class MedsView: UIView {
                 let eventName = (event.name as NSString?)?.substring(to: 1)
                 eventName?.draw(in: eventRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize - 4)!,NSForegroundColorAttributeName: UIColor.white])
                 
-                eventCount += 1
+                // eventCount += 1
             }
             colorArrayCount += 1
             if colorArrayCount == numberOfColors {

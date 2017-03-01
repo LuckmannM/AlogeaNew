@@ -50,7 +50,7 @@ class ErrorManager: NSObject {
         } else {
             self.alertViewOpen = true
         }
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertController = UIAlertController(title: titleToUse, message: message, preferredStyle: .alert)
         
         // Configure Alert Controller
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) -> Void in

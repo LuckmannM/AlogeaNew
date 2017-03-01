@@ -516,7 +516,18 @@ public class DrugEpisode: NSManagedObject {
         
         let center = UNUserNotificationCenter.current()
         let calendar = NSCalendar.current
-        let components: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
+        
+        // components determine the date/time and repeat intervals
+        var components: Set<Calendar.Component>!
+        
+        if frequencyVar <= 24 * 3600 {
+            // repeats every day at given hour and minute
+            components = [.hour, .minute]
+        } else {
+            // repeats on a specific at given hour and minute; this will repeat once per year on this date only
+            components = [.month, .day, .hour, .minute]
+        }
+        
         let nextDoseDueDates = self.nextDoseDueDates()
         
         var i = 0
@@ -529,12 +540,18 @@ public class DrugEpisode: NSManagedObject {
                 content.body = NSString.localizedUserNotificationString(forKey: "it's time to take %@", arguments: [messageForDrugAlert(index: i)])
                 content.categoryIdentifier = notification_MedReminderCategory
                 content.sound = UNNotificationSound.default()
-                    
-                let reminderDate = calendar.dateComponents(components, from: nextDoseDueDates[i])
                 
-                let alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
+                if frequencyVar > 24 * 3600 {
+                    // repeats every day at given hour and minute
+                    content.userInfo = ["manualRepeat":true]
+                }
+                
+                let reminderDate = calendar.dateComponents(components, from: nextDoseDueDates[i])
+                // let reminderDate = calendar.dateComponents(components, from: Date().addingTimeInterval(30))
+                
+                //let alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
                 // another trigger using timerIntervals
-                // let alert2Trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                let alertTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
                 
                 let request = UNNotificationRequest(identifier: drugID!, content: content, trigger: alertTrigger)
                 
@@ -543,6 +560,8 @@ public class DrugEpisode: NSManagedObject {
                     (error: Error?) in
                     if let theError = error {
                         ErrorManager.sharedInstance().errorMessage(message: "MedEpisode Error 2", systemError: theError as NSError?, errorInfo: "error in scheduling \(request.identifier) is \(theError.localizedDescription)")
+                    } else {
+                        print("scheduled drug reminder at \(alertTrigger)")
                     }
                 })
             }

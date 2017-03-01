@@ -16,7 +16,7 @@ let iCloudBackUpsOn = "iCloudBackupsOn"
 let notification_MedReminderCategory = "DrugReminderCategory"
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
     
@@ -58,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        print("Device name \(UIDevice.current.name)")
         tabBarViews = {
             let tBC = self.window!.rootViewController as! UITabBarController
             if let navControllers = tBC.viewControllers { return navControllers }
@@ -80,9 +79,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        print("finished app didFinishLaunching")
-        print("")
         
+        UNUserNotificationCenter.current().delegate = self
+        
+// DEBUG
+        print("Checking pending notifications...")
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: {
+            (requests: [UNNotificationRequest]) in
+            for request in requests {
+                if request.content.categoryIdentifier == notification_MedReminderCategory {
+                    print("pending notification: \(request)")
+                }
+            }
+        })
+// DEBUG
+
         return true
     }
 
@@ -214,16 +225,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // handling notification actions received from system
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        print("Alogea received a UserNotification feedback message while in background")
         
         // handling non-specific/non-action user actions e.g. deleting notification in NotificationCenter
         if response.actionIdentifier == UNNotificationDismissActionIdentifier {
             // The user dismissed the notification without taking action
+            print("user dismissed notification")
         }
         else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
             // The user launched the app
+            print("user has tappe on notification")
         }
         
         // handling category specific notification actions from the user
@@ -237,10 +251,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Invalidate the timer. . .
             }
         }
-        
         // Else handle actions for other notification types. . .
-    }
 
+        
+        completionHandler()
+    }
+    
+    func userNotificationCenter(_: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        print("Alogea received a UserNotification feedback message while in background")
+        
+        // Delivers a notification to an app running in the foreground.
+        completionHandler([.alert, .sound])
+    }
 
     // MARK: - Core Data Saving support
 
