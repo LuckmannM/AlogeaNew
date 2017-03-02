@@ -115,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
+        checkDeliveredNotifications()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -228,43 +228,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        print("Alogea received a UserNotification feedback message while in background")
+        //        // handling non-specific/non-action user actions e.g. deleting notification in NotificationCenter
+//        if response.actionIdentifier == UNNotificationDismissActionIdentifier {
+//            // The user dismissed the notification without taking action
+//            print("user dismissed notification")
+//        }
+//        else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
+//            // The user launched the app
+//            print("user has tappe on notification")
+//        }
         
-        // handling non-specific/non-action user actions e.g. deleting notification in NotificationCenter
-        if response.actionIdentifier == UNNotificationDismissActionIdentifier {
-            // The user dismissed the notification without taking action
-            print("user dismissed notification")
-        }
-        else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
-            // The user launched the app
-            print("user has tappe on notification")
-        }
-        
-        // handling category specific notification actions from the user
         if response.notification.request.content.categoryIdentifier == notification_MedReminderCategory {
-            // *** Handle the actions for the expired timer.
-            if response.actionIdentifier == "dismiss" {
-                // Invalidate the old timer and create a new one. . .
-                print("action dismiss received in notification")
-            }
-            else if response.actionIdentifier == "any other action" {
-                // Invalidate the timer. . .
-            }
+                if response.notification.request.content.userInfo["manualRepeat"] as! Bool == true {
+                    
+                }
         }
-        // Else handle actions for other notification types. . .
-
         
         completionHandler()
     }
     
     func userNotificationCenter(_: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
-        print("Alogea received a UserNotification feedback message while in background")
-        
-        // Delivers a notification to an app running in the foreground.
+        // Displays a notification while App running in the foreground.
+        // for displaying a standard system notification pass eg. [.alter, .sound] below
+        // to show app internal dialog use [] empty array and use alertView or similar above the below completionHAndler()
         completionHandler([.alert, .sound])
     }
 
+    
+    func checkDeliveredNotifications() {
+        UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {
+            (notifications: [UNNotification]) -> Void in
+            
+            if !UserDefaults.standard.bool(forKey: notification_MedRemindersOn) {
+                UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+                return
+            }
+            
+            for notification in notifications {
+//                print("manual repeat? \(notification.request.content.userInfo["manualRepeat"] as? Bool)")
+                if (notification.request.content.userInfo["manualRepeat"] as? Bool ?? false) {
+                    self.rescheduleMedReminder(drugID: notification.request.content.userInfo["drugID"] as! String)
+                }
+            }
+        })
+    }
+    
+    func rescheduleMedReminder(drugID: String) {
+        
+        // this will be called when the content.userInfo for 'manualRepeat' is true.
+        // this is set in DrugEpisode.scheduleReminder function only for meds with frequencyVar of >1 day and <1 week
+        // this does not allow to use the 'repeat' for notificationRequest.
+        // this manually reschedules these meds to their frequency, however, if the App is not run/ in the foreground from triggerDate and the next due time the next drugReminder is NOT scheduled, so there will be no alert.
+        // this functioanility would require the app to be notified of the notification while in the background when the user does NOT tap on the notification, and being able to run this code while in the background
+        let fetchRequest = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        let predicate = NSPredicate(format: "drugID == %@", argumentArray: [drugID])
+        fetchRequest.predicate = predicate
+        
+        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        
+        do {
+            let drugs = try moc.fetch(fetchRequest)
+            if drugs.count > 0 {
+                let drug = drugs[0]
+                drug.scheduleReminderNotifications(cancelExisting: true)
+            }
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage(message: "AppDelegate Error 2", systemError: error, errorInfo: "error fetching drug in rescheduleMedReminder function")
+        }
+    }
+    
     // MARK: - Core Data Saving support
 
     func saveContext () {

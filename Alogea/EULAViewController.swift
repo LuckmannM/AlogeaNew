@@ -54,6 +54,10 @@ class EULAViewController: UIViewController {
             confirmationLabel.sizeToFit()
         }
         
+        if UserDefaults.standard.bool(forKey: "TOUAccepted") == false {
+            (UIApplication.shared.delegate as! AppDelegate).applicationWillTerminate((UIApplication.shared))
+        }
+        
     }
 
     /*

@@ -670,6 +670,9 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
                 } else { dosesCell?.accessoryType = .none }
                 frequencyPicker.removeFromSuperview()
                 
+                if frequencyChosen == "every three days" || frequencyChosen == "every other day" {
+                    showMessage(title: "Please note", message: "In order to receive repeat reminders for this medicine please tap on one of the first three reminder notifications when you receive them\nOtherwise repeat reminders will be limited to three.")
+                }
             } else {
                 cellRowHelper.insertVisibleRow(forIndexPath: indexPath)
                 tableView.insertRows(at: [changeAtPath], with: .top)
@@ -1056,7 +1059,21 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
 
     }
     
+    // MARK: - Alert Dialog
     
+    func showMessage(title: String, message: String) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        // Configure Alert Controller
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) -> Void in
+            
+        }))
+        
+        // Present Alert Controller
+        self.present(alertController, animated: true, completion: nil)
+        
+    }
 }
 
 extension NewDrug: UITextViewDelegate {

@@ -489,6 +489,7 @@ public class DrugEpisode: NSManagedObject {
                     nextDueDate = calendar.date(from: nextDueComponents)
                     dueDates.append(nextDueDate)
                 } else { // dose frequency is > 1 day
+                    // possible requirement to add month as at the end of a month there may be 'overspill' into next month; not sure whether this is taken into account with jusst .day and .hour
                     nextDueComponents.day = nextDueComponents.day! + Int(frequencyVar / (24 *  3600))
                     nextDueComponents.hour = nextDueComponents.hour! + Int(frequencyVar.truncatingRemainder(dividingBy: 24*3600) / 3600)
                     nextDueDate = calendar.date(from: nextDueComponents)
@@ -529,6 +530,7 @@ public class DrugEpisode: NSManagedObject {
         }
         
         let nextDoseDueDates = self.nextDoseDueDates()
+        var alertTrigger: UNCalendarNotificationTrigger!
         
         var i = 0
         // each dose has it's own reminder
@@ -541,17 +543,32 @@ public class DrugEpisode: NSManagedObject {
                 content.categoryIdentifier = notification_MedReminderCategory
                 content.sound = UNNotificationSound.default()
                 
-                if frequencyVar > 24 * 3600 {
-                    // repeats every day at given hour and minute
-                    content.userInfo = ["manualRepeat":true]
-                }
                 
                 let reminderDate = calendar.dateComponents(components, from: nextDoseDueDates[i])
-                // let reminderDate = calendar.dateComponents(components, from: Date().addingTimeInterval(30))
                 
-                //let alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
+                if frequencyVar <= 24 * 3600 {
+                    // repeats every day at given hour and minute
+                    components = [.hour, .minute]
+                    content.userInfo["manualRepeat"] = false
+                    alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
+                }
+                else if frequencyVar == 7 * 24 * 3600 {
+                    // repeats once weekly
+                    components = [.weekday, .hour, .minute]
+                    content.userInfo["manualRepeat"] = false
+                    alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: true)
+                    
+                }
+                else {
+                    // >daily and < weekly
+                    content.userInfo["manualRepeat"] = true
+                    //content.userInfo = ["lastRepeatDate":nextDoseDueDates[i]]
+                    content.userInfo["drugID"] = drugID!
+                    alertTrigger = UNCalendarNotificationTrigger(dateMatching: reminderDate, repeats: false)
+                }
+                
                 // another trigger using timerIntervals
-                let alertTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                //let alertTrigger2 = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
                 
                 let request = UNNotificationRequest(identifier: drugID!, content: content, trigger: alertTrigger)
                 
@@ -561,9 +578,38 @@ public class DrugEpisode: NSManagedObject {
                     if let theError = error {
                         ErrorManager.sharedInstance().errorMessage(message: "MedEpisode Error 2", systemError: theError as NSError?, errorInfo: "error in scheduling \(request.identifier) is \(theError.localizedDescription)")
                     } else {
-                        print("scheduled drug reminder at \(alertTrigger)")
+                        print("scheduled drug reminder at \(alertTrigger)...")
                     }
                 })
+                
+                if request.content.userInfo["manualRepeat"] as! Bool {
+                    // schedule two additional reminders for drugs with repeat dose between 1 and 7 days (only)
+                    let doseDate2 = calendar.dateComponents(components, from: nextDoseDueDates[i].addingTimeInterval(frequencyVar))
+                    let doseDate3 = calendar.dateComponents(components, from: nextDoseDueDates[i].addingTimeInterval(2 * frequencyVar))
+                    let alertTrigger2 = UNCalendarNotificationTrigger(dateMatching: doseDate2, repeats: false)
+                    let alertTrigger3 = UNCalendarNotificationTrigger(dateMatching: doseDate3, repeats: false)
+                    
+                    let request2 = UNNotificationRequest(identifier: drugID!, content: content, trigger: alertTrigger2)
+                    let request3 = UNNotificationRequest(identifier: drugID!, content: content, trigger: alertTrigger3)
+                    
+                    center.add(request2, withCompletionHandler: {
+                        (error: Error?) in
+                        if let theError = error {
+                            ErrorManager.sharedInstance().errorMessage(message: "MedEpisode Error 2.1", systemError: theError as NSError?, errorInfo: "error in scheduling \(request.identifier) is \(theError.localizedDescription)")
+                        } else {
+                            print("scheduled drug reminder at \(alertTrigger2)...")
+                        }
+                    })
+                    
+                    center.add(request3, withCompletionHandler: {
+                        (error: Error?) in
+                        if let theError = error {
+                            ErrorManager.sharedInstance().errorMessage(message: "MedEpisode Error 2.2", systemError: theError as NSError?, errorInfo: "error in scheduling \(request.identifier) is \(theError.localizedDescription)")
+                        } else {
+                            print("scheduled drug reminder at \(alertTrigger3)...")
+                        }
+                    })
+                }
             }
             i = i+1
         }

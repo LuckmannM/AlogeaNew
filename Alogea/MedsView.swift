@@ -195,7 +195,7 @@ class MedsView: UIView {
     private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) {
         
         var allRectsArray = [CGRect]()
-        var topOfRect = verticalOffset
+       //  var topOfRect = verticalOffset
         count = 0
         colorArrayCount = 0
         var regMeds: NSFetchedResultsController<DrugEpisode>!
@@ -243,14 +243,13 @@ class MedsView: UIView {
     
     private func drawPrnMeds(scale: TimeInterval, verticalOffset: CGFloat) {
         
-        var topOfRect = verticalOffset
+//        var topOfRect = verticalOffset
         var allRectsArray = symbolArrays[0]
         var rectArray = [CGRect]()
         
         count = 0
         colorArrayCount = 0
         var sectionCount = 0
-        // var eventCount = 0
         var intersectDetected = false
         
         var prnMeds: NSFetchedResultsController<Event>!
