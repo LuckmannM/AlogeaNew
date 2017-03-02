@@ -39,23 +39,18 @@ class EULAViewController: UIViewController {
     func updateConfirmationLabel() {
         
         if UserDefaults.standard.value(forKey: "TOUAccepted") != nil {
-            var confirmed = String()
             
             if UserDefaults.standard.bool(forKey: "TOUAccepted") == true {
-                confirmed = "accepted"
+                confirmationLabel.textColor = UIColor.blue
+                confirmationLabel.text = "You accepted these Terms of Use on \(UserDefaults.standard.value(forKey: "TOUAcceptanceDate")!)"
             } else {
-                confirmed = "declined"
+                confirmationLabel.textColor = UIColor.red
+                confirmationLabel.text = "You declined these Terms of Use on \(UserDefaults.standard.value(forKey: "TOUAcceptanceDate")!)\nThe App cannot be used without accepting the terms\nPlease either accept the terms below or press the home button to exit."
             }
-            
-            confirmationLabel.text = "You " + confirmed + " these Terms of Use on \(UserDefaults.standard.value(forKey: "TOUAcceptanceDate")!)"
             
         } else {
             confirmationLabel.text = "You must accept the Terms Of Use in order to use this App"
             confirmationLabel.sizeToFit()
-        }
-        
-        if UserDefaults.standard.bool(forKey: "TOUAccepted") == false {
-            (UIApplication.shared.delegate as! AppDelegate).applicationWillTerminate((UIApplication.shared))
         }
         
     }
