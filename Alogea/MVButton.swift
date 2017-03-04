@@ -41,7 +41,6 @@ class MVButton: UIButton {
         
     }
     
-    
     override func draw(_ rect: CGRect) {
         let buttonCircle = UIBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1))
         colorScheme.lightGray.setFill()

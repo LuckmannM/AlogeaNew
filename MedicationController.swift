@@ -133,9 +133,9 @@ class MedicationController: NSObject {
     }()
 
     
-    var asRequiredMedNames: [(String, Double)] {
+    var asRequiredMedNames: [(String, Double, String)] {
         
-        var nameArray = [(name: String, duration: Double)]()
+        var nameArray = [(name: String, duration: Double, dose:String)]()
         
         guard asRequiredMedsFRC.fetchedObjects != nil else {
             return nameArray
@@ -145,7 +145,8 @@ class MedicationController: NSObject {
             if let recordType = object as DrugEpisode? {
                 let pickerStringForMainViewButton = recordType.name!// + " " + recordType.individualDoseString(index: 0,numberOnly: true)
                 let medEffectDuration = object.frequency
-                nameArray.append((pickerStringForMainViewButton, medEffectDuration))
+                let medDoseString = object.individualDoseString(index: 0)
+                nameArray.append((pickerStringForMainViewButton, medEffectDuration, medDoseString))
             }
         }
         //print("MedsController found prn drug names: \(nameArray)")

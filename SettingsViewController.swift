@@ -17,7 +17,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     
     @IBOutlet weak var cloudSwitch: UISwitch!
     @IBOutlet weak var drugReminderSwitch: UISwitch!
-
+    @IBOutlet weak var passcodeSwitch: UISwitch!
     
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
@@ -67,7 +67,7 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 7
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,6 +82,10 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         case 3 :
             return 1
         case 4 :
+            return 1
+        case 5 :
+            return 1
+        case 6 :
             return 1
         default:
             return 0
@@ -100,6 +104,10 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         case 3 :
             return "Medicine reminders"
         case 4 :
+            return "Use App Passcode"
+        case 5 :
+            return "Help & support"
+        case 6:
             return "Terms Of Use"
         default:
             return ""
@@ -237,6 +245,10 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
         
     }
     
+    @IBAction func passcodeSwitchAction(_ sender: UISwitch) {
+        
+        
+    }
     
     // MARK: - Navigation
     

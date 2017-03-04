@@ -189,8 +189,8 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
                 controller.requestDiaryEntryWindow(frame: touchWheel.frame.insetBy(dx: -20, dy: -20))
             } else {
                 resolvePicker(picker: pickerView)
-                let (name, duration) = MedicationController.sharedInstance().asRequiredMedNames[row - 2]
-                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: nil, duration: duration, buttonView: self)
+                let (name, duration, dose$) = MedicationController.sharedInstance().asRequiredMedNames[row - 2]
+                EventsDataController.sharedInstance().newEvent(ofType: medicineEvent, withName: name, withDate: Date(), vas: -1, note: dose$, duration: duration, buttonView: self)
             }
         } else if pickerView.isEqual(eventTimePicker) {
             

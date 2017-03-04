@@ -142,13 +142,13 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         return fileNames
     }
     
-    func updateCloudAccessIcon() {
-        if FileManager.default.ubiquityIdentityToken == nil  {
-            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
-        } else {
-            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
-        }
-    }
+//    func updateCloudAccessIcon() {
+//        if FileManager.default.ubiquityIdentityToken == nil  {
+//            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+//        } else {
+//            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
+//        }
+//    }
     
     // MARK: - Table view data source
     

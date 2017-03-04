@@ -89,6 +89,7 @@ class FloatingMenuView: UIView {
             graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
         }
         graphView.setNeedsDisplay()
+        self.slideIn()
     }
     
     @IBAction func toggleEventsView(sender: UIButton) {

@@ -33,11 +33,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
             }
     }()
     
+    let cloudButton = UIButton(type: .custom)
 
     var drugDictionary: DrugDictionary!
     var inAppStore: InAppStore!
 
-    
     var cellRowHelper: NewDrugHelper!
     
     var dropDownButton: UIButton!
@@ -84,9 +84,7 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
 
         
         let saveButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(saveAction))
-        
-        let cloudButton = UIButton(type: .custom)
-        
+                
         if drugDictionary.iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() {
             cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
         } else {
@@ -129,7 +127,11 @@ class NewDrug: UITableViewController, UITextFieldDelegate, UIPickerViewDelegate,
         self.hidesBottomBarWhenPushed = true
         self.tabBarController!.tabBar.isHidden = true
         
-        
+        if drugDictionary.iCloudStatus == CKAccountStatus.available && InAppStore.sharedInstance().isConnectedToNetwork() {
+            cloudButton.setImage(UIImage(named: "BlueCloud"), for: .disabled)
+        } else {
+            cloudButton.setImage(UIImage(named: "GreyCloud"), for: .disabled)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

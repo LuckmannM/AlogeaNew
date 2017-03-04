@@ -27,6 +27,7 @@
 		2645230E1DDB596B00D62CC1 /* DrugRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645230D1DDB596B00D62CC1 /* DrugRating.swift */; };
 		2645C5DC1DCC9B9300916596 /* GraphViewTimeLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */; };
 		2645C5DE1DD30E4100916596 /* PrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */; };
+		2649F7251E69F0050016F7C0 /* LockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2649F7241E69F0050016F7C0 /* LockScreen.swift */; };
 		2651FD681DB3B07700C1301A /* MVButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD671DB3B07700C1301A /* MVButtonView.swift */; };
 		2651FD6A1DB3B90C00C1301A /* MVButtonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD691DB3B90C00C1301A /* MVButtonController.swift */; };
 		2651FD6C1DB3D8A600C1301A /* MVButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2651FD6B1DB3D8A600C1301A /* MVButton.swift */; };
@@ -107,6 +108,7 @@
 		2645230D1DDB596B00D62CC1 /* DrugRating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrugRating.swift; sourceTree = "<group>"; };
 		2645C5DB1DCC9B9300916596 /* GraphViewTimeLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewTimeLine.swift; sourceTree = "<group>"; };
 		2645C5DD1DD30E4100916596 /* PrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrintPageRenderer.swift; sourceTree = "<group>"; };
+		2649F7241E69F0050016F7C0 /* LockScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockScreen.swift; sourceTree = "<group>"; };
 		2651FD671DB3B07700C1301A /* MVButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonView.swift; sourceTree = "<group>"; };
 		2651FD691DB3B90C00C1301A /* MVButtonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButtonController.swift; sourceTree = "<group>"; };
 		2651FD6B1DB3D8A600C1301A /* MVButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVButton.swift; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 			children = (
 				26E3B8FB1DA177DA00D157BB /* Alogea.entitlements */,
 				26E3B8CE1DA177D000D157BB /* Main.storyboard */,
+				2649F7241E69F0050016F7C0 /* LockScreen.swift */,
 				26E3B8CA1DA177D000D157BB /* AppDelegate.swift */,
 				26A013951DA2DCB20031DF79 /* CoreDataStack.swift */,
 				2644B8AC1DAE355300FF0484 /* ColorScheme.swift */,
@@ -583,6 +586,7 @@
 				26BDBD341E44B511007F6917 /* EventRect PopUp.swift in Sources */,
 				260898791E36603200CBB6B6 /* Backups.swift in Sources */,
 				26F91E131DC215ED00C4942A /* RecordTypesController.swift in Sources */,
+				2649F7251E69F0050016F7C0 /* LockScreen.swift in Sources */,
 				265387051E38A1F800DE095E /* MedicationController.swift in Sources */,
 				263DA0131DD4D41D00CD7963 /* DrugListViewController.swift in Sources */,
 				26770D581E2C29F500DCCBA6 /* EventTypeSettings.swift in Sources */,
