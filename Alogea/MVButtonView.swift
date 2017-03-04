@@ -153,13 +153,13 @@ class MVButtonView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         if pickerView.isEqual(eventSelectionPicker) {
             options = diaryEventTypeTitles
-            for (name, _) in MedicationController.sharedInstance().asRequiredMedNames {
+            for (name, _, _) in MedicationController.sharedInstance().asRequiredMedNames {
                 options.append(name)
             }
         } else  if pickerView.isEqual(eventTimePicker) {
             options = eventTimePickerOptions
         } else {
-            for (name, _) in MedicationController.sharedInstance().asRequiredMedNames {
+            for (name, _, _) in MedicationController.sharedInstance().asRequiredMedNames {
                 options.append(name)
             }
         }
