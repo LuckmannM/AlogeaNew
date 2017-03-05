@@ -96,6 +96,18 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         stack.updateContextWithUbiquitousChangesObserver = false
         
     }
+    
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
+            (context: UIViewControllerTransitionCoordinatorContext) -> Void in
+                self.tableView.reloadData()
+        })
+    }
+
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
@@ -197,6 +209,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
             
+            /* OLD
             if UIDevice().userInterfaceIdiom == .pad {
                 cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
                 cell.doseLabel.text = aDrug.dosesShortString() + ".  " + aDrug.regularityLong$() + aDrug.reminderActive()
@@ -206,14 +219,42 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
                 }
             } else {
+                if self.view.frame.size.width > self.view.frame.size.height { // landscape
+                    
+                } else { // portrait
+                    cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
+                    cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
+                    if aDrug.endDate != nil {
+                        cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
+                    } else {
+                        cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.regularityShort$())"
+                    }
+                }
+            }
+            */
+            
+            
+            if UIDevice().userInterfaceIdiom == .phone && (self.view.frame.size.height > self.view.frame.size.width) {
+                // iPhone in portrait - less space
                 cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
                 cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
                 if aDrug.endDate != nil {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()); stop \(aDrug.endDateString())"
+                } else {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())" // . \(aDrug.regularityShort$())"
+                }
+                
+            } else {
+                // iPad or iPhone landscape  - more space to display
+                cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
+                cell.doseLabel.text = aDrug.dosesShortString() + ", " + aDrug.regularityLong$() + aDrug.reminderActive()
+                if aDrug.endDate != nil {
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
                 } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.regularityShort$())"
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
                 }
             }
+            
             cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
             cell.ratingButton.sizeToFit()
             cell.ratingButton.addTarget(self, action: #selector(popUpRatingView(sender:)), for: .touchUpInside)

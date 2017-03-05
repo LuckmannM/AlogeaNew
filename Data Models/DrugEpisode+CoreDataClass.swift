@@ -52,6 +52,16 @@ public class DrugEpisode: NSManagedObject {
         return formatter
     }()
     
+    let shortDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = NSTimeZone.local
+        //formatter.dateFormat = "dd.MM.yy" // time/date symbols shown on the bottom timeLine
+        formatter.dateStyle = .short
+        return formatter
+    }()
+
+    
     let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = NSLocale.current
@@ -337,7 +347,7 @@ public class DrugEpisode: NSManagedObject {
     func endDateString() -> String {
         
         if endDateVar == nil { return "" }
-        else { return dateFormatter.string(from: endDateVar!) }
+        else { return shortDateFormatter.string(from: endDateVar!) }
     }
     
     func returnEffect() -> String {
@@ -353,10 +363,10 @@ public class DrugEpisode: NSManagedObject {
         
         var freqString = String()
         
-        let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("every twelve hours",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
+        let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("twice daily",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
         
         if regularlyVar == false {
-            freqString = "Up to "
+            freqString = "Max. "
         }
         
         for aTerm in altFrequencyTerms {
@@ -375,7 +385,7 @@ public class DrugEpisode: NSManagedObject {
         let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("every twelve hours",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
         
         if regularlyVar == false {
-            freqString = "When needed, up to "
+            freqString = "when needed, up to "
         }
         
         for aTerm in altFrequencyTerms {

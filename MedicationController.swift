@@ -171,6 +171,34 @@ class MedicationController: NSObject {
         }
     }
     
+    func countPRNMedEvents(forMedName: String, betweenStartDate: Date? = nil, andEndDate: Date? = nil) -> Int {
+
+        let combinedPredicate: NSCompoundPredicate!
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let medPredicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
+        let namePredicate = NSPredicate(format: "name == %@", argumentArray: [forMedName])
+        if betweenStartDate != nil {
+            let startDatePredicate = NSPredicate(format: "date > %@", argumentArray: [betweenStartDate!])
+            let endDatePredicate = NSPredicate(format: "date < %@", argumentArray: [andEndDate!])
+            combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [medPredicate,namePredicate,startDatePredicate,endDatePredicate])
+        } else {
+            combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [medPredicate,namePredicate])
+            
+        }
+        
+        request.predicate = combinedPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+        
+        do {
+            let medEvents = try managedObjectContext.fetch(request)
+            return medEvents.count
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 5", systemError: error, errorInfo: "error fetching named prn medEvents for counting")
+            return 0
+        }
+
+    }
+    
     // - Methods:
     
     
