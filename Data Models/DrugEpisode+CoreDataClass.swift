@@ -344,6 +344,26 @@ public class DrugEpisode: NSManagedObject {
         return componentFormatter.string(from: timeInterval)!
     }
     
+    func countTaken(fromDate: Date? = nil, toDate: Date? = nil) -> String {
+        
+        if fromDate != nil {
+            if regularlyVar == false {
+                return "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: fromDate, andEndDate: toDate)) taken"
+            } else {
+                let timeTakenFor = toDate!.timeIntervalSince(fromDate!)
+                let timesTaken = Int(timeTakenFor / frequencyVar)
+                return "\(timesTaken) taken"
+            }
+        } else {
+            if regularlyVar == false {
+                return "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar)) taken"
+            } else {
+                let timesTaken = Int(Date().timeIntervalSince(startDate as! Date) / frequencyVar)
+                return "\(timesTaken) taken"
+            }
+        }
+    }
+    
     func endDateString() -> String {
         
         if endDateVar == nil { return "" }

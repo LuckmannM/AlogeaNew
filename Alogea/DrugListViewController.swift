@@ -84,7 +84,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         // the next hides the search bar until it is dragged down by user
         tableView.contentOffset = CGPoint(x: 0.0, y: self.tableView.tableHeaderView!.frame.size.height)
         
-//        drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
         drugList.delegate = self
 
@@ -101,10 +100,13 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
-            (context: UIViewControllerTransitionCoordinatorContext) -> Void in
-                self.tableView.reloadData()
-        })
+        
+        if UIDevice().userInterfaceIdiom == .phone {
+            coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
+                (context: UIViewControllerTransitionCoordinatorContext) -> Void in
+                    self.tableView.reloadData()
+            })
+        }
     }
 
     
@@ -209,49 +211,24 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
             
-            /* OLD
-            if UIDevice().userInterfaceIdiom == .pad {
-                cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.doseLabel.text = aDrug.dosesShortString() + ".  " + aDrug.regularityLong$() + aDrug.reminderActive()
-                if aDrug.endDate != nil {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
-                } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
-                }
-            } else {
-                if self.view.frame.size.width > self.view.frame.size.height { // landscape
-                    
-                } else { // portrait
-                    cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-                    cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
-                    if aDrug.endDate != nil {
-                        cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
-                    } else {
-                        cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.regularityShort$())"
-                    }
-                }
-            }
-            */
-            
-            
             if UIDevice().userInterfaceIdiom == .phone && (self.view.frame.size.height > self.view.frame.size.width) {
                 // iPhone in portrait - less space
                 cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
                 cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
-                if aDrug.endDate != nil {
+                if aDrug.endDateVar != nil {
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()); stop \(aDrug.endDateString())"
                 } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())" // . \(aDrug.regularityShort$())"
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
                 }
                 
             } else {
                 // iPad or iPhone landscape  - more space to display
                 cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
                 cell.doseLabel.text = aDrug.dosesShortString() + ", " + aDrug.regularityLong$() + aDrug.reminderActive()
-                if aDrug.endDate != nil {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
+                if aDrug.endDateVar != nil {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString()). \(aDrug.countTaken())"
                 } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.countTaken())"
                 }
             }
             
@@ -267,13 +244,40 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             if inAppStore.checkDrugFormularyAccess() == true {
                 cell.isUserInteractionEnabled = true
                 cell.accessoryType = .disclosureIndicator
-                cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.doseLabel.text = aDrug.returnTimeOnDrug()
-                if aDrug.endDate != nil {
-                    cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
-                } else { cell.otherInfoLabel.text = "no end date" }
+                
+                
+//                cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
+//                cell.doseLabel.text = aDrug.returnTimeOnDrug()
+//                if aDrug.endDate != nil {
+//                    cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
+//                } else { cell.otherInfoLabel.text = "no end date" }
+                
+                if UIDevice().userInterfaceIdiom == .phone && (self.view.frame.size.height > self.view.frame.size.width) {
+                    // iPhone in portrait - less space
+                    cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
+                    cell.doseLabel.text = aDrug.dosesShortString()
+                    if aDrug.endDateVar != nil {
+                        cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
+                    } else {
+                        cell.otherInfoLabel.text = "no end date"
+                    }
+                    
+                } else {
+                    // iPad or iPhone landscape  - more space to display
+                    cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
+                    cell.doseLabel.text = aDrug.dosesShortString() + ", " + aDrug.regularityLong$()
+                    if aDrug.endDateVar != nil {
+                        cell.otherInfoLabel.text = "Stopped on \(aDrug.endDateString()), taken for \(aDrug.returnTimeOnDrug()). \(aDrug.countTaken(fromDate: aDrug.startDateVar, toDate: aDrug.endDateVar))"
+                    } else {
+                        cell.otherInfoLabel.text = "Taken for \(aDrug.returnTimeOnDrug()). \(aDrug.countTaken())"
+                    }
+                }
+
+                
                 cell.ratingButton.isEnabled = false
                 cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
+                
+                
             }
             else {
                 cell.nameLabel.text = "Discontinued"
