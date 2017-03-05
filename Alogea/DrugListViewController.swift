@@ -411,11 +411,12 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         }()
         
         
-        let titleString = "Medicine List" + " (" + dateFormatter.string(from: Date()) + ")" + lf + lf
+        let titleString = "ALOGEA® Medicines List" + " (" + dateFormatter.string(from: Date()) + ")" + lf + lf
         let title = NSAttributedString(
             string: titleString,
             attributes: [NSFontAttributeName: titleFont,
-                         NSUnderlineColorAttributeName: UIColor.black]
+                         NSUnderlineColorAttributeName: UIColor.black,
+                         NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue]
         )
         attributedText.append(title)
         
@@ -426,20 +427,24 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             let titleText = NSAttributedString(
                 string: simpleString,
                 attributes: [NSFontAttributeName: titleFont,
-                             NSUnderlineColorAttributeName: UIColor.black]
+                             NSUnderlineColorAttributeName: UIColor.black,
+                             NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue]
             )
             
             simpleString = lf + tab2 + drug.dosesAndFrequencyForPrint()
-            if drug.endDate != nil {
+            
+            if drug.endDateVar != nil {
                 simpleString += lf + tab2 + dateFormatter.string(from: drug.startDateVar)
                 simpleString += " - " + dateFormatter.string(from: drug.endDateVar!) +  " (" + drug.returnTimeOnDrug() + ")"
             } else {
                 simpleString += lf + tab2 + "started: " + dateFormatter.string(from: drug.startDateVar)
                 simpleString += " (since " + drug.returnTimeOnDrug() + ")"
             }
-            
+
+            simpleString += lf + tab2 + "\(drug.countTaken())"
+
             if drug.effectiveness != nil {
-                simpleString += lf + tab2 + "benefit: " + drug.effectiveness!
+                simpleString += lf + tab2 + "Benefit: " + drug.effectiveness!
             }
             
             if (drug.sideEffectsVar?.count)! > 0 {
@@ -447,15 +452,16 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 for se in drug.sideEffectsVar! {
                     seString += se + ", "
                 }
-                simpleString += lf + tab2 + "side effects: " + seString
+                simpleString += lf + tab2 + "Side effects: " + seString
             }
+            
             let headerText = NSAttributedString(
                 string: simpleString,
-                attributes: [NSFontAttributeName: headerFont]
+                attributes: [NSFontAttributeName: bodyFont]
             )
             
             if drug.notes != nil {
-                simpleString = lf + tab2 + drug.notes!
+                simpleString = lf + tab2 + "Personal notes: " + drug.notes! + lf
             }
             
             simpleString += lf

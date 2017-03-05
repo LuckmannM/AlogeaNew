@@ -346,20 +346,33 @@ public class DrugEpisode: NSManagedObject {
     
     func countTaken(fromDate: Date? = nil, toDate: Date? = nil) -> String {
         
+        // request is set between specific dates
         if fromDate != nil {
             if regularlyVar == false {
-                return "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: fromDate, andEndDate: toDate)) taken"
+                return "Number taken: \(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: fromDate, andEndDate: toDate))"
             } else {
                 let timeTakenFor = toDate!.timeIntervalSince(fromDate!)
                 let timesTaken = Int(timeTakenFor / frequencyVar)
-                return "\(timesTaken) taken"
+                return "Number taken:\(timesTaken)"
             }
-        } else {
-            if regularlyVar == false {
-                return "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar)) taken"
+        }
+            // request does not have specific dates
+            // check if isCurrent otherwise count only until endDate
+        else {
+            var stopCountingDate: Date
+            if Date().compare(endDateVar ?? Date()) == .orderedDescending {
+                // endDate earlier than now
+                stopCountingDate = endDateVar!
+                
             } else {
-                let timesTaken = Int(Date().timeIntervalSince(startDate as! Date) / frequencyVar)
-                return "\(timesTaken) taken"
+                stopCountingDate = Date()
+            }
+            
+            if regularlyVar == false {
+                return "Number taken: \(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: startDateVar, andEndDate: stopCountingDate))"
+            } else {
+                let timesTaken = Int(stopCountingDate.timeIntervalSince(startDate as! Date) / frequencyVar)
+                return "Number taken: \(timesTaken)"
             }
         }
     }
@@ -386,7 +399,7 @@ public class DrugEpisode: NSManagedObject {
         let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("twice daily",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
         
         if regularlyVar == false {
-            freqString = "Max. "
+            freqString = "max. "
         }
         
         for aTerm in altFrequencyTerms {
