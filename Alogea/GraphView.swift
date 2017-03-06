@@ -70,7 +70,9 @@ class GraphView: UIView {
         if helper.allGraphEventsTimeSpan < (24 * 3600) {
             displayedTimeSpan = 24 * 3600
         } else {
-            displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
+            displayedTimeSpan = TimeInterval(7 * 24 * 3600) // one week default
+            // for timeSpan including all stored events use below instead
+            // displayedTimeSpan = helper.selectedScoreMinDateToNow
             minDisplayDate = maxDisplayDate.addingTimeInterval(-displayedTimeSpan)
         }
         
@@ -83,7 +85,6 @@ class GraphView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        print("draw GraphView)")
         
         drawTimeLine()
         if refreshPointsFlag {
@@ -104,7 +105,6 @@ class GraphView: UIView {
         }
         
         refreshPointsFlag = true
-        print("finished drawing GraphView)")
     }
     
     func drawLineGraph() {

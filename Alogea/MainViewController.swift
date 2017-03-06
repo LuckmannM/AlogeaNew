@@ -58,7 +58,9 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
             displayTimeSegmentedController.selectedSegmentIndex = 0
             graphContainerView.graphView.displayedTimeSpan = 24 * 3600
         } else {
-            graphContainerView.graphView.displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
+            graphContainerView.graphView.displayedTimeSpan = TimeInterval(7*24*3600) // set default to one week
+            // use below instead for interval including all event dates
+            // graphContainerView.graphView.displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
             graphContainerView.graphView.minDisplayDate = graphContainerView.graphView.maxDisplayDate.addingTimeInterval(-graphContainerView.graphView.displayedTimeSpan)
         }
         // transferred to here from GraphView.init()

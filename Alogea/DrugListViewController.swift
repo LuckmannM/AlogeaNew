@@ -397,10 +397,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         let lf = "\n"
         let titleDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.title1)
         let bodyDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.body)
-        let headerDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.title3)
+        //let headerDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.title3)
         let titleFont = UIFont(descriptor: titleDescriptor, size: 16)
         let bodyFont = UIFont(descriptor: bodyDescriptor, size: 12)
-        let headerFont = UIFont(descriptor: headerDescriptor, size: 14.0)
+        //let headerFont = UIFont(descriptor: headerDescriptor, size: 14.0)
         
         let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
