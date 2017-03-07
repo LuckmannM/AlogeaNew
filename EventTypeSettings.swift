@@ -68,10 +68,20 @@ class EventTypeSettings: UITableViewController {
         if indexPath.section == 0 {
             cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
             cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
+            if (eventsController.fetchSpecificEvents(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
+                cell.accessoryType = .disclosureIndicator
+            } else {
+                cell.accessoryType = .none
+            }
         } else {
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)
             cell.textField.text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) events"
+            if (eventsController.fetchSpecificEvents(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) > 0 {
+                cell.accessoryType = .disclosureIndicator
+            } else {
+                cell.accessoryType = .none
+            }
         }
 
         return cell
@@ -101,7 +111,40 @@ class EventTypeSettings: UITableViewController {
 
         let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
         tableView.deselectRow(at: indexPath, animated: false)
-        cell.textField.becomeFirstResponder()
+        
+        if cell.accessoryType == .disclosureIndicator {
+            let modifiedPath = IndexPath(row: 0, section: indexPath.row)
+            var frc: NSFetchedResultsController<Event>!
+            
+            if indexPath.section == 0 {
+                let name = recordTypesController.allTypes.object(at: indexPath).name!
+                frc = eventsController.fetchSpecificEvents(name: name, type: scoreEvent)
+            } else {
+                let name = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
+                frc = eventsController.fetchSpecificEvents(name: name, type: nonScoreEvent)
+            }
+            
+            performSegue(withIdentifier: "toEventsListSegue", sender: frc)
+            
+        } else {
+            cell.textField.becomeFirstResponder()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let modifiedPath = IndexPath(row: 0, section: indexPath.row)
+        var frc: NSFetchedResultsController<Event>!
+        
+        if indexPath.section == 0 {
+            let name = recordTypesController.allTypes.object(at: indexPath).name!
+            frc = eventsController.fetchSpecificEvents(name: name, type: scoreEvent)
+        } else {
+            let name = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
+            frc = eventsController.fetchSpecificEvents(name: name, type: nonScoreEvent)
+        }
+
+        performSegue(withIdentifier: "toEventsListSegue", sender: frc)
     }
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -255,6 +298,19 @@ class EventTypeSettings: UITableViewController {
             ErrorManager.sharedInstance().errorMessage(message: "EventTypeSettings Error 1", showInVC: self, systemError: error)
         }
         
+    }
+    
+    //Mark: - Navigation
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "toEventsListSegue" {
+            if let destination = segue.destination as? EventsListViewController {
+                destination.eventsFRC = sender as! NSFetchedResultsController<Event>
+                destination.stack = stack
+            }
+        }
     }
 
 }
