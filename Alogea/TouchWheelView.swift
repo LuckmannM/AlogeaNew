@@ -43,6 +43,7 @@ class TouchWheelView: UIView {
     
     var touchPoint = CGPoint.zero
     var touchWheelValue: Double = 0.0
+    var previousTouchPoint = CGPoint.zero
     
     var innerRect: CGRect {
         return bounds.insetBy(dx: lineWidth + margin, dy: lineWidth + margin)
@@ -84,6 +85,7 @@ class TouchWheelView: UIView {
         
         if rect.height <= 0 { return } // avoids re-drawing in landScape mode when the view is 'squashed'
         logoView.frame = bounds.insetBy(dx: bounds.width * 0.05, dy: bounds.height * 0.05)
+        previousTouchPoint = self.center
         
         // self.frame is only available in correct size while drawing, not after init() from NIB; it's then set to 0,0,1000,1000
         startAngle = 2 * π // ('east')
@@ -171,16 +173,24 @@ class TouchWheelView: UIView {
         
         // red/green wheel transition at top  - due to overlap in gradient arc drawing - is at ca. 3º 'east'
         // so add slightly more than π/2 to align 0 angle to border
-        angle = atan2f(Float(distanceFromCentre.y),Float(-distanceFromCentre.x)) + π / 1.9
+        angle = atan2f(Float(distanceFromCentre.x),Float(distanceFromCentre.y)) + π
         
-        if angle < 0 {
-            angle += 2 * π
+        //the next stops from acidentally 'overshooting', stopping at 0 or 360º
+        if previousTouchPoint.x < touchPoint.x && touchPoint.y < self.frame.height / 2 {
+            // counterClockwise drag
+            if touchPoint.x > self.frame.width / 2 { angle = 0 }
+        }
+        else if previousTouchPoint.x > touchPoint.x && touchPoint.y < self.frame.height / 2 {
+            //counterClockwise drag
+            if touchPoint.x < self.frame.width / 2 { angle = 2*π }
         }
         
         if self.layer.pixelIsOpaque(point: touchPoint) && self.getPixelColor(fromPoint: touchPoint) != mainButtonController.buttonView.buttonColor {
             touchWheelValue = Double(10 * angle / (2 * π))
+            previousTouchPoint = touchPoint
             if recogniser.state == .ended {
                 delegate.passOnTouchWheelScore(score: touchWheelValue, ended: true)
+                previousTouchPoint = CGPoint.zero
             } else {
                 delegate.passOnTouchWheelScore(score: touchWheelValue, ended: false)
             }
