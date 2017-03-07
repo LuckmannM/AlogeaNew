@@ -42,7 +42,6 @@ class EventsListViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.trash, target: self, action: #selector(startDeleteSelection))
         eventsFRC.delegate = self
     }
 
@@ -123,6 +122,12 @@ class EventsListViewController: UITableViewController {
                 }
                 count += 1
             }
+        }
+        
+        if selectedCellsPaths.count > 0 {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.trash, target: self, action: #selector(startDeleteSelection))
+        } else {
+            self.navigationItem.rightBarButtonItem = nil
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
