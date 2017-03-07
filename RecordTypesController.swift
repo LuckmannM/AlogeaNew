@@ -109,6 +109,20 @@ class RecordTypesController: NSObject {
         return nil
     }
     
+    func returnRecordTypesWithSavedEvents() -> [RecordType] {
+        
+        var scoreTypes = [RecordType]()
+        
+        for type in allTypes.fetchedObjects! {
+            let events = EventsDataController.sharedInstance().fetchSpecificEventsFRC(name: scoreEvent, type: type.name!)
+            if (events.fetchedObjects?.count)! > 0 {
+                scoreTypes.append(type)
+            }
+        }
+        return scoreTypes
+    
+    }
+    
     func rename(oldName: String, newName: String) {
         
         let request = NSFetchRequest<RecordType>(entityName: "RecordType")

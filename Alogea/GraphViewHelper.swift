@@ -57,7 +57,7 @@ class GraphViewHelper: NSObject {
 
     var graphEventsFRC: NSFetchedResultsController<Event> {
         
-        let frc = EventsDataController.sharedInstance().fetchSpecificEvents(name: self.selectedScore, type: scoreEvent)
+        let frc = EventsDataController.sharedInstance().fetchSpecificEventsFRC(name: self.selectedScore, type: scoreEvent)
         frc.delegate = self
         return frc
     }

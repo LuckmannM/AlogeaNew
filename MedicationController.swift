@@ -199,6 +199,22 @@ class MedicationController: NSObject {
 
     }
     
+    func returnSingleMed(withID: String) -> [DrugEpisode]? {
+        
+        let predicate = NSPredicate(format: "drugID == %@", [withID])
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        request.predicate = predicate
+        
+        do {
+            let meds = try managedObjectContext.fetch(request)
+            return meds
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 5.1", systemError: error, errorInfo: "error fetching named  med with id \(withID)for returnSingleMed")
+            return nil
+        }
+
+    }
+    
     // - Methods:
     
     

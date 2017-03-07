@@ -61,9 +61,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
             graphContainerView.graphView.displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
             graphContainerView.graphView.minDisplayDate = graphContainerView.graphView.maxDisplayDate.addingTimeInterval(-graphContainerView.graphView.displayedTimeSpan)
         }
-        // transferred to here from GraphView.init()
-        
-
         
         graphContainerView.reloadAllViews()
     }
