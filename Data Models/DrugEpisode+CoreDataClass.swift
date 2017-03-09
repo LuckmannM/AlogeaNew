@@ -346,14 +346,23 @@ public class DrugEpisode: NSManagedObject {
     
     func countTaken(fromDate: Date? = nil, toDate: Date? = nil) -> String {
         
+        var term: String!
+        
+        if frequencyVar > 24*3600 {
+            term = "Number used: "
+        }else {
+            term = "Number taken: "
+        }
+
         // request is set between specific dates
         if fromDate != nil {
+            
             if regularlyVar == false {
-                return "Number taken: \(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: fromDate, andEndDate: toDate))"
+                return term + "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: fromDate, andEndDate: toDate))"
             } else {
                 let timeTakenFor = toDate!.timeIntervalSince(fromDate!)
                 let timesTaken = Int(timeTakenFor / frequencyVar)
-                return "Number taken:\(timesTaken)"
+                return term + "\(timesTaken)"
             }
         }
             // request does not have specific dates
@@ -369,10 +378,10 @@ public class DrugEpisode: NSManagedObject {
             }
             
             if regularlyVar == false {
-                return "Number taken: \(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: startDateVar, andEndDate: stopCountingDate))"
+                return term + "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: startDateVar, andEndDate: stopCountingDate))"
             } else {
                 let timesTaken = Int(stopCountingDate.timeIntervalSince(startDate as! Date) / frequencyVar)
-                return "Number taken: \(timesTaken)"
+                return term + "\(timesTaken)"
             }
         }
     }

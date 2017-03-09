@@ -284,7 +284,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 cell.isUserInteractionEnabled = false
                 cell.accessoryType = .none
                 cell.doseLabel.text = ""
-                cell.otherInfoLabel.text = "Full version required for details"
+                cell.otherInfoLabel.text = "Medicines expansion required"
             }
 
         default:
