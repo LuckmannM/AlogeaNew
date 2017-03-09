@@ -101,6 +101,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
+        guard self.tableView != nil else {
+            return
+        }
         coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
             (context: UIViewControllerTransitionCoordinatorContext) -> Void in
                 self.tableView.reloadData()

@@ -155,6 +155,7 @@ class EventTypeSettings: UITableViewController {
                 var cell = tableView.cellForRow(at: indexPath) as! TextInputCell
                 tableView.reloadRows(at: [indexPath], with: .none)
                 cell = tableView.cellForRow(at: indexPath) as! TextInputCell
+                cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()
                 
         } )
@@ -262,7 +263,7 @@ class EventTypeSettings: UITableViewController {
             EventsDataController.sharedInstance().renameEvents(ofType: eventType, oldName: originalName!, newName: newName)
             
             self.tableView.reloadSections([forIndexPath.section], with: .automatic)
-            
+            cell.textField.isUserInteractionEnabled = false
             
         })
         
