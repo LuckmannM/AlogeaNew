@@ -100,6 +100,9 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
+        guard self.tableView != nil else {
+            return
+        }
         
         if UIDevice().userInterfaceIdiom == .phone {
             coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
