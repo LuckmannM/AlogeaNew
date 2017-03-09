@@ -14,6 +14,7 @@ import UserNotifications
 let notification_MedRemindersOn = "MedRemindersOn"
 let iCloudBackUpsOn = "iCloudBackupsOn"
 let notification_MedReminderCategory = "DrugReminderCategory"
+let notification_ScoreReminderCategory = "ScoreReminderCategory"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -24,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var mainView: MainViewController!
     var backups: Backups!
     
-    var reminderNotificationCategoryRegistered = false
+    var medReminderNotificationCategoryRegistered = false
+    var scoreReminderNotificationCategoryRegistered = false
     
     var notificationsAuthorised: Bool = false
     var authorisedNotificationSettings: UNNotificationSettings?
@@ -110,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
-        reviewNotificationsDeliveredInBackground()
+        checkDeliveredNotifications()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -151,39 +153,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func registerNotificationCategories() {
         
+        // defining actions displayed as buttons with the notifications
+        let dismissAction = UNNotificationAction(identifier: "dismissAction", title: "dismiss", options: UNNotificationActionOptions(rawValue: 0))
+
         let center = UNUserNotificationCenter.current()
         center.getNotificationCategories(completionHandler: {
             (categories) in
             
+            var isRegistered = false
+            
+            // 1. check if medReminderCategory is registered, if not register it
             for category in categories {
                 if category.identifier == notification_MedReminderCategory {
-                    self.reminderNotificationCategoryRegistered = true
-                    return
+                    self.medReminderNotificationCategoryRegistered = true
+                    isRegistered = true
                 }
             }
-
-        })
-        
-        // defining actions displayed as buttons with the notifications
-        let dismissAction = UNNotificationAction(identifier: "dismissAction", title: "dismiss", options: UNNotificationActionOptions(rawValue: 0))
-        
-        // defining categories containing one or more actions
-        let drugReminderCategory = UNNotificationCategory(identifier: notification_MedReminderCategory, actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
-        
-        center.setNotificationCategories([drugReminderCategory])
-    }
-    
-    // possible option of checking notifications that have been displayed while App in background
-    func reviewNotificationsDeliveredInBackground() {
-        let center = UNUserNotificationCenter.current()
-        center.getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
-            for notification in notifications {
-                if notification.request.content.categoryIdentifier == notification_MedReminderCategory {
-                    
-                    // do relevant stuff e.g. check if repeat is 3-daily and re-schedule next repeat manually
+            if !isRegistered {
+                let drugReminderCategory = UNNotificationCategory(identifier: notification_MedReminderCategory, actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
+                center.setNotificationCategories([drugReminderCategory])
+            }
+            
+            isRegistered = false
+            // 2. check if scoreReminderCategory is registered, if not register it
+            for category in categories {
+                if category.identifier == notification_ScoreReminderCategory {
+                    self.scoreReminderNotificationCategoryRegistered = true
+                    isRegistered = true
                 }
             }
-            center.removeDeliveredNotifications(withIdentifiers: ["drugID here"])
+            if !isRegistered {
+                let scoreReminderCategory = UNNotificationCategory(identifier: notification_ScoreReminderCategory, actions: [dismissAction], intentIdentifiers: [], options: .customDismissAction)
+                
+                center.setNotificationCategories([scoreReminderCategory])
+            }
         })
     }
     
@@ -217,7 +220,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             (requests: [UNNotificationRequest]) in
             for request in requests {
                 if request.content.categoryIdentifier == withCategory {
-                    print("cancelling notification\(request)")
                     center.removePendingNotificationRequests(withIdentifiers: [request.identifier])
                 }
             }
@@ -225,22 +227,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     // handling notification actions received from system
-    
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        //        // handling non-specific/non-action user actions e.g. deleting notification in NotificationCenter
-//        if response.actionIdentifier == UNNotificationDismissActionIdentifier {
-//            // The user dismissed the notification without taking action
-//            print("user dismissed notification")
-//        }
-//        else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
-//            // The user launched the app
-//            print("user has tappe on notification")
-//        }
-        
         if response.notification.request.content.categoryIdentifier == notification_MedReminderCategory {
-                if response.notification.request.content.userInfo["manualRepeat"] as! Bool == true {
-                    
+                if (response.notification.request.content.userInfo["manualRepeat"] as? Bool ?? false) {
+                    self.rescheduleMedReminder(drugID: response.notification.request.content.userInfo["drugID"] as! String)
                 }
         }
         
@@ -280,7 +271,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // this is set in DrugEpisode.scheduleReminder function only for meds with frequencyVar of >1 day and <1 week
         // this does not allow to use the 'repeat' for notificationRequest.
         // this manually reschedules these meds to their frequency, however, if the App is not run/ in the foreground from triggerDate and the next due time the next drugReminder is NOT scheduled, so there will be no alert.
-        // this functioanility would require the app to be notified of the notification while in the background when the user does NOT tap on the notification, and being able to run this code while in the background
+        // this functionality would require the app to be notified of the notification while in the background when the user does NOT tap on the notification, and being able to run this code while in the background
         let fetchRequest = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         let predicate = NSPredicate(format: "drugID == %@", argumentArray: [drugID])
         fetchRequest.predicate = predicate
