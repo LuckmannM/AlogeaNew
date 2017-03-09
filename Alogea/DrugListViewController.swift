@@ -103,10 +103,13 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         guard self.tableView != nil else {
             return
         }
-        coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
-            (context: UIViewControllerTransitionCoordinatorContext) -> Void in
-                self.tableView.reloadData()
-        })
+        
+        if UIDevice().userInterfaceIdiom == .phone {
+            coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
+                (context: UIViewControllerTransitionCoordinatorContext) -> Void in
+                    self.tableView.reloadData()
+            })
+        }
     }
 
     

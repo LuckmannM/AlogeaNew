@@ -83,15 +83,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         
 // DEBUG
-        print("Checking pending notifications...")
-        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: {
-            (requests: [UNNotificationRequest]) in
-            for request in requests {
-                if request.content.categoryIdentifier == notification_MedReminderCategory {
-                    print("pending notification: \(request)")
-                }
-            }
-        })
+//        print("Checking pending notifications...")
+//        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: {
+//            (requests: [UNNotificationRequest]) in
+//            for request in requests {
+//                if request.content.categoryIdentifier == notification_MedReminderCategory {
+//                    print("pending notification: \(request)")
+//                }
+//            }
+//        })
 // DEBUG
 
         return true
