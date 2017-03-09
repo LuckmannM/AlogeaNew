@@ -44,6 +44,7 @@ class TouchWheelView: UIView {
     var touchPoint = CGPoint.zero
     var touchWheelValue: Double = 0.0
     var previousTouchPoint = CGPoint.zero
+    var previousValue: Double = 0
     
     var innerRect: CGRect {
         return bounds.insetBy(dx: lineWidth + margin, dy: lineWidth + margin)
@@ -152,6 +153,8 @@ class TouchWheelView: UIView {
     
     // MARK: - gestureFunctions
     
+    // FIXME: still causes the odd 0 or 10.0 appear unexpectedly at same pan positions, together with the 'previousValue' mechanism at end of pan below
+    
     @IBAction func touchGesture(recogniser: UIPanGestureRecognizer) {
         
         let π: Float = Float(M_PI)
@@ -170,29 +173,43 @@ class TouchWheelView: UIView {
             x: (touchPoint.x - self.frame.width / 2),
             y: (touchPoint.y - self.frame.height / 2 )
         )
+
         
         // red/green wheel transition at top  - due to overlap in gradient arc drawing - is at ca. 3º 'east'
-        // so add slightly more than π/2 to align 0 angle to border
         angle = atan2f(Float(distanceFromCentre.x),Float(distanceFromCentre.y)) + π
         
+        
         //the next stops from acidentally 'overshooting', stopping at 0 or 360º
-        if previousTouchPoint.x < touchPoint.x && touchPoint.y < self.frame.height / 2 {
+
+        if previousTouchPoint.x <= touchPoint.x && touchPoint.y < self.frame.height / 2 {
             // counterClockwise drag
             if touchPoint.x > self.frame.width / 2 { angle = 0 }
         }
-        else if previousTouchPoint.x > touchPoint.x && touchPoint.y < self.frame.height / 2 {
+        else if previousTouchPoint.x >= touchPoint.x && touchPoint.y < self.frame.height / 2 {
             //counterClockwise drag
             if touchPoint.x < self.frame.width / 2 { angle = 2*π }
         }
         
         if self.layer.pixelIsOpaque(point: touchPoint) && self.getPixelColor(fromPoint: touchPoint) != mainButtonController.buttonView.buttonColor {
             touchWheelValue = Double(10 * angle / (2 * π))
-            previousTouchPoint = touchPoint
+            print("twValue \(touchWheelValue)")
+            
             if recogniser.state == .ended {
-                delegate.passOnTouchWheelScore(score: touchWheelValue, ended: true)
+                if previousValue == 0.0 || previousValue == 10.0 {
+                    // the above overshoot protection doesn't catch when Pan has came to a stop at the end
+                    // as previousTouchPoint == touchPoint so the last touchWheelvalue will be evaluated as overshot
+                    // if previousValue is 0 or 10 then this value is passed on
+                    delegate.passOnTouchWheelScore(score: previousValue, ended: true)
+                    
+                } else {
+                    delegate.passOnTouchWheelScore(score: touchWheelValue, ended: true)
+                    
+                }
                 previousTouchPoint = CGPoint.zero
             } else {
                 delegate.passOnTouchWheelScore(score: touchWheelValue, ended: false)
+                previousTouchPoint = touchPoint
+                previousValue = touchWheelValue
             }
         }
     }
