@@ -344,6 +344,48 @@ public class DrugEpisode: NSManagedObject {
         return componentFormatter.string(from: timeInterval)!
     }
     
+    func countTaken(fromDate: Date? = nil, toDate: Date? = nil) -> String {
+        
+        var term: String!
+        
+        if frequencyVar > 24*3600 {
+            term = "Number used: "
+        }else {
+            term = "Number taken: "
+        }
+
+        // request is set between specific dates
+        if fromDate != nil {
+            
+            if regularlyVar == false {
+                return term + "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: fromDate, andEndDate: toDate))"
+            } else {
+                let timeTakenFor = toDate!.timeIntervalSince(fromDate!)
+                let timesTaken = Int(timeTakenFor / frequencyVar)
+                return term + "\(timesTaken)"
+            }
+        }
+            // request does not have specific dates
+            // check if isCurrent otherwise count only until endDate
+        else {
+            var stopCountingDate: Date
+            if Date().compare(endDateVar ?? Date()) == .orderedDescending {
+                // endDate earlier than now
+                stopCountingDate = endDateVar!
+                
+            } else {
+                stopCountingDate = Date()
+            }
+            
+            if regularlyVar == false {
+                return term + "\(MedicationController.sharedInstance().countPRNMedEvents(forMedName: nameVar, betweenStartDate: startDateVar, andEndDate: stopCountingDate))"
+            } else {
+                let timesTaken = Int(stopCountingDate.timeIntervalSince(startDate as! Date) / frequencyVar)
+                return term + "\(timesTaken)"
+            }
+        }
+    }
+    
     func endDateString() -> String {
         
         if endDateVar == nil { return "" }
@@ -366,7 +408,7 @@ public class DrugEpisode: NSManagedObject {
         let altFrequencyTerms:[(String, Double)] = [("hourly",3600.0),("every 4 hours",4*3600.0),("every 6 hours",6*3600.0),("every 8 hours",8*3600.0),("twice daily",12*3600.0),("once daily",24*3600.0),("every other day",48*3600.0),("every three days",72*3600.0),("once weekly",7*24*3600.0)]
         
         if regularlyVar == false {
-            freqString = "Max. "
+            freqString = "max. "
         }
         
         for aTerm in altFrequencyTerms {

@@ -84,7 +84,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         // the next hides the search bar until it is dragged down by user
         tableView.contentOffset = CGPoint(x: 0.0, y: self.tableView.tableHeaderView!.frame.size.height)
         
-//        drugDictionary = DrugDictionary.sharedInstance()
         inAppStore = InAppStore.sharedInstance()
         drugList.delegate = self
 
@@ -212,49 +211,24 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             cell.isUserInteractionEnabled = true
             cell.accessoryType = .disclosureIndicator
             
-            /* OLD
-            if UIDevice().userInterfaceIdiom == .pad {
-                cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.doseLabel.text = aDrug.dosesShortString() + ".  " + aDrug.regularityLong$() + aDrug.reminderActive()
-                if aDrug.endDate != nil {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
-                } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
-                }
-            } else {
-                if self.view.frame.size.width > self.view.frame.size.height { // landscape
-                    
-                } else { // portrait
-                    cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-                    cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
-                    if aDrug.endDate != nil {
-                        cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
-                    } else {
-                        cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.regularityShort$())"
-                    }
-                }
-            }
-            */
-            
-            
             if UIDevice().userInterfaceIdiom == .phone && (self.view.frame.size.height > self.view.frame.size.width) {
                 // iPhone in portrait - less space
                 cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
                 cell.doseLabel.text = aDrug.dosesShortString() + aDrug.reminderActive()
-                if aDrug.endDate != nil {
+                if aDrug.endDateVar != nil {
                     cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()); stop \(aDrug.endDateString())"
                 } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())" // . \(aDrug.regularityShort$())"
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
                 }
                 
             } else {
                 // iPad or iPhone landscape  - more space to display
                 cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
                 cell.doseLabel.text = aDrug.dosesShortString() + ", " + aDrug.regularityLong$() + aDrug.reminderActive()
-                if aDrug.endDate != nil {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString())"
+                if aDrug.endDateVar != nil {
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()), until \(aDrug.endDateString()). \(aDrug.countTaken())"
                 } else {
-                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug())"
+                    cell.otherInfoLabel.text = "Since \(aDrug.returnTimeOnDrug()). \(aDrug.countTaken())"
                 }
             }
             
@@ -270,20 +244,47 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             if inAppStore.checkDrugFormularyAccess() == true {
                 cell.isUserInteractionEnabled = true
                 cell.accessoryType = .disclosureIndicator
-                cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
-                cell.doseLabel.text = aDrug.returnTimeOnDrug()
-                if aDrug.endDate != nil {
-                    cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
-                } else { cell.otherInfoLabel.text = "no end date" }
+                
+                
+//                cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
+//                cell.doseLabel.text = aDrug.returnTimeOnDrug()
+//                if aDrug.endDate != nil {
+//                    cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
+//                } else { cell.otherInfoLabel.text = "no end date" }
+                
+                if UIDevice().userInterfaceIdiom == .phone && (self.view.frame.size.height > self.view.frame.size.width) {
+                    // iPhone in portrait - less space
+                    cell.nameLabel.text = aDrug.returnName() // using 'name' results in blank for returning drugs when using searchController druglistFRC
+                    cell.doseLabel.text = aDrug.dosesShortString()
+                    if aDrug.endDateVar != nil {
+                        cell.otherInfoLabel.text = "stopped on \(aDrug.endDateString())"
+                    } else {
+                        cell.otherInfoLabel.text = "no end date"
+                    }
+                    
+                } else {
+                    // iPad or iPhone landscape  - more space to display
+                    cell.nameLabel.text = aDrug.returnName() + " " + aDrug.substancesForDrugList()// using 'name' results in blank for returning drugs when using searchController druglistFRC
+                    cell.doseLabel.text = aDrug.dosesShortString() + ", " + aDrug.regularityLong$()
+                    if aDrug.endDateVar != nil {
+                        cell.otherInfoLabel.text = "Stopped on \(aDrug.endDateString()), taken for \(aDrug.returnTimeOnDrug()). \(aDrug.countTaken(fromDate: aDrug.startDateVar, toDate: aDrug.endDateVar))"
+                    } else {
+                        cell.otherInfoLabel.text = "Taken for \(aDrug.returnTimeOnDrug()). \(aDrug.countTaken())"
+                    }
+                }
+
+                
                 cell.ratingButton.isEnabled = false
                 cell.ratingImageForButton(effect: aDrug.returnEffect(), sideEffects: aDrug.returnSideEffect())
+                
+                
             }
             else {
                 cell.nameLabel.text = "Discontinued"
                 cell.isUserInteractionEnabled = false
                 cell.accessoryType = .none
                 cell.doseLabel.text = ""
-                cell.otherInfoLabel.text = "Full version required for details"
+                cell.otherInfoLabel.text = "Medicines expansion required"
             }
 
         default:
@@ -396,10 +397,10 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         let lf = "\n"
         let titleDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.title1)
         let bodyDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.body)
-        let headerDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.title3)
+        //let headerDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: UIFontTextStyle.title3)
         let titleFont = UIFont(descriptor: titleDescriptor, size: 16)
         let bodyFont = UIFont(descriptor: bodyDescriptor, size: 12)
-        let headerFont = UIFont(descriptor: headerDescriptor, size: 14.0)
+        //let headerFont = UIFont(descriptor: headerDescriptor, size: 14.0)
         
         let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
@@ -410,11 +411,12 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         }()
         
         
-        let titleString = "Medicine List" + " (" + dateFormatter.string(from: Date()) + ")" + lf + lf
+        let titleString = "ALOGEA® Medicines List" + " (" + dateFormatter.string(from: Date()) + ")" + lf + lf
         let title = NSAttributedString(
             string: titleString,
             attributes: [NSFontAttributeName: titleFont,
-                         NSUnderlineColorAttributeName: UIColor.black]
+                         NSUnderlineColorAttributeName: UIColor.black,
+                         NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue]
         )
         attributedText.append(title)
         
@@ -425,20 +427,24 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             let titleText = NSAttributedString(
                 string: simpleString,
                 attributes: [NSFontAttributeName: titleFont,
-                             NSUnderlineColorAttributeName: UIColor.black]
+                             NSUnderlineColorAttributeName: UIColor.black,
+                             NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue]
             )
             
             simpleString = lf + tab2 + drug.dosesAndFrequencyForPrint()
-            if drug.endDate != nil {
+            
+            if drug.endDateVar != nil {
                 simpleString += lf + tab2 + dateFormatter.string(from: drug.startDateVar)
                 simpleString += " - " + dateFormatter.string(from: drug.endDateVar!) +  " (" + drug.returnTimeOnDrug() + ")"
             } else {
                 simpleString += lf + tab2 + "started: " + dateFormatter.string(from: drug.startDateVar)
                 simpleString += " (since " + drug.returnTimeOnDrug() + ")"
             }
-            
+
+            simpleString += lf + tab2 + "\(drug.countTaken())"
+
             if drug.effectiveness != nil {
-                simpleString += lf + tab2 + "benefit: " + drug.effectiveness!
+                simpleString += lf + tab2 + "Benefit: " + drug.effectiveness!
             }
             
             if (drug.sideEffectsVar?.count)! > 0 {
@@ -446,15 +452,16 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                 for se in drug.sideEffectsVar! {
                     seString += se + ", "
                 }
-                simpleString += lf + tab2 + "side effects: " + seString
+                simpleString += lf + tab2 + "Side effects: " + seString
             }
+            
             let headerText = NSAttributedString(
                 string: simpleString,
-                attributes: [NSFontAttributeName: headerFont]
+                attributes: [NSFontAttributeName: bodyFont]
             )
             
             if drug.notes != nil {
-                simpleString = lf + tab2 + drug.notes!
+                simpleString = lf + tab2 + "Personal notes: " + drug.notes! + lf
             }
             
             simpleString += lf
