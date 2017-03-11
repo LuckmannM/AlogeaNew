@@ -311,20 +311,37 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             return formatter
         }()
         
-        print("log severe episodes:")
-
-        /*
+        print()
+        print("scoreTypeStats...")
+        
+        let stats = StatisticsController.sharedInstance().calculateScoreTypeStats()
+        
+        for stat in stats {
+            print()
+            print("stats for scoreRType \(stat.scoreTypeName)")
+            print("...for scoreType: \(stat.scoreTypeName)")
+            print("max \(numberFormatter.string(from: stat.max as NSNumber))")
+            print("min \(numberFormatter.string(from: stat.min as NSNumber))")
+            print("mean \(numberFormatter.string(from: stat.mean as NSNumber))")
+            print("Number VAS>5 \(numberFormatter.string(from: stat.moreThan5Pct as NSNumber))%")
+            print("Time VAS>5 \(numberFormatter.string(from: stat.moreThan5TimePct as NSNumber))%")
+            print("VAS<3 \(numberFormatter.string(from: stat.lessThan3Pct as NSNumber))%")
+            print("no of score events: \(numberFormatter.string(from: stat.numberOfScores as NSNumber))")
+            
+        }
+        
+        print()
         print("log Meds stats...")
         //var scoreStats:[(String, ScoreStats)]?
         
-        for med in drugList.fetchedObjects! {
-            let scoreStats = StatisticsController.sharedInstance().singleMedStats(forMed: med)
+        for med in MedicationController.sharedInstance().regMedsSortedByStartDateFRC.fetchedObjects! {
+            let stats = StatisticsController.sharedInstance().singleMedStats(forMed: med)
             
-            if scoreStats != nil {
-                for stats in scoreStats! {
+            if stats != nil {
+                for stats in stats! {
                     print()
                     print("stats for Med \(stats.medName)")
-                    print("...for scoreType: \(stats.scoreName)")
+                    print("...for scoreType: \(stats.scoreTypeName)")
                     print("max \(numberFormatter.string(from: stats.max as NSNumber))")
                     print("min \(numberFormatter.string(from: stats.min as NSNumber))")
                     print("mean \(numberFormatter.string(from: stats.mean as NSNumber))")
@@ -335,7 +352,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
               }
             }
         }
-        */
+
     }
     
     func debugEraseAll() {

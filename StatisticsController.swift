@@ -61,8 +61,8 @@ class StatisticsController {
             if let events = EventsDataController.sharedInstance().fetchSpecificEvents(name: type.name!, type: scoreEvent) {
                 
                 var scoreArray = [Double]()
-                var over5Count = 0
-                var under3Count = 0
+                var over5Count: Double = 0
+                var under3Count: Double = 0
                 let newStats = ScoreTypeStats()
                 
                 newStats.scoreTypeName = type.name!
@@ -84,8 +84,8 @@ class StatisticsController {
                 newStats.min = scoreArray.min()!
                 newStats.mean = scoreArray.mean()
                 
-                newStats.moreThan5Pct = 100 * Double(over5Count / scoreArray.count)
-                newStats.lessThan3Pct = 100 * Double(under3Count / scoreArray.count)
+                newStats.moreThan5Pct = 100.0 * over5Count / Double(scoreArray.count)
+                newStats.lessThan3Pct = 100.0 * under3Count / Double(scoreArray.count)
                 
                 let totalScoreTypeTime = (events.last?.date as! Date).timeIntervalSince(events.first?.date as! Date)
                 
@@ -211,7 +211,7 @@ class StatisticsController {
                 
                 print ("there are \(events.count) scoreEvents of type \(scoreType.name) for this drug...")
                 
-                if let stats = calculateStats(withScoreEvents: events,forMed: forMed) {
+                if let stats = calculateMedStats(withScoreEvents: events,forMed: forMed) {
                     statsForScores.append(stats)
                 }
             }
@@ -225,7 +225,7 @@ class StatisticsController {
     }
 
     
-    private func calculateStats(withScoreEvents: [Event], forMed: DrugEpisode ) -> MedStats? {
+    private func calculateMedStats(withScoreEvents: [Event], forMed: DrugEpisode ) -> MedStats? {
         
         guard withScoreEvents.count > 0 else {
             return nil
@@ -265,15 +265,25 @@ class StatisticsController {
 //        let timeOnDrug = endingDate.timeIntervalSince(forMed.startDateVar)
 //        if timeOnDrug > 0 {
 //        }
-        stats.moreThan5TimePct = timeOver5(startDate: forMed.startDateVar, endDate: endingDate,  scoreEvents: withScoreEvents)
+        
+        let totalScoreTime = (withScoreEvents.last!.date as! Date).timeIntervalSince(withScoreEvents.first!.date as! Date)
+        //stats.moreThan5TimePct = timeOver5(startDate: forMed.startDateVar, endDate: endingDate,  scoreEvents: withScoreEvents)
+        
+        if let episodeForScoreType = calculateScoreEpisodesOver5(events: withScoreEvents) {
+            var timeOver5 = TimeInterval()
+            for (start, end) in episodeForScoreType {
+                timeOver5 += end.timeIntervalSince(start)
+            }
+            stats.moreThan5TimePct = 100 * timeOver5 / totalScoreTime
+        }
         
         stats.computed = true
         stats.numberOfScores  = withScoreEvents.count
         
         return stats
-        
     }
     
+    /*
     private func timeOver5(startDate: Date, endDate: Date, scoreEvents: [Event]) -> Double {
         // find all scoreEvents for different existing scores within start and endDate
         
@@ -336,6 +346,10 @@ class StatisticsController {
         
         return Double(100 * timeAbove5 / totalScoreTime!)
     }
+ 
+     */
+    
+    // MARK: - Episode stats
     
     func episodeStats() -> [EpisodeStats]? {
         

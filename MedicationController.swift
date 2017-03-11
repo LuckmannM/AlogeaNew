@@ -223,6 +223,12 @@ class MedicationController: NSObject {
         }
     }
     
+    func medStats(forMed: DrugEpisode) -> [MedStats]? {
+        
+        return StatisticsController.sharedInstance().singleMedStats(forMed: forMed)
+        
+    }
+    
     
     // - Methods:
     
