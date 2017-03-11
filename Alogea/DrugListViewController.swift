@@ -312,7 +312,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         }()
         
         print("log severe episodes:")
-        StatisticsController.sharedInstance().scoreTypeEpisodesOver5()
 
         /*
         print("log Meds stats...")

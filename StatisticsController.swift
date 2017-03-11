@@ -10,7 +10,7 @@ import Foundation
 
 class MedStats {
     
-    var scoreName = ""
+    var scoreTypeName = ""
     var medName = ""
     
     var mean: Double = 0.0
@@ -36,16 +36,15 @@ class EpisodeStats: MedStats {
 }
 
 class ScoreTypeStats: MedStats {
-    var scoreTypeName = String()
     
+    var startDate = Date()
+    var endDate = Date()
+
 }
 
 
 class StatisticsController {
     
-//    var statisticsSet = [ScoreStats]()
-//    let medsController = MedicationController.sharedInstance()
-//    let eventsController = EventsDataController.sharedInstance()
     
     class func sharedInstance() -> StatisticsController {
         return statisticsController
@@ -77,6 +76,8 @@ class StatisticsController {
                     }
                     
                 }
+                newStats.startDate = events.first!.date as! Date
+                newStats.endDate = events.last!.date as! Date
                 
                 newStats.numberOfScores  = scoreArray.count
                 newStats.max = scoreArray.max()!
@@ -94,7 +95,6 @@ class StatisticsController {
                         timeOver5 += end.timeIntervalSince(start)
                     }
                     newStats.moreThan5TimePct = 100 * timeOver5 / totalScoreTypeTime
-                    print("moreThan5TimePct \(newStats.moreThan5TimePct)%")
                     scoreTypeStats.append(newStats)
                 }
             }
@@ -103,14 +103,14 @@ class StatisticsController {
         
     }
     
-    func calculateScoreEpisodesOver5(events:[Event]) -> [(Date,Date)]? {
+    private func calculateScoreEpisodesOver5(events:[Event]) -> [(Date,Date)]? {
 
         var datesArray = [(start: Date, end:Date)]()
         
         var index = 0
         
         repeat {
-            // find next date with score>5
+            // find next date with score>5 as eposide start
             var startDate: Date?
             var endDate: Date?
             for i in index..<events.count {
@@ -138,9 +138,8 @@ class StatisticsController {
                 // no event with vas>5 found
                 return nil
             }
-            //print("start date is: \(startDate!)")
             
-            // find next date when score<=5
+            // find next date when score<=5  as episode end
             for i in index..<events.count {
                 // print("endDate loop: event vas = \(events[i].vas), date = \(events[i].date)")
                 if events[i].vas!.doubleValue <= 5.0 {
@@ -157,10 +156,9 @@ class StatisticsController {
             }
             
             if endDate == nil {
-                // no event after start-event with vas<=5
-                endDate = Date()
+                // no event after start-event with vas<=5; adding 1 sec to last date to avoid long gaps until current date
+                endDate = events.last!.date?.addingTimeInterval(1) as Date?
             }
-            // print("end date is: \(endDate!)")
             
             let newEpisode = (start: startDate!, end: endDate!)
             //print("new episode dates: \(newEpisode)")
@@ -239,18 +237,15 @@ class StatisticsController {
         var under3Count = 0
 
         for event in withScoreEvents {
-            print("... event date: \(event.date)")
-            print("... event vas: \(event.vas!)")
             scoreArray.append(event.vas as! Double)
             if event.vas!.doubleValue > 5.0 {
                 over5Count += 1
             } else if event.vas!.doubleValue < 3.0 {
                 under3Count += 1
             }
-            print("...over5Count = \(over5Count)")
         }
         
-        stats.scoreName = withScoreEvents[0].name ?? ""
+        stats.scoreTypeName = withScoreEvents[0].name ?? ""
         stats.medName = forMed.nameVar
         
         stats.max = scoreArray.max() ?? 0
