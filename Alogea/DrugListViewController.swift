@@ -326,6 +326,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             print("Number VAS>5 \(numberFormatter.string(from: stat.moreThan5Pct as NSNumber))%")
             print("Time VAS>5 \(numberFormatter.string(from: stat.moreThan5TimePct as NSNumber))%")
             print("VAS<3 \(numberFormatter.string(from: stat.lessThan3Pct as NSNumber))%")
+            print("Time VAS<3 \(numberFormatter.string(from: stat.lessThan3TimePct as NSNumber))%")
             print("no of score events: \(numberFormatter.string(from: stat.numberOfScores as NSNumber))")
             
         }
@@ -348,6 +349,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
                     print("Number VAS>5 \(numberFormatter.string(from: stats.moreThan5Pct as NSNumber))%")
                     print("Time VAS>5 \(numberFormatter.string(from: stats.moreThan5TimePct as NSNumber))%")
                     print("VAS<3 \(numberFormatter.string(from: stats.lessThan3Pct as NSNumber))%")
+                    print("Time VAS<3 \(numberFormatter.string(from: stats.lessThan3TimePct as NSNumber))%")
                     print("no of score events: \(numberFormatter.string(from: stats.numberOfScores as NSNumber))")
               }
             }

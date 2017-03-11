@@ -97,6 +97,15 @@ class StatisticsController {
                     newStats.moreThan5TimePct = 100 * timeOver5 / totalScoreTypeTime
                     scoreTypeStats.append(newStats)
                 }
+                
+                if let episodes = calculateScoreEpisodesUnder3(events: events) {
+                    var timeUnder3 = TimeInterval()
+                    for (start, end) in episodes {
+                        timeUnder3 += end.timeIntervalSince(start)
+                    }
+                    newStats.lessThan3TimePct = 100 * timeUnder3 / totalScoreTypeTime
+                }
+                scoreTypeStats.append(newStats)
             }
         }
         return scoreTypeStats
@@ -136,7 +145,7 @@ class StatisticsController {
             
             guard startDate != nil else {
                 // no event with vas>5 found
-                return nil
+                return datesArray
             }
             
             // find next date when score<=5  as episode end
@@ -149,6 +158,71 @@ class StatisticsController {
                     let scoreTo5 = events[i-1].vas!.doubleValue - 5.0
                     let timeTo5 = dTime * TimeInterval(abs(scoreTo5 / dScore))
                     endDate = events[i-1].date!.addingTimeInterval(timeTo5) as Date?
+                    index = i + 1
+                    break
+                }
+                index = i
+            }
+            
+            if endDate == nil {
+                // no event after start-event with vas<=5; adding 1 sec to last date to avoid long gaps until current date
+                endDate = events.last!.date?.addingTimeInterval(1) as Date?
+            }
+            
+            let newEpisode = (start: startDate!, end: endDate!)
+            //print("new episode dates: \(newEpisode)")
+            datesArray.append(newEpisode)
+        } while index < events.count
+        
+        return datesArray
+    }
+    
+    private func calculateScoreEpisodesUnder3(events:[Event]) -> [(Date,Date)]? {
+        
+        var datesArray = [(start: Date, end:Date)]()
+        
+        var index = 0
+        
+        repeat {
+            // find next date with score<3 as eposide start
+            var startDate: Date?
+            var endDate: Date?
+            for i in index..<events.count {
+                // print("startDate loop:  event vas = \(events[i].vas), date = \(events[i].date)")
+                if events[i].vas!.doubleValue < 3.0 {
+                    if index == 0 {
+                        startDate = events[i].date as Date?
+                        break
+                    }
+                    else {
+                        // earlier event with vas > 3
+                        let dScore = events[i-1].vas!.doubleValue - events[i].vas!.doubleValue
+                        let dTime = events[i].date!.timeIntervalSince(events[i-1].date as! Date)
+                        let scoreFrom3 = 3.0 - events[i].vas!.doubleValue
+                        let timeTo3 = dTime * TimeInterval(abs(scoreFrom3 / dScore))
+                        startDate = events[i].date!.addingTimeInterval(-timeTo3) as Date?
+                        index += 1
+                        break
+                    }
+                }
+                index += 1
+            }
+            
+            guard startDate != nil else {
+                // no event with vas<3 found
+                return datesArray
+            }
+            
+            // find next date when score>=3  as episode end
+            for i in index..<events.count {
+                // print("endDate loop: event vas = \(events[i].vas), date = \(events[i].date)")
+                if events[i].vas!.doubleValue >= 3.0 {
+                    // earlier event with vas > 5
+                    let dScore = events[i-1].vas!.doubleValue - events[i].vas!.doubleValue
+                    let dTime = events[i].date!.timeIntervalSince(events[i-1].date as! Date)
+                    let scoreTo3 = events[i-1].vas!.doubleValue - 3.0
+                    let timeTo3 = dTime * TimeInterval(abs(scoreTo3 / dScore))
+                    endDate = events[i-1].date!.addingTimeInterval(timeTo3) as Date?
                     index = i + 1
                     break
                 }
@@ -277,6 +351,14 @@ class StatisticsController {
             stats.moreThan5TimePct = 100 * timeOver5 / totalScoreTime
         }
         
+        if let episodes = calculateScoreEpisodesUnder3(events: withScoreEvents) {
+            var timeUnder3 = TimeInterval()
+            for (start, end) in episodes {
+                timeUnder3 += end.timeIntervalSince(start)
+            }
+            stats.lessThan3TimePct = 100 * timeUnder3 / totalScoreTime
+        }
+
         stats.computed = true
         stats.numberOfScores  = withScoreEvents.count
         
