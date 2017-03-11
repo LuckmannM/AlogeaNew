@@ -261,6 +261,38 @@ class EventsDataController: NSObject {
         return nil
     }
     
+    func fetchAllScoreEvents() -> [Event]? {
+        
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let typePredicate = NSPredicate(format: "type == %@", argumentArray: [scoreEvent])
+        request.predicate = typePredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        
+        do {
+            let fetchedEvents = try managedObjectContext.fetch(request)
+            return fetchedEvents
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.1", systemError: error, errorInfo: "error in EventsDataController fetchAllScoreEvents fetch function")
+        }
+        return nil
+    }
+    
+    func fetchAllMedEvents() -> [Event]? {
+        
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let typePredicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
+        request.predicate = typePredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        
+        do {
+            let fetchedEvents = try managedObjectContext.fetch(request)
+            return fetchedEvents
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.2", systemError: error, errorInfo: "error in EventsDataController fetchAllMedEvents fetch function")
+        }
+        return nil
+    }
+
 
     
     func fetchEventsBetweenDates(type: String, name:String? = nil, startDate: Date, endDate:Date) -> [Event]? {
@@ -285,7 +317,7 @@ class EventsDataController: NSObject {
             let fetchedEvents = try managedObjectContext.fetch(request)
             return fetchedEvents
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.3", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
         }
         return nil
 
@@ -337,6 +369,48 @@ class EventsDataController: NSObject {
         }
         
         return uniqueName
+    }
+    
+    func earliestScoreOrMedEventDate() -> Date? {
+        
+        
+        var startDate: Date?
+       
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: [scoreEvent])
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        request.predicate = anyScorePredicate
+        
+        do {
+            let scoreEvents = try managedObjectContext.fetch(request)
+            if scoreEvents.count > 0 {
+                startDate = scoreEvents[0].date as Date?
+            }
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 3", systemError: error, errorInfo: "error when fetching scoreEvents in earliestScoreOrMedEventDate function")
+        }
+ 
+        let request2 = NSFetchRequest<Event>(entityName: "Event")
+        let medPredicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
+        request2.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        request2.predicate = medPredicate
+        
+        do {
+            let medEvents = try managedObjectContext.fetch(request2)
+            if medEvents.count > 0 {
+                if let medStartDate = medEvents[0].date as? Date {
+                    if startDate != nil {
+                        if startDate!.compare(medStartDate) == .orderedDescending {
+                            startDate = medStartDate
+                        }
+                    }
+                }
+            }
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 4", systemError: error, errorInfo: "error when fetching medEvents in earliestScoreOrMedEventDate function")
+        }
+
+        return startDate
     }
 }
 

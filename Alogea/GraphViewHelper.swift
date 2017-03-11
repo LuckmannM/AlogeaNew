@@ -101,8 +101,7 @@ class GraphViewHelper: NSObject {
     
     var allGraphEventsTimeSpan: TimeInterval {
         
-        guard allEventsMinMaxDates != nil
-            else {
+        guard allEventsMinMaxDates != nil else {
                 return (24 * 3600)
         }
         return allEventsMinMaxDates![1].timeIntervalSince(allEventsMinMaxDates![0])

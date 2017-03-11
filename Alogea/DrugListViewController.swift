@@ -68,6 +68,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         tableView.reloadData()
         
+        logMedStats()
+        
     }
     
     override func viewDidLoad() {
@@ -88,7 +90,6 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         inAppStore = InAppStore.sharedInstance()
         drugList.delegate = self
 
-
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -100,6 +101,8 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        
+        guard tableView != nil else {return}
         
         coordinator.animateAlongsideTransition(in: nil, animation: nil, completion: {
             (context: UIViewControllerTransitionCoordinatorContext) -> Void in
@@ -298,6 +301,42 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
             ErrorManager.sharedInstance().errorMessage(message: "DLVC Error 7", showInVC: self, systemError: error)
         }
         
+    }
+    
+    func logMedStats() {
+        
+        let numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.maximumFractionDigits = 1
+            return formatter
+        }()
+        
+        print("log severe episodes:")
+        StatisticsController.sharedInstance().scoreTypeEpisodesOver5()
+
+        /*
+        print("log Meds stats...")
+        //var scoreStats:[(String, ScoreStats)]?
+        
+        for med in drugList.fetchedObjects! {
+            let scoreStats = StatisticsController.sharedInstance().singleMedStats(forMed: med)
+            
+            if scoreStats != nil {
+                for stats in scoreStats! {
+                    print()
+                    print("stats for Med \(stats.medName)")
+                    print("...for scoreType: \(stats.scoreName)")
+                    print("max \(numberFormatter.string(from: stats.max as NSNumber))")
+                    print("min \(numberFormatter.string(from: stats.min as NSNumber))")
+                    print("mean \(numberFormatter.string(from: stats.mean as NSNumber))")
+                    print("Number VAS>5 \(numberFormatter.string(from: stats.moreThan5Pct as NSNumber))%")
+                    print("Time VAS>5 \(numberFormatter.string(from: stats.moreThan5TimePct as NSNumber))%")
+                    print("VAS<3 \(numberFormatter.string(from: stats.lessThan3Pct as NSNumber))%")
+                    print("no of score events: \(numberFormatter.string(from: stats.numberOfScores as NSNumber))")
+              }
+            }
+        }
+        */
     }
     
     func debugEraseAll() {

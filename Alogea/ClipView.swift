@@ -14,7 +14,6 @@ class ClipView: UIView {
     @IBOutlet weak var graphView:GraphView!
         
     override func draw(_ rect: CGRect) {
-            print("draw ClipView")
         
             let xStart: CGFloat = bounds.origin.x
             let xEnd: CGFloat = bounds.maxX

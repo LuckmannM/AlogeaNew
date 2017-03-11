@@ -215,6 +215,15 @@ class MedicationController: NSObject {
 
     }
     
+    func returnFirstRegMedStartDate() -> Date? {
+        if (regMedsSortedByStartDateFRC.fetchedObjects?.count ?? 0) > 0 {
+            return regMedsSortedByStartDateFRC.fetchedObjects?[0].startDateVar
+        } else {
+            return nil
+        }
+    }
+    
+    
     // - Methods:
     
     

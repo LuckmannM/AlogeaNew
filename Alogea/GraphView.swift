@@ -83,8 +83,6 @@ class GraphView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        print("draw GraphView)")
-        
         drawTimeLine()
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
@@ -104,7 +102,6 @@ class GraphView: UIView {
         }
         
         refreshPointsFlag = true
-        print("finished drawing GraphView)")
     }
     
     func drawLineGraph() {

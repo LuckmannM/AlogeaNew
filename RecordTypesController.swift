@@ -114,8 +114,8 @@ class RecordTypesController: NSObject {
         var scoreTypes = [RecordType]()
         
         for type in allTypes.fetchedObjects! {
-            let events = EventsDataController.sharedInstance().fetchSpecificEventsFRC(name: scoreEvent, type: type.name!)
-            if (events.fetchedObjects?.count)! > 0 {
+            let events = EventsDataController.sharedInstance().fetchSpecificEventsFRC(name: type.name!, type: scoreEvent)
+            if (events.fetchedObjects?.count ?? 0) > 0 {
                 scoreTypes.append(type)
             }
         }
@@ -179,7 +179,18 @@ class RecordTypesController: NSObject {
         }
     }
 
-    
+    func scoreStats(forScoreType: String) -> ScoreTypeStats? {
+        
+        let statsForScoreTypesWithSavedEvents = StatisticsController.sharedInstance().calculateScoreTypeStats()
+        
+        for stats in statsForScoreTypesWithSavedEvents {
+            if stats.scoreTypeName == forScoreType {
+                return stats
+            }
+        }
+        
+        return nil
+    }
     
     
 }

@@ -164,7 +164,6 @@ class MedsView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        print("draw MedsView)")
         if UserDefaults.standard.bool(forKey: "MedsViewEnabled") == false {
             return
         } else {
@@ -188,8 +187,6 @@ class MedsView: UIView {
         drawPrnMeds(scale: scale, verticalOffset: vOffset)
         
         drawNonScoreEvents(scale: scale, verticalOffset: vOffset)
-        
-        print("finished drawing MedsView)")
     }
     
     private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) {

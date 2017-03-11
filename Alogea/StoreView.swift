@@ -162,7 +162,7 @@ class StoreView: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "storeCell", for: indexPath) as! StoreViewCell
         if inAppStore.products != nil {
-            var textSize: CGFloat = 28.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
+            //var textSize: CGFloat = 28.0 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.width
             let product = inAppStore.products![indexPath.row]
             let text = NSAttributedString(
                 string: product.localizedTitle,
