@@ -318,7 +318,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         for stat in stats {
             print()
-            print("stats for scoreRType \(stat.scoreTypeName)")
+            print("stats for scoreType \(stat.scoreTypeName)")
             print("...for scoreType: \(stat.scoreTypeName)")
             print("max \(numberFormatter.string(from: stat.max as NSNumber))")
             print("min \(numberFormatter.string(from: stat.min as NSNumber))")

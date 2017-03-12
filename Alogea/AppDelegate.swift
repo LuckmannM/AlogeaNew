@@ -272,6 +272,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // this does not allow to use the 'repeat' for notificationRequest.
         // this manually reschedules these meds to their frequency, however, if the App is not run/ in the foreground from triggerDate and the next due time the next drugReminder is NOT scheduled, so there will be no alert.
         // this functionality would require the app to be notified of the notification while in the background when the user does NOT tap on the notification, and being able to run this code while in the background
+        
+        guard UserDefaults.standard.bool(forKey: notification_MedRemindersOn) else {
+            return
+        }
+        
         let fetchRequest = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         let predicate = NSPredicate(format: "drugID == %@", argumentArray: [drugID])
         fetchRequest.predicate = predicate

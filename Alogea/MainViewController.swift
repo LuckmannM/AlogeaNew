@@ -68,7 +68,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("MainVC viewDidLoad start")
         graphContainerView.mainViewController  = self
         /*
         Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
@@ -81,7 +80,8 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
         
         self.view.backgroundColor = ColorScheme.sharedInstance().lightGray
-        print("MainVC viewDidLoad end")
+        let episodeStats = StatisticsController.sharedInstance().episodeStats()
+        
         
     }
     

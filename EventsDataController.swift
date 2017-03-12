@@ -323,6 +323,28 @@ class EventsDataController: NSObject {
 
     }
     
+    func fetchMedEventsForEpisode(start: Date, end: Date) -> [Event]? {
+        var predicates = [NSPredicate]()
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        
+        predicates.append(NSPredicate(format: "type == %@", argumentArray: [medicineEvent]))
+        predicates.append(NSPredicate(format: "date == %@", argumentArray: [start]))
+        //predicates.append(NSPredicate(format: "date <= %@", argumentArray: [end]))
+        
+        let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        
+        request.predicate = combinedPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        
+        do {
+            let fetchedEvents = try managedObjectContext.fetch(request)
+            return fetchedEvents
+        } catch let error as NSError {
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.3", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
+        }
+        return nil
+    }
+    
     func renameEvents(ofType: String, oldName: String, newName: String) {
         
         print("renaming events '\(oldName)' with \(newName)...")
@@ -371,11 +393,10 @@ class EventsDataController: NSObject {
         return uniqueName
     }
     
-    func earliestScoreOrMedEventDate() -> Date? {
-        
-        
+    func earliestScoreEventDate() -> Date? {
+
         var startDate: Date?
-       
+        
         let request = NSFetchRequest<Event>(entityName: "Event")
         let anyScorePredicate = NSPredicate(format: "type == %@", argumentArray: [scoreEvent])
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
@@ -389,6 +410,14 @@ class EventsDataController: NSObject {
         } catch let error as NSError{
             ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 3", systemError: error, errorInfo: "error when fetching scoreEvents in earliestScoreOrMedEventDate function")
         }
+        return startDate
+
+    }
+    
+    func earliestScoreOrMedEventDate() -> Date? {
+        
+        
+        var startDate = earliestScoreEventDate()
  
         let request2 = NSFetchRequest<Event>(entityName: "Event")
         let medPredicate = NSPredicate(format: "type == %@", argumentArray: [medicineEvent])
