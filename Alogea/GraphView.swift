@@ -101,6 +101,7 @@ class GraphView: UIView {
             drawLineGraph()
         }
         
+        drawStats()
         refreshPointsFlag = true
     }
     
@@ -141,6 +142,29 @@ class GraphView: UIView {
             circle.stroke()
             circle.fill()
         }
+    }
+    
+    func drawStats() {
+        
+        guard let episodeStats = StatisticsController.sharedInstance().episodeStats() else {
+            return
+        }
+        
+        let displayScale = CGFloat(displayedTimeSpan) / frame.width
+        let bottomY = bounds.maxY - helper.timeLineSpace()
+        let topY: CGFloat = 5
+        
+        let episodeBars = UIBezierPath()
+        
+        for stat in episodeStats {
+            let timeSinceMinDate = stat.startDate.timeIntervalSince(minDisplayDate)
+            episodeBars.move(to: CGPoint(x: CGFloat(timeSinceMinDate) / displayScale, y: bottomY))
+            episodeBars.addLine(to: CGPoint(x: CGFloat(timeSinceMinDate) / displayScale, y: topY))
+        }
+        colorScheme.pearlWhite.setStroke()
+        episodeBars.lineWidth = 2.0
+        episodeBars.stroke()
+        
     }
     
     func drawTimeLine() {

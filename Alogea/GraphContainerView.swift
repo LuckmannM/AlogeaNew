@@ -87,7 +87,6 @@ class GraphContainerView: UIView, UIGestureRecognizerDelegate {
     
     required init?(coder aDecoder: NSCoder) {
         
-        print("init GraphContainerView")
         super.init(coder: aDecoder)
         
         backgroundColor = ColorScheme.sharedInstance().duskBlue
@@ -103,7 +102,6 @@ class GraphContainerView: UIView, UIGestureRecognizerDelegate {
         labelTap = UITapGestureRecognizer(target: self, action: #selector(graphLabelTap))
         labelTap.delegate = self
         upperLabel.addGestureRecognizer(labelTap)
-        print("finsihed init GraphContainerView")
     }
 
     deinit {

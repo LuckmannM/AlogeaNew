@@ -298,12 +298,12 @@ class StatisticsController {
         stats.moreThan5Pct = Double(over5Count) / Double(scoreArray.count) * 100
         stats.lessThan3Pct = Double(under3Count) / Double(scoreArray.count) * 100
         
-        var endingDate = Date()
-        if forMed.endDate != nil {
-            if forMed.endDate!.compare(Date()) == .orderedAscending {
-                endingDate = forMed.endDate as! Date
-            }
-        }
+        //var endingDate = Date()
+//        if forMed.endDate != nil {
+//            if forMed.endDate!.compare(Date()) == .orderedAscending {
+//                endingDate = forMed.endDate as! Date
+//            }
+//        }
         
         let totalScoreTime = (withScoreEvents.last!.date as! Date).timeIntervalSince(withScoreEvents.first!.date as! Date)
         
