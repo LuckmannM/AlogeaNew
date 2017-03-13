@@ -80,7 +80,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
         
         self.view.backgroundColor = ColorScheme.sharedInstance().lightGray
-        let episodeStats = StatisticsController.sharedInstance().episodeStats()
+        //let episodeStats = StatisticsController.sharedInstance().episodeStats()
         
         
     }

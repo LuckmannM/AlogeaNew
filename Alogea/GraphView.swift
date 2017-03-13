@@ -162,7 +162,7 @@ class GraphView: UIView {
             episodeBars.addLine(to: CGPoint(x: CGFloat(timeSinceMinDate) / displayScale, y: topY))
         }
         colorScheme.pearlWhite.setStroke()
-        episodeBars.lineWidth = 2.0
+        episodeBars.lineWidth = 1.0
         episodeBars.stroke()
         
     }
