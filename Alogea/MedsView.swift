@@ -142,7 +142,6 @@ class MedsView: UIView {
     
     convenience init(graphView: GraphView) {
         self.init()
-        print("init MedsView)")
 
         self.graphView = graphView
         self.helper = graphView.helper
@@ -156,12 +155,10 @@ class MedsView: UIView {
         regMedsFRC.delegate = self
         prnMedsFRC.delegate = self
         diaryEventsFRC.delegate = self
-        print("finished init MedsView)")
-
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.init()
     }
     
     // MARK: - Drawing methods

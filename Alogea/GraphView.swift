@@ -163,46 +163,45 @@ class GraphView: UIView {
             maxVAS = RecordTypesController.sharedInstance().returnMaxVAS(forType: helper.selectedScore)!
         }
         
-        // need to ensure that the episodeStats and displayed score types match!
-        
         let episodeBars = UIBezierPath()
         let meanBars = UIBezierPath()
         let stdErrRects = UIBezierPath()
         
         for stat in episodeStats {
-            let timeSinceMinDateForStart = stat.startDate.timeIntervalSince(minDisplayDate)
-            let timeSinceMinDateForEnd = stat.endDate.timeIntervalSince(minDisplayDate)
-            
-            // vertical episode bars
-            let episodeStartX = CGFloat(timeSinceMinDateForStart) / displayScale
-            episodeBars.move(to: CGPoint(x: episodeStartX, y: bottomY))
-            episodeBars.addLine(to: CGPoint(x: episodeStartX, y: topY))
-            
-            // horizontal mean and SE bars if >1 score
-            if stat.numberOfScores > 1 {
-                let meanY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean) / maxVAS)
-                let episodeEndX = CGFloat(timeSinceMinDateForEnd) / displayScale
-                meanBars.move(to: CGPoint(x: episodeStartX, y: meanY))
-                meanBars.addLine(to: CGPoint(x: episodeEndX, y: meanY))
+            if stat.scoreTypeName == helper.selectedScore { //  this needs testing to ensure that the episodeStats match the displayed score type
+                let timeSinceMinDateForStart = stat.startDate.timeIntervalSince(minDisplayDate)
+                let timeSinceMinDateForEnd = stat.endDate.timeIntervalSince(minDisplayDate)
                 
-                let seUpperY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean - 1.96 * stat.stdError) / maxVAS)
-                let seLowerY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean + 1.96 * stat.stdError) / maxVAS)
+                // vertical episode bars
+                let episodeStartX = CGFloat(timeSinceMinDateForStart) / displayScale
+                episodeBars.move(to: CGPoint(x: episodeStartX, y: bottomY))
+                episodeBars.addLine(to: CGPoint(x: episodeStartX, y: topY))
                 
-                let rect = CGRect(x: episodeStartX, y: seUpperY, width: (episodeEndX - episodeStartX), height: seLowerY - seUpperY)
-                stdErrRects.append(UIBezierPath(rect: rect))
+                // horizontal mean and SE bars if >1 score
+                if stat.numberOfScores > 1 {
+                    let meanY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean) / maxVAS)
+                    let episodeEndX = CGFloat(timeSinceMinDateForEnd) / displayScale
+                    meanBars.move(to: CGPoint(x: episodeStartX, y: meanY))
+                    meanBars.addLine(to: CGPoint(x: episodeEndX, y: meanY))
+                    
+                    let seUpperY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean - 1.96 * stat.stdError) / maxVAS)
+                    let seLowerY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean + 1.96 * stat.stdError) / maxVAS)
+                    
+                    let rect = CGRect(x: episodeStartX, y: seUpperY, width: (episodeEndX - episodeStartX), height: seLowerY - seUpperY)
+                    stdErrRects.append(UIBezierPath(rect: rect))
+                }
+                
             }
+            colorScheme.pearlWhite.setStroke()
+            episodeBars.lineWidth = 1.0
+            episodeBars.stroke()
             
+            meanBars.lineWidth = 3.0
+            meanBars.stroke()
+            
+            colorScheme.pearlWhite04.setFill()
+            stdErrRects.fill()
         }
-        colorScheme.pearlWhite.setStroke()
-        episodeBars.lineWidth = 1.0
-        episodeBars.stroke()
-        
-        meanBars.lineWidth = 3.0
-        meanBars.stroke()
-        
-        colorScheme.pearlWhite04.setFill()
-        stdErrRects.fill()
-        
     }
     
     func drawTimeLine() {
