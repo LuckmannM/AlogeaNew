@@ -41,12 +41,11 @@ extension Array {
         
         var sd: Double = 0.0
         let mn = self.mean()
-        print("mean = \(mn)")
+
         for element in self {
             sd += abs(element as! Double - mn)
         }
-        print("sd sum = \(sd)")
-        
+
         return sd / Double(self.count)
         
     }

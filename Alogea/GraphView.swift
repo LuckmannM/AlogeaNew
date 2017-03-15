@@ -150,7 +150,7 @@ class GraphView: UIView {
     
     func drawStats() {
         
-        guard let episodeStats = StatisticsController.sharedInstance().episodeStats() else {
+        guard let episodeStats = StatisticsController.sharedInstance().returnEpisodeStats(forScoreType: helper.selectedScore) else {
             return
         }
         
@@ -168,7 +168,7 @@ class GraphView: UIView {
         let stdErrRects = UIBezierPath()
         
         for stat in episodeStats {
-            if stat.scoreTypeName == helper.selectedScore { //  this needs testing to ensure that the episodeStats match the displayed score type
+            //if stat.scoreTypeName == helper.selectedScore { //  this needs testing to ensure that the episodeStats match the displayed score type
                 let timeSinceMinDateForStart = stat.startDate.timeIntervalSince(minDisplayDate)
                 let timeSinceMinDateForEnd = stat.endDate.timeIntervalSince(minDisplayDate)
                 
@@ -189,8 +189,11 @@ class GraphView: UIView {
                     
                     let rect = CGRect(x: episodeStartX, y: seUpperY, width: (episodeEndX - episodeStartX), height: seLowerY - seUpperY)
                     stdErrRects.append(UIBezierPath(rect: rect))
+                    
+                    if stat.moreThan5TimePct > 0 && stat.lessThan3TimePct > 0 {
+                        drawStatText(upperNumber: stat.moreThan5TimePct, lowerNumber: stat.lessThan3TimePct, xPos: episodeStartX, episodeWidth: episodeEndX - episodeStartX)
+                    }
                 }
-                
             }
             colorScheme.pearlWhite.setStroke()
             episodeBars.lineWidth = 1.0
@@ -201,7 +204,44 @@ class GraphView: UIView {
             
             colorScheme.pearlWhite04.setFill()
             stdErrRects.fill()
+       // }
+    }
+    
+    func drawStatText(upperNumber: Double, lowerNumber: Double, xPos: CGFloat, episodeWidth: CGFloat) {
+        
+        let numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.maximumFractionDigits = 0
+            return formatter
+        }()
+        
+        var frameWidth = episodeWidth
+        if frameWidth > 30 {
+            frameWidth = 30
         }
+        
+        let upperRect = CGRect(x: xPos, y: 5, width: frameWidth, height: 16)
+        let lowerRect = CGRect(x: xPos , y: upperRect.maxY + 5, width: frameWidth, height: 16)
+        let cornerRadius: CGFloat = 2.0
+        
+        let upperRectPath = UIBezierPath(roundedRect: upperRect, cornerRadius: cornerRadius)
+        upperRectPath.lineWidth = 1.0
+        colorScheme.medBarRed.setFill()
+        upperRectPath.fill()
+        upperRectPath.stroke()
+        
+        let lowerRectPath = UIBezierPath(roundedRect: lowerRect, cornerRadius: cornerRadius)
+        lowerRectPath.lineWidth = 1.0
+        colorScheme.medBarGreen.setFill()
+        lowerRectPath.fill()
+        lowerRectPath.stroke()
+        
+        let upperText = (numberFormatter.string(from: upperNumber as NSNumber) ?? "") + "%"
+        upperText.draw(in: upperRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
+        
+        let lowerText = (numberFormatter.string(from: lowerNumber as NSNumber) ?? "") + "%"
+        lowerText.draw(in: lowerRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
+
     }
     
     func drawTimeLine() {

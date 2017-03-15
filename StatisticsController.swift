@@ -337,7 +337,31 @@ class StatisticsController {
 
     // MARK: - Episode stats
     
-    func episodeStats() -> [EpisodeStats]? {
+    func returnEpisodeStats(forScoreType: String) -> [EpisodeStats]? {
+        
+        guard let allStats = episodeStats() else {
+            return nil
+        }
+        
+        var statsForScore = [EpisodeStats]()
+        
+        for episodeStats in allStats {
+            for stat in episodeStats {
+                if stat.scoreTypeName == forScoreType {
+                    statsForScore.append(stat)
+                }
+            }
+        }
+        
+        if statsForScore.count > 0 {
+        return statsForScore
+        } else {
+            return nil
+        }
+    }
+
+    
+    private func episodeStats() -> [[EpisodeStats]]? {
         
         let now = Date()
         
@@ -385,10 +409,11 @@ class StatisticsController {
             stats = [EpisodeStats]()
         } else {
             // no events or regMeds present
-            return stats
+            return nil
         }
         
         // 3. form episodes from these dates, with startDate and endDate back to back until nowDate
+        // for each episode a EpisodeStats object is created
         var index = 0
         for aDate in datesArray {
             let newEpisode = EpisodeStats()
@@ -403,32 +428,37 @@ class StatisticsController {
         }
         
         // 4. create EpisodeStats for each episode and calculate stats, which meds etc
+        // for each episode  an array of EpisodeStat objects for each scoreType is created
+        var allEpisodesStats = [[EpisodeStats]]()
         
         for episode in stats! {
+            var episodeStatGroup = [EpisodeStats]()
             for type in RecordTypesController.sharedInstance().returnRecordTypesWithSavedEvents() {
-                episode.scoreTypeName = type.name ?? ""
-                let scoreEvents = EventsDataController.sharedInstance().fetchEventsBetweenDates(type: scoreEvent, name: type.name, startDate: episode.startDate, endDate: episode.endDate)
-                calculateEpisodesStats(forStat: episode, withEvents: scoreEvents)
+                let newEpisodeForScoreType = EpisodeStats()
+                newEpisodeForScoreType.startDate = episode.startDate
+                newEpisodeForScoreType.endDate = episode.endDate
                 
-                if let regMedsTaken = MedicationController.sharedInstance().regMedsTakenDuringEpisode(start: episode.startDate, end: episode.endDate) {
+                newEpisodeForScoreType.scoreTypeName = type.name ?? ""
+                let scoreEvents = EventsDataController.sharedInstance().fetchEventsBetweenDates(type: scoreEvent, name: type.name, startDate: newEpisodeForScoreType.startDate, endDate: newEpisodeForScoreType.endDate)
+                calculateEpisodesStats(forStat: newEpisodeForScoreType, withEvents: scoreEvents)
+                
+                if let regMedsTaken = MedicationController.sharedInstance().regMedsTakenDuringEpisode(start: newEpisodeForScoreType.startDate, end: newEpisodeForScoreType.endDate) {
                     for med in regMedsTaken {
-                        episode.medNames.append(med.nameVar)
+                        newEpisodeForScoreType.medNames.append(med.nameVar)
                     }
-                    
                 }
                 
-                
-                if let prnMedsTaken = EventsDataController.sharedInstance().fetchMedEventsForEpisode(start: episode.startDate, end: episode.endDate) {
+                if let prnMedsTaken = EventsDataController.sharedInstance().fetchMedEventsForEpisode(start: newEpisodeForScoreType.startDate, end: newEpisodeForScoreType.endDate) {
                     for med in prnMedsTaken {
-                        episode.medNames.append(med.name ?? "")
+                        newEpisodeForScoreType.medNames.append(med.name ?? "")
                     }
-                    
                 }
-            
+                episodeStatGroup.append(newEpisodeForScoreType)
             }
+            allEpisodesStats.append(episodeStatGroup)
         }
         
-        //* DEBUG
+        /* DEBUG
         
         if stats != nil {
             for stat in stats! {
@@ -451,10 +481,10 @@ class StatisticsController {
             }
         }
  
-        //*
+        */
         
         
-        return stats
+        return allEpisodesStats
         
     }
     
