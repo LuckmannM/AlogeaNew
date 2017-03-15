@@ -154,7 +154,7 @@ class GraphView: UIView {
         guard let episodeStats = StatisticsController.sharedInstance().returnEpisodeStats(forScoreType: helper.selectedScore) else {
 
             let textwidth: CGFloat = 250
-            let titleRect = CGRect(x: frame.midX - textwidth / 2.0, y: frame.midY - 10, width: textwidth, height: 20)
+            let titleRect = CGRect(x: frame.midX - textwidth / 2.0, y: frame.midY - 15, width: textwidth, height: 30)
             let text: NSString = "not enough scores to analyse"
             text.draw(in: titleRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!,NSForegroundColorAttributeName: UIColor.white])
             
@@ -242,12 +242,12 @@ class GraphView: UIView {
         colorScheme.medBarGreen.setFill()
         lowerRectPath.fill()
         lowerRectPath.stroke()
-        
+                
         let upperText = (numberFormatter.string(from: upperNumber as NSNumber) ?? "") + "%"
-        upperText.draw(in: upperRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
+        upperText.draw(in: upperRect.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
         
         let lowerText = (numberFormatter.string(from: lowerNumber as NSNumber) ?? "") + "%"
-        lowerText.draw(in: lowerRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
+        lowerText.draw(in: lowerRect.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
 
     }
     

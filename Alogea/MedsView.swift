@@ -235,8 +235,11 @@ class MedsView: UIView {
             ColorScheme.sharedInstance().barColors[colorArrayCount].setFill()
             medRectPath.fill()
             medRectPath.stroke()
-            let medName = medicine.nameVar as NSString?
-            medName?.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+            
+            if !graphView.graphIsStatType {
+                let medName = medicine.nameVar as NSString?
+                medName?.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name:   "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+            }
             count += 1
             colorArrayCount += 1
             if colorArrayCount == numberOfColors {
@@ -296,16 +299,18 @@ class MedsView: UIView {
                     medRectPath.fill()
                     medRectPath.stroke()
                     
-                    var medName = NSString()
-                    if medRect.width == medBarHeight {
-                        medName = (medEvent.name! as NSString).substring(to: 1) as NSString
-                    } else {
-                        medName = medEvent.name! as NSString
-                    }
-                    let rightShift = 3 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
-                    let downShift = -1 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
                     
-                    medName.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+                    if !graphView.graphIsStatType {
+                        var medName = NSString()
+                        if medRect.width == medBarHeight {
+                            medName = (medEvent.name! as NSString).substring(to: 1) as NSString
+                        } else {
+                            medName = medEvent.name! as NSString
+                        }
+                        let rightShift = 3 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                        let downShift = -1 * (UIApplication.shared.delegate as! AppDelegate).deviceBasedSizeFactor.height
+                        medName.draw(in: medRect.offsetBy(dx: rightShift, dy: downShift), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: fontSize)!,NSForegroundColorAttributeName: UIColor.white])
+                    }
                     
                     // eventCount += 1
                 }
