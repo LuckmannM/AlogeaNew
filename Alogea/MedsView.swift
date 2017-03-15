@@ -26,6 +26,10 @@ class MedsView: UIView {
     var helper: GraphViewHelper!
     var medController: MedicationController!
     
+    var graphIsStatType: Bool {
+        return UserDefaults.standard.bool(forKey: "GraphIsStat")
+    }
+    
     var regMedsFRC: NSFetchedResultsController<DrugEpisode> = {
         
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
@@ -170,6 +174,11 @@ class MedsView: UIView {
             alpha = 1.0
         }
         
+        if graphIsStatType {
+            self.alpha = 0.7
+        } else {
+            self.alpha = 1.0
+        }
 
         UIColor.white.setStroke()
         
@@ -186,7 +195,9 @@ class MedsView: UIView {
         
         drawPrnMeds(scale: scale, verticalOffset: vOffset)
         
-        drawNonScoreEvents(scale: scale, verticalOffset: vOffset)
+        if !graphIsStatType {
+            drawNonScoreEvents(scale: scale, verticalOffset: vOffset)
+        }
     }
     
     private func drawRegularMeds(scale: TimeInterval, verticalOffset: CGFloat) {
