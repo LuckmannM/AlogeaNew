@@ -126,10 +126,11 @@ class StatisticsController {
             var startDate: Date?
             var endDate: Date?
             for i in index..<events.count {
-                //print("startDate loop:  event vas = \(events[i].vas), date = \(events[i].date)")
+                // print("startDate loop:  event vas = \(events[i].vas), date = \(events[i].date)")
                 if events[i].vas!.doubleValue > 5.0 {
                     if index == 0 {
                         startDate = events[i].date as Date?
+                        index += 1
                         break
                     }
                     else {
@@ -175,7 +176,8 @@ class StatisticsController {
             let newEpisode = (start: startDate!, end: endDate!)
             //print("new episode dates: \(newEpisode)")
             datesArray.append(newEpisode)
-        } while index < events.count
+            
+        } while index < events.count - 1
         
         return datesArray
     }
@@ -195,6 +197,7 @@ class StatisticsController {
                 if events[i].vas!.doubleValue < 3.0 {
                     if index == 0 {
                         startDate = events[i].date as Date?
+                        index += 1
                         break
                     }
                     else {
@@ -240,7 +243,7 @@ class StatisticsController {
             let newEpisode = (start: startDate!, end: endDate!)
             //print("new episode dates: \(newEpisode)")
             datesArray.append(newEpisode)
-        } while index < events.count
+        } while index < events.count - 1
         
         return datesArray
     }
@@ -522,18 +525,24 @@ class StatisticsController {
         forStat.computed = true
         
         if withEvents!.count > 1 {
+//            print()
+//            print("new episode start: \(forStat.startDate) end: \(forStat.endDate)")
         
             forStat.moreThan5Pct = 100.0 * over5Count / Double(scoreArray.count)
             forStat.lessThan3Pct = 100.0 * under3Count / Double(scoreArray.count)
             
             let totalScoreTypeTime = (withEvents!.last?.date as! Date).timeIntervalSince(withEvents!.first?.date as! Date)
+            // print("... episode totalTime: \(totalScoreTypeTime)")
             
             if let episodeForScoreType = calculateScoreEpisodesOver5(events: withEvents!) {
+                // print("... episodes >5 : \(episodeForScoreType)")
                 var timeOver5 = TimeInterval()
                 for (start, end) in episodeForScoreType {
                     timeOver5 += end.timeIntervalSince(start)
+                    // print("... >5 Time: \(timeOver5)")
                 }
                 forStat.moreThan5TimePct = 100 * timeOver5 / totalScoreTypeTime
+                // print("... final >5 Time: \(timeOver5)  = >5%: \(forStat.moreThan5TimePct) %")
             }
             
             if let episodes = calculateScoreEpisodesUnder3(events: withEvents!) {
