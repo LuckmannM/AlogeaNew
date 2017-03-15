@@ -17,6 +17,8 @@ class MedStats {
     var max: Double = 0.0
     var min: Double = 0.0
     var nowScore: Double = 0.0
+    var stdDev: Double = 0.0
+    var stdError: Double = 0.0
     
     var moreThan5Pct: Double = 0.0
     var moreThan5TimePct: Double = 0
@@ -83,6 +85,8 @@ class StatisticsController {
                 newStats.max = scoreArray.max()!
                 newStats.min = scoreArray.min()!
                 newStats.mean = scoreArray.mean()
+                newStats.stdDev = scoreArray.stdDeviation() ?? 0.0
+                newStats.stdError = scoreArray.stdError() ?? 0.0
                 
                 newStats.moreThan5Pct = 100.0 * over5Count / Double(scoreArray.count)
                 newStats.lessThan3Pct = 100.0 * under3Count / Double(scoreArray.count)
@@ -294,6 +298,8 @@ class StatisticsController {
         stats.max = scoreArray.max() ?? 0
         stats.min = scoreArray.min() ?? 0
         stats.mean = scoreArray.mean()
+        stats.stdDev = scoreArray.stdDeviation() ?? 0.0
+        stats.stdError = scoreArray.stdError() ?? 0.0
         
         stats.moreThan5Pct = Double(over5Count) / Double(scoreArray.count) * 100
         stats.lessThan3Pct = Double(under3Count) / Double(scoreArray.count) * 100
@@ -436,6 +442,8 @@ class StatisticsController {
                 print(" - min \(stat.min)")
                 print(" - max \(stat.max)")
                 print(" - mean \(stat.mean)")
+                print(" - SD ±\(stat.stdDev)")
+                print(" - SE ±\(stat.stdError)")
                 print(" - scores <3 \(stat.lessThan3Pct)%")
                 print(" - time <3 \(stat.lessThan3TimePct)%")
                 print(" - scores >5 \(stat.moreThan5Pct)%")
@@ -479,6 +487,8 @@ class StatisticsController {
         forStat.max = scoreArray.max()!
         forStat.min = scoreArray.min()!
         forStat.mean = scoreArray.mean()
+        forStat.stdDev = scoreArray.stdDeviation() ?? 0.0
+        forStat.stdError = scoreArray.stdError() ?? 0.0
         forStat.computed = true
         
         if withEvents!.count > 1 {

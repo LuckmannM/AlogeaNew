@@ -44,6 +44,7 @@ class ColorScheme {
     
     let duskBlue = UIColor(colorLiteralRed: 0/255, green: 44/255, blue: 81/255, alpha: 1.0)
     let pearlWhite = UIColor(colorLiteralRed: 247/255, green: 245/255, blue: 241/255, alpha: 1.0)
+    let pearlWhite04 = UIColor(colorLiteralRed: 247/255, green: 245/255, blue: 241/255, alpha: 0.4)
     
     let drugListRowRose = UIColor(colorLiteralRed: 249/255, green: 230/255, blue: 213/255, alpha: 1.0)
     

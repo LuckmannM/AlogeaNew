@@ -32,5 +32,32 @@ extension Array {
         
         return sum / Double(self.count)
     }
-      
+    
+    func stdDeviation() -> Double? {
+        
+        guard self.count > 2 else {
+            return nil
+        }
+        
+        var sd: Double = 0.0
+        let mn = self.mean()
+        print("mean = \(mn)")
+        for element in self {
+            sd += abs(element as! Double - mn)
+        }
+        print("sd sum = \(sd)")
+        
+        return sd / Double(self.count)
+        
+    }
+    
+    func stdError() -> Double? {
+
+        guard self.count > 2 else {
+            return nil
+        }
+        
+        return self.stdDeviation()! / sqrt(Double(self.count))
+    }
+    
 }

@@ -48,8 +48,8 @@ class GraphView: UIView {
     var maxDisplayDate: Date!
     var refreshPointsFlag: Bool = true
     
-    var graphIsBarType: Bool {
-        return UserDefaults.standard.bool(forKey: "GraphIsBar")
+    var graphIsStatType: Bool {
+        return UserDefaults.standard.bool(forKey: "GraphIsStat")
     }
     
     var timeLinePoints: [CGPoint]!
@@ -95,13 +95,14 @@ class GraphView: UIView {
             return
         }
         
-        if  graphIsBarType {
-            drawBarGraph()
+        if  graphIsStatType {
+            //drawBarGraph()
+            drawStats()
         } else {
             drawLineGraph()
         }
         
-        drawStats()
+       // drawStats()
         refreshPointsFlag = true
     }
     
@@ -144,6 +145,9 @@ class GraphView: UIView {
         }
     }
     
+    
+    // FIXME: scoreType match stats type
+    
     func drawStats() {
         
         guard let episodeStats = StatisticsController.sharedInstance().episodeStats() else {
@@ -153,17 +157,45 @@ class GraphView: UIView {
         let displayScale = CGFloat(displayedTimeSpan) / frame.width
         let bottomY = bounds.maxY - helper.timeLineSpace()
         let topY: CGFloat = 5
+        var maxVAS: Double = 10.0
+        
+        if RecordTypesController.sharedInstance().returnMaxVAS(forType: helper.selectedScore) != nil {
+            maxVAS = RecordTypesController.sharedInstance().returnMaxVAS(forType: helper.selectedScore)!
+        }
+        
+        // need to ensure that the episodeStats and displayed score types match!
         
         let episodeBars = UIBezierPath()
+        let stdErrRects = UIBezierPath()
         
         for stat in episodeStats {
-            let timeSinceMinDate = stat.startDate.timeIntervalSince(minDisplayDate)
-            episodeBars.move(to: CGPoint(x: CGFloat(timeSinceMinDate) / displayScale, y: bottomY))
-            episodeBars.addLine(to: CGPoint(x: CGFloat(timeSinceMinDate) / displayScale, y: topY))
+            let timeSinceMinDateForStart = stat.startDate.timeIntervalSince(minDisplayDate)
+            let timeSinceMinDateForEnd = stat.endDate.timeIntervalSince(minDisplayDate)
+            
+            // vertical episode bars
+            let episodeStartX = CGFloat(timeSinceMinDateForStart) / displayScale
+            episodeBars.move(to: CGPoint(x: episodeStartX, y: bottomY))
+            episodeBars.addLine(to: CGPoint(x: episodeStartX, y: topY))
+            
+            // horizontal mean etc bars
+            let meanY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean) / maxVAS)
+            let episodeEndX = CGFloat(timeSinceMinDateForEnd) / displayScale
+            episodeBars.move(to: CGPoint(x: episodeStartX, y: meanY))
+            episodeBars.addLine(to: CGPoint(x: episodeEndX, y: meanY))
+            
+            let seUpperY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean - 1.96 * stat.stdError) / maxVAS)
+            let seLowerY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean + 1.96 * stat.stdError) / maxVAS)
+            
+            let rect = CGRect(x: episodeStartX, y: seUpperY, width: (episodeEndX - episodeStartX), height: seLowerY - seUpperY)
+            stdErrRects.append(UIBezierPath(rect: rect))
+            
         }
         colorScheme.pearlWhite.setStroke()
         episodeBars.lineWidth = 1.0
         episodeBars.stroke()
+        
+        colorScheme.pearlWhite04.setFill()
+        stdErrRects.fill()
         
     }
     
