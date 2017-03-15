@@ -83,6 +83,7 @@ class GraphView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
+        
         drawTimeLine()
         if refreshPointsFlag {
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
@@ -91,14 +92,14 @@ class GraphView: UIView {
         medsView.frame = bounds
         medsView.setNeedsDisplay()
         
-        guard graphPoints.count > 0  else {
-            return
-        }
+//        guard graphPoints.count > 0  else {
+//            return
+//        }
         
         if  graphIsStatType {
             //drawBarGraph()
             drawStats()
-        } else {
+        } else if graphPoints.count > 0 {
             drawLineGraph()
         }
         
@@ -151,6 +152,12 @@ class GraphView: UIView {
     func drawStats() {
         
         guard let episodeStats = StatisticsController.sharedInstance().returnEpisodeStats(forScoreType: helper.selectedScore) else {
+
+            let textwidth: CGFloat = 250
+            let titleRect = CGRect(x: frame.midX - textwidth / 2.0, y: frame.midY - 10, width: textwidth, height: 20)
+            let text: NSString = "not enough scores to analyse"
+            text.draw(in: titleRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!,NSForegroundColorAttributeName: UIColor.white])
+            
             return
         }
         
