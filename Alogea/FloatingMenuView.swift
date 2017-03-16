@@ -54,8 +54,11 @@ class FloatingMenuView: UIView {
         graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
         
         if UserDefaults.standard.bool(forKey: "GraphIsStat") {
+            graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
+            graphTypeButton.tag = 0
         } else {
-            graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
+            graphTypeButton.setImage(UIImage(named: "StatsButton"), for: .normal)
+            graphTypeButton.tag = 1
         }
         
         
@@ -79,9 +82,11 @@ class FloatingMenuView: UIView {
     
     @IBAction func graphButtonAction(sender: UIButton) {
         
+        print("UereDef graphType is Stat? = \(UserDefaults.standard.bool(forKey: "GraphIsStat"))")
+        
         if graphTypeButton.tag == 0 {            //graphView.graphIsLineType = false
             UserDefaults.standard.set(false, forKey: "GraphIsStat")
-            graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
+            graphTypeButton.setImage(UIImage(named: "StatsButton"), for: .normal)
             graphTypeButton.tag = 1
         } else {
             UserDefaults.standard.set(true, forKey: "GraphIsStat")

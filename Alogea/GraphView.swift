@@ -81,6 +81,7 @@ class GraphView: UIView {
         
         self.medsView = MedsView(graphView: self)
         self.addSubview(medsView)
+        //self.insertSubview(medsView, belowSubview: self)
 
     }
     
@@ -162,6 +163,12 @@ class GraphView: UIView {
             
             return
         }
+        let numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.maximumFractionDigits = 1
+            return formatter
+        }()
+
         
         let displayScale = CGFloat(displayedTimeSpan) / frame.width
         let bottomY = bounds.maxY - helper.timeLineSpace()
@@ -175,6 +182,7 @@ class GraphView: UIView {
         let episodeBars = UIBezierPath()
         let meanBars = UIBezierPath()
         let stdErrRects = UIBezierPath()
+        var maxTextWidth: CGFloat!
         
         for stat in episodeStats {
             //if stat.scoreTypeName == helper.selectedScore { //  this needs testing to ensure that the episodeStats match the displayed score type
@@ -193,6 +201,21 @@ class GraphView: UIView {
                     meanBars.move(to: CGPoint(x: episodeStartX, y: meanY))
                     meanBars.addLine(to: CGPoint(x: episodeEndX, y: meanY))
                     
+                    maxTextWidth = episodeEndX - episodeStartX
+                    if maxTextWidth > 60 {
+                        maxTextWidth = 60
+                    }
+                    
+                    let meanBarTextBox = CGRect(
+                        x: episodeStartX + (episodeEndX - episodeStartX - maxTextWidth) / 2,
+                        y: meanY - 20,
+                        width: maxTextWidth,
+                        height: 18
+                    )
+                    
+                    let meanText = (numberFormatter.string(from: stat.mean as NSNumber) ?? "")
+                    meanText.draw(in: meanBarTextBox.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16.0)!,NSForegroundColorAttributeName: UIColor.white])
+
                     let seUpperY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean - 1.96 * stat.stdError) / maxVAS)
                     let seLowerY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean + 1.96 * stat.stdError) / maxVAS)
                     

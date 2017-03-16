@@ -172,7 +172,7 @@ class MedsView: UIView {
         }
         
         if graphIsStatType {
-            self.alpha = 0.7
+            self.alpha = 0.4
         } else {
             self.alpha = 1.0
         }

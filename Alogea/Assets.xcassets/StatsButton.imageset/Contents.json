@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "GraphButtonLine.png",
+      "filename" : "StatsButton.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "GraphButtonLine@2x.png",
+      "filename" : "StatsButton@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "GraphButtonLine@3x.png",
+      "filename" : "StatsButton@3x.png",
       "scale" : "3x"
     }
   ],
