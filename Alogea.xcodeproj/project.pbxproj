@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26046D131E7AEA3B00675D52 /* StatisticsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26046D121E7AEA3B00675D52 /* StatisticsController.swift */; };
 		2604F8371E33F7C300742FE6 /* GraphScoreChoser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */; };
 		2604F8391E34D03A00742FE6 /* GraphScoreChoserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */; };
 		260898791E36603200CBB6B6 /* Backups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260898781E36603200CBB6B6 /* Backups.swift */; };
@@ -89,6 +90,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		26046D121E7AEA3B00675D52 /* StatisticsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatisticsController.swift; path = Alogea/StatisticsController.swift; sourceTree = "<group>"; };
 		2604F8361E33F7C300742FE6 /* GraphScoreChoser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphScoreChoser.swift; path = ../GraphScoreChoser.swift; sourceTree = "<group>"; };
 		2604F8381E34D03A00742FE6 /* GraphScoreChoserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphScoreChoserCell.swift; sourceTree = "<group>"; };
 		260898781E36603200CBB6B6 /* Backups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Backups.swift; sourceTree = "<group>"; };
@@ -191,8 +193,8 @@
 			isa = PBXGroup;
 			children = (
 				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
+				26046D121E7AEA3B00675D52 /* StatisticsController.swift */,
 				265387041E38A1F800DE095E /* MedicationController.swift */,
-				265D3DEF1E6DEEAD001A6D9A /* StatisticsController.swift */,
 				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
 			);
 			name = Controllers;
@@ -554,6 +556,7 @@
 				267F78D11DC5264F008CC23E /* ClipView.swift in Sources */,
 				26202FAA1E53542400966532 /* ErrorManager.swift in Sources */,
 				26CD8DFF1DBBED000040E4D4 /* FloatingMenuView.swift in Sources */,
+				26046D131E7AEA3B00675D52 /* StatisticsController.swift in Sources */,
 				269B9BFD1DDE5A5300C3BDA9 /* StoreViewCell.swift in Sources */,
 				263DA0111DD4660300CD7963 /* DrugListCell.swift in Sources */,
 				2604F8391E34D03A00742FE6 /* GraphScoreChoserCell.swift in Sources */,
@@ -561,7 +564,6 @@
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */,
 				263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */,
-				265D3DF01E6DEEAD001A6D9A /* StatisticsController.swift in Sources */,
 				262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
 				267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */,

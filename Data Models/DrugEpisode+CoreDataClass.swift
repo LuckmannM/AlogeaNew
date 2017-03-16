@@ -348,6 +348,25 @@ public class DrugEpisode: NSManagedObject {
         return componentFormatter.string(from: timeInterval)!
     }
     
+    func returnDatesForDrug () -> [Date] {
+        
+        var dates = [Date]()
+        dates.append(startDateVar)
+        
+        if endDateVar != nil {
+            if Date().compare(endDateVar!) == .orderedAscending {
+                dates.append(Date())
+            } else {
+                dates.append(endDateVar!)
+            }
+        } else {
+            dates.append(Date())
+        }
+        
+        return dates
+    }
+
+    
     func countTaken(fromDate: Date? = nil, toDate: Date? = nil) -> String {
         
         var term: String!
