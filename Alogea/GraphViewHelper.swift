@@ -64,6 +64,9 @@ class GraphViewHelper: NSObject {
     
     var allEventsMinMaxDates: [Date]? {
         
+        // return dates from all entered dated events and regular Meds
+        // date[0] is first date, date[1] = last date
+        
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
         let fetchRequest = NSFetchRequest<Event>(entityName: "Event")
         

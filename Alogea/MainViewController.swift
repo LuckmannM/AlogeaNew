@@ -62,6 +62,7 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
             // use below instead for interval including all event dates
             // graphContainerView.graphView.displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
             graphContainerView.graphView.minDisplayDate = graphContainerView.graphView.maxDisplayDate.addingTimeInterval(-graphContainerView.graphView.displayedTimeSpan)
+            displayTimeSegmentedController.selectedSegmentIndex = 1
         }
         
         graphContainerView.reloadAllViews()
@@ -175,7 +176,16 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         case 1:
             graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 7 * 24 * 3600)
         case 2:
+            graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 14 * 24 * 3600)
+        case 3:
             graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 30 * 24 * 3600)
+        case 4:
+            graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 61 * 24 * 3600)
+        case 5:
+            if let dates = graphContainerView.graphView.helper.allEventsMinMaxDates {
+                let allInterval = dates[1].timeIntervalSince(dates[0])
+                graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: allInterval)
+            }
         default:
             graphContainerView.graphView.helper.changeDisplayedInterval(toInterval: 365 * 24 * 3600)
         }
