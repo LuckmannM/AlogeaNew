@@ -32,7 +32,7 @@ class MedicationController: NSObject {
         
         let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
         let prnPredicate = NSPredicate(format: "regularly == false")
-        let currentPredicate1 = NSPredicate(format: "endDate = nil")
+        let currentPredicate1 = NSPredicate(format: "endDate == nil")
         let currentPredicate2 = NSPredicate(format: "endDate > %@",NSDate())
         let currentCombinedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [currentPredicate1, currentPredicate2])
         let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [prnPredicate,currentCombinedPredicate])
@@ -197,6 +197,60 @@ class MedicationController: NSObject {
             return 0
         }
 
+    }
+    
+    func returnSingleMed(withID: String) -> [DrugEpisode]? {
+        
+        let predicate = NSPredicate(format: "drugID == %@", [withID])
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        request.predicate = predicate
+        
+        do {
+            let meds = try managedObjectContext.fetch(request)
+            return meds
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 5.1", systemError: error, errorInfo: "error fetching named  med with id \(withID)for returnSingleMed")
+            return nil
+        }
+
+    }
+    
+    func returnFirstRegMedStartDate() -> Date? {
+        if (regMedsSortedByStartDateFRC.fetchedObjects?.count ?? 0) > 0 {
+            return regMedsSortedByStartDateFRC.fetchedObjects?[0].startDateVar
+        } else {
+            return nil
+        }
+    }
+    
+    func medStats(forMed: DrugEpisode) -> [MedStats]? {
+        
+        return StatisticsController.sharedInstance().singleMedStats(forMed: forMed)
+        
+    }
+    
+    func regMedsTakenDuringEpisode(start: Date, end: Date) -> [DrugEpisode]? {
+        
+        let combinedPredicate: NSCompoundPredicate!
+        let request = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
+        
+        let medPredicate = NSPredicate(format: "regularly == true")
+        let startDatePredicate = NSPredicate(format: "startDate <= %@", argumentArray: [start])
+        let endDate1Predicate = NSPredicate(format: "endDate == nil")
+        let endDate2Predicate = NSPredicate(format: "endDate > %@", argumentArray: [start])
+        let combinedEndDatePredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [endDate1Predicate,endDate2Predicate])
+            combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [medPredicate,startDatePredicate,combinedEndDatePredicate])
+        
+        request.predicate = combinedPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        
+        do {
+            let meds = try managedObjectContext.fetch(request)
+            return meds
+        } catch let error as NSError{
+            ErrorManager.sharedInstance().errorMessage(message: "MedController Error 5", systemError: error, errorInfo: "error fetching named prn medEvents for counting")
+            return nil
+        }
     }
     
     // - Methods:

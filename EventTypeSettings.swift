@@ -173,7 +173,7 @@ class EventTypeSettings: UITableViewController {
                 } else {
                     eventType = nonScoreEvent
                 }
-                let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: name, type: eventType)
+                let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEventsFRC(name: name, type: eventType)
 
                 let deleteAlert = UIAlertController(title: "Delete multiple events?", message: "This will remove \(fetchedEventsFRC.fetchedObjects?.count ?? 0) events with this name", preferredStyle: .actionSheet)
                 
@@ -244,7 +244,7 @@ class EventTypeSettings: UITableViewController {
         
         let originalName = cell.originalText
         
-        let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEvents(name: originalName!, type: eventType)
+        let fetchedEventsFRC = EventsDataController.sharedInstance().fetchSpecificEventsFRC(name: originalName!, type: eventType)
         let recordCount = fetchedEventsFRC.fetchedObjects?.count ?? 0
         
         let alert = UIAlertController(title: "Rename multiple events?", message: "This will change the name of all events (\(recordCount)) with this name", preferredStyle: .actionSheet)

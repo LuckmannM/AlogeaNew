@@ -48,8 +48,8 @@ class GraphView: UIView {
     var maxDisplayDate: Date!
     var refreshPointsFlag: Bool = true
     
-    var graphIsBarType: Bool {
-        return UserDefaults.standard.bool(forKey: "GraphIsBar")
+    var graphIsStatType: Bool {
+        return UserDefaults.standard.bool(forKey: "GraphIsStat")
     }
     
     var timeLinePoints: [CGPoint]!
@@ -94,16 +94,18 @@ class GraphView: UIView {
         medsView.frame = bounds
         medsView.setNeedsDisplay()
         
-        guard graphPoints.count > 0  else {
-            return
-        }
+//        guard graphPoints.count > 0  else {
+//            return
+//        }
         
-        if  graphIsBarType {
-            drawBarGraph()
-        } else {
+        if  graphIsStatType {
+            //drawBarGraph()
+            drawStats()
+        } else if graphPoints.count > 0 {
             drawLineGraph()
         }
         
+       // drawStats()
         refreshPointsFlag = true
     }
     
@@ -144,6 +146,111 @@ class GraphView: UIView {
             circle.stroke()
             circle.fill()
         }
+    }
+    
+    
+    // FIXME: scoreType match stats type
+    
+    func drawStats() {
+        
+        guard let episodeStats = StatisticsController.sharedInstance().returnEpisodeStats(forScoreType: helper.selectedScore) else {
+
+            let textwidth: CGFloat = 250
+            let titleRect = CGRect(x: frame.midX - textwidth / 2.0, y: frame.midY - 15, width: textwidth, height: 30)
+            let text: NSString = "not enough scores to analyse"
+            text.draw(in: titleRect, withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18.0)!,NSForegroundColorAttributeName: UIColor.white])
+            
+            return
+        }
+        
+        let displayScale = CGFloat(displayedTimeSpan) / frame.width
+        let bottomY = bounds.maxY - helper.timeLineSpace()
+        let topY: CGFloat = 5
+        var maxVAS: Double = 10.0
+        
+        if RecordTypesController.sharedInstance().returnMaxVAS(forType: helper.selectedScore) != nil {
+            maxVAS = RecordTypesController.sharedInstance().returnMaxVAS(forType: helper.selectedScore)!
+        }
+        
+        let episodeBars = UIBezierPath()
+        let meanBars = UIBezierPath()
+        let stdErrRects = UIBezierPath()
+        
+        for stat in episodeStats {
+            //if stat.scoreTypeName == helper.selectedScore { //  this needs testing to ensure that the episodeStats match the displayed score type
+                let timeSinceMinDateForStart = stat.startDate.timeIntervalSince(minDisplayDate)
+                let timeSinceMinDateForEnd = stat.endDate.timeIntervalSince(minDisplayDate)
+                
+                // vertical episode bars
+                let episodeStartX = CGFloat(timeSinceMinDateForStart) / displayScale
+                episodeBars.move(to: CGPoint(x: episodeStartX, y: bottomY))
+                episodeBars.addLine(to: CGPoint(x: episodeStartX, y: topY))
+                
+                // horizontal mean and SE bars if >1 score
+                if stat.numberOfScores > 1 {
+                    let meanY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean) / maxVAS)
+                    let episodeEndX = CGFloat(timeSinceMinDateForEnd) / displayScale
+                    meanBars.move(to: CGPoint(x: episodeStartX, y: meanY))
+                    meanBars.addLine(to: CGPoint(x: episodeEndX, y: meanY))
+                    
+                    let seUpperY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean - 1.96 * stat.stdError) / maxVAS)
+                    let seLowerY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean + 1.96 * stat.stdError) / maxVAS)
+                    
+                    let rect = CGRect(x: episodeStartX, y: seUpperY, width: (episodeEndX - episodeStartX), height: seLowerY - seUpperY)
+                    stdErrRects.append(UIBezierPath(rect: rect))
+                    
+                    if stat.moreThan5TimePct > 0 && stat.lessThan3TimePct > 0 {
+                        drawStatText(upperNumber: stat.moreThan5TimePct, lowerNumber: stat.lessThan3TimePct, xPos: episodeStartX, episodeWidth: episodeEndX - episodeStartX)
+                    }
+                }
+            }
+            colorScheme.pearlWhite.setStroke()
+            episodeBars.lineWidth = 1.0
+            episodeBars.stroke()
+            
+            meanBars.lineWidth = 3.0
+            meanBars.stroke()
+            
+            colorScheme.pearlWhite04.setFill()
+            stdErrRects.fill()
+       // }
+    }
+    
+    func drawStatText(upperNumber: Double, lowerNumber: Double, xPos: CGFloat, episodeWidth: CGFloat) {
+        
+        let numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.maximumFractionDigits = 0
+            return formatter
+        }()
+        
+        var frameWidth = episodeWidth
+        if frameWidth > 30 {
+            frameWidth = 30
+        }
+        
+        let upperRect = CGRect(x: xPos, y: 5, width: frameWidth, height: 16)
+        let lowerRect = CGRect(x: xPos , y: upperRect.maxY + 5, width: frameWidth, height: 16)
+        let cornerRadius: CGFloat = 2.0
+        
+        let upperRectPath = UIBezierPath(roundedRect: upperRect, cornerRadius: cornerRadius)
+        upperRectPath.lineWidth = 1.0
+        colorScheme.medBarRed.setFill()
+        upperRectPath.fill()
+        upperRectPath.stroke()
+        
+        let lowerRectPath = UIBezierPath(roundedRect: lowerRect, cornerRadius: cornerRadius)
+        lowerRectPath.lineWidth = 1.0
+        colorScheme.medBarGreen.setFill()
+        lowerRectPath.fill()
+        lowerRectPath.stroke()
+                
+        let upperText = (numberFormatter.string(from: upperNumber as NSNumber) ?? "") + "%"
+        upperText.draw(in: upperRect.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
+        
+        let lowerText = (numberFormatter.string(from: lowerNumber as NSNumber) ?? "") + "%"
+        lowerText.draw(in: lowerRect.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 12.0)!,NSForegroundColorAttributeName: UIColor.white])
+
     }
     
     func drawTimeLine() {

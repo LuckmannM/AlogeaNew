@@ -111,7 +111,7 @@ class DosesAndReminders: UITableViewController, UITextFieldDelegate {
         }
         
         //next check if the requried category exists
-        guard (UIApplication.shared.delegate as! AppDelegate).reminderNotificationCategoryRegistered else {
+        guard (UIApplication.shared.delegate as! AppDelegate).medReminderNotificationCategoryRegistered else {
             showNotificationPermissionsAlert(message: "Medication notification error: Reminder category not registered. Please inform our support team")
             sender.isOn = false
             return

@@ -192,6 +192,7 @@
 			children = (
 				263DE6041DBCDD5E00A7BCF7 /* EventsDataController.swift */,
 				265387041E38A1F800DE095E /* MedicationController.swift */,
+				265D3DEF1E6DEEAD001A6D9A /* StatisticsController.swift */,
 				26F91E121DC215ED00C4942A /* RecordTypesController.swift */,
 			);
 			name = Controllers;
@@ -560,6 +561,7 @@
 				26E3B8D31DA177D000D157BB /* Alogea.xcdatamodeld in Sources */,
 				2657FA681DD8C83A0063CCB4 /* CloudDrug.swift in Sources */,
 				263DE6071DBD4A2800A7BCF7 /* GraphView.swift in Sources */,
+				265D3DF01E6DEEAD001A6D9A /* StatisticsController.swift in Sources */,
 				262F2AFA1E2534EA00E8779E /* DigitsFromString.swift in Sources */,
 				26E3B9111DA1816E00D157BB /* DrugEpisode+CoreDataProperties.swift in Sources */,
 				267F78CF1DC4FCF8008CC23E /* GraphViewHelper.swift in Sources */,

@@ -35,6 +35,11 @@ class ColorScheme {
     let lightYellow = UIColor(colorLiteralRed: 249/255, green: 246/255, blue: 195/255, alpha: 1.0)
     let white = UIColor.white
     
+    let medBarGreen = UIColor(colorLiteralRed: 117/255, green: 171/255, blue: 144/255, alpha: 0.55)
+    let medBarRed = UIColor(colorLiteralRed: 172/255, green: 82/255, blue: 71/255, alpha: 0.6)
+    let medBarYellow = UIColor(colorLiteralRed: 246/255, green: 243/255, blue: 134/255, alpha: 0.50)
+    let medBarOrange = UIColor(colorLiteralRed: 250/255, green: 170/255, blue: 45/255, alpha: 0.5)
+
     static let medBarGreen = UIColor(colorLiteralRed: 117/255, green: 171/255, blue: 144/255, alpha: 0.55)
     static let medBarRed = UIColor(colorLiteralRed: 172/255, green: 82/255, blue: 71/255, alpha: 0.6)
     static let medBarYellow = UIColor(colorLiteralRed: 246/255, green: 243/255, blue: 134/255, alpha: 0.50)
@@ -44,6 +49,7 @@ class ColorScheme {
     
     let duskBlue = UIColor(colorLiteralRed: 0/255, green: 44/255, blue: 81/255, alpha: 1.0)
     let pearlWhite = UIColor(colorLiteralRed: 247/255, green: 245/255, blue: 241/255, alpha: 1.0)
+    let pearlWhite04 = UIColor(colorLiteralRed: 247/255, green: 245/255, blue: 241/255, alpha: 0.25)
     
     let drugListRowRose = UIColor(colorLiteralRed: 249/255, green: 230/255, blue: 213/255, alpha: 1.0)
     

@@ -323,8 +323,10 @@ public class DrugEpisode: NSManagedObject {
 
     func returnTimeOnDrug () -> String {
         
-        var timeInterval: TimeInterval
+        let dates = returnDatesForDrug()
+        let timeInterval = dates[1].timeIntervalSince(dates[0])
         
+        /*
         if endDateVar != nil {
             if Date().compare(endDateVar!) == .orderedAscending {
                 timeInterval = Date().timeIntervalSince(startDate as! Date)
@@ -333,7 +335,9 @@ public class DrugEpisode: NSManagedObject {
             }
         } else {
             timeInterval = Date().timeIntervalSince(startDate as! Date)
+            
         }
+        */
         
         let componentFormatter = DateComponentsFormatter()
         componentFormatter.unitsStyle = .full

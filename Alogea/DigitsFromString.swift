@@ -15,3 +15,48 @@ extension String {
         return components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
     }
 }
+
+extension Array {
+    
+    func mean() -> Double {
+        
+        guard self.count > 0 else {
+            return 0.0
+        }
+        
+        var sum:Double = 0.0
+        
+        for element in self {
+            sum += element as! Double
+        }
+        
+        return sum / Double(self.count)
+    }
+    
+    func stdDeviation() -> Double? {
+        
+        guard self.count > 2 else {
+            return nil
+        }
+        
+        var sd: Double = 0.0
+        let mn = self.mean()
+
+        for element in self {
+            sd += abs(element as! Double - mn)
+        }
+
+        return sd / Double(self.count)
+        
+    }
+    
+    func stdError() -> Double? {
+
+        guard self.count > 2 else {
+            return nil
+        }
+        
+        return self.stdDeviation()! / sqrt(Double(self.count))
+    }
+    
+}

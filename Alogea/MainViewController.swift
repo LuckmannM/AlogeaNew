@@ -63,9 +63,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
             // graphContainerView.graphView.displayedTimeSpan = helper.selectedScoreMinDateToNow // set initial dTS to minScoreEventDate to now
             graphContainerView.graphView.minDisplayDate = graphContainerView.graphView.maxDisplayDate.addingTimeInterval(-graphContainerView.graphView.displayedTimeSpan)
         }
-        // transferred to here from GraphView.init()
-        
-
         
         graphContainerView.reloadAllViews()
     }
@@ -73,7 +70,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("MainVC viewDidLoad start")
         graphContainerView.mainViewController  = self
         /*
         Problem: iPad in LandScape mode has the same IB dimension wRhR as in portrait mode
@@ -86,7 +82,8 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         displayTimeSegmentedController.selectedSegmentIndex = UISegmentedControlNoSegment
         
         self.view.backgroundColor = ColorScheme.sharedInstance().lightGray
-        print("MainVC viewDidLoad end")
+        //let episodeStats = StatisticsController.sharedInstance().episodeStats()
+        
         
     }
     

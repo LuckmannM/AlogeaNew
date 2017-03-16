@@ -53,7 +53,7 @@ class FloatingMenuView: UIView {
         let targetY = graphContainerView.bounds.midY - targetHeight/2
         graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
         
-        if UserDefaults.standard.bool(forKey: "GraphIsBar") {
+        if UserDefaults.standard.bool(forKey: "GraphIsStat") {
         } else {
             graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
         }
@@ -80,11 +80,11 @@ class FloatingMenuView: UIView {
     @IBAction func graphButtonAction(sender: UIButton) {
         
         if graphTypeButton.tag == 0 {            //graphView.graphIsLineType = false
-            UserDefaults.standard.set(false, forKey: "GraphIsBar")
+            UserDefaults.standard.set(false, forKey: "GraphIsStat")
             graphTypeButton.setImage(UIImage(named: "GraphButtonBar"), for: .normal)
             graphTypeButton.tag = 1
         } else {
-            UserDefaults.standard.set(true, forKey: "GraphIsBar")
+            UserDefaults.standard.set(true, forKey: "GraphIsStat")
             graphTypeButton.tag = 0
             graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
         }
