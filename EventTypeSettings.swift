@@ -67,8 +67,8 @@ class EventTypeSettings: UITableViewController {
         
         if indexPath.section == 0 {
             cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
-            cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
-            if (eventsController.fetchSpecificEvents(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
+            cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
+            if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
                 cell.accessoryType = .disclosureIndicator
             } else {
                 cell.accessoryType = .none
@@ -76,8 +76,8 @@ class EventTypeSettings: UITableViewController {
         } else {
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)
             cell.textField.text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
-            cell.SubLabel.text = "\(eventsController.fetchSpecificEvents(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) events"
-            if (eventsController.fetchSpecificEvents(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) > 0 {
+            cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) events"
+            if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) > 0 {
                 cell.accessoryType = .disclosureIndicator
             } else {
                 cell.accessoryType = .none
@@ -118,10 +118,10 @@ class EventTypeSettings: UITableViewController {
             
             if indexPath.section == 0 {
                 let name = recordTypesController.allTypes.object(at: indexPath).name!
-                frc = eventsController.fetchSpecificEvents(name: name, type: scoreEvent)
+                frc = eventsController.fetchSpecificEventsFRC(name: name, type: scoreEvent)
             } else {
                 let name = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
-                frc = eventsController.fetchSpecificEvents(name: name, type: nonScoreEvent)
+                frc = eventsController.fetchSpecificEventsFRC(name: name, type: nonScoreEvent)
             }
             
             performSegue(withIdentifier: "toEventsListSegue", sender: frc)
@@ -138,10 +138,10 @@ class EventTypeSettings: UITableViewController {
         
         if indexPath.section == 0 {
             let name = recordTypesController.allTypes.object(at: indexPath).name!
-            frc = eventsController.fetchSpecificEvents(name: name, type: scoreEvent)
+            frc = eventsController.fetchSpecificEventsFRC(name: name, type: scoreEvent)
         } else {
             let name = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
-            frc = eventsController.fetchSpecificEvents(name: name, type: nonScoreEvent)
+            frc = eventsController.fetchSpecificEventsFRC(name: name, type: nonScoreEvent)
         }
 
         performSegue(withIdentifier: "toEventsListSegue", sender: frc)
