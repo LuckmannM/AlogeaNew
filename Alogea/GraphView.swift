@@ -195,7 +195,7 @@ class GraphView: UIView {
                 episodeBars.addLine(to: CGPoint(x: episodeStartX, y: topY))
                 
                 // horizontal mean and SE bars if >1 score
-                if stat.numberOfScores > 1 {
+                if stat.numberOfScores > 0 {
                     let meanY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean) / maxVAS)
                     let episodeEndX = CGFloat(timeSinceMinDateForEnd) / displayScale
                     meanBars.move(to: CGPoint(x: episodeStartX, y: meanY))
@@ -203,7 +203,7 @@ class GraphView: UIView {
                     
                     maxTextWidth = episodeEndX - episodeStartX
                     if maxTextWidth > 60 {
-                        maxTextWidth = 60
+                        maxTextWidth = 30
                     }
                     
                     let meanBarTextBox = CGRect(
@@ -215,12 +215,16 @@ class GraphView: UIView {
                     
                     let meanText = (numberFormatter.string(from: stat.mean as NSNumber) ?? "")
                     meanText.draw(in: meanBarTextBox.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16.0)!,NSForegroundColorAttributeName: UIColor.white])
-
+                    /*
                     let seUpperY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean - 1.96 * stat.stdError) / maxVAS)
                     let seLowerY = (frame.height - helper.timeLineSpace()) * CGFloat((maxVAS - stat.mean + 1.96 * stat.stdError) / maxVAS)
                     
                     let rect = CGRect(x: episodeStartX, y: seUpperY, width: (episodeEndX - episodeStartX), height: seLowerY - seUpperY)
                     stdErrRects.append(UIBezierPath(rect: rect))
+                    */
+                    if stat.compareToPrevious != nil {
+                        displayMeanChange(change: stat.compareToPrevious!, xPos: episodeStartX, xWidth: episodeEndX - episodeStartX, meanYPos: meanY)
+                    }
                     
                     if stat.moreThan5TimePct > 0 && stat.lessThan3TimePct > 0 {
                         drawStatText(upperNumber: stat.moreThan5TimePct, lowerNumber: stat.lessThan3TimePct, xPos: episodeStartX, episodeWidth: episodeEndX - episodeStartX)
@@ -237,6 +241,57 @@ class GraphView: UIView {
             colorScheme.pearlWhite04.setFill()
             stdErrRects.fill()
        // }
+    }
+    
+    func displayMeanChange(change: Double, xPos: CGFloat, xWidth: CGFloat, meanYPos: CGFloat) {
+        
+        print("change: \(change)")
+        
+        let numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.maximumFractionDigits = 0
+            return formatter
+        }()
+
+        let fromMeanBar: CGFloat = change > 0 ? meanYPos - 36 : meanYPos + 2
+        let boxWidth: CGFloat = xWidth > 30 ? 30 : xWidth
+        
+        var arrowBoxRect = CGRect(x: xPos + (xWidth - boxWidth) / 2, y: fromMeanBar, width: boxWidth, height: 16)
+        
+        // if mean is close to 10 or 0 offSet arrow to avoid overspilling out of bounds
+        if arrowBoxRect.minY - 10 < 0 {
+            arrowBoxRect = arrowBoxRect.offsetBy(dx: 0, dy: 48)
+        } else if (arrowBoxRect.maxY + 10) > (bounds.maxY - helper.timeLineSpace()) {
+            arrowBoxRect = arrowBoxRect.offsetBy(dx: 0, dy: -48)
+        }
+        
+        let boxPath = UIBezierPath(roundedRect: arrowBoxRect, cornerRadius: 0)
+        
+        if change > 0 {
+            colorScheme.medBarRed.setFill()
+            boxPath.move(to: arrowBoxRect.origin)
+            boxPath.addLine(to: CGPoint(x:arrowBoxRect.origin.x + arrowBoxRect.width / 2, y:arrowBoxRect.minY - 10))
+            boxPath.addLine(to: CGPoint(x:arrowBoxRect.maxX , y:arrowBoxRect.origin.y))
+        } else {
+            colorScheme.medBarGreen.setFill()
+            boxPath.move(to: CGPoint(x:arrowBoxRect.origin.x, y:arrowBoxRect.maxY))
+            boxPath.addLine(to: CGPoint(x:arrowBoxRect.origin.x + arrowBoxRect.width / 2, y:arrowBoxRect.maxY + 10))
+            boxPath.addLine(to: CGPoint(x:arrowBoxRect.maxX , y:arrowBoxRect.maxY))
+        }
+        
+        
+        //colorScheme.pearlWhite.setStroke()
+        boxPath.fill()
+        
+        
+        var text = String()
+        if (abs(change) < 100.0) {
+            text = (numberFormatter.string(from: change as NSNumber) ?? "") + "%"
+        } else {
+            text = ">99%"
+        }
+        text.draw(in: arrowBoxRect.insetBy(dx: 2, dy: 0), withAttributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 11.0)!,NSForegroundColorAttributeName: UIColor.white])
+        
     }
     
     func drawStatText(upperNumber: Double, lowerNumber: Double, xPos: CGFloat, episodeWidth: CGFloat) {

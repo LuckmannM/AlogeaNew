@@ -35,6 +35,7 @@ class EpisodeStats: MedStats {
     
     var numberOfMeds = 0
     var medNames = [String]()
+    var compareToPrevious: Double?
 }
 
 class ScoreTypeStats: MedStats {
@@ -445,6 +446,24 @@ class StatisticsController {
                 let scoreEvents = EventsDataController.sharedInstance().fetchEventsBetweenDates(type: scoreEvent, name: type.name, startDate: newEpisodeForScoreType.startDate, endDate: newEpisodeForScoreType.endDate)
                 calculateEpisodesStats(forStat: newEpisodeForScoreType, withEvents: scoreEvents)
                 
+                /*
+                if index > 0 {
+                    if (stats?[index - 1].mean ?? 0.0) > 0.0 {
+                        newEpisodeForScoreType.compareToPrevious = 100 * (episode.mean - stats![index - 1].mean) / stats![index - 1].mean
+                        print(newEpisodeForScoreType.compareToPrevious!)
+                    }
+                }
+                */
+                //print("last episode mean = \(lastEpisode?.mean)")
+                //print("episode mean = \(newEpisodeForScoreType.mean)")
+                
+                /*
+                if lastEpisode?.mean != nil && newEpisodeForScoreType.mean > 0.0 {
+                    newEpisodeForScoreType.compareToPrevious = 100 * (episode.mean - lastEpisode!.mean) / lastEpisode!.mean
+                    print(newEpisodeForScoreType.compareToPrevious!)
+                }
+                */
+                
                 if let regMedsTaken = MedicationController.sharedInstance().regMedsTakenDuringEpisode(start: newEpisodeForScoreType.startDate, end: newEpisodeForScoreType.endDate) {
                     for med in regMedsTaken {
                         newEpisodeForScoreType.medNames.append(med.nameVar)
@@ -459,6 +478,27 @@ class StatisticsController {
                 episodeStatGroup.append(newEpisodeForScoreType)
             }
             allEpisodesStats.append(episodeStatGroup)
+        }
+        
+        // calculting changes in means from episode to episode
+        for type in RecordTypesController.sharedInstance().returnRecordTypesWithSavedEvents() {
+            var previousMeanToCompareTo: Double?
+            for episodeGroup in allEpisodesStats {
+                // an episodeGroup contains one EpisodeStats object for each scoreType
+                // [[ep1Score1][ep1Score2]]
+                for episode in episodeGroup {
+                    //[ep1Score1]
+                    if episode.scoreTypeName == type.name {
+                        if episode.mean > 0.0 {
+                            if previousMeanToCompareTo != nil {
+                                episode.compareToPrevious = 100 * (episode.mean - previousMeanToCompareTo!) / previousMeanToCompareTo!
+                            }
+                            previousMeanToCompareTo = episode.mean
+                        }
+                    }
+                }
+            }
+            previousMeanToCompareTo = nil
         }
         
         /* DEBUG
