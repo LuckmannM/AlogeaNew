@@ -66,6 +66,7 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
             if error != nil {
                 DispatchQueue.main.async() {
                     self.delegate?.errorUpdating(error: error as! NSError)
+                    // FIXME: iCloud connexion
                     // *** show disabled iCloud connection icon in e.g. NewDrug VC
                     // or show user Alert of missgin iCloud link
                 }
@@ -115,11 +116,14 @@ class DrugDictionary: PublicDrugDataBaseDelegate {
                         priority = currentPriority
                         bestMatchingDrugIndex = matchingDrugIndex
                     }
-                } else {
-                    ErrorManager.sharedInstance().errorMessage(message: "MedDictionary Error 2", errorInfo: "cloudDrug with index \(matchingDrugIndex) returns  nil priority indicating no match, however there should be one!")
                 }
             }
-            return (selectedDrugName,cloudDrugArray[bestMatchingDrugIndex!])
+            if bestMatchingDrugIndex != nil {
+                return (selectedDrugName,cloudDrugArray[bestMatchingDrugIndex!])
+            } else {
+                ErrorManager.sharedInstance().errorMessage(message: "MedDictionary Error 2", errorInfo: "DrugDictionary function matchPriorityOf \(selectedDrugName) fails to return a priority indicating no match")
+                return (nil, nil)
+            }
         }
         return (nil,nil)
     }

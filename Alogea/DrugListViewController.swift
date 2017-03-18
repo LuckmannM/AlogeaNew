@@ -20,7 +20,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
     lazy var stack : CoreDataStack = {
         return (UIApplication.shared.delegate as! AppDelegate).stack
     }()
-//    var drugDictionary: DrugDictionary!
+    var drugDictionary = DrugDictionary() // needs early init to load CloudDrugs before adding new Meds
     var inAppStore: InAppStore!
     var searchController: UISearchController!
     
@@ -68,7 +68,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
         tableView.reloadData()
         
-        logMedStats()
+        //logMedStats()
         
     }
     
@@ -308,6 +308,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         
     }
     
+    /*
     func logMedStats() {
         
         let numberFormatter: NumberFormatter = {
@@ -361,6 +362,7 @@ class DrugListViewController: UIViewController, UISearchResultsUpdating, UIPopov
         }
 
     }
+    */
     
     func debugEraseAll() {
         
