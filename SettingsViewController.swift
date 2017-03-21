@@ -223,9 +223,10 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             
         }
         else {
-            // Switch on - recreate notifications for drugs that have reminders set
+            // Switch on - recreate notifications for all non-discontinued drugs that have reminders set
             let fetchRequest = NSFetchRequest<DrugEpisode>(entityName: "DrugEpisode")
             var drugsList = [DrugEpisode]()
+            fetchRequest.predicate = NSPredicate(format: "isCurrent == %@", argumentArray: ["CurrentMedicines"])
             
             do {
                 drugsList = try managedObjectContext.fetch(fetchRequest)
@@ -236,7 +237,6 @@ class SettingsViewController: UITableViewController, NSFetchedResultsControllerD
             for drug in drugsList {
                 // for some reason the iteration doesn't trigger awakeFromFetch for the drug object
                 // the non-initiated local DrugEpisode variables can trigger crashes
-                // print("request notificationCheck for drug \(drug.nameVar)...")
                 drug.convertFromStorage()
                 drug.scheduleReminderNotifications(cancelExisting: false)
             }

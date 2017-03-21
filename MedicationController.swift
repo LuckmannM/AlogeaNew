@@ -155,11 +155,9 @@ class MedicationController: NSObject {
     
     override init() {
         super.init()
-        print("init MedicationController)")
         
         regMedsFRC.delegate = self
         allMedsFRC.delegate = self
-        print("finished init MedicationController)")
     }
     
     func returnSingleCurrentMedName() -> String? {
