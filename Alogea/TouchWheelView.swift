@@ -192,7 +192,6 @@ class TouchWheelView: UIView {
         
         if self.layer.pixelIsOpaque(point: touchPoint) && self.getPixelColor(fromPoint: touchPoint) != mainButtonController.buttonView.buttonColor {
             touchWheelValue = Double(10 * angle / (2 * π))
-            print("twValue \(touchWheelValue)")
             
             if recogniser.state == .ended {
                 if previousValue == 0.0 || previousValue == 10.0 {

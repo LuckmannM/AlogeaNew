@@ -18,10 +18,7 @@ let medicineEvent = "Medicine Event"
 class EventsDataController: NSObject {
     
     // MARK: - CoreData & FRCs
-    lazy var managedObjectContext: NSManagedObjectContext = {
-        let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
-        return moc
-    }()
+    var managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).stack.context
     
     var nonScoreEventTypesFRC: NSFetchedResultsController<Event>  = {
         let request = NSFetchRequest<Event>(entityName: "Event")
@@ -114,7 +111,6 @@ class EventsDataController: NSObject {
     
     override init() {
         super.init()
-        print("init EventsDataController)")
         
         nonScoreEventsByDateFRC.delegate = self
         nonScoreEventTypesFRC.delegate = self
@@ -123,10 +119,14 @@ class EventsDataController: NSObject {
         
         
         reconcileRecordTypesAndEventNames()
-        print("finsihed init EventsDataController)")
     }
     
-    func reconcileRecordTypesAndEventNames() {
+    func reconcileRecordTypesAndEventNames(saveNewTypeInEDC: Bool = true) {
+        // this function checks whether there is a RecordType Object for every stored event.type
+        // if it comes across an event of a type that has no matching RecordType it creates a new RecordType with this name
+        // this situation can arise after first launch when the user creates score events when there is only the 'untitled' default that is not stored as  RecordType, or after deleting/restoring from backup
+        // the method is called from EventsDataController in the FRCDelegate method when creating a new scoreEvent
+        // the call happens during (before completion) of the EDC save method, so before this save is completed a new RecordType may be created which itslef calls save in thi controller. This generates an 'recursively call save' Error (non-fatal)
         
         var scoreEventTypes = [String]()
         for sections in scoreEventTypesFRC.sections! {
@@ -134,15 +134,13 @@ class EventsDataController: NSObject {
         }
         
         guard scoreEventTypes.count > 0 else {
-            print("no events exist for reconciliation with recordTypes")
+
             return
         }
         
         for type in scoreEventTypes {
             if !recordTypesController.recordTypeNames.contains(type) {
-                recordTypesController.createNewRecordType(withName: type)
-                print("there are stored events of type \(type) that have no matching recordType")
-                print("a new matching recordType has been created by EventsDataController.reconcile method")
+                recordTypesController.createNewRecordType(withName: type, saveHere: saveNewTypeInEDC)
             }
         }
         
@@ -156,7 +154,7 @@ class EventsDataController: NSObject {
         
         currentlyProcessedEvent = NSEntityDescription.insertNewObject(forEntityName: "Event", into: managedObjectContext) as? Event
         guard currentlyProcessedEvent != nil else {
-                print ("error in EventsDatController newEvent function")
+            ErrorManager.sharedInstance().errorMessage(message: "EventsDataController Error 0", errorInfo:"error in EventsDatController newEvent function")
                 return
         }
         
@@ -193,18 +191,20 @@ class EventsDataController: NSObject {
         
         if managedObjectContext.hasChanges {
             do {
+                print("EventsDataController trying to save moc changes...")
                 currentlyProcessedEvent = nil
                 try managedObjectContext.save()
             } catch let error as NSError {
-                print("Error saving \(error)")
+                ErrorManager.sharedInstance().errorMessage(message: "EventsDataController Error 1", systemError: error)
             }
         }
+        print("EventsDataController save moc changes complete")
+
         
     }
     
     func deleteCurrentEvent() {
         guard currentlyProcessedEvent != nil else {
-            print("no currentlyProcessEvent to delete in EvenbtsDataController")
             return
         }
         
@@ -231,7 +231,7 @@ class EventsDataController: NSObject {
         do {
             try frc.performFetch()
         } catch let error as NSError{
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 1", systemError: error, errorInfo: "error in EventsDataController fetchSpecificEventsFRC function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2", systemError: error, errorInfo: "error in EventsDataController fetchSpecificEventsFRC function")
             return NSFetchedResultsController<Event>()
         }
 
@@ -241,7 +241,7 @@ class EventsDataController: NSObject {
     func fetchSpecificEvents(name: String, type: String) -> [Event]? {
         
         guard type == nonScoreEvent || type == scoreEvent else {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 1.1",  errorInfo: "error in EventsDataController fetchSpecificEvents function, type \(type) or name \(name) don't match eventTypes')")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 3",  errorInfo: "error in EventsDataController fetchSpecificEvents function, type \(type) or name \(name) don't match eventTypes')")
             return nil
         }
         
@@ -256,7 +256,7 @@ class EventsDataController: NSObject {
             let fetchedEvents = try managedObjectContext.fetch(request)
             return fetchedEvents
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2", systemError: error, errorInfo: "error in EventsDataController fetchEvents fetch function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 4", systemError: error, errorInfo: "error in EventsDataController fetchEvents fetch function")
         }
         return nil
     }
@@ -272,7 +272,7 @@ class EventsDataController: NSObject {
             let fetchedEvents = try managedObjectContext.fetch(request)
             return fetchedEvents
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.1", systemError: error, errorInfo: "error in EventsDataController fetchAllScoreEvents fetch function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 5", systemError: error, errorInfo: "error in EventsDataController fetchAllScoreEvents fetch function")
         }
         return nil
     }
@@ -288,7 +288,7 @@ class EventsDataController: NSObject {
             let fetchedEvents = try managedObjectContext.fetch(request)
             return fetchedEvents
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.2", systemError: error, errorInfo: "error in EventsDataController fetchAllMedEvents fetch function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 6", systemError: error, errorInfo: "error in EventsDataController fetchAllMedEvents fetch function")
         }
         return nil
     }
@@ -317,7 +317,7 @@ class EventsDataController: NSObject {
             let fetchedEvents = try managedObjectContext.fetch(request)
             return fetchedEvents
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.3", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 7", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
         }
         return nil
 
@@ -340,7 +340,7 @@ class EventsDataController: NSObject {
             let fetchedEvents = try managedObjectContext.fetch(request)
             return fetchedEvents
         } catch let error as NSError {
-            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 2.3", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
+            ErrorManager.sharedInstance().errorMessage( message: "EventsDataController Error 8", systemError: error, errorInfo: "error in EventsDataController fetchEventsBetweenDates function")
         }
         return nil
     }
@@ -408,7 +408,7 @@ class EventsDataController: NSObject {
                 startDate = scoreEvents[0].date as Date?
             }
         } catch let error as NSError{
-            ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 3", systemError: error, errorInfo: "error when fetching scoreEvents in earliestScoreOrMedEventDate function")
+            ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 9", systemError: error, errorInfo: "error when fetching scoreEvents in earliestScoreOrMedEventDate function")
         }
         return startDate
 
@@ -436,7 +436,7 @@ class EventsDataController: NSObject {
                 }
             }
         } catch let error as NSError{
-            ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 4", systemError: error, errorInfo: "error when fetching medEvents in earliestScoreOrMedEventDate function")
+            ErrorManager.sharedInstance().errorMessage(message: "EventsManager Error 10", systemError: error, errorInfo: "error when fetching medEvents in earliestScoreOrMedEventDate function")
         }
 
         return startDate
@@ -449,7 +449,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print("an eventsDataController changed content...")
+        print("EventsDataController changed content...")
 //        
 //        switch controller {
 //        case nonScoreEventsByDateFRC:
@@ -468,7 +468,10 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
         if currentlyProcessedEvent == nil {
             // do not draw pending events prior to saving. This would happen during pickerView showing predating options in mvButton
             graphView.setNeedsDisplay()
-            reconcileRecordTypesAndEventNames()
+            reconcileRecordTypesAndEventNames(saveNewTypeInEDC: false) // see this method in RecordTypesController
+            // this is called DURING the moc.save porcess when new Events are created, to check that there is an exsiting RecordType matching type
+            // if not RecordType is found the reconcile methid will create a new REcordType matching event.type which would be saved before returning and finishing the EDV.save. This create a recursive call to context save error.
+            // the only problem with this could be that if FRC is updated without EDC.save following then any new RecordTypes may not be saved reliably. this could happen with restores from Backup
         }
 
     }

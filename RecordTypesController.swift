@@ -61,7 +61,6 @@ class RecordTypesController: NSObject {
     
     override init() {
         super.init()
-        print("init RecordTypesController)")
         
 //        for object in allTypes.fetchedObjects! {
 //            print("recordType name is \(object.name) ")
@@ -73,7 +72,6 @@ class RecordTypesController: NSObject {
 //                // create new RecordType
 //            }
 //        }
-        print("finished init RecordTypesController)")
         
         allTypes.delegate = self
 
@@ -83,9 +81,8 @@ class RecordTypesController: NSObject {
         return recordTypesController
     }
     
-    func createNewRecordType(withName: String, minValue: Double? = 0, maxValue: Double? = 10) {
+    func createNewRecordType(withName: String, minValue: Double? = 0, maxValue: Double? = 10, saveHere: Bool = true) {
         
-        print("RecordTypesController.createNewRecordType of type: \(withName)")
         let newType = NSEntityDescription.insertNewObject(forEntityName: "RecordType", into: managedObjectContext) as! RecordType
         
         newType.name = withName
@@ -93,7 +90,9 @@ class RecordTypesController: NSObject {
         newType.minScore = minValue! as NSNumber?
         newType.maxScore = maxValue! as NSNumber?
         
-        save()
+        if saveHere {
+            save()
+        }
         
     }
     
@@ -148,7 +147,6 @@ class RecordTypesController: NSObject {
         var uniqueName = name
         let decimals = NSCharacterSet.decimalDigits
         
-//        print("checking \(name) as unique RecordType; existing are \(recordTypeNames)")
         var lowerRecordTypeNames = [String]()
         for type in recordTypeNames {
             lowerRecordTypeNames.append(type.lowercased())
@@ -171,12 +169,22 @@ class RecordTypesController: NSObject {
     
     func save() {
         
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch let error as NSError {
+                ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 3", systemError: error)
+            }
+        }
+
+        /*
         do {
             try  managedObjectContext.save()
         }
         catch let error as NSError {
             ErrorManager.sharedInstance().errorMessage(message: "RecTypeController Error 3", systemError: error)
         }
+        */
     }
 
     func scoreStats(forScoreType: String) -> ScoreTypeStats? {
