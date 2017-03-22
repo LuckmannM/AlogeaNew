@@ -191,6 +191,7 @@ class CoreDataStack: CustomStringConvertible {
             // even withou the expansion option of multiple scores a user may rename the one default RecordType on one device and this would be merged/imported via CoreData sync so one RecordType per device can be added event though only one should be permitted.
             // after merge/import there needs to be a check if the expansion was purchased and if not whether the user opts to rename the imported REcordTypes and evetn to the local RecordType, purchase, rename local REcordType to imported or not import
         }
+        RecordTypesController.sharedInstance().cleanDuplicatesAfterMerge()
     }
     
     @objc func persistentStoreCoordinatorWillChangeStores (notification: NSNotification) {

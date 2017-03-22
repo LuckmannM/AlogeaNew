@@ -83,6 +83,26 @@ class RecordTypesController: NSObject {
     
     func cleanDuplicatesAfterMerge() {
         
+        guard allTypes.fetchedObjects != nil else {
+            return
+        }
+        
+        guard allTypes.fetchedObjects!.count > 1 else {
+            return
+        }
+        
+        for type in allTypes.fetchedObjects! {
+            var count = 0
+            for scoreName in recordTypeNames {
+                if type.name == scoreName {
+                    count += 1
+                    if count > 1 {
+                        managedObjectContext.delete(type)
+                    }
+                }
+            }
+        }
+
     }
     
     func createNewRecordType(withName: String, minValue: Double? = 0, maxValue: Double? = 10, saveHere: Bool = true) {
