@@ -111,7 +111,7 @@ class EventPopUp: UIViewController {
 
             self.dismiss(animated: true, completion: { (void) in
                 
-                self.graphContainer.graphView.medsView.setNeedsLayout()
+                self.graphContainer.graphView.medsView.setNeedsDisplay()
                 
             })
 
@@ -122,7 +122,7 @@ class EventPopUp: UIViewController {
             
             self.dismiss(animated: true, completion: { (void) in
                 
-                self.graphContainer.graphView.medsView.setNeedsLayout()
+                self.graphContainer.graphView.medsView.setNeedsDisplay()
                 
             })
         })
