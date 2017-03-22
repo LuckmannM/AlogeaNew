@@ -467,12 +467,12 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
 //
         if currentlyProcessedEvent == nil {
             // do not draw pending events prior to saving. This would happen during pickerView showing predating options in mvButton
-            graphView.setNeedsLayout()
             reconcileRecordTypesAndEventNames(saveNewTypeInEDC: false) // see this method in RecordTypesController
             // this is called DURING the moc.save porcess when new Events are created, to check that there is an exsiting RecordType matching type
             // if not RecordType is found the reconcile methid will create a new REcordType matching event.type which would be saved before returning and finishing the EDV.save. This create a recursive call to context save error.
             // the only problem with this could be that if FRC is updated without EDC.save following then any new RecordTypes may not be saved reliably. this could happen with restores from Backup
         }
+        graphView.setNeedsDisplay()
 
     }
     
