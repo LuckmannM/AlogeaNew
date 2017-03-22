@@ -42,6 +42,9 @@ class ErrorManager: NSObject {
         var presentingVC = showInVC
         var titleToUse = title
         
+        addErrorLog(errorLocation: message, systemError: systemError, errorInfo: errorInfo)
+
+        
         if presentingVC == nil {
             if let visibleVC = (UIApplication.shared.delegate as! AppDelegate).window?.visibleViewController {
                 presentingVC = visibleVC
@@ -58,7 +61,6 @@ class ErrorManager: NSObject {
         
         if alertViewOpen {
             print("incoming error while alertView open")
-            addErrorLog(errorLocation: message, systemError: systemError, errorInfo: errorInfo)
             return
         } else {
             self.alertViewOpen = true
@@ -85,6 +87,10 @@ class ErrorManager: NSObject {
         
         let newError = ErrorLogBook.init(location: errorLocation, systemMessage: systemError, errorInfo: errorInfo ?? "no info")
         errorLogBook?.append(newError)
+        print("Error LogBook entry added...")
+        print("   location:\(newError.location)")
+        print("   system message:\(newError.systemMessage ?? nil)")
+        print("   erroInfo:\(newError.errorInfo)")
     }
 
 }
