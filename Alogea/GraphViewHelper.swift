@@ -127,9 +127,10 @@ class GraphViewHelper: NSObject {
         if UserDefaults.standard.value(forKey: "SelectedScore") != nil {
             return UserDefaults.standard.value(forKey: "SelectedScore") as! String
         } else {
-            UserDefaults.standard.set("untitled", forKey: "SelectedScore")
-            return "untitled"
+            UserDefaults.standard.set("untitled score", forKey: "SelectedScore")
+            return "untitled score"
         }
+        
     }
     
     var timeLineHelper: TimeLineHelper!
@@ -149,7 +150,7 @@ class GraphViewHelper: NSObject {
     class func sharedInstance() -> GraphViewHelper {
         return helper
     }
-    
+        
     func lineGraphGradient() -> CGGradient {
         
         let colourSpace = CGColorSpaceCreateDeviceRGB()
@@ -265,7 +266,6 @@ let helper = GraphViewHelper()
 extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("GaphView Helper current scoreEvents FRC has content changes - asking GraphView to refresh")
         graphView.refreshPointsFlag = true
         graphView.setNeedsLayout()
     }

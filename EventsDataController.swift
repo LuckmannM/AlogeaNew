@@ -472,6 +472,7 @@ extension EventsDataController: NSFetchedResultsControllerDelegate {
             // if not RecordType is found the reconcile methid will create a new REcordType matching event.type which would be saved before returning and finishing the EDV.save. This create a recursive call to context save error.
             // the only problem with this could be that if FRC is updated without EDC.save following then any new RecordTypes may not be saved reliably. this could happen with restores from Backup
         }
+        print("EventsDataController refreshing graphView")
         graphView.setNeedsDisplay()
 
     }
