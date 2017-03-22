@@ -75,16 +75,6 @@ class CoreDataStack: CustomStringConvertible {
     
     lazy var model : NSManagedObjectModel = NSManagedObjectModel(contentsOf: self.modelURL as URL)!
     
-    private lazy var storeContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: self.modelName)
-        container.loadPersistentStores {
-            (storeDescription, error) in
-            if let error = error as NSError? {
-                ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 2", systemError: error,errorInfo:"unresolved Persistent Store Container")
-            }
-        }
-        return container
-    }()
     
     
     // the options[] were missing in the CoreData project; the options make the sync succeed
@@ -95,15 +85,17 @@ class CoreDataStack: CustomStringConvertible {
     lazy var coordinator : NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.model)
         var storeError : NSError?
-        let URLPersistentStore = self.applicationStoresDirectory().appendingPathComponent("PainDiaryModel.sqlite")
+        let URLPersistentStore = self.applicationStoresDirectory().appendingPathComponent("Alogea.sqlite")
         do {
             self.store = try coordinator.addPersistentStore(
                 ofType: NSSQLiteStoreType,
                 configurationName: nil,
                 at: self.storeURL as URL,
-                options: [NSPersistentStoreUbiquitousContentNameKey: "Alogea",
-                                                                              NSMigratePersistentStoresAutomaticallyOption: true,
-                                                                              NSInferMappingModelAutomaticallyOption: true])
+                options: [
+                        NSPersistentStoreUbiquitousContentNameKey: "Alogea",
+                        NSMigratePersistentStoresAutomaticallyOption: true,
+                        NSInferMappingModelAutomaticallyOption: true]
+            )
         } catch  {
             // if there is an error with an incompatible store the below moves the incompatibel store
             // to a separate directory and creates a new store
@@ -111,7 +103,7 @@ class CoreDataStack: CustomStringConvertible {
             userInfo[NSLocalizedDescriptionKey] = "There was an error creating or loading the applications saved date" as AnyObject?
             userInfo[NSLocalizedFailureReasonErrorKey] = "There was an error creating or loading the applications saved state" as AnyObject?
             userInfo[NSUnderlyingErrorKey] = storeError!
-            let wrappedError = NSError(domain: "co.uk.PainApp", code: 1001, userInfo: userInfo)
+            let wrappedError = NSError(domain: "co.uk.Alogea", code: 1001, userInfo: userInfo)
             
             ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 3", systemError: wrappedError, errorInfo: "\(storeError!.userInfo)")
             
@@ -142,16 +134,31 @@ class CoreDataStack: CustomStringConvertible {
     }()
     
     
-    
+    /*
+     private lazy var storeContainer: NSPersistentContainer = {
+     let container = NSPersistentContainer(name: self.modelName)
+     container.loadPersistentStores {
+     (storeDescription, error) in
+     if let error = error as NSError? {
+     ErrorManager.sharedInstance().errorMessage(message: "CoreDataStack Error 2", systemError: error,errorInfo:"unresolved Persistent Store Container")
+     }
+     }
+     return container
+     }()
+
+     
     lazy var oldContext : NSManagedObjectContext = {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.persistentStoreCoordinator = self.coordinator
         
         return context
     }()
+    */
     
     lazy var context: NSManagedObjectContext = {
-        return self.storeContainer.viewContext
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.persistentStoreCoordinator = self.coordinator
+        return context
     }()
     
     var updateContextWithUbiquitousChangesObserver: Bool = false {

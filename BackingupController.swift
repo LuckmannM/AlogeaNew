@@ -110,7 +110,7 @@ class BackingUpController {
                     print("Folder path containing Cloud Backups: \(cloudFolderURL.path)")
                     return cloudFolderURL
                 } catch let error as NSError {
-                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 0.1", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
+                    ErrorManager.sharedInstance().errorMessage(message: "Backup failed with error 0.1", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
                 }
             }
         }
@@ -201,7 +201,7 @@ class BackingUpController {
         // check whether local dated Backup folder already exists; if so delete nad create, otherwise create new
         
         guard localBackupsFolderPath != nil else {
-            ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 4; can't save Backup", errorInfo:"error - cannot find directory at /Library/ApplicationSupport/Backups")
+            ErrorManager.sharedInstance().errorMessage(message: "BackupController failed with error 4; can't save Backup", errorInfo:"error - cannot find directory at /Library/ApplicationSupport/Backups")
             return
         }
 
@@ -513,7 +513,8 @@ class BackingUpController {
                     }
                 }
             } else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                // ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 16", systemError: nil, errorInfo: "can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
             }
             
 // 2. Drugs
@@ -613,7 +614,8 @@ class BackingUpController {
                 }
                 
             } else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 18", systemError: nil, errorInfo: "can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
             }
             
 // 3. RecordTypes
@@ -659,14 +661,16 @@ class BackingUpController {
                     
                 }
             } else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                // ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 20", systemError: nil, errorInfo: "can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
             }
             
             do {
                 try  moc.save()
             }
             catch let error as NSError {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
+                //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
+                ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 21", systemError: error, errorInfo: "Error saving moc after loading events from backup in DataIO")
             }
         }
         NotificationCenter.default.post(name: Notification.Name(rawValue: "Success"), object: nil, userInfo: ["text":"Restore from backup complete"])
@@ -687,16 +691,19 @@ class BackingUpController {
                     if let array = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as? [Dictionary<String,Data>] {
                         return array
                     } else {
-                        ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", errorInfo:"can't convert \(dictionaryType) object into drug array object")
+                        //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 22", errorInfo:"can't convert \(dictionaryType) object into drug array object")
+                        ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 22", systemError: nil, errorInfo: "can't convert \(dictionaryType) object into drug array object")
                         return nil
                     }
                 } else {
-                    ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 23", errorInfo:"Error loading \(dictionaryType) Data as NSData from file @ \(dictionaryPath)")
+                    //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 23", errorInfo:"Error loading \(dictionaryType) Data as NSData from file @ \(dictionaryPath)")
+                    ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 23", systemError: nil, errorInfo: "Error loading \(dictionaryType) Data as NSData from file @ \(dictionaryPath)")
                     return nil
                 }
             }
             else {
-                ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 24", errorInfo: "NSFileManager error in  importFromBackup - can't find \(dictionaryType) file @ \(dictionaryPath)")
+                //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 24", errorInfo: "NSFileManager error in  importFromBackup - can't find \(dictionaryType) file @ \(dictionaryPath)")
+                ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 24", systemError: nil, errorInfo: "NSFileManager error in  importFromBackup - can't find \(dictionaryType) file @ \(dictionaryPath)")
                 return nil
             }
     }

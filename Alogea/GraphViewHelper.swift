@@ -254,7 +254,7 @@ class GraphViewHelper: NSObject {
         }
         
         graphView.graphContainerView.updateBottomLabel()
-        graphView.setNeedsDisplay()
+        graphView.setNeedsLayout()
     }
 
 
@@ -265,29 +265,10 @@ let helper = GraphViewHelper()
 extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("GaphView Helper current scoreEvents FRC has content changes - asking GraphView to refresh")
         graphView.refreshPointsFlag = true
-        graphView.setNeedsDisplay()
+        graphView.setNeedsLayout()
     }
     
 }
-
-// *** Debug only
-extension GraphViewHelper {
-  
-    func printSelectedScoreEventDates() {
-        
-        for object in graphEventsFRC.fetchedObjects! {
-            if let event = object as Event? {
-                print("event date \(event.date)")
-            }
-        }
-        
-        if allEventsMinMaxDates?.count != nil {
-            print("earliest Selected event Date \(allEventsMinMaxDates![0])")
-            print("latest Selected event Date \(allEventsMinMaxDates![1])")
-        }
-    }
-
-}
-// *** Debug only
 

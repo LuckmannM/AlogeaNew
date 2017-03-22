@@ -167,8 +167,8 @@ class GraphContainerView: UIView, UIGestureRecognizerDelegate {
         
         updateLabels()
         clipView.setNeedsDisplay()
-        graphView.setNeedsDisplay()
-        self.setNeedsDisplay()
+        graphView.setNeedsLayout()
+        self.setNeedsLayout()
         
     }
 

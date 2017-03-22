@@ -41,8 +41,8 @@ class MVButtonController: TouchWheelDelegate, MVButtonDelegate {
         buttonView.frame = rect
         roundButton.frame = buttonView.bounds
         
-        buttonView.setNeedsDisplay()
-        roundButton.setNeedsDisplay()
+        buttonView.setNeedsLayout()
+        roundButton.setNeedsLayout()
     }
     
     func passOnTouchWheelScore(score: Double,ended: Bool = false) {

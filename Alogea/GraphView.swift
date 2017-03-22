@@ -93,7 +93,7 @@ class GraphView: UIView {
         }
         
         medsView.frame = bounds
-        medsView.setNeedsDisplay()
+        medsView.setNeedsLayout()
         
 //        guard graphPoints.count > 0  else {
 //            return
@@ -438,7 +438,7 @@ class GraphView: UIView {
             i += 1
         }
         refreshPointsFlag = false
-        setNeedsDisplay()
+        setNeedsLayout()
     }
     
     @IBAction func tapGesture(sender: UITapGestureRecognizer) {
@@ -506,7 +506,7 @@ class GraphView: UIView {
                 removeTimeLineLabels()
             }
         }
-        setNeedsDisplay()
+        setNeedsLayout()
         graphContainerView.updateBottomLabel()
     }
 

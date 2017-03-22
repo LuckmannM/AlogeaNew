@@ -14,6 +14,23 @@ class ErrorManager: NSObject {
     
     //static var alertViewOpen: Bool!
     
+    struct ErrorLogBook {
+        var location = String()
+        var systemMessage: NSError?
+        var errorInfo = String()
+        
+        mutating func create(location: String, systemError: NSError? = nil, errorInfo: String) {
+            self.location = location
+            self.errorInfo = errorInfo
+            if systemError != nil {
+                self.systemMessage = NSError()
+                self.systemMessage = systemError
+            }
+        }
+    }
+    
+    var errorLogBook: [ErrorLogBook]?
+    
     class func sharedInstance() -> ErrorManager {
         return errorManager
     }
@@ -29,7 +46,7 @@ class ErrorManager: NSObject {
             if let visibleVC = (UIApplication.shared.delegate as! AppDelegate).window?.visibleViewController {
                 presentingVC = visibleVC
             } else {
-                print("Error in Error manager: can't find currently visible VC")
+                addErrorLog(errorLocation: "ErrorManager", errorInfo: "can't find currently visible VC")
                 return
             }
 
@@ -40,12 +57,8 @@ class ErrorManager: NSObject {
         }
         
         if alertViewOpen {
-// *** accumulate incoming messages and gather log
-            print("incoming error while alertView open________")
-            print("message \(message)")
-            print("systemError: \(systemError)")
-            print("errorInfo: \(errorInfo)")
-            print()
+            print("incoming error while alertView open")
+            addErrorLog(errorLocation: message, systemError: systemError, errorInfo: errorInfo)
             return
         } else {
             self.alertViewOpen = true
@@ -60,13 +73,19 @@ class ErrorManager: NSObject {
         // Present Alert Controller
             presentingVC!.present(alertController, animated: true, completion: nil)
         
-        //temporary for debugging
-        print("ERROR________")
-        print("systemError: \(systemError)")
-        print("errorInfo: \(errorInfo)")
-        
     }
     
+    func addErrorLog(errorLocation: String, systemError: NSError? = nil, errorInfo: String?) {
+        
+        // gathering error messages without displaying to the user
+        // this may be useful if other alert is already displayed e.g. in Backups if Backup fails at the end
+        // think about persisting these in a lof file
+        
+        errorLogBook = [ErrorLogBook]()
+        
+        let newError = ErrorLogBook.init(location: errorLocation, systemMessage: systemError, errorInfo: errorInfo ?? "no info")
+        errorLogBook?.append(newError)
+    }
 
 }
 

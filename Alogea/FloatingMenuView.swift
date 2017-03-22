@@ -93,7 +93,7 @@ class FloatingMenuView: UIView {
             graphTypeButton.tag = 0
             graphTypeButton.setImage(UIImage(named: "GraphButtonLine"), for: .normal)
         }
-        graphView.setNeedsDisplay()
+        graphView.setNeedsLayout()
         self.slideIn()
     }
     

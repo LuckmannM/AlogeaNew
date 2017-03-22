@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     lazy var stack : CoreDataStack = {
         let options  = [NSPersistentStoreUbiquitousContentNameKey: "Alogea", NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true, NSPersistentStoreFileProtectionKey: FileProtectionType.completeUnlessOpen] as [String : Any]
         
-        return CoreDataStack(modelName: "Alogea", storeName: "Alogea", options: options as NSDictionary?)
+        return CoreDataStack(modelName: "Alogea", storeName: "AlogeaStore", options: options as NSDictionary?)
         
     }()
 
@@ -124,6 +124,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+        if ErrorManager.sharedInstance().errorLogBook != nil {
+            print()
+            print("____ ERROR LOG BOOK ____")
+            var i = 0
+            for logEntry in ErrorManager.sharedInstance().errorLogBook! {
+                print(" - Error /(i+1).")
+                print("   location:\(logEntry.location)")
+                print("   system message:\(logEntry.systemMessage ?? nil)")
+                print("   erroInfo:\(logEntry.errorInfo)")
+                i += 1
+            }
+        }
     }
     
     // MARK: - Notifications

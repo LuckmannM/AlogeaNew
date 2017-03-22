@@ -427,7 +427,7 @@ class MedsView: UIView {
 extension MedsView: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        self.setNeedsDisplay()
+        self.setNeedsLayout()
     }
     
 }
