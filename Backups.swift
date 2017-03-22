@@ -83,7 +83,7 @@ class Backups: UITableViewController, UNUserNotificationCenterDelegate  {
         self.navigationItem.setRightBarButtonItems([backupActionButton, spacer, cloudIcon], animated: true)
         
         NotificationCenter.default.addObserver(self, selector: #selector(cloudBackupsUpdated), name: NSNotification.Name(rawValue: "CloudBackupFinished"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: NSNotification.Name(rawValue: "Success"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: NSNotification.Name(rawValue: "Restore result"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showMessage(notification:)), name: .NSUbiquityIdentityDidChange, object: nil)
         
     }

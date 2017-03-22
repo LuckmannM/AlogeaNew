@@ -57,6 +57,7 @@ class BackingUpController {
         guard let appSupportDirectoryPath = applicationSupportDirectoryPath else {
             return nil
         }
+        //print("local Backups at: \(appSupportDirectoryPath.appending(localBackupsFolderName))")
         
         return appSupportDirectoryPath.appending(localBackupsFolderName)
     }()
@@ -71,7 +72,6 @@ class BackingUpController {
         var iCloudStorageURL: URL?
         
         DispatchQueue.main.async() {
-            print("Obtainig CloudStorageUrl...")
             iCloudStorageURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)
             updateCloudAccess(cloudURL: iCloudStorageURL)
         }
@@ -81,7 +81,6 @@ class BackingUpController {
     
     static func updateCloudAccess(cloudURL: URL?) {
         
-        print("...got CloudStorageUrl: \(cloudURL?.path)")
         guard cloudURL != nil  else {
             return
         }
@@ -107,7 +106,6 @@ class BackingUpController {
             if !FileManager.default.fileExists(atPath: cloudFolderURL.path) {
                 do {
                     try FileManager.default.createDirectory(at: cloudFolderURL, withIntermediateDirectories: false, attributes: nil)
-                    print("Folder path containing Cloud Backups: \(cloudFolderURL.path)")
                     return cloudFolderURL
                 } catch let error as NSError {
                     ErrorManager.sharedInstance().errorMessage(message: "Backup failed with error 0.1", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
@@ -124,10 +122,10 @@ class BackingUpController {
         }
         
         if let cloudFolderURL = cloudStorageURL?.appendingPathComponent(cloudBackupsFolderName) {
+            //print("got Folder path containing Cloud Backups: \(cloudFolderURL.path)")
             if !FileManager.default.fileExists(atPath: cloudFolderURL.path) {
                 do {
                     try FileManager.default.createDirectory(at: cloudFolderURL, withIntermediateDirectories: false, attributes: nil)
-                    print("Folder path containing Cloud Backups: \(cloudFolderURL.path)")
                     return cloudFolderURL
                 } catch let error as NSError {
                     ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 0.2", systemError: error, errorInfo: "Can't create iCloud toplevel Backups folder")
@@ -454,6 +452,7 @@ class BackingUpController {
     static func importFromBackup(sourcePath: String?) {
         
         let moc = (UIApplication.shared.delegate as! AppDelegate).stack.context
+        var restoreError = false
         
         if sourcePath != nil {
             
@@ -515,6 +514,7 @@ class BackingUpController {
             } else {
                 // ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 16", errorInfo:"can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
                 ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 16", systemError: nil, errorInfo: "can't import EventsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                restoreError = true
             }
             
 // 2. Drugs
@@ -616,6 +616,7 @@ class BackingUpController {
             } else {
                 //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 18", errorInfo:"can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
                 ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 18", systemError: nil, errorInfo: "can't import DrugsBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                restoreError = true
             }
             
 // 3. RecordTypes
@@ -663,6 +664,7 @@ class BackingUpController {
             } else {
                 // ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 20", errorInfo:"can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
                 ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 20", systemError: nil, errorInfo: "can't import RecordTypesBackup into dictionary array in 'importFramBackup'; filepath is \(sourcePath)")
+                restoreError = true
             }
             
             do {
@@ -671,9 +673,15 @@ class BackingUpController {
             catch let error as NSError {
                 //ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 21", systemError: error, errorInfo:"Error saving moc after loading events from backup in DataIO")
                 ErrorManager.sharedInstance().addErrorLog(errorLocation: "BackupController Error 21", systemError: error, errorInfo: "Error saving moc after loading events from backup in DataIO")
+                restoreError = true
             }
         }
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "Success"), object: nil, userInfo: ["text":"Restore from backup complete"])
+        if !restoreError {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "Restore result"), object: nil, userInfo: ["text":"Success. Restore from backup complete"])
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "Restore result"), object: nil, userInfo: ["text":"Backup Failed. Unable to complete restore from Backup"])
+            
+        }
         
     }
     

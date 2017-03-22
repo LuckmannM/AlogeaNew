@@ -185,6 +185,7 @@ class CoreDataStack: CustomStringConvertible {
             self.context.mergeChanges(fromContextDidSave: notification as Notification)
             print("persistentStore Did Import UbiquitousContent Changes")
             // views should be updated via FRC delegates connected to moc
+            
             // if events of new (to the device) RecordType created on another device are imported before importing the new RecordType, then duplicate RecordType may appear
             // consider clean function in REcordTypesController to get rid of duplicates, called after merge
             // even withou the expansion option of multiple scores a user may rename the one default RecordType on one device and this would be merged/imported via CoreData sync so one RecordType per device can be added event though only one should be permitted.
@@ -194,6 +195,7 @@ class CoreDataStack: CustomStringConvertible {
     
     @objc func persistentStoreCoordinatorWillChangeStores (notification: NSNotification) {
         
+        // called before DoreData iCloud store switched on/off
         if context.hasChanges {
             do {
                 try context.save()
