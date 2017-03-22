@@ -252,7 +252,7 @@ class GraphViewHelper: NSObject {
         }
         
         graphView.graphContainerView.updateBottomLabel()
-        graphView.setNeedsLayout()
+        graphView.setNeedsDisplay()
     }
 
 

@@ -271,8 +271,8 @@ class BackingUpController {
         }
         
         // 2.  create new folder in toplevel iCloud Backups folder
-        print("cloudStorageURL = \(cloudStorageURL)")
-        print("cloudBackupsURL = \(updateCloudBackupsFolderURL())")
+        //print("cloudStorageURL = \(cloudStorageURL)")
+        //print("cloudBackupsURL = \(updateCloudBackupsFolderURL())")
         guard let newCloudFolder = cloudBackupsFolderURL?.appendingPathComponent("CloudBackup " + dateFormatter.string(from: Date()), isDirectory: true) else {
             ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 10", errorInfo: "Can't create new CloudBackup Folder in directory \(cloudBackupsFolderURL)")
             return
