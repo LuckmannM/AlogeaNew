@@ -264,7 +264,7 @@ extension GraphViewHelper: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         graphView.refreshPointsFlag = true
-        graphView.setNeedsLayout()
+        graphView.setNeedsDisplay()
     }
     
 }
