@@ -139,12 +139,9 @@ class GraphViewHelper: NSObject {
 
     convenience init(graphView: GraphView) {
         
-        print("init GraphViewHelper")
         self.init()
         self.graphView = graphView
         self.timeLineHelper = TimeLineHelper(helper: self)
-        print("finished init GraphViewHelper")
-        print("")
     }
     
     class func sharedInstance() -> GraphViewHelper {

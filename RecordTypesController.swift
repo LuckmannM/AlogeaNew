@@ -81,6 +81,10 @@ class RecordTypesController: NSObject {
         return recordTypesController
     }
     
+    func cleanDuplicatesAfterMerge() {
+        
+    }
+    
     func createNewRecordType(withName: String, minValue: Double? = 0, maxValue: Double? = 10, saveHere: Bool = true) {
         
         let newType = NSEntityDescription.insertNewObject(forEntityName: "RecordType", into: managedObjectContext) as! RecordType

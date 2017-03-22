@@ -81,6 +81,12 @@ class GraphScoreChoser: UITableViewController {
             UserDefaults.standard.set(recordTypeNames[indexPath.row], forKey: "SelectedScore")
             tableView.reloadSections([indexPath.section], with: .automatic)
         } else {
+            // FIXME: Adding RecordType and syncing
+            // if events of new (to the device) RecordType created on another device are imported before importing the new RecordType, then duplicate RecordType may appear
+            // consider clean function in REcordTypesController to get rid of duplicates, called after merge
+            // even withou the expansion option of multiple scores a user may rename the one default RecordType on one device and this would be merged/imported via CoreData sync so one RecordType per device can be added event though only one should be permitted.
+            // after merge/import there needs to be a check if the expansion was purchased and if not whether the user opts to rename the imported REcordTypes and evetn to the local RecordType, purchase, rename local REcordType to imported or not import
+            
             
             // check option purchased
             if InAppStore.sharedInstance().checkMultipleGraphAccess() {

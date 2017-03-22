@@ -97,8 +97,6 @@ class GraphView: UIView {
         
         drawTimeLine()
         if refreshPointsFlag {
-            print("GraphView dTS = \(displayedTimeSpan)")
-            print("GraphView minDisplayDateDate = \(minDisplayDate)")
             graphPoints = helper.calculateGraphPoints(forFrame: frame, withDisplayedTimeSpan: displayedTimeSpan, withMinDate: minDisplayDate)
         }
         
@@ -254,8 +252,6 @@ class GraphView: UIView {
     }
     
     func displayMeanChange(change: Double, xPos: CGFloat, xWidth: CGFloat, meanYPos: CGFloat) {
-        
-        print("change: \(change)")
         
         let numberFormatter: NumberFormatter = {
             let formatter = NumberFormatter()

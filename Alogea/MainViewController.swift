@@ -48,7 +48,6 @@ class MainViewController: UIViewController, UNUserNotificationCenterDelegate {
         // rretrun from other viewControllers
         // the graph may have changed so need re-draw/refresh
         
-        print("MainVC viewWillAppear")
 
         // hide navigationBar
         self.navigationController?.setNavigationBarHidden(true, animated: true)

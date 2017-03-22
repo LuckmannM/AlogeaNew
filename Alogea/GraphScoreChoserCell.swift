@@ -51,6 +51,7 @@ class GraphScoreChoserCell: UITableViewCell {
         textField.clearButtonMode = .whileEditing
         textField.isEnabled = true
         textField.becomeFirstResponder()
+
     }
 }
 
@@ -77,6 +78,7 @@ extension GraphScoreChoserCell: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text != "" {
             textField.isEnabled = false
+            
             let uniqueName = RecordTypesController.sharedInstance().returnUniqueName(name: textField.text!)
             RecordTypesController.sharedInstance().createNewRecordType(withName: uniqueName)
             UserDefaults.standard.set(uniqueName, forKey: "SelectedScore")
