@@ -49,14 +49,36 @@ class GraphScoreChoser: UITableViewController {
         cell.setDelegate(delegate: self, indexPath: indexPath, tableView: self.tableView)
 
         if indexPath.row < recordTypeNames.count {
-            cell.textField.text = recordTypeNames[indexPath.row]
-            cell.textField.isEnabled = false
-            cell.addButton.isHidden = true
-            
-            if recordTypeNames[indexPath.row] == selectedScore {
-                cell.accessoryType = .checkmark
+            if InAppStore.sharedInstance().checkMultipleGraphAccess() {
+                // user purchased multiple graph option
+                cell.textField.text = recordTypeNames[indexPath.row]
+                cell.textField.isEnabled = false
+                cell.addButton.isHidden = true
+                
+                if recordTypeNames[indexPath.row] == selectedScore {
+                    cell.accessoryType = .checkmark
+                } else {
+                    cell.accessoryType = .none
+                }
+                
             } else {
-                cell.accessoryType = .none
+                // option not purchased, enable only one score ([0] element
+                // there may be more than on RecordTypes stored if these have been imported from other devices
+                
+                if indexPath.row < 1 {
+                    // alloqwed default score
+                    cell.textField.text = recordTypeNames[indexPath.row]
+                    cell.textField.isEnabled = false
+                    cell.addButton.isHidden = true
+                    cell.accessoryType = .checkmark
+                } else {
+                    // non-permitted scores
+                    cell.textField.textColor = UIColor.gray
+                    cell.textField.text = recordTypeNames[indexPath.row]
+                    cell.textField.isEnabled = false
+                    cell.addButton.isHidden = true
+                    cell.accessoryType = .none
+                }
             }
         } else {
             // active add button here dn when pressed active textField in didSelectRow
@@ -72,16 +94,29 @@ class GraphScoreChoser: UITableViewController {
         
         let cell = tableView.cellForRow(at: indexPath) as! GraphScoreChoserCell
         tableView.deselectRow(at: indexPath, animated: true)
+        
         if indexPath.row < recordTypeNames.count {
-            UserDefaults.standard.set(recordTypeNames[indexPath.row], forKey: "SelectedScore")
-            tableView.reloadSections([indexPath.section], with: .automatic)
-        } else {
-            // FIXME: Adding RecordType and syncing
-            // if events of new (to the device) RecordType created on another device are imported before importing the new RecordType, then duplicate RecordType may appear
-            // consider clean function in REcordTypesController to get rid of duplicates, called after merge
-            // even withou the expansion option of multiple scores a user may rename the one default RecordType on one device and this would be merged/imported via CoreData sync so one RecordType per device can be added event though only one should be permitted.
-            // after merge/import there needs to be a check if the expansion was purchased and if not whether the user opts to rename the imported REcordTypes and evetn to the local RecordType, purchase, rename local REcordType to imported or not import
+            // user selects an existing scoreType/RecordType
             
+            if indexPath.row == 0 {
+                // selecting 0 element or default score always possible
+                UserDefaults.standard.set(recordTypeNames[indexPath.row], forKey: "SelectedScore")
+                tableView.reloadSections([indexPath.section], with: .automatic)
+            } else {
+                // optional additional scoreTypes can only be selected if expansion purchased
+                if InAppStore.sharedInstance().checkMultipleGraphAccess() {
+                    UserDefaults.standard.set(recordTypeNames[indexPath.row], forKey: "SelectedScore")
+                    tableView.reloadSections([indexPath.section], with: .automatic)
+                } else {
+                    // if not purchased display purchase offer
+                    // FIXME: Add Merge RecordTypes option
+                    self.dismiss(animated: true, completion: {
+                        self.rootViewController.showPurchaseDialog()
+                    })
+                }
+            }
+        } else {
+            // user wants to add a new RecordType
             
             // check option purchased
             if InAppStore.sharedInstance().checkMultipleGraphAccess() {

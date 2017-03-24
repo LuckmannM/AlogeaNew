@@ -66,6 +66,7 @@ class EventTypeSettings: UITableViewController {
         cell.setDelegate(delegate: self,indexPath: indexPath,tableView: self.tableView)
         
         if indexPath.section == 0 {
+            // RecordTypes
             cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
             cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
             if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {

@@ -107,7 +107,10 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
                 qualifiesForAccess = true
             }
         }
-        return qualifiesForAccess
+        
+        return false
+        // FIXME: Reset this Debug setting
+        // return qualifiesForAccess
     }
     
     

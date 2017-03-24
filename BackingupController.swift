@@ -355,6 +355,10 @@ class BackingUpController {
             if event.note != nil {
                 singleEventDictionary["note"] = NSKeyedArchiver.archivedData(withRootObject: event.note!) as NSData
             }
+            if event.urid != nil {
+                singleEventDictionary["urid"] = NSKeyedArchiver.archivedData(withRootObject: event.urid!) as NSData
+            }
+
             
             eventsDictionaryArray.append(singleEventDictionary as NSDictionary)
         }
@@ -407,6 +411,11 @@ class BackingUpController {
             if drug.attribute3 != nil {
                 singleDrugDictionary["attribute3"] = NSKeyedArchiver.archivedData(withRootObject: drug.attribute3!) as NSData
             }
+            if drug.urid != nil {
+                singleDrugDictionary["urid"] = NSKeyedArchiver.archivedData(withRootObject: drug.urid!) as NSData
+            }
+            
+
             
             drugsDictionaryArray.append(singleDrugDictionary as NSDictionary)
         }
@@ -429,6 +438,9 @@ class BackingUpController {
             }
             if type.minScore != nil {
                 singleTypeDictionary["minScore"] = NSKeyedArchiver.archivedData(withRootObject: type.minScore!) as NSData
+            }
+            if type.urid != nil {
+                singleTypeDictionary["urid"] = NSKeyedArchiver.archivedData(withRootObject: type.urid!) as NSData
             }
             
             recordTypesDictionaryArray.append(singleTypeDictionary as NSDictionary)
@@ -491,6 +503,9 @@ class BackingUpController {
                                 newEvent!.outcome = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["outcome"] as! Data)) as? String
                             case "locationImage":
                                 newEvent!.locationImage = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["locationImage"]as! Data)) as? NSObject
+                            case "urid":
+                                newEvent!.urid = NSKeyedUnarchiver.unarchiveObject(with: (eventDictionary["urid"]as! Data)) as? String
+
                             default:
                                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 15", errorInfo:"backup event dictionary unrecognised key \(key)")
                             }
@@ -570,6 +585,8 @@ class BackingUpController {
                                 newDrugEpsiode!.attribute2 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute2"] as! Data)) as? NSData
                             case "attribute3":
                                 newDrugEpsiode!.attribute3 = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["attribute3"] as! Data)) as? NSData
+                            case "urid":
+                                newDrugEpsiode!.urid = NSKeyedUnarchiver.unarchiveObject(with: (drugDictionary["urid"]as! Data)) as? String
                             default:
                                 print("backup drug dictionary unrecognised key \(key)")
                                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 17")
@@ -644,6 +661,8 @@ class BackingUpController {
                                 newRecordType!.maxScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["maxScore"] as? Data)!) as? NSNumber
                             case "minScore":
                                 newRecordType!.minScore = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["minScore"] as? Data)!)  as? NSNumber
+                            case "urid":
+                                newRecordType!.urid = NSKeyedUnarchiver.unarchiveObject(with: (recordTypeDictionary["urid"] as! Data)) as? String
                             default:
                                 ErrorManager.sharedInstance().errorMessage(message: "BackupController Error 19", errorInfo:"backup recordTypes dictionary unrecognised key \(key)")
                             }

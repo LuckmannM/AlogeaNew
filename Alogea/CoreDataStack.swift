@@ -191,7 +191,23 @@ class CoreDataStack: CustomStringConvertible {
             // even withou the expansion option of multiple scores a user may rename the one default RecordType on one device and this would be merged/imported via CoreData sync so one RecordType per device can be added event though only one should be permitted.
             // after merge/import there needs to be a check if the expansion was purchased and if not whether the user opts to rename the imported REcordTypes and evetn to the local RecordType, purchase, rename local REcordType to imported or not import
         }
-        RecordTypesController.sharedInstance().cleanDuplicatesAfterMerge()
+        
+        RecordTypesController.sharedInstance().cleanAfterCloudMerge()
+        
+        // if user has NOT purchased multiple graph expansion then the App needs to check:
+        // are the imported RecordType(s) of the same name as the single allowed on this device?
+        // - if not: display as grey and disabled in GraphScoreChoser and in EventTypeSettings (no edit and display)
+        // - offer option to merge device RT and imported RT into one, also merging all nonScoreEvents with these name
+        // are the imported scoreEvents of the single allowed RecordType on this device?
+        // - if NOT: can't be displayed or edited
+        
+        // if user has NOT purchased multiple drug expansion then the App needs to check:
+        // are the imported medEvents of the same name/drugID than the one allowed on this device?
+        // - if NOT: keep imported med events but do not display, show only med events with the name of the drug on the device
+        // is there an existing drug? if so does the imported one have the same name?
+        // - if NOT: display notification that there can't be more than one drug
+        // - do NOT delete imported drugs from moc (this would deleted from other devices as well) but display drug with URID for this device only
+        
     }
     
     @objc func persistentStoreCoordinatorWillChangeStores (notification: NSNotification) {

@@ -37,6 +37,19 @@ class RecordTypesController: NSObject {
         return frc
     }()
     
+    /*
+    var allowedTypes: NSFetchedResultsController<RecordType> = {
+        
+        let request = NSFetchedResultsController<RecordType> (entityName:"RecordType")
+        var predicate: NSPredicate?
+        
+        if !InAppStore.sharedInstance().checkMultipleGraphAccess() {
+            predicate = NSPredicate(format: "name == %@", argumentArray: [oldName])
+        }
+       
+    }()
+    */
+    
     var recordTypeNames: [String] {
         
         var nameArray = [String]()
@@ -81,8 +94,11 @@ class RecordTypesController: NSObject {
         return recordTypesController
     }
     
-    func cleanDuplicatesAfterMerge() {
+    func cleanAfterCloudMerge() {
         
+        // method called after import/merge from records from other devices
+        
+        // 1.check for duplicates
         guard allTypes.fetchedObjects != nil else {
             return
         }
@@ -102,6 +118,43 @@ class RecordTypesController: NSObject {
                 }
             }
         }
+        
+        // 2. check if MultipleGraph Expansion purchased
+        if !InAppStore.sharedInstance().checkMultipleGraphAccess() {
+            // if not check wether there are more than one RecordTypes
+            if (RecordTypesController.sharedInstance().allTypes.fetchedObjects?.count ?? 0) > 1 {
+                // if so check wether the local device RecordType has any saved scoreEvents with this name
+                let request = NSFetchRequest<RecordType>(entityName: "RecordType")
+                let predicate = NSPredicate(format: "name hasPrefix %@", argumentArray: ["\(UIDevice.current.name)"])
+                request.predicate = predicate
+                var localTypeName: String?
+                
+                do {
+                    let localTypes = try managedObjectContext.fetch(request)
+                    localTypeName = localTypes[0].name
+                    
+                    if localTypeName != nil {
+                        // if not delete the empty local REcordType to set the imported RT as new default and new selectedScore in GraphView
+                        let localTypeEvents = EventsDataController.sharedInstance().fetchSpecificEvents(name: localTypeName!, type: scoreEvent)
+                        if localTypeEvents?.count == 0 {
+                            managedObjectContext.delete(localTypes[0])
+                            let remainingRT = allTypes.object(at: IndexPath(item: 0, section: 0))
+                            UserDefaults.standard.set(remainingRT.name, forKey: "SelectedScore")
+                        }
+                    }
+                    
+                } catch let error as NSError {
+                    ErrorManager.sharedInstance().addErrorLog(errorLocation: "RecTypeController Error 3", systemError: error, errorInfo: "error trying to fetch local RecordTypes")
+                    return
+                }
+                
+
+                
+            }
+        }
+        
+        // if it has GraphScoreChoser will put limitations in place
+        // some kind of alert should be displayed to show import of RT (and associated events) that can't be displayed
 
     }
     
