@@ -20,5 +20,6 @@ extension RecordType {
     @NSManaged public var name: String?
     @NSManaged public var minScore: NSNumber?
     @NSManaged public var maxScore: NSNumber?
+    @NSManaged public var urid: String?
 
 }

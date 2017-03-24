@@ -22,5 +22,6 @@ extension Exercise {
     @NSManaged public var metricType: String?
     @NSManaged public var mectricValue: Double
     @NSManaged public var name: String?
+    @NSManaged public var urid: String?
 
 }

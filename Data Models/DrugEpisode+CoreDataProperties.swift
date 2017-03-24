@@ -34,5 +34,6 @@ extension DrugEpisode {
     @NSManaged public var reminders: NSData?
     @NSManaged public var sideEffects: NSData?
     @NSManaged public var startDate: NSDate?
+    @NSManaged public var urid: String?
 
 }

@@ -12,6 +12,19 @@ import CoreData
 
 public class Event: NSManagedObject {
     
+    override public func awakeFromInsert() {
+        
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = NSTimeZone.local
+        formatter.dateFormat = "dd.MM.yy - HH:mm:ss"
+        let uniqueRecordID = "\(UIDevice.current.name) " + formatter.string(from: Date())
+        
+        self.setPrimitiveValue(uniqueRecordID, forKey: urid!)
+        
+    }
+
+    
     func graphicDuration(scale: TimeInterval) -> CGFloat? {
         
         if (duration?.doubleValue ?? 0) > 0 {

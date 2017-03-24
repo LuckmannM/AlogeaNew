@@ -6,10 +6,23 @@
 //  Copyright © 2016 AppToolFactory. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 
 public class Exercise: NSManagedObject {
+    
+    override public func awakeFromInsert() {
+        
+        let formatter = DateFormatter()
+        formatter.locale = NSLocale.current
+        formatter.timeZone = NSTimeZone.local
+        formatter.dateFormat = "dd.MM.yy - HH:mm:ss"
+        let uniqueRecordID = "\(UIDevice.current.name) " + formatter.string(from: Date())
+        
+        self.setPrimitiveValue(uniqueRecordID, forKey: urid!)
+        
+    }
+
 
 }

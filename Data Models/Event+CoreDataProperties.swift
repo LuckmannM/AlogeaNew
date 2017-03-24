@@ -25,5 +25,7 @@ extension Event {
     @NSManaged public var outcome: String?
     @NSManaged public var type: String?
     @NSManaged public var vas: NSNumber?
+    @NSManaged public var urid: String?
+    
 
 }

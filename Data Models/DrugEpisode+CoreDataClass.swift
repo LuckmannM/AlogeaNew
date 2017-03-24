@@ -93,6 +93,11 @@ public class DrugEpisode: NSManagedObject {
         formatter.locale = NSLocale.current
         formatter.timeZone = NSTimeZone.local
         formatter.dateFormat = "dd.MM.yy - HH:mm:ss"
+        
+        let uniqueRecordID = "\(UIDevice.current.name) " + formatter.string(from: Date())
+        self.setPrimitiveValue(uniqueRecordID, forKey: urid!)
+
+        
         drugID = formatter.string(from: Date())
         
         let components: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute]
