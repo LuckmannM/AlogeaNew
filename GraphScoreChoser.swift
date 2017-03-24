@@ -65,8 +65,7 @@ class GraphScoreChoser: UITableViewController {
                 // option not purchased, enable only one score ([0] element
                 // there may be more than on RecordTypes stored if these have been imported from other devices
                 
-                if indexPath.row < 1 {
-                    // alloqwed default score
+                if recordTypeNames[indexPath.row] == UserDefaults.standard.value(forKey: "SelectedScore") as! String {
                     cell.textField.text = recordTypeNames[indexPath.row]
                     cell.textField.isEnabled = false
                     cell.addButton.isHidden = true

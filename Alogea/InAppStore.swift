@@ -347,6 +347,59 @@ class InAppStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObser
         print("errorInfo: \(errorInfo)")
         
     }
+    
+    func showPurchaseDialog() {
+        
+        guard let presentingVC = (UIApplication.shared.delegate as! AppDelegate).window?.visibleViewController else {
+            ErrorManager.sharedInstance().addErrorLog(errorLocation: "MainViewController", errorInfo: "can't find currently visible VC")
+            return
+        }
+        
+        let purchaseAlert = UIAlertController(title: "Free version limit", message: "To add more graphs please purchase the 'No Limits' or 'Unlimited Graphs' expansion.   You can rename the existing graph in Settings > Event Types\nAlogea without expansion is limited to one graph", preferredStyle: .actionSheet)
+        
+        let goToStore = UIAlertAction(title: "View expansion options", style: UIAlertActionStyle.default, handler: { (storeAction)
+            -> Void in
+            
+            self.presentStoreView(rootViewController: presentingVC)
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: { (cancelAction)
+            -> Void in
+            
+            //do nothing and dimiss
+        })
+        
+        purchaseAlert.addAction(goToStore)
+        purchaseAlert.addAction(cancelAction)
+        
+        if UIDevice().userInterfaceIdiom == .pad {
+            let popUpController = purchaseAlert.popoverPresentationController
+            popUpController!.permittedArrowDirections = .any
+            popUpController?.sourceView = presentingVC.view
+        }
+        
+        
+        presentingVC.present(purchaseAlert, animated: true, completion: nil)
+        
+    }
+    
+    func presentStoreView(rootViewController: UIViewController) {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let storeView = storyBoard.instantiateViewController(withIdentifier: "StoreViewID") as! StoreView
+        storeView.rootView = rootViewController
+        
+        storeView.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+        storeView.preferredContentSize = CGSize(width: 280, height: 360)
+        
+        //        self.present(storeView, animated: true, completion: nil)
+        //        self.navigationController?.navigationBar.isHidden = false
+        rootViewController.navigationController!.pushViewController(storeView, animated: true)
+        
+        
+    }
+
+
 }
 
 let InAppStoreGlobal = InAppStore()

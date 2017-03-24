@@ -64,17 +64,48 @@ class EventTypeSettings: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventTypeCell", for: indexPath) as! TextInputCell
 
         cell.setDelegate(delegate: self,indexPath: indexPath,tableView: self.tableView)
+        cell.tag = 10 // enabled
         
         if indexPath.section == 0 {
             // RecordTypes
-            cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
-            cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
-            if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
-                cell.accessoryType = .disclosureIndicator
+            if InAppStore.sharedInstance().checkMultipleGraphAccess() {
+                // user has purchased multiple graph expansion
+                cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
+                cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
+                if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
+                    cell.accessoryType = .disclosureIndicator
+                } else {
+                    cell.accessoryType = .none
+                }
             } else {
-                cell.accessoryType = .none
+                // multiple graph expansion NOT purchased
+                if recordTypesController.allTypes.object(at: indexPath).name! == UserDefaults.standard.value(forKey: "SelectedScore") as! String {
+                    // selected local store = permitted
+                    cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
+                    cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
+                    if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
+                        cell.accessoryType = .disclosureIndicator
+                    } else {
+                        cell.accessoryType = .none
+                    }
+                }
+                else {
+                    // additional imported non-permitted store
+                    cell.textField.text = recordTypesController.allTypes.object(at: indexPath).name!
+                    cell.textField.textColor = UIColor.gray
+                    cell.SubLabel.textColor = UIColor.gray
+                    cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) events"
+                    if (eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: scoreEvent).fetchedObjects?.count ?? 0) > 0 {
+                        cell.accessoryType = .disclosureIndicator
+                    } else {
+                        cell.accessoryType = .none
+                    }
+                    //cell.isUserInteractionEnabled = false
+                    cell.tag = 20
+                }
             }
         } else {
+            // non score Events
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)
             cell.textField.text = eventsController.nonScoreEventTypesFRC.object(at: modifiedPath).name!
             cell.SubLabel.text = "\(eventsController.fetchSpecificEventsFRC(name: cell.textField.text!, type: nonScoreEvent).fetchedObjects?.count ?? 0) events"
@@ -112,6 +143,12 @@ class EventTypeSettings: UITableViewController {
 
         let cell = tableView.cellForRow(at: indexPath) as! TextInputCell
         tableView.deselectRow(at: indexPath, animated: false)
+        
+        if cell.tag == 20 {
+            // show purchase alert
+            InAppStore.sharedInstance().showPurchaseDialog()
+            return
+        }
         
         if cell.accessoryType == .disclosureIndicator {
             let modifiedPath = IndexPath(row: 0, section: indexPath.row)

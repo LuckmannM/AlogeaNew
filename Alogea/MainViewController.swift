@@ -539,7 +539,20 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
     
     func showPurchaseDialog() {
         
-        let purchaseAlert = UIAlertController(title: "Free version limit", message: "To add more graphs please purchase the 'No Limits' or 'Unlimited Graphs' expansion.   You can rename the existing graph in Settings > Event Types; Alogea without expansion is limited to one graph", preferredStyle: .actionSheet)
+        InAppStore.sharedInstance().showPurchaseDialog()
+
+        /*
+        var presentingVC: UIViewController?
+        
+        if let visibleVC = (UIApplication.shared.delegate as! AppDelegate).window?.visibleViewController {
+            presentingVC = visibleVC
+        } else {
+            ErrorManager.sharedInstance().addErrorLog(errorLocation: "MainViewController", errorInfo: "can't find currently visible VC")
+            return
+        }
+
+        
+        let purchaseAlert = UIAlertController(title: "Free version limit", message: "To add more graphs please purchase the 'No Limits' or 'Unlimited Graphs' expansion.   You can rename the existing graph in Settings > Event Types\nAlogea without expansion is limited to one graph", preferredStyle: .actionSheet)
         
         let goToStore = UIAlertAction(title: "View expansion options", style: UIAlertActionStyle.default, handler: { (storeAction)
             -> Void in
@@ -563,10 +576,10 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         }
         
         
-        self.present(purchaseAlert, animated: true, completion: nil)
-
+        presentingVC?.present(purchaseAlert, animated: true, completion: nil)
+        */
     }
-    
+    /*
     func presentStoreView() {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -582,6 +595,7 @@ extension MainViewController: UIPopoverPresentationControllerDelegate, UIAdaptiv
         
         
     }
+    */
 }
 
 extension MainViewController: MFMailComposeViewControllerDelegate {
