@@ -19,8 +19,8 @@ public class Event: NSManagedObject {
         formatter.timeZone = NSTimeZone.local
         formatter.dateFormat = "dd.MM.yy - HH:mm:ss"
         let uniqueRecordID = "\(UIDevice.current.name) " + formatter.string(from: Date())
-        
-        self.setPrimitiveValue(uniqueRecordID, forKey: urid!)
+        self.urid = uniqueRecordID
+        //self.setPrimitiveValue(uniqueRecordID, forKey: urid!)
         
     }
 
